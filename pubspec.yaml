@@ -1,0 +1,29 @@
+name: comfyssh_flutter
+description: A more comfortable SSH experience
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  dartssh2: ^2.8.2
+  xterm: ^3.5.0
+  virtual_keyboard_multi_language: ^1.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
