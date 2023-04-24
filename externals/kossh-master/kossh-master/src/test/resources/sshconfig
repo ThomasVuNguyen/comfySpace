@@ -1,4 +1,0 @@
-Host localhost
-  HostName localhost
-  IdentityFile ~/.ssh/id_rsa
-  User test
