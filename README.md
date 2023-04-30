@@ -1,10 +1,16 @@
-# ComfySSH
-A comfortable SSH experience
+# comfyssh
 
+A new Flutter project.
 
-devlog#1:
-1. I just posted my announcement Youtube Video, checkout here: https://www.youtube.com/watch?v=xMLbllbrg9k
-2. Goal for UI: Developing a design language (collor pallete, icon, fonts) on Figma
-3. Goal for Android Dev: Finishing my first demo project on Udemy course
+## Getting Started
 
-![image](https://user-images.githubusercontent.com/70709101/232629979-712f2b18-9020-4545-9c21-f4963fd90501.png)
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

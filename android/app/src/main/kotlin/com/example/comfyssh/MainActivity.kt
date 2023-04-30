@@ -1,4 +1,4 @@
-package com.example.comfyssh_flutter
+package com.example.comfyssh
 
 import io.flutter.embedding.android.FlutterActivity
 

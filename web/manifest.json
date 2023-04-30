@@ -1,11 +1,11 @@
 {
-    "name": "comfyssh_flutter",
-    "short_name": "comfyssh_flutter",
+    "name": "comfyssh",
+    "short_name": "comfyssh",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A more comfortable SSH experience",
+    "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
