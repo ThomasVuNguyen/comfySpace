@@ -1,8 +1,9 @@
 # comfyssh
-A comfortable SSH experience for beginners & customizable tool for the more advanced
+A comfortable SSH experience for beginners & customizable tool for the more advanced. 
 Built with Flutter for ease of cross-platform publishing (Android, iOS, web, Windows, Linux)
 Libraries & API: 
-  dartssh2 for ssh connection & sftp 
+ 
+dartssh2 for ssh connection & sftp 
   xterm for terminal emulator
   virtualkey for extra keyboard keys (Ctrl, Shift, etc.)
 Tools:
