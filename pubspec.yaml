@@ -16,6 +16,7 @@ dependencies:
   dartssh2: ^2.8.2
   xterm: ^3.5.0
   virtual_keyboard_multi_language: ^1.0.3
+  shared_preferences: ^2.1.0
 
 dev_dependencies:
   flutter_test:

@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:xterm/xterm.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 String? hostname;
 int port = 22;
 String? username;
 String? password;
 const bgcolor = Color(0x001f1f1f);
+List<String> nameList = ["hi"];
+var name = "ok";
 
 void main() {
   runApp(MyApp());
@@ -85,7 +87,7 @@ class _WelcomePage extends State<Welcome>{
               leading: const Icon(
                 Icons.star,
               ),
-              title: const Text("Ubuntu 20.04"),
+                  title: Text(nameList.elementAt(0)),
               subtitle: const Text("@ 192.168.0.127"),
               //onTap: () => ,
               //onLongPress: () => ,
@@ -94,6 +96,9 @@ class _WelcomePage extends State<Welcome>{
                 Icons.settings,
               ),
                 onTap: (){
+                  newName("tung");
+                  setState(() {
+                  }); //force all widget rebuild
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -255,3 +260,15 @@ class _TerminalPage extends State<Term> {
     );
   }
 }  //TerminalState
+
+newName(String name) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<String> oldNameList = prefs.getStringList("listName")!;
+  oldNameList.add(name);
+  prefs.setStringList("listName", oldNameList);
+  nameList = prefs.getStringList("listName")!;
+  print("new list");
+  print(nameList);
+
+}
+
