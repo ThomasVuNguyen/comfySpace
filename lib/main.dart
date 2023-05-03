@@ -8,12 +8,18 @@ import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.
 import 'package:flutter/cupertino.dart';
 import 'package:xterm/xterm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+String? nickname;
 String? hostname;
 int port = 22;
 String? username;
 String? password;
+String? color;
 const bgcolor = Color(0x001f1f1f);
-List<String> nameList = ["hi"];
+List<String> nameList = ["name1"];
+List<String> hostList = ["host1"];
+List<String> userList = [];
+List<String> passList = [];
+List<String> colorList = [];
 var name = "ok";
 
 void main() {
@@ -45,13 +51,6 @@ class Term extends StatefulWidget {
 } //MyHomePage
 
 class _WelcomePage extends State<Welcome>{
-  /*String? value1;
-  String? hostname;
-  int port = 22;
-  String? username;
-  String? password;
-  Color bgcolor = Color(0x001f1f1f);*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,13 +69,87 @@ class _WelcomePage extends State<Welcome>{
         actions: <Widget>[
           Padding(padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
-              onTap:(){},
+              onTap:(){
+                showDialog(context: context, builder:(BuildContext context){
+                  return AlertDialog(
+                    title: const Text("Add a new host"),
+                    content: Column(
+                      children: [
+                        TextField( //add nickname
+                          onChanged: (name1){
+                            nickname = name1;
+                            },
+                          decoration: const InputDecoration(
+                            hintText: "nickname",
+                          ),
+                        ),
+                        TextField( //add hostname
+                          onChanged: (host1){
+                            hostname = host1;
+                            ;},
+                          decoration: const InputDecoration(
+                            hintText: "hostname",
+                          ),
+                        ),
+                        TextField( //add username
+                          onChanged: (user1){
+                            username = user1;
+                            },
+                          decoration: const InputDecoration(
+                            hintText: "username",
+                          ),
+                        ),
+                        TextField( //add password
+                          onChanged: (pass1){
+                            password = pass1;
+                            },
+                          decoration: const InputDecoration(
+                            hintText: "password",
+                          ),
+                        ),
+                        TextField( //add color
+                          onChanged: (color1){
+                            color = color1;},
+                          decoration: const InputDecoration(
+                            hintText: "color",
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      MaterialButton(
+                          color: Colors.green,
+                          textColor: Colors.white,
+                          child: const Text("Save"),
+                          onPressed: (){
+                            newName(nickname!);
+                            newHost(hostname!);
+                            newUser(username!);
+                            newPass(password!);
+                            newColor(color!);
+                          }
+                      )
+                    ],
+                  );
+                });
+
+              },
               child: const Icon(
                 Icons.add,
                 size: 26.0,
               )
             ),
+          ),
+        Padding(padding: const EdgeInsets.only(right:20),
+        child: GestureDetector(
+          onTap:(){ //clear all data
+            clearData();
+          },
+          child: const Icon(
+            Icons.accessibility,
+            size: 26.0,
           )
+        ))
         ]
       ),
       body: Column(
@@ -87,7 +160,7 @@ class _WelcomePage extends State<Welcome>{
               leading: const Icon(
                 Icons.star,
               ),
-                  title: Text(nameList.elementAt(0)),
+                  title: Text("hi"),
               subtitle: const Text("@ 192.168.0.127"),
               //onTap: () => ,
               //onLongPress: () => ,
@@ -136,8 +209,7 @@ class _WelcomePage extends State<Welcome>{
                             MaterialButton(
                               color: Colors.green,
                                 textColor: Colors.white,
-                                child: const Text("Connect"),
-
+                                child: const Text("Save"),
                                 onPressed: (){
                               Navigator.push(
                                 context,
@@ -263,12 +335,66 @@ class _TerminalPage extends State<Term> {
 
 newName(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setStringList("listName", nameList);
   List<String> oldNameList = prefs.getStringList("listName")!;
   oldNameList.add(name);
   prefs.setStringList("listName", oldNameList);
   nameList = prefs.getStringList("listName")!;
-  print("new list");
-  print(nameList);
-
+  print("new name"); print(nameList!);
 }
 
+newHost(String name) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setStringList("listHost", hostList);
+  List<String> oldHostList = prefs.getStringList("listHost")!;
+  oldHostList.add(name);
+  prefs.setStringList("listHost", oldHostList);
+  hostList = prefs.getStringList("listHost")!;
+  print("new host"); print(hostList!);
+}
+
+newUser(String name) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setStringList("listUser", userList);
+  List<String> oldUserList = prefs.getStringList("listUser")!;
+  oldUserList.add(name);
+  prefs.setStringList("listUser", oldUserList);
+  userList = prefs.getStringList("listUser")!;
+  print("new user"); print(userList!);
+}
+
+newPass(String name) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setStringList("listPass", passList);
+  List<String> oldPassList = prefs.getStringList("listPass")!;
+  oldPassList.add(name);
+  prefs.setStringList("listPass", oldPassList);
+  passList = prefs.getStringList("listPass")!;
+  print("new pass"); print(passList!);
+}
+
+newColor(String name) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setStringList("listColor", colorList);
+  List<String> oldColorList = prefs.getStringList("listColor")!;
+  oldColorList.add(name);
+  prefs.setStringList("listColor", oldColorList);
+  colorList = prefs.getStringList("listColor")!;
+  print("new color"); print(colorList!);
+}
+
+clearData() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setStringList("listName", <String>[]);
+  prefs.setStringList("listHost", <String>[]);
+  prefs.setStringList("listUser", <String>[]);
+  prefs.setStringList("listPass", <String>[]);
+  prefs.setStringList("listColor", <String>[]);
+  nameList = <String>[];hostList = <String>[];userList = <String>[];passList = <String>[];colorList = <String>[];
+}
+/*
+Navigator.push(
+context,
+MaterialPageRoute(builder: (context) =>  const Term()),
+);
+*/
