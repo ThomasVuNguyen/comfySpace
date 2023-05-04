@@ -14,15 +14,15 @@ int port = 22;
 String? username;
 String? password;
 String? color;
-const bgcolor = Color(0x001f1f1f);
-List<String> nameList = ["name1"];
-List<String> hostList = ["host1"];
+const bgcolor = Colors.grey;
+List<String> nameList = [];
+List<String> hostList = [];
 List<String> userList = [];
 List<String> passList = [];
 List<String> colorList = [];
-var name = "ok";
 
 void main() {
+  reAssign();
   runApp(MyApp());
 }  //main function, execute MyApp
 
@@ -56,7 +56,7 @@ class _WelcomePage extends State<Welcome>{
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(
-        title: const Text("Welcome, Thomas"),
+        title: Text(nameList!.toString()),
         backgroundColor: bgcolor,
         leading: const Icon(
           Icons.menu,
@@ -81,7 +81,7 @@ class _WelcomePage extends State<Welcome>{
                             },
                           decoration: const InputDecoration(
                             hintText: "nickname",
-                          ),
+                          ),textInputAction: TextInputAction.next,
                         ),
                         TextField( //add hostname
                           onChanged: (host1){
@@ -89,7 +89,7 @@ class _WelcomePage extends State<Welcome>{
                             ;},
                           decoration: const InputDecoration(
                             hintText: "hostname",
-                          ),
+                          ),textInputAction: TextInputAction.next,
                         ),
                         TextField( //add username
                           onChanged: (user1){
@@ -97,7 +97,7 @@ class _WelcomePage extends State<Welcome>{
                             },
                           decoration: const InputDecoration(
                             hintText: "username",
-                          ),
+                          ),textInputAction: TextInputAction.next,
                         ),
                         TextField( //add password
                           onChanged: (pass1){
@@ -105,14 +105,14 @@ class _WelcomePage extends State<Welcome>{
                             },
                           decoration: const InputDecoration(
                             hintText: "password",
-                          ),
+                          ),textInputAction: TextInputAction.next,
                         ),
                         TextField( //add color
                           onChanged: (color1){
                             color = color1;},
                           decoration: const InputDecoration(
                             hintText: "color",
-                          ),
+                          ),textInputAction: TextInputAction.next,
                         ),
                       ],
                     ),
@@ -127,6 +127,9 @@ class _WelcomePage extends State<Welcome>{
                             newUser(username!);
                             newPass(password!);
                             newColor(color!);
+                            setState(() {
+                            });
+                            Navigator.pop(context);
                           }
                       )
                     ],
@@ -141,111 +144,40 @@ class _WelcomePage extends State<Welcome>{
             ),
           ),
         Padding(padding: const EdgeInsets.only(right:20),
-        child: GestureDetector(
-          onTap:(){ //clear all data
-            clearData();
-          },
-          child: const Icon(
-            Icons.accessibility,
-            size: 26.0,
-          )
-        ))
+              child: GestureDetector(
+                  onTap:(){ //clear all data
+                    clearData();
+                    setState(() {
+                    });
+                  },
+                  child: const Icon(
+                    Icons.accessibility,
+                    size: 26.0,
+                  )
+              )),
+          Padding(padding: const EdgeInsets.only(right:20),
+              child: GestureDetector(
+                  onTap:(){ //clear all data
+                    setState(() {
+                    });
+                  },
+                  child: const Icon(
+                    Icons.dangerous,
+                    size: 26.0,
+                  )
+              ))
         ]
       ),
-      body: Column(
-        children: <Widget> [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: ListTile(
-              leading: const Icon(
-                Icons.star,
-              ),
-                  title: Text("hi"),
-              subtitle: const Text("@ 192.168.0.127"),
-              //onTap: () => ,
-              //onLongPress: () => ,
-              trailing: InkWell(
-                child: const Icon(
-                Icons.settings,
-              ),
-                onTap: (){
-                  newName("tung");
-                  setState(() {
-                  }); //force all widget rebuild
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text("Insert information"),
-                          content: Column(
-                            children: [
-                              TextField( //hostname input
-                                onChanged: (host1){
-                                hostname =host1;
-                                print("hostname is " + hostname!);},
-                                decoration: const InputDecoration(
-                                  hintText: "hostname",
-                                ),
-                              ),
-                              TextField(
-                                  onChanged: (user1){
-                                    username = user1;
-                                    print("username is "+username!);},
-                                decoration: const InputDecoration(
-                                  hintText: "username",
-                                ),
-                              ),
-                              TextField(
-                                  onChanged: (pw1){
-                                    password = pw1;
-                                    print(password);},
-                                decoration: const InputDecoration(
-                                  hintText: "password, promise won't leak :)"
-                                ),
-                              ),
-                            ],
-                          ),
-                          actions: <Widget>[
-                            MaterialButton(
-                              color: Colors.green,
-                                textColor: Colors.white,
-                                child: const Text("Save"),
-                                onPressed: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) =>  const Term()),
-                              );
-                            })
-                          ],
-                        );
-                      }
-                  );
-                },
-              ),
-              tileColor: Colors.orange,
-              visualDensity: VisualDensity(vertical: 3.3),
-
-            ),
+      body: ListView(
+        padding: const EdgeInsets.all(8.0),
+        children: List.generate(nameList.length, (index) => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+              title: Text("name is ${nameList[index]}"),
+            subtitle: Text("host ${hostList[index]}"),
+            tileColor: Colors.red,
           ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: ListTile(
-              leading: Icon(
-                Icons.star,
-              ),
-              title: Text("Raspbian 64-bit"),
-              subtitle: Text("@ 192.168.0.135"),
-              //onTap: () => ,
-              //onLongPress: () => ,
-              trailing: Icon(
-                Icons.settings,
-              ),
-              tileColor: Colors.green,
-              visualDensity: VisualDensity(vertical: 3.3),
-            ),
-          ),
-        ],
-
+        )),
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.blue,
@@ -335,52 +267,47 @@ class _TerminalPage extends State<Term> {
 
 newName(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setStringList("listName", nameList);
   List<String> oldNameList = prefs.getStringList("listName")!;
   oldNameList.add(name);
   prefs.setStringList("listName", oldNameList);
   nameList = prefs.getStringList("listName")!;
-  print("new name"); print(nameList!);
+  //print("new name"); print(nameList!);
 }
 
 newHost(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setStringList("listHost", hostList);
   List<String> oldHostList = prefs.getStringList("listHost")!;
   oldHostList.add(name);
   prefs.setStringList("listHost", oldHostList);
   hostList = prefs.getStringList("listHost")!;
-  print("new host"); print(hostList!);
+  //print("new host"); print(hostList!);
 }
 
 newUser(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setStringList("listUser", userList);
   List<String> oldUserList = prefs.getStringList("listUser")!;
   oldUserList.add(name);
   prefs.setStringList("listUser", oldUserList);
   userList = prefs.getStringList("listUser")!;
-  print("new user"); print(userList!);
+  //print("new user"); print(userList!);
 }
 
 newPass(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setStringList("listPass", passList);
   List<String> oldPassList = prefs.getStringList("listPass")!;
   oldPassList.add(name);
   prefs.setStringList("listPass", oldPassList);
   passList = prefs.getStringList("listPass")!;
-  print("new pass"); print(passList!);
+  //print("new pass"); print(passList!);
 }
 
 newColor(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setStringList("listColor", colorList);
   List<String> oldColorList = prefs.getStringList("listColor")!;
   oldColorList.add(name);
   prefs.setStringList("listColor", oldColorList);
   colorList = prefs.getStringList("listColor")!;
-  print("new color"); print(colorList!);
+  //print("new color"); print(colorList!);
 }
 
 clearData() async {
@@ -392,9 +319,27 @@ clearData() async {
   prefs.setStringList("listColor", <String>[]);
   nameList = <String>[];hostList = <String>[];userList = <String>[];passList = <String>[];colorList = <String>[];
 }
+reAssign() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  //prefs.reload();
+  nameList = prefs.getStringList("listName")!;
+  hostList = prefs.getStringList("listHost")!;
+  userList = prefs.getStringList("listUser")!;
+  passList = prefs.getStringList("listPass")!;
+  colorList = prefs.getStringList("listColor")!;
+}
+resetData() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setStringList("listName", nameList);
+  prefs.setStringList("listHost", hostList);
+  prefs.setStringList("listPass", passList);
+  prefs.setStringList("listColor", colorList);
+}
 /*
 Navigator.push(
 context,
 MaterialPageRoute(builder: (context) =>  const Term()),
 );
 */
+
+/*setState()*/
