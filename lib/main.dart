@@ -14,7 +14,7 @@ int port = 22;
 String? username;
 String? password;
 String? color;
-const bgcolor = Colors.grey;
+const bgcolor = Colors.white;
 List<String> nameList = [];
 List<String> hostList = [];
 List<String> userList = [];
@@ -56,8 +56,12 @@ class _WelcomePage extends State<Welcome>{
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(
-        title: Text(nameList!.toString()),
-        backgroundColor: bgcolor,
+        title: Text("welcome back", style: TextStyle(
+          color: Colors.black,
+          //height: 26, fontSize: 10
+        ),
+        ),
+        //backgroundColor: bgcolor,
         leading: const Icon(
           Icons.menu,
         ),
@@ -173,9 +177,24 @@ class _WelcomePage extends State<Welcome>{
         children: List.generate(nameList.length, (index) => Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-              title: Text("name is ${nameList[index]}"),
+            leading: Icon(Icons.ice_skating),
+              title: Text("name is $index"),
             subtitle: Text("host ${hostList[index]}"),
             tileColor: Colors.red,
+            trailing: IconButton(
+              icon:const Icon(
+              Icons.delete,
+              size: 26.0,
+              ), onPressed: () { removeItem(index); setState(() {
+              }); },
+            ),
+            onTap: (){
+              hostname = hostList[index]; username = userList[index]; password = passList[index];
+              Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) =>  const Term()),
+        );
+            },
           ),
         )),
       ),
@@ -335,11 +354,31 @@ resetData() async{
   prefs.setStringList("listPass", passList);
   prefs.setStringList("listColor", colorList);
 }
+removeItem(int index) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var tempName = prefs.getStringList("listName");
+  var tempHost = prefs.getStringList("listName");
+  var tempUser = prefs.getStringList("listName");
+  var tempPass = prefs.getStringList("listName");
+  var tempColor= prefs.getStringList("listColor");
+  tempName?.removeAt(index);
+  tempHost?.removeAt(index);
+  tempUser?.removeAt(index);
+  tempPass?.removeAt(index);
+  tempColor?.removeAt(index);
+  nameList = tempName!; hostList = tempHost!; userList = tempUser!; passList = tempPass!; colorList = tempColor!;
+
+  prefs.setStringList("listName", tempName!);
+  prefs.setStringList("listHost", tempHost!);
+  prefs.setStringList("listUser", tempUser!);
+  prefs.setStringList("listPass", tempPass!);
+  prefs.setStringList("listColor", tempColor!);
+  print("new list");
+  print(tempName);
+
+}
 /*
-Navigator.push(
-context,
-MaterialPageRoute(builder: (context) =>  const Term()),
-);
+
 */
 
 /*setState()*/
