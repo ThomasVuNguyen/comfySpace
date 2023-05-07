@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:dartssh2/dartssh2.dart';
@@ -8,18 +9,23 @@ import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.
 import 'package:flutter/cupertino.dart';
 import 'package:xterm/xterm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:string_to_color/string_to_color.dart';
 String? nickname;
 String? hostname;
 int port = 22;
 String? username;
 String? password;
 String? color;
-const bgcolor = Colors.white;
+Color? currentColor; String? currentColorString;
+const bgcolor = Color(0xffFCF3E6);
+const borderColor = Colors.black;
+const cardColor = Colors.white;
 List<String> nameList = [];
 List<String> hostList = [];
 List<String> userList = [];
 List<String> passList = [];
-List<String> colorList = [];
+List<String> distroList = []; List<String>? distro = [];
+Map<String, Color> colorMap = {"Ubuntu": Colors.orange, "Raspbian": Colors.green, "Kali Linux": Colors.blue};String currentDistro = colorMap.keys.first;
 
 void main() {
   reAssign();
@@ -56,14 +62,35 @@ class _WelcomePage extends State<Welcome>{
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(
-        title: Text("welcome back", style: TextStyle(
+        elevation: 0,
+        backgroundColor: bgcolor,
+        title: const Text("My Hosts", style: TextStyle(
           color: Colors.black,
           //height: 26, fontSize: 10
         ),
         ),
         //backgroundColor: bgcolor,
-        leading: const Icon(
-          Icons.menu,
+        leading: Material(
+          type: MaterialType.transparency,
+          child: Ink(
+            decoration: BoxDecoration(
+              border: Border.all(color: borderColor, width: 4.0 ),
+              color: cardColor,
+              shape: BoxShape.circle,
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(1000.0),
+              child: const Padding(
+                padding: EdgeInsets.all(0.0),
+                child: Icon(
+                  Icons.menu,
+                  size: 30.0,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          )
+
         ),
         actionsIconTheme: const IconThemeData(
           size: 30.0,
@@ -111,12 +138,21 @@ class _WelcomePage extends State<Welcome>{
                             hintText: "password",
                           ),textInputAction: TextInputAction.next,
                         ),
-                        TextField( //add color
-                          onChanged: (color1){
-                            color = color1;},
-                          decoration: const InputDecoration(
-                            hintText: "color",
-                          ),textInputAction: TextInputAction.next,
+                        DropdownButtonFormField<String> (
+                          value: colorMap.keys.toList()![0],
+                            items: colorMap.keys.toList()!.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String? value){
+                            currentDistro = value!;
+                            print("changed" + currentDistro!);
+                            },
                         ),
                       ],
                     ),
@@ -130,10 +166,16 @@ class _WelcomePage extends State<Welcome>{
                             newHost(hostname!);
                             newUser(username!);
                             newPass(password!);
-                            newColor(color!);
+                            //distro?.add(currentDistro!);
+                            //print(distro);
+                            print(currentDistro);
+                            newDistro(currentDistro!);
+                            print("distro list is" + distroList.toString());
+                            print("new name list is " + nameList.toString());
                             setState(() {
                             });
                             Navigator.pop(context);
+                            currentDistro=colorMap.keys.first;
                           }
                       )
                     ],
@@ -178,9 +220,9 @@ class _WelcomePage extends State<Welcome>{
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
             leading: Icon(Icons.ice_skating),
-              title: Text("name is $index"),
-            subtitle: Text("host ${hostList[index]}"),
-            tileColor: Colors.red,
+              title: Text(nameList[index][0].toUpperCase()+nameList[index].substring(1)),
+            subtitle: Text("${userList[index]} @ ${hostList[index]}"),
+            tileColor: colorMap[distroList[index]],
             trailing: IconButton(
               icon:const Icon(
               Icons.delete,
@@ -203,9 +245,9 @@ class _WelcomePage extends State<Welcome>{
         unselectedItemColor: Colors.white,
         backgroundColor: bgcolor,
         items:  const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'calls',),
-          BottomNavigationBarItem(icon: Icon(Icons.camera), label: 'camera',),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'chat',),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'calls',),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'camera',),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'chat',),
         ],
       ),
     );
@@ -320,23 +362,25 @@ newPass(String name) async{
   //print("new pass"); print(passList!);
 }
 
-newColor(String name) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  List<String> oldColorList = prefs.getStringList("listColor")!;
-  oldColorList.add(name);
-  prefs.setStringList("listColor", oldColorList);
-  colorList = prefs.getStringList("listColor")!;
-  //print("new color"); print(colorList!);
-}
+newDistro(String name) async{
 
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<String> oldDistroList = prefs.getStringList("listDistro")!;
+  print("oldDistroList is " + oldDistroList.toString());
+  oldDistroList.add(name);
+  prefs.setStringList("listDistro", oldDistroList);
+  distroList = prefs.getStringList("listDistro")!;
+  print("new distroList is "+ distroList.toString());
+  print("new distro " + name + "added");
+}
 clearData() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setStringList("listName", <String>[]);
   prefs.setStringList("listHost", <String>[]);
   prefs.setStringList("listUser", <String>[]);
   prefs.setStringList("listPass", <String>[]);
-  prefs.setStringList("listColor", <String>[]);
-  nameList = <String>[];hostList = <String>[];userList = <String>[];passList = <String>[];colorList = <String>[];
+  prefs.setStringList("listDistro", <String>[]);
+  nameList = <String>[];hostList = <String>[];userList = <String>[];passList = <String>[];distroList = <String>[];
 }
 reAssign() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -345,14 +389,14 @@ reAssign() async{
   hostList = prefs.getStringList("listHost")!;
   userList = prefs.getStringList("listUser")!;
   passList = prefs.getStringList("listPass")!;
-  colorList = prefs.getStringList("listColor")!;
+  distroList = prefs.getStringList("listDistro")!;
 }
 resetData() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setStringList("listName", nameList);
   prefs.setStringList("listHost", hostList);
   prefs.setStringList("listPass", passList);
-  prefs.setStringList("listColor", colorList);
+  prefs.setStringList("listColor", distroList);
 }
 removeItem(int index) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -360,23 +404,25 @@ removeItem(int index) async{
   var tempHost = prefs.getStringList("listName");
   var tempUser = prefs.getStringList("listName");
   var tempPass = prefs.getStringList("listName");
-  var tempColor= prefs.getStringList("listColor");
+  var tempDistro= prefs.getStringList("listDistro");
   tempName?.removeAt(index);
   tempHost?.removeAt(index);
   tempUser?.removeAt(index);
   tempPass?.removeAt(index);
-  tempColor?.removeAt(index);
-  nameList = tempName!; hostList = tempHost!; userList = tempUser!; passList = tempPass!; colorList = tempColor!;
+  tempDistro?.removeAt(index);
+  nameList = tempName!; hostList = tempHost!; userList = tempUser!; passList = tempPass!; distroList = tempDistro!;
 
   prefs.setStringList("listName", tempName!);
   prefs.setStringList("listHost", tempHost!);
   prefs.setStringList("listUser", tempUser!);
   prefs.setStringList("listPass", tempPass!);
-  prefs.setStringList("listColor", tempColor!);
+  prefs.setStringList("listDistro", tempDistro!);
   print("new list");
   print(tempName);
-
 }
+
+
+
 /*
 
 */

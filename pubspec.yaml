@@ -17,6 +17,7 @@ dependencies:
   xterm: ^3.5.0
   virtual_keyboard_multi_language: ^1.0.3
   shared_preferences: ^2.1.0
+  string_to_color: ^2.0.0
 
 dev_dependencies:
   flutter_test:
