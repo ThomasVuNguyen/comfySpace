@@ -9,13 +9,16 @@ import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.
 import 'package:flutter/cupertino.dart';
 import 'package:xterm/xterm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:string_to_color/string_to_color.dart';
+import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
+import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 String? nickname;
 String? hostname;
 int port = 22;
 String? username;
 String? password;
 String? color;
+int _selectedIndex = 0;
+ValueNotifier<int> reloadState = ValueNotifier(0);
 Color? currentColor; String? currentColorString;
 const bgcolor = Color(0xffFCF3E6);
 const borderColor = Colors.black;
@@ -72,26 +75,23 @@ class _WelcomePage extends State<Welcome>{
         //backgroundColor: bgcolor,
         leading: Material(
           type: MaterialType.transparency,
-          child: Ink(
-            decoration: BoxDecoration(
-              border: Border.all(color: borderColor, width: 4.0 ),
-              color: cardColor,
-              shape: BoxShape.circle,
-            ),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(1000.0),
-              child: const Padding(
-                padding: EdgeInsets.all(0.0),
-                child: Icon(
-                  Icons.menu,
-                  size: 30.0,
-                  color: Colors.black,
+          child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Ink(
+                decoration: BoxDecoration(
+                  border: Border.all(color: borderColor, width: 2.0 ),
+                  color: cardColor,
+                  shape: BoxShape.circle,
                 ),
-              ),
-            ),
-          )
-
-        ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(00.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(0.0),
+                    child: Icon(
+                      Icons.menu,
+                      size: 20.0,
+                      color: Colors.black,
+                    ),),),),),),
         actionsIconTheme: const IconThemeData(
           size: 30.0,
           color: Colors.white,
@@ -166,23 +166,12 @@ class _WelcomePage extends State<Welcome>{
                             newHost(hostname!);
                             newUser(username!);
                             newPass(password!);
-                            //distro?.add(currentDistro!);
-                            //print(distro);
-                            print(currentDistro);
                             newDistro(currentDistro!);
-                            print("distro list is" + distroList.toString());
-                            print("new name list is " + nameList.toString());
                             setState(() {
                             });
                             Navigator.pop(context);
                             currentDistro=colorMap.keys.first;
-                          }
-                      )
-                    ],
-                  );
-                });
-
-              },
+                          })],);});},
               child: const Icon(
                 Icons.add,
                 size: 26.0,
@@ -201,17 +190,6 @@ class _WelcomePage extends State<Welcome>{
                     size: 26.0,
                   )
               )),
-          Padding(padding: const EdgeInsets.only(right:20),
-              child: GestureDetector(
-                  onTap:(){ //clear all data
-                    setState(() {
-                    });
-                  },
-                  child: const Icon(
-                    Icons.dangerous,
-                    size: 26.0,
-                  )
-              ))
         ]
       ),
       body: ListView(
@@ -240,19 +218,42 @@ class _WelcomePage extends State<Welcome>{
           ),
         )),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.white,
-        backgroundColor: bgcolor,
-        items:  const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'calls',),
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'camera',),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'chat',),
+      bottomNavigationBar: FlashyTabBar(
+        animationCurve: Curves.linear,
+        selectedIndex: _selectedIndex,
+        iconSize: 30,
+        showElevation: false, // use this to remove appBar's elevation
+        onItemSelected: (index){
+
+          infoBox(index, context);
+          print("wait finished");
+          reloadState.addListener(() => setState(() {
+          }));
+          reloadState.value = 0;
+        },
+        items: [
+          FlashyTabBarItem(
+            icon: Icon(Icons.event),
+            title: Text('Events'),
+          ),
+          FlashyTabBarItem(
+            icon: Image.asset(
+              "assets/homeIcon.png",
+              color: Color(0xff9496c1),
+              width: 30,
+            ),
+            title: Text('Home'),
+          ),
+          FlashyTabBarItem(
+            icon: Icon(Icons.search),
+            title: Text('Search'),
+          ),
         ],
       ),
     );
   }
 }
+
 class _TerminalPage extends State<Term> {
   late final terminal = Terminal(inputHandler: defaultInputHandler);
 
@@ -334,7 +335,6 @@ newName(String name) async{
   nameList = prefs.getStringList("listName")!;
   //print("new name"); print(nameList!);
 }
-
 newHost(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldHostList = prefs.getStringList("listHost")!;
@@ -343,7 +343,6 @@ newHost(String name) async{
   hostList = prefs.getStringList("listHost")!;
   //print("new host"); print(hostList!);
 }
-
 newUser(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldUserList = prefs.getStringList("listUser")!;
@@ -352,7 +351,6 @@ newUser(String name) async{
   userList = prefs.getStringList("listUser")!;
   //print("new user"); print(userList!);
 }
-
 newPass(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldPassList = prefs.getStringList("listPass")!;
@@ -361,17 +359,16 @@ newPass(String name) async{
   passList = prefs.getStringList("listPass")!;
   //print("new pass"); print(passList!);
 }
-
 newDistro(String name) async{
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldDistroList = prefs.getStringList("listDistro")!;
-  print("oldDistroList is " + oldDistroList.toString());
+  //print("oldDistroList is " + oldDistroList.toString());
   oldDistroList.add(name);
   prefs.setStringList("listDistro", oldDistroList);
   distroList = prefs.getStringList("listDistro")!;
-  print("new distroList is "+ distroList.toString());
-  print("new distro " + name + "added");
+  //print("new distroList is "+ distroList.toString());
+  //print("new distro " + name + "added");
 }
 clearData() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -419,6 +416,69 @@ removeItem(int index) async{
   prefs.setStringList("listDistro", tempDistro!);
   print("new list");
   print(tempName);
+}
+infoBox(int count, BuildContext context) async{
+  if(count == 1) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Add a new host"),
+          content: Column(
+            children: [
+              TextField( onChanged: (name1){
+                nickname = name1;},
+                decoration: const InputDecoration(hintText: "nickname"), textInputAction: TextInputAction.next,
+              ),
+              TextField( onChanged: (host1){
+                hostname = host1;},
+                decoration: const InputDecoration(hintText: "hostname"), textInputAction: TextInputAction.next,
+              ),
+              TextField( onChanged: (user1){
+                username = user1;},
+                decoration: const InputDecoration(hintText: "username"), textInputAction: TextInputAction.next,
+              ),
+              TextField( onChanged: (pass1){
+                password = pass1;},
+                decoration: const InputDecoration(hintText: "password"), textInputAction: TextInputAction.next,
+              ),
+              DropdownButtonFormField<String> (
+                value: colorMap.keys.toList()![0],
+                items: colorMap.keys.toList()!.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (String? value){
+                  currentDistro = value!;
+                  print("changed$currentDistro");
+                },
+              ),
+            ],
+        ),
+          actions: <Widget>[
+            MaterialButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text("Save"),
+                onPressed: (){
+                  newName(nickname!);
+                  newHost(hostname!);
+                  newUser(username!);
+                  newPass(password!);
+                  newDistro(currentDistro);
+                  print("saved");
+                  print("popped 1");
+                  currentDistro=colorMap.keys.first;
+                  reloadState.value = 1;
+                  Navigator.of(context, rootNavigator:true).pop();
+                })],
+        )
+    );
+  }
 }
 
 
