@@ -28,7 +28,7 @@ List<String> hostList = [];
 List<String> userList = [];
 List<String> passList = [];
 List<String> distroList = []; List<String>? distro = [];
-Map<String, Color> colorMap = {"Ubuntu": Colors.orange, "Raspbian": Colors.green, "Kali Linux": Colors.blue};String currentDistro = colorMap.keys.first;
+Map<String, Color> colorMap = {"Ubuntu": const Color(0xffE95420), "Raspbian": Colors.green, "Kali Linux": Colors.blue};String currentDistro = colorMap.keys.first;
 
 void main() {
   reAssign();
@@ -97,7 +97,7 @@ class _WelcomePage extends State<Welcome>{
           color: Colors.white,
           opacity: 10.0
         ),
-        actions: <Widget>[
+        /*actions: <Widget>[
           Padding(padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap:(){
@@ -187,67 +187,66 @@ class _WelcomePage extends State<Welcome>{
                   },
                   child: const Icon(
                     Icons.accessibility,
-                    size: 26.0,
+                    size: 0.0,
                   )
               )),
-        ]
+        ]*/
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(8.0),
-        children: List.generate(nameList.length, (index) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListTile(
-            leading: Icon(Icons.ice_skating),
-              title: Text(nameList[index][0].toUpperCase()+nameList[index].substring(1)),
-            subtitle: Text("${userList[index]} @ ${hostList[index]}"),
-            tileColor: colorMap[distroList[index]],
-            trailing: IconButton(
-              icon:const Icon(
-              Icons.delete,
-              size: 26.0,
-              ), onPressed: () { removeItem(index); setState(() {
-              }); },
+      body: SizedBox(
+        child: ListView(
+          padding: const EdgeInsets.all(10.0),
+          children: List.generate(nameList.length, (index) => Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListTile(
+              leading: Image.asset('assets/ubuntu-tile.png'),
+                dense: true,
+                title: Text(nameList[index][0].toUpperCase()+nameList[index].substring(1)),
+              subtitle: Text("${userList[index]} @ ${hostList[index]}"),
+              tileColor: colorMap[distroList[index]],
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  IconButton( icon:const Icon(Icons.delete, size: 26.0,),
+                    onPressed: () { removeItem(index); setState(() {}); },
+                  ),
+                  IconButton( icon:const Icon(Icons.more, size: 26.0,),
+                    onPressed: () { setState(() {}); },
+                  ),
+                ],
+              ),
+              onTap: (){
+                hostname = hostList[index]; username = userList[index]; password = passList[index];
+                Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  const Term()),
+          );
+              },
             ),
-            onTap: (){
-              hostname = hostList[index]; username = userList[index]; password = passList[index];
-              Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) =>  const Term()),
-        );
-            },
-          ),
-        )),
+          )),
+        ),
       ),
       bottomNavigationBar: FlashyTabBar(
-        animationCurve: Curves.linear,
         selectedIndex: _selectedIndex,
         iconSize: 30,
         showElevation: false, // use this to remove appBar's elevation
         onItemSelected: (index){
-
           infoBox(index, context);
-          print("wait finished");
           reloadState.addListener(() => setState(() {
           }));
           reloadState.value = 0;
         },
         items: [
-          FlashyTabBarItem(
-            icon: Icon(Icons.event),
-            title: Text('Events'),
-          ),
-          FlashyTabBarItem(
+          FlashyTabBarItem( icon: const Icon(Icons.scanner), title: const Text('Scan'),),
+          FlashyTabBarItem( icon: const Icon(Icons.add), title: const Text('Add'),),
+          /*FlashyTabBarItem(
             icon: Image.asset(
               "assets/homeIcon.png",
               color: Color(0xff9496c1),
               width: 30,
             ),
             title: Text('Home'),
-          ),
-          FlashyTabBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
-          ),
+          ),*/
+          FlashyTabBarItem( icon: const Icon(Icons.settings),  title: const Text('Settings'),),
         ],
       ),
     );
