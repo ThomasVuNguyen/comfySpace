@@ -405,6 +405,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  virtual_keyboard_custom_layout:
+    dependency: "direct main"
+    description:
+      name: virtual_keyboard_custom_layout
+      sha256: "72451ba845c0d6d5012a98c6a3f736f8bcbf10003176ad7bc18b00706041e180"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   virtual_keyboard_multi_language:
     dependency: "direct main"
     description:

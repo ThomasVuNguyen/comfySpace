@@ -97,7 +97,7 @@ class _WelcomePage extends State<Welcome>{
           color: Colors.white,
           opacity: 10.0
         ),
-        /*actions: <Widget>[
+        actions: <Widget>[
           Padding(padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap:(){
@@ -190,7 +190,7 @@ class _WelcomePage extends State<Welcome>{
                     size: 0.0,
                   )
               )),
-        ]*/
+        ]
       ),
       body: SizedBox(
         child: ListView(
@@ -230,10 +230,10 @@ class _WelcomePage extends State<Welcome>{
         iconSize: 30,
         showElevation: false, // use this to remove appBar's elevation
         onItemSelected: (index){
-          infoBox(index, context);
+          /*infoBox(index, context);
           reloadState.addListener(() => setState(() {
           }));
-          reloadState.value = 0;
+          reloadState.value = 0;*/
         },
         items: [
           FlashyTabBarItem( icon: const Icon(Icons.scanner), title: const Text('Scan'),),
@@ -255,7 +255,7 @@ class _WelcomePage extends State<Welcome>{
 
 class _TerminalPage extends State<Term> {
   late final terminal = Terminal(inputHandler: defaultInputHandler);
-
+  //final keyboard = VirtualKeyboard(type: ,)
   var title = hostname! + username! + password!;
   @override
   void initState() {
@@ -321,11 +321,37 @@ class _TerminalPage extends State<Term> {
               ),
             ],
           ),
-        )
+        ),
+      bottomNavigationBar: // Wrap the keyboard with Container to set background color.
+      Container(
+        // Keyboard is transparent
+        color: Colors.grey,
+        child: VirtualKeyboard(
+          // Default height is 300
+            height: 350,
+            // Default height is will screen width
+            width: 600,
+            // Default is black
+            textColor: Colors.white,
+            // Default 14
+            fontSize: 20,
+            // the layouts supported
+            defaultLayouts = [VirtualKeyboardDefaultLayouts.English],
+            // All types
+            type: VirtualKeyboardType.Custom,
+            // Layout separated by rows
+            keys: const [
+              ["T", "E", "S", "T"],
+              ["C", "U", "S", "T", "O", "M"],
+              ["L", "A", "Y", "O", "U", "T"],
+              ["RETURN", "SHIFT", "BACKSPACE", "SPACE"],
+            ],
+            // Callback for key press event
+            onKeyPress: _onKeyPress),
+      ),
     );
   }
 }  //TerminalState
-
 newName(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldNameList = prefs.getStringList("listName")!;
@@ -359,7 +385,6 @@ newPass(String name) async{
   //print("new pass"); print(passList!);
 }
 newDistro(String name) async{
-
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldDistroList = prefs.getStringList("listDistro")!;
   //print("oldDistroList is " + oldDistroList.toString());
@@ -479,7 +504,33 @@ infoBox(int count, BuildContext context) async{
     );
   }
 }
+// Just local variable. Use Text widget or similar to show in UI.
+String text;
 
+/// Fired when the virtual keyboard key is pressed.
+_onKeyPress(VirtualKeyboardKey key) {
+  if (key.keyType == VirtualKeyboardKeyType.String) {
+    text = text + (shiftEnabled ? key.capsText : key.text);
+  } else if (key.keyType == VirtualKeyboardKeyType.Action) {
+    switch (key.action) {
+      case VirtualKeyboardKeyAction.Backspace:
+        if (text.length == 0) return;
+        text = text.substring(0, text.length - 1);
+        break;
+      case VirtualKeyboardKeyAction.Return:
+        text = text + '\n';
+        break;
+      case VirtualKeyboardKeyAction.Space:
+        text = text + key.text;
+        break;
+      case VirtualKeyboardKeyAction.Shift:
+        shiftEnabled = !shiftEnabled;
+        break;
+      default:
+    }
+  }
+
+}
 
 
 /*
