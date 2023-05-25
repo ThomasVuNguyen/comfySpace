@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:ffi';
 import 'dart:typed_data';
+import 'package:comfyssh_flutter/function.dart';
+import 'package:comfyssh_flutter/main.dart';
+import 'package:comfyssh_flutter/pages/home_page.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
@@ -35,16 +38,6 @@ void main() {
   runApp(MyApp());
 }  //main function, execute MyApp
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'xterm.dart demo',
-      debugShowCheckedModeBanner: false,
-      home: Welcome(),
-    );
-  }
-}  //MyApp, wraps the main home page
 
 class Welcome extends StatefulWidget {
   const Welcome({Key? key}) : super(key: key);
@@ -322,219 +315,11 @@ class _TerminalPage extends State<Term> {
             ],
           ),
         ),
-      bottomNavigationBar: // Wrap the keyboard with Container to set background color.
-      Container(
-        // Keyboard is transparent
-        color: Colors.grey,
-        child: VirtualKeyboard(
-          // Default height is 300
-            height: 350,
-            // Default height is will screen width
-            width: 600,
-            // Default is black
-            textColor: Colors.white,
-            // Default 14
-            fontSize: 20,
-            // the layouts supported
-            defaultLayouts = [VirtualKeyboardDefaultLayouts.English],
-            // All types
-            type: VirtualKeyboardType.Custom,
-            // Layout separated by rows
-            keys: const [
-              ["T", "E", "S", "T"],
-              ["C", "U", "S", "T", "O", "M"],
-              ["L", "A", "Y", "O", "U", "T"],
-              ["RETURN", "SHIFT", "BACKSPACE", "SPACE"],
-            ],
-            // Callback for key press event
-            onKeyPress: _onKeyPress),
-      ),
     );
   }
 }  //TerminalState
-newName(String name) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  List<String> oldNameList = prefs.getStringList("listName")!;
-  oldNameList.add(name);
-  prefs.setStringList("listName", oldNameList);
-  nameList = prefs.getStringList("listName")!;
-  //print("new name"); print(nameList!);
-}
-newHost(String name) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  List<String> oldHostList = prefs.getStringList("listHost")!;
-  oldHostList.add(name);
-  prefs.setStringList("listHost", oldHostList);
-  hostList = prefs.getStringList("listHost")!;
-  //print("new host"); print(hostList!);
-}
-newUser(String name) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  List<String> oldUserList = prefs.getStringList("listUser")!;
-  oldUserList.add(name);
-  prefs.setStringList("listUser", oldUserList);
-  userList = prefs.getStringList("listUser")!;
-  //print("new user"); print(userList!);
-}
-newPass(String name) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  List<String> oldPassList = prefs.getStringList("listPass")!;
-  oldPassList.add(name);
-  prefs.setStringList("listPass", oldPassList);
-  passList = prefs.getStringList("listPass")!;
-  //print("new pass"); print(passList!);
-}
-newDistro(String name) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  List<String> oldDistroList = prefs.getStringList("listDistro")!;
-  //print("oldDistroList is " + oldDistroList.toString());
-  oldDistroList.add(name);
-  prefs.setStringList("listDistro", oldDistroList);
-  distroList = prefs.getStringList("listDistro")!;
-  //print("new distroList is "+ distroList.toString());
-  //print("new distro " + name + "added");
-}
-clearData() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setStringList("listName", <String>[]);
-  prefs.setStringList("listHost", <String>[]);
-  prefs.setStringList("listUser", <String>[]);
-  prefs.setStringList("listPass", <String>[]);
-  prefs.setStringList("listDistro", <String>[]);
-  nameList = <String>[];hostList = <String>[];userList = <String>[];passList = <String>[];distroList = <String>[];
-}
-reAssign() async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  //prefs.reload();
-  nameList = prefs.getStringList("listName")!;
-  hostList = prefs.getStringList("listHost")!;
-  userList = prefs.getStringList("listUser")!;
-  passList = prefs.getStringList("listPass")!;
-  distroList = prefs.getStringList("listDistro")!;
-}
-resetData() async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setStringList("listName", nameList);
-  prefs.setStringList("listHost", hostList);
-  prefs.setStringList("listPass", passList);
-  prefs.setStringList("listColor", distroList);
-}
-removeItem(int index) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var tempName = prefs.getStringList("listName");
-  var tempHost = prefs.getStringList("listName");
-  var tempUser = prefs.getStringList("listName");
-  var tempPass = prefs.getStringList("listName");
-  var tempDistro= prefs.getStringList("listDistro");
-  tempName?.removeAt(index);
-  tempHost?.removeAt(index);
-  tempUser?.removeAt(index);
-  tempPass?.removeAt(index);
-  tempDistro?.removeAt(index);
-  nameList = tempName!; hostList = tempHost!; userList = tempUser!; passList = tempPass!; distroList = tempDistro!;
 
-  prefs.setStringList("listName", tempName!);
-  prefs.setStringList("listHost", tempHost!);
-  prefs.setStringList("listUser", tempUser!);
-  prefs.setStringList("listPass", tempPass!);
-  prefs.setStringList("listDistro", tempDistro!);
-  print("new list");
-  print(tempName);
-}
-infoBox(int count, BuildContext context) async{
-  if(count == 1) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Add a new host"),
-          content: Column(
-            children: [
-              TextField( onChanged: (name1){
-                nickname = name1;},
-                decoration: const InputDecoration(hintText: "nickname"), textInputAction: TextInputAction.next,
-              ),
-              TextField( onChanged: (host1){
-                hostname = host1;},
-                decoration: const InputDecoration(hintText: "hostname"), textInputAction: TextInputAction.next,
-              ),
-              TextField( onChanged: (user1){
-                username = user1;},
-                decoration: const InputDecoration(hintText: "username"), textInputAction: TextInputAction.next,
-              ),
-              TextField( onChanged: (pass1){
-                password = pass1;},
-                decoration: const InputDecoration(hintText: "password"), textInputAction: TextInputAction.next,
-              ),
-              DropdownButtonFormField<String> (
-                value: colorMap.keys.toList()![0],
-                items: colorMap.keys.toList()!.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: const TextStyle(fontSize: 10),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (String? value){
-                  currentDistro = value!;
-                  print("changed$currentDistro");
-                },
-              ),
-            ],
-        ),
-          actions: <Widget>[
-            MaterialButton(
-                color: Colors.green,
-                textColor: Colors.white,
-                child: const Text("Save"),
-                onPressed: (){
-                  newName(nickname!);
-                  newHost(hostname!);
-                  newUser(username!);
-                  newPass(password!);
-                  newDistro(currentDistro);
-                  print("saved");
-                  print("popped 1");
-                  currentDistro=colorMap.keys.first;
-                  reloadState.value = 1;
-                  Navigator.of(context, rootNavigator:true).pop();
-                })],
-        )
-    );
-  }
-}
+
+
 // Just local variable. Use Text widget or similar to show in UI.
-String text;
-
-/// Fired when the virtual keyboard key is pressed.
-_onKeyPress(VirtualKeyboardKey key) {
-  if (key.keyType == VirtualKeyboardKeyType.String) {
-    text = text + (shiftEnabled ? key.capsText : key.text);
-  } else if (key.keyType == VirtualKeyboardKeyType.Action) {
-    switch (key.action) {
-      case VirtualKeyboardKeyAction.Backspace:
-        if (text.length == 0) return;
-        text = text.substring(0, text.length - 1);
-        break;
-      case VirtualKeyboardKeyAction.Return:
-        text = text + '\n';
-        break;
-      case VirtualKeyboardKeyAction.Space:
-        text = text + key.text;
-        break;
-      case VirtualKeyboardKeyAction.Shift:
-        shiftEnabled = !shiftEnabled;
-        break;
-      default:
-    }
-  }
-
-}
-
-
-/*
-
-*/
-
-/*setState()*/
+String? text;
