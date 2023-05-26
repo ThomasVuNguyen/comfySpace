@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:ffi';
 import 'dart:typed_data';
+import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
-import 'package:comfyssh_flutter/main.dart';
 import 'package:comfyssh_flutter/pages/home_page.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
-import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:xterm/xterm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 String? nickname;
 String? hostname;
 int port = 22;
@@ -247,8 +246,8 @@ class _WelcomePage extends State<Welcome>{
 }
 
 class _TerminalPage extends State<Term> {
-  late final terminal = Terminal(inputHandler: defaultInputHandler);
-  //final keyboard = VirtualKeyboard(type: ,)
+  late final terminal = Terminal(inputHandler: keyboard);
+  final keyboard = VirtualKeyboard(defaultInputHandler);
   var title = hostname! + username! + password!;
   @override
   void initState() {
@@ -302,6 +301,7 @@ class _TerminalPage extends State<Term> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(title),
           backgroundColor: Colors.blueGrey,
@@ -315,9 +315,13 @@ class _TerminalPage extends State<Term> {
             ],
           ),
         ),
-    );
+      bottomNavigationBar: Padding(
+        padding: MediaQuery.of(context).viewInsets,
+        child: VirtualKeyboardView(keyboard),
+      ),
+      );
   }
-}  //TerminalState
+} //TerminalState
 
 
 
