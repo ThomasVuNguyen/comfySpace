@@ -57,6 +57,9 @@ class _WelcomePage extends State<Welcome>{
     return Scaffold(
       backgroundColor: bgcolor,
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: bgcolor,
+        ),
         elevation: 0,
         backgroundColor: bgcolor,
         title: const Text("My Hosts", style: TextStyle(
@@ -303,6 +306,11 @@ class _TerminalPage extends State<Term> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: bgcolor,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
           title: Text(title),
           backgroundColor: Colors.blueGrey,
         ),
