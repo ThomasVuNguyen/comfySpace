@@ -154,3 +154,11 @@ infoBox(int count, BuildContext context) async{
     );
   }
 }
+memoryCheck() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.getStringList("listName") == null){ await prefs.setStringList("listName", <String> []); print(null);}
+  if (prefs.getStringList("listHost") == null){ await prefs.setStringList("listHost", <String> []);}
+  if (prefs.getStringList("listPass") == null){ await prefs.setStringList("listPass", <String> []);}
+  if (prefs.getStringList("listUser") == null){ await prefs.setStringList("listUser", <String> []);}
+  if (prefs.getStringList("listDistro") == null){ await prefs.setStringList("listDistro", <String> []);}
+}
