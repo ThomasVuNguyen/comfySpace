@@ -1,7 +1,10 @@
+
+
 import 'package:comfyssh_flutter/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
 newName(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldNameList = prefs.getStringList("listName")!;
@@ -161,4 +164,22 @@ memoryCheck() async{
   if (prefs.getStringList("listPass") == null){ await prefs.setStringList("listPass", <String> []);}
   if (prefs.getStringList("listUser") == null){ await prefs.setStringList("listUser", <String> []);}
   if (prefs.getStringList("listDistro") == null){ await prefs.setStringList("listDistro", <String> []);}
+}
+
+void open_url() async{
+    final Uri url = Uri.parse('https://flutter.dev');
+    launchUrl(url);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch ');
+    }
+    print("yay");
+}
+
+void open_url2() {
+  final Uri emailLaunchUri = Uri(
+    scheme: 'StackOverFlow',
+    path: 'https://stackoverflow.com',
+  );
+
+  launchUrl(emailLaunchUri);
 }

@@ -21,6 +21,10 @@ dependencies:
   flashy_tab_bar2: ^0.0.6
   animated_notch_bottom_bar: ^0.0.6
   virtual_keyboard_custom_layout: ^0.0.5
+  google_fonts: ^4.0.4
+  url_launcher: ^6.1.11
+  open_url: ^2.0.1
+  flutter_web_browser: ^0.17.1
 
 dev_dependencies:
   flutter_test:

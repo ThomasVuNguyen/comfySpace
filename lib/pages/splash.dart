@@ -32,7 +32,7 @@ class Splash extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(height: 79), //create gap
-          Image.asset('assets/onboarding-image.png', width:180, height: 168,),
+          Image.asset("assets/ubuntu-icon.png", width:180, height: 168,),
           const SizedBox(height: 79), //create gap
           const SizedBox(height: 21), //create gap
           GestureDetector(

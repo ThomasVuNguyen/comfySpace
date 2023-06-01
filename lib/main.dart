@@ -9,8 +9,12 @@ import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:xterm/xterm.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:open_url/open_url.dart';
 String? nickname;String? hostname;int port = 22;String? username;String? password;String? color;int _selectedIndex = 0;
 ValueNotifier<int> reloadState = ValueNotifier(0);
 Color? currentColor; String? currentColorString;
@@ -22,8 +26,8 @@ List<String> userList = [];
 List<String> passList = [];
 List<String> distroList = []; List<String>? distro = [];
 Map<String, Color> colorMap = {"Ubuntu": const Color(0xffE95420), "Raspbian": Colors.green, "Kali Linux": Colors.blue};String currentDistro = colorMap.keys.first;
-const bgcolor = Color(0xff0A0B0F);
-const textcolor = Color(0xffFCFCFC);
+const bgcolor = Color(0xff1F1F1F);
+const textcolor = Color(0xffFFFFFF);
 const subcolor = Color(0xff6F6E73);
 
 void main() {
@@ -31,6 +35,7 @@ void main() {
   reAssign();
   runApp(MyApp());
 }  //main function, execute MyApp
+
 
 
 class Welcome extends StatefulWidget {
@@ -51,10 +56,32 @@ class _WelcomePage extends State<Welcome>{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgcolor,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.question_answer),
+        onPressed: () {
+          showDialog(context: context, builder:(BuildContext context) {
+            return AlertDialog(
+              title: Text("Yo"),
+              actions: <Widget>[
+                TextButton(onPressed:() => open_url2(), child: Text("Click me"))
+              ],
+            );
+          });
+          },
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+              title: Text("yo"),
+            )
+          ],
+        )
+      ),
       appBar: AppBar(
           toolbarHeight: 100,
           centerTitle: true,
-          title: Text('Hosts', style: TextStyle(color: textcolor),),
+          //title: Text('Hosts', style: TextStyle(color: textcolor),),
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: bgcolor,
           ),
@@ -62,25 +89,14 @@ class _WelcomePage extends State<Welcome>{
           backgroundColor: bgcolor,
           // title: const Text("My Hosts", style: TextStyle( color: Colors.black,),),
           //backgroundColor: bgcolor,
-          leading: Material(
-            type: MaterialType.transparency,
-            child: Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Ink(
-                decoration: BoxDecoration(
-                  border: Border.all(color: borderColor, width: 2.0 ),
-                  color: cardColor,
-                  shape: BoxShape.circle,
-                ),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(00.0),
-                  child: const Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: Icon(
-                      Icons.menu,
-                      size: 20.0,
-                      color: Colors.black,
-                    ),),),),),),
+          leading: Builder(
+            builder: (BuildContext context){
+              return IconButton(onPressed: (){
+                Scaffold.of(context).openDrawer();
+              },
+                  icon: Icon(Icons.settings));
+            },
+          ),
           actionsIconTheme: const IconThemeData(
               size: 30.0,
               color: Colors.white,
@@ -183,61 +199,51 @@ class _WelcomePage extends State<Welcome>{
                 )),
           ]
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(10.0),
-        children: List.generate(nameList.length, (index) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListTile(
-            shape: RoundedRectangleBorder(side: BorderSide(width: 6, color: colorMap[distroList[index]]!) , borderRadius: BorderRadius.circular(20.0)),
-            visualDensity: const VisualDensity(vertical: 4),
-            //leading: Image.asset('assets/ubuntu-tile.png'),
-            //dense: true,
-            title: Text(nameList[index][0].toUpperCase()+nameList[index].substring(1), style: TextStyle(color: textcolor),),
-            subtitle: Text("${userList[index]} @ ${hostList[index]}", style: TextStyle(color: subcolor),),
-            tileColor: bgcolor,
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                IconButton( icon:const Icon(Icons.delete, size: 26.0, color: subcolor,),
-                  onPressed: () { removeItem(index); setState(() {}); },
-                ),
-                /*IconButton( icon:const Icon(Icons.more, size: 26.0,),
-                            onPressed: () { setState(() {}); },
-                          ),*/
-              ],
-            ),
-            onTap: (){
-              hostname = hostList[index]; username = userList[index]; password = passList[index];
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) =>  const Term()),
-              );
-            },
+      body: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 100,
+              width: double.infinity,
+            child: Text("HOSTS", textAlign: TextAlign.center, style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 48)),
           ),
-        )),
-      ),
-      bottomNavigationBar: FlashyTabBar(
-        selectedIndex: _selectedIndex,
-        iconSize: 30,
-        showElevation: false, // use this to remove appBar's elevation
-        onItemSelected: (index){
-          /*infoBox(index, context);
-          reloadState.addListener(() => setState(() {
-          }));
-          reloadState.value = 0;*/
-        },
-        items: [
-          FlashyTabBarItem( icon: const Icon(Icons.scanner), title: const Text('Scan'),),
-          FlashyTabBarItem( icon: const Icon(Icons.add), title: const Text('Add'),),
-          /*FlashyTabBarItem(
-            icon: Image.asset(
-              "assets/homeIcon.png",
-              color: Color(0xff9496c1),
-              width: 30,
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(10.0),
+              children: List.generate(nameList.length, (index) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 200,
+                  child: ListTile(
+                    shape: RoundedRectangleBorder(side: BorderSide(width: 4, color: colorMap[distroList[index]]!) , borderRadius: BorderRadius.circular(30.0)),
+                    visualDensity: const VisualDensity(vertical: 4),
+                    leading: Image.asset('assets/ubuntu-tile.png'),
+                    //dense: true,
+                    title: Text(nameList[index][0].toUpperCase()+nameList[index].substring(1), style: GoogleFonts.ubuntu(color: textcolor, fontSize: 20),),
+                    subtitle: Text("${userList[index]} @ ${hostList[index]}", style: GoogleFonts.ubuntu(color: subcolor, fontSize: 18),),
+                    tileColor: colorMap[distroList[index]]!,
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton( icon:const Icon(Icons.delete, size: 26.0, color: subcolor,),
+                          onPressed: () { removeItem(index); setState(() {}); },
+                        ),
+                        /*IconButton( icon:const Icon(Icons.more, size: 26.0,),
+                                    onPressed: () { setState(() {}); },
+                                  ),*/
+                      ],
+                    ),
+                    onTap: (){
+                      hostname = hostList[index]; username = userList[index]; password = passList[index];
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  const Term()),
+                      );
+                    },
+                  ),
+                ),
+              )),
             ),
-            title: Text('Home'),
-          ),*/
-          FlashyTabBarItem( icon: const Icon(Icons.settings),  title: const Text('Settings'),),
+          ),
         ],
       ),
     );
@@ -308,7 +314,7 @@ class _TerminalPage extends State<Term> {
           statusBarBrightness: Brightness.light,
         ),
         title: Text(title),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: bgcolor,
       ),
       body: Center(
         child: Column(
@@ -326,4 +332,5 @@ class _TerminalPage extends State<Term> {
     );
   }
 } //TerminalState
+
 

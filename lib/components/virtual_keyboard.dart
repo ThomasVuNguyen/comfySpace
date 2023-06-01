@@ -1,28 +1,40 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:xterm/xterm.dart';
 
-class VirtualKeyboardView extends StatelessWidget {
+class VirtualKeyboardView extends StatefulWidget {
   const VirtualKeyboardView(this.keyboard, {super.key});
 
   final VirtualKeyboard keyboard;
 
   @override
+  State<VirtualKeyboardView> createState() => _VirtualKeyboardViewState();
+}
+
+class _VirtualKeyboardViewState extends State<VirtualKeyboardView> {
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: keyboard,
+
+      animation: widget.keyboard,
       builder: (context, child) => ToggleButtons(
         children: [Text('Ctrl'), Text('Alt'), Text('Shift')],
-        isSelected: [keyboard.ctrl, keyboard.alt, keyboard.shift],
+        isSelected: [widget.keyboard.ctrl, widget.keyboard.alt, widget.keyboard.shift],
+        color: Colors.green,
+        selectedBorderColor: Colors.red,
+        selectedColor: Colors.blue,
+        fillColor: Colors.purple,
         onPressed: (index) {
           switch (index) {
             case 0:
-              keyboard.ctrl = !keyboard.ctrl;
+              widget.keyboard.ctrl = !widget.keyboard.ctrl;
               break;
             case 1:
-              keyboard.alt = !keyboard.alt;
+              widget.keyboard.alt = !widget.keyboard.alt;
               break;
             case 2:
-              keyboard.shift = !keyboard.shift;
+              widget.keyboard.shift = !widget.keyboard.shift;
               break;
           }
         },
@@ -33,11 +45,9 @@ class VirtualKeyboardView extends StatelessWidget {
 
 class VirtualKeyboard extends TerminalInputHandler with ChangeNotifier {
   final TerminalInputHandler _inputHandler;
-
   VirtualKeyboard(this._inputHandler);
 
   bool _ctrl = false;
-
   bool get ctrl => _ctrl;
 
   set ctrl(bool value) {
