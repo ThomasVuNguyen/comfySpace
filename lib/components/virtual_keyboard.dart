@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:xterm/xterm.dart';
 
 class VirtualKeyboardView extends StatefulWidget {
   const VirtualKeyboardView(this.keyboard, {super.key});
-
   final VirtualKeyboard keyboard;
 
   @override
@@ -58,9 +56,7 @@ class VirtualKeyboard extends TerminalInputHandler with ChangeNotifier {
   }
 
   bool _shift = false;
-
   bool get shift => _shift;
-
   set shift(bool value) {
     if (_shift != value) {
       _shift = value;

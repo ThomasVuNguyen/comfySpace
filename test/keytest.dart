@@ -1,43 +1,36 @@
 
-import 'package:flutter/material.dart';
+class KeyPressSimulator {
+  final SimulateKeyPress simulateKeyPress;
 
-class CustomKeyboard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      color: Colors.grey[300],
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildKey('A'),
-          _buildKey('B'),
-        ],
-      ),
-    );
+  KeyPressSimulator() :
+        simulateKeyPress = _loadSimulateKeyPress() {
+    // Initialize any necessary setup
   }
 
-  Widget _buildKey(String letter) {
-    return InkWell(
-      onTap: () {
-        print('Pressed $letter');
-      },
-      child: Container(
-        width: 80,
-        height: 80,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          letter,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
+  static SimulateKeyPress _loadSimulateKeyPress() {
+    final dylib = DynamicLibrary.open('native_key_press.so'); // Replace with the actual dynamic library file name
+    return dylib
+        .lookupFunction<NativeSimulateKeyPress, SimulateKeyPress>('simulateKeyPress');
+  }
+
+  void simulateKey(int keyCode) {
+    simulateKeyPress(keyCode);
   }
 }
+
+class KeyPressSimulatorWidget extends StatelessWidget {
+  final KeyPressSimulator keyPressSimulator = KeyPressSimulator();
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+        onPressed: () {
+          // Simulate keypress event
+          keyPressSimulator.simulateKey(29); // Pass the desired key code
+        },
+        child: Icon(Icons.keyboard),
+      );
+  }
+}
+
+

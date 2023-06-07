@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
+import 'package:comfyssh_flutter/main.dart';
 import 'package:comfyssh_flutter/pages/home_page.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
 import 'package:dartssh2/dartssh2.dart';
@@ -15,6 +16,9 @@ import 'package:xterm/xterm.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:open_url/open_url.dart';
+import 'dart:ffi';
+import 'package:ffi/ffi.dart';
+
 String? nickname;String? hostname;int port = 22;String? username;String? password;String? color;int _selectedIndex = 0;
 ValueNotifier<int> reloadState = ValueNotifier(0);
 Color? currentColor; String? currentColorString;
@@ -26,9 +30,9 @@ List<String> userList = [];
 List<String> passList = [];
 List<String> distroList = []; List<String>? distro = [];
 Map<String, Color> colorMap = {"Ubuntu": const Color(0xffE95420), "Raspbian": Colors.green, "Kali Linux": Colors.blue};String currentDistro = colorMap.keys.first;
-const bgcolor = Color(0xff1F1F1F);
-const textcolor = Color(0xffFFFFFF);
-const subcolor = Color(0xff6F6E73);
+const bgcolor = Color(0xffFFFFFF);
+const textcolor = Color(0xff000000);
+const subcolor = Color(0xff000000);
 
 void main() {
   memoryCheck();
@@ -57,31 +61,90 @@ class _WelcomePage extends State<Welcome>{
     return Scaffold(
       backgroundColor: bgcolor,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.question_answer),
-        onPressed: () {
-          showDialog(context: context, builder:(BuildContext context) {
-            return AlertDialog(
-              title: Text("Yo"),
-              actions: <Widget>[
-                TextButton(onPressed:() => open_url2(), child: Text("Click me"))
+        backgroundColor: Colors.blue,
+        onPressed: () {showDialog(context: context, builder:(BuildContext context){
+          return AlertDialog(
+            title: const Text("Add a new host"),
+            content: Column(
+              children: [
+                TextField( //add nickname
+                  onChanged: (name1){
+                    nickname = name1;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: "nickname",
+                  ),textInputAction: TextInputAction.next,
+                ),
+                TextField( //add hostname
+                  onChanged: (host1){
+                    hostname = host1;
+                    ;},
+                  decoration: const InputDecoration(
+                    hintText: "hostname",
+                  ),textInputAction: TextInputAction.next,
+                ),
+                TextField( //add username
+                  onChanged: (user1){
+                    username = user1;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: "username",
+                  ),textInputAction: TextInputAction.next,
+                ),
+                TextField( //add password
+                  onChanged: (pass1){
+                    password = pass1;
+                    print(password);
+                    print(pass1);
+                  },
+                  decoration: const InputDecoration(
+                    hintText: "password",
+                  ),textInputAction: TextInputAction.next,
+                ),
+                DropdownButtonFormField<String> (
+                  value: colorMap.keys.toList()![0],
+                  items: colorMap.keys.toList()!.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: const TextStyle(fontSize: 10),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (String? value){
+                    currentDistro = value!;
+                  },
+                ),
               ],
-            );
-          });
-          },
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              title: Text("yo"),
-            )
-          ],
-        )
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                  color: Colors.green,
+                  textColor: Colors.white,
+                  child: const Text("Save"),
+                  onPressed: (){
+                    newName(nickname!);
+                    newHost(hostname!);
+                    newUser(username!);
+                    newPass(password!);
+                    newDistro(currentDistro);
+                    print("done");
+                    setState(() {
+                    });
+                    Navigator.pop(context);
+                    currentDistro=colorMap.keys.first;
+                  })],);});
+        },
       ),
       appBar: AppBar(
-          toolbarHeight: 100,
-          centerTitle: true,
-          //title: Text('Hosts', style: TextStyle(color: textcolor),),
+        shape: Border(bottom: BorderSide(color: textcolor, width: 2)),
+          toolbarHeight: 64,
+          title: Row(
+            children: <Widget>[
+              SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor, ),),), Text('COMFYSSH', style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),),
+            ],
+          ),
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: bgcolor,
           ),
@@ -89,14 +152,6 @@ class _WelcomePage extends State<Welcome>{
           backgroundColor: bgcolor,
           // title: const Text("My Hosts", style: TextStyle( color: Colors.black,),),
           //backgroundColor: bgcolor,
-          leading: Builder(
-            builder: (BuildContext context){
-              return IconButton(onPressed: (){
-                Scaffold.of(context).openDrawer();
-              },
-                  icon: Icon(Icons.settings));
-            },
-          ),
           actionsIconTheme: const IconThemeData(
               size: 30.0,
               color: Colors.white,
@@ -181,7 +236,7 @@ class _WelcomePage extends State<Welcome>{
                               })],);});},
                   child: const Icon(
                     Icons.add,
-                    size: 26.0,
+                    size: 0,
                   )
               ),
             ),
@@ -197,27 +252,34 @@ class _WelcomePage extends State<Welcome>{
                       size: 0.0,
                     )
                 )),
+            Padding(padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                child: Icon(Icons.menu, color: textcolor,),
+              ),
+            )
           ]
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(
-            height: 100,
-              width: double.infinity,
-            child: Text("HOSTS", textAlign: TextAlign.center, style: GoogleFonts.ubuntu(color: Colors.white, fontSize: 48)),
-          ),
+          //SizedBox(height: 35,),
+          Padding(padding: EdgeInsets.only(top: 35, left: 20),
+            child: Align(alignment: Alignment.centerLeft, child: Text("HOSTS", style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),)),),
+          Padding(padding: EdgeInsets.only(top: 10, left: 20),
+            child: Align(alignment: Alignment.centerLeft, child: Text("Code Away", style: GoogleFonts.poppins(color: textcolor, fontSize: 16),)),),
+          SizedBox(height: 43),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
               children: List.generate(nameList.length, (index) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 200,
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: SizedBox(
+                  height: 128,
                   child: ListTile(
-                    shape: RoundedRectangleBorder(side: BorderSide(width: 4, color: colorMap[distroList[index]]!) , borderRadius: BorderRadius.circular(30.0)),
-                    visualDensity: const VisualDensity(vertical: 4),
-                    leading: Image.asset('assets/ubuntu-tile.png'),
-                    //dense: true,
+                    contentPadding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(side: BorderSide(width: 2, color:  textcolor/*colorMap[distroList[index]]!*/) , borderRadius: BorderRadius.circular(8.0)),
+                    //visualDensity: VisualDensity(vertical: -3, horizontal: 0),
+                    leading:  Image.asset('assets/ubuntu-icon.png'),
+                    dense: true,
                     title: Text(nameList[index][0].toUpperCase()+nameList[index].substring(1), style: GoogleFonts.ubuntu(color: textcolor, fontSize: 20),),
                     subtitle: Text("${userList[index]} @ ${hostList[index]}", style: GoogleFonts.ubuntu(color: subcolor, fontSize: 18),),
                     tileColor: colorMap[distroList[index]]!,
@@ -307,6 +369,13 @@ class _TerminalPage extends State<Term> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      //floatingActionButton:  KeyPressSimulatorWidget(),
+      //ArrowUpWidget(),
+      /*FloatingActionButton(
+        backgroundColor: Colors.red,
+        child: Icon(Icons.add),
+        onPressed: ,
+      )*/
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: bgcolor,
@@ -333,4 +402,64 @@ class _TerminalPage extends State<Term> {
   }
 } //TerminalState
 
+class ArrowUpWidget extends StatefulWidget {
+  const ArrowUpWidget({super.key});
 
+  @override
+  _ArrowUpWidgetState createState() => _ArrowUpWidgetState();
+}
+
+class _ArrowUpWidgetState extends State<ArrowUpWidget> {
+  final _textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  void moveCursorUp() async {
+    print("up");
+    final currentText = _textEditingController.text;
+    final selection = _textEditingController.selection;
+
+    if (selection.extentOffset > 0) {
+      final updatedOffset = selection.extentOffset - 1;
+      final updatedSelection = TextSelection.collapsed(offset: updatedOffset);
+
+      _textEditingController.value = TextEditingValue(
+        text: currentText,
+        selection: updatedSelection,
+        composing: TextRange.empty,
+      );
+
+      // Platform-specific code to simulate arrow key press
+      if (Theme.of(context).platform == TargetPlatform.android) {
+        print("android");
+      }
+        // iOS does not have a direct way to simulate arrow key press
+        // You may need to find a third-party package or custom solution
+      } else {
+      print("not android");
+        /*SystemChannels.textInput.invokeMethod('TextInput.sendKeyEvent', {
+          'ok': 'sup',
+          'keymap': 'windows', // Change to 'windows' for web platform
+          'keyCode': 65, // Key code for arrow-up
+          'type': 'keydown',
+        });*/
+      final event = RawKeyDownEvent(data: RawKeyEventDataAndroid(
+        keyCode: 29,
+        scanCode: 30,
+        metaState: 0,
+      ));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(onPressed: moveCursorUp,
+      backgroundColor: Colors.blue,
+      child: Icon(Icons.upload),
+    );
+  }
+}
