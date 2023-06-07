@@ -369,13 +369,19 @@ class _TerminalPage extends State<Term> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      //floatingActionButton:  KeyPressSimulatorWidget(),
-      //ArrowUpWidget(),
-      /*FloatingActionButton(
-        backgroundColor: Colors.red,
-        child: Icon(Icons.add),
-        onPressed: ,
-      )*/
+      /*floatingActionButton:  FloatingActionButton(
+        onPressed: () async {
+          final keyEvent = KeyEvent(
+            keyType: KeyEventType.arrowUp,
+            character: '\u2191',
+            modifiers: Modifier.none,
+          );
+
+          // Send the KeyEvent event to the _key object.
+          await _key.dispatchEvent(keyEvent);
+          },
+
+      ),*/
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: bgcolor,
@@ -402,64 +408,3 @@ class _TerminalPage extends State<Term> {
   }
 } //TerminalState
 
-class ArrowUpWidget extends StatefulWidget {
-  const ArrowUpWidget({super.key});
-
-  @override
-  _ArrowUpWidgetState createState() => _ArrowUpWidgetState();
-}
-
-class _ArrowUpWidgetState extends State<ArrowUpWidget> {
-  final _textEditingController = TextEditingController();
-
-  @override
-  void dispose() {
-    _textEditingController.dispose();
-    super.dispose();
-  }
-
-  void moveCursorUp() async {
-    print("up");
-    final currentText = _textEditingController.text;
-    final selection = _textEditingController.selection;
-
-    if (selection.extentOffset > 0) {
-      final updatedOffset = selection.extentOffset - 1;
-      final updatedSelection = TextSelection.collapsed(offset: updatedOffset);
-
-      _textEditingController.value = TextEditingValue(
-        text: currentText,
-        selection: updatedSelection,
-        composing: TextRange.empty,
-      );
-
-      // Platform-specific code to simulate arrow key press
-      if (Theme.of(context).platform == TargetPlatform.android) {
-        print("android");
-      }
-        // iOS does not have a direct way to simulate arrow key press
-        // You may need to find a third-party package or custom solution
-      } else {
-      print("not android");
-        /*SystemChannels.textInput.invokeMethod('TextInput.sendKeyEvent', {
-          'ok': 'sup',
-          'keymap': 'windows', // Change to 'windows' for web platform
-          'keyCode': 65, // Key code for arrow-up
-          'type': 'keydown',
-        });*/
-      final event = RawKeyDownEvent(data: RawKeyEventDataAndroid(
-        keyCode: 29,
-        scanCode: 30,
-        metaState: 0,
-      ));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(onPressed: moveCursorUp,
-      backgroundColor: Colors.blue,
-      child: Icon(Icons.upload),
-    );
-  }
-}
