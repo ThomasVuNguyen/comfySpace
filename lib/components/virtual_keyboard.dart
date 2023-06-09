@@ -1,7 +1,8 @@
 import 'dart:async';
+import 'package:comfyssh_flutter/main.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:xterm/xterm.dart';
-
 class VirtualKeyboardView extends StatefulWidget {
   const VirtualKeyboardView(this.keyboard, {super.key});
   final VirtualKeyboard keyboard;
@@ -14,15 +15,19 @@ class _VirtualKeyboardViewState extends State<VirtualKeyboardView> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-
       animation: widget.keyboard,
       builder: (context, child) => ToggleButtons(
-        children: [Text('Ctrl'), Text('Alt'), Text('Shift')],
+        borderWidth: 2,
+        children: [
+          Container(height:45, width:(MediaQuery.of(context).size.width-10)/3, child: Center(child: Text('Ctrl', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 21)))),
+          Container(width:(MediaQuery.of(context).size.width-10)/3, child: Center(child: Text('Alt', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 21)))),
+          Container(width:(MediaQuery.of(context).size.width-10)/3, child: Center(child: Text('Shift', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 21)))),],
         isSelected: [widget.keyboard.ctrl, widget.keyboard.alt, widget.keyboard.shift],
-        color: Colors.green,
-        selectedBorderColor: Colors.red,
-        selectedColor: Colors.blue,
-        fillColor: Colors.purple,
+        color: keycolor, //unselected color
+        borderColor: bgcolor,
+        selectedBorderColor: Colors.black, //selected colors
+        selectedColor: Colors.white,
+        fillColor: Colors.black,
         onPressed: (index) {
           switch (index) {
             case 0:

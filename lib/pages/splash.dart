@@ -1,6 +1,9 @@
 import 'package:comfyssh_flutter/function.dart';
+import 'package:comfyssh_flutter/main.dart';
 import 'package:flutter/material.dart';
 import 'package:comfyssh_flutter/pages/home_page.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -23,47 +26,41 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
 class Splash extends StatelessWidget {
   const Splash({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const SizedBox(height: 79), //create gap
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Container( color: Colors.red, width: 100, height: 100,child: Icon(Icons.add, color: Colors.white,),),
-            tileColor: Colors.grey,
-            title: Text("ho", ),
-            //subtitle: Text("go"),
-            trailing: Icon(Icons.add, color: Colors.black,),
-
-          ),
-          //Image.asset("assets/ubuntu-icon.png", width:180, height: 168,),
-          const SizedBox(height: 79), //create gap
-          const SizedBox(height: 21), //create gap
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) =>  const HomePage()),
-              );
-              reAssign();
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 32.0),
-              child: Text('This is my practice app splash screen. Feel free to play around',
-                textAlign: TextAlign.center,),
+      appBar: AppBar(
+        toolbarHeight: 44,
+        backgroundColor: bgcolor,
+        elevation: 0.0,
+      ),
+      body: Container(
+        color: bgcolor,height: double.infinity,
+        child: Column( crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(width: double.infinity, height: 141, color: bgcolor,),
+            Container(
+              //height: 100,
+              child: Center(child: Image.asset('assets/codingguy.png', height: 239.0,)),
+              width: double.infinity,
+              color: bgcolor,
             ),
-          ),
-        ],
+            Container(child: Text("Code away your worry", style: GoogleFonts.poppins(color: textcolor,  fontSize: 24)),color: bgcolor,),
+            Container(height: 35, color: bgcolor,),
+            Container(width: double.infinity, height: 100,
+              child: IconButton(onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  const HomePage()),
+                );
+                reAssign();
+              }, icon: Image.asset('assets/play.png', width: 100,), ),
+            )
+          ],
+        ),
       ),
     );
   }
-}
-
-void toHomePage(){
-
 }

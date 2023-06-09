@@ -33,14 +33,13 @@ Map<String, Color> colorMap = {"Ubuntu": const Color(0xffE95420), "Raspbian": Co
 const bgcolor = Color(0xffFFFFFF);
 const textcolor = Color(0xff000000);
 const subcolor = Color(0xff000000);
+const keycolor = Color(0xff656366);
 
 void main() {
   memoryCheck();
   reAssign();
   runApp(const MyApp());
 }  //main function, execute MyApp
-
-
 
 class Welcome extends StatefulWidget {
   const Welcome({Key? key}) : super(key: key);
@@ -139,7 +138,7 @@ class _WelcomePage extends State<Welcome>{
               child: Icon(Icons.add, size: 28,),
             ),
       appBar: AppBar(
-        shape: Border(bottom: BorderSide(color: textcolor, width: 2)),
+        shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
           toolbarHeight: 64,
           title: Row(
             children: <Widget>[
@@ -268,41 +267,70 @@ class _WelcomePage extends State<Welcome>{
           Padding(padding: EdgeInsets.only(top: 10, left: 20),
             child: Align(alignment: Alignment.centerLeft, child: Text("Code Away", style: GoogleFonts.poppins(color: textcolor, fontSize: 16),)),),
           const SizedBox(height: 43),
+
           Expanded(
             child: ListView(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0), //card wall padding
               children: List.generate(nameList.length, (index) => Padding(
                 padding: const EdgeInsets.only(bottom: 20.0), //distance between cards
-                child: SizedBox(
-                  height: 128,
-                  child: ListTile(
-                      //minLeadingWidth: 140,
-                      horizontalTitleGap: 15,
-                      contentPadding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(side: const BorderSide(width: 2, color:  textcolor) , borderRadius: BorderRadius.circular(8.0)),
-                      leading:  Container(width: 106, height: 128, color: Colors.black, child: Icon(Icons.add, color: Colors.white)),
-                      title: Text(nameList[index][0].toUpperCase()+nameList[index].substring(1), style: GoogleFonts.ubuntu(color: textcolor, fontSize: 20),),
-                    subtitle: Text("${userList[index]} @ ${hostList[index]}", style: GoogleFonts.ubuntu(color: subcolor, fontSize: 18),),
-                      tileColor: bgcolor,
-                      //colorMap[distroList[index]]!,
-                    onLongPress: () => showDialog<String>(
-                                context: context, builder: (BuildContext context) => AlertDialog(
-                                title: const Text('Delete host?'),
-                                content: const Text('This will permanently remove host information.'),
-                                actions: <Widget>[
-                                TextButton(onPressed: () => Navigator.pop(context, 'Cancel'), child: const Text('Cancel'),),
-                                TextButton(onPressed: () {removeItem(index); Navigator.pop(context, 'OK'); setState(() {});}, child: const Text('OK'),),],),),
-                      //trailing: ,
-                      onTap: (){
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: textcolor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8.0),topRight: Radius.circular(0.0),bottomLeft: Radius.circular(8.0),bottomRight: Radius.circular(0.0),
+                          )
+                      ),
+                      height: 128, width: 106,
+                      child: IconButton(
+                        icon: Image.asset('assets/ubuntu-icon.png'), onPressed: () {
                         nickname = nameList[index];hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) =>  const Term()),
                         );
                       },
+                      ),
                     ),
+                    SizedBox(width: MediaQuery.of(context).size.width-40-106, height: 128,
+                      child: ListTile(contentPadding: const EdgeInsets.only(top:0.0, bottom: 0.0),
+                          trailing: Container( width: 40,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Icon(Icons.arrow_forward_ios, color: textcolor,size: 25,),
+                              ],
+                            ),
+                          ),
+                          onLongPress: () => showDialog<String>(
+                            context: context, builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Delete host?'),
+                            content: const Text('This will permanently remove host information.'),
+                            actions: <Widget>[
+                              TextButton(onPressed: () => Navigator.pop(context, 'Cancel'), child: const Text('Cancel'),),
+                              TextButton(onPressed: () {removeItem(index); Navigator.pop(context, 'OK'); setState(() {});}, child: const Text('OK'),),],),),
+                          onTap: (){
+                            nickname = nameList[index];hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>  const Term()),
+                            );
+                          },
+                          shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color:textcolor) , borderRadius: BorderRadius.only(topLeft: Radius.circular(0.0),topRight: Radius.circular(8.0),bottomLeft: Radius.circular(0.0),bottomRight: Radius.circular(8.0),)),
+                          title: Padding(
+                            padding: const EdgeInsets.only(left: 15.0, top: 23, bottom: 23),
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(nameList[index][0].toUpperCase()+nameList[index].substring(1), style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold,  fontSize: 20)),
+                                Text("${userList[index]} @ ${hostList[index]}", style: GoogleFonts.poppins(color: textcolor, fontSize: 16)),
+                              ],
+                            ),
+                          )
+                      ),
+                    )
+                  ],
                 ),
-
               )),
             ),
           ),
@@ -370,13 +398,14 @@ class _TerminalPage extends State<Term> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         toolbarHeight: 64,
-        shape: Border(bottom: BorderSide(color: textcolor, width: 2)),
-        systemOverlayStyle: SystemUiOverlayStyle(
+        shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
+        systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: bgcolor,
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.light,
         ),
         title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, //left alignment for texts
           children: [
             Text(nickname!,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 21)),
             Text(distro!,style: GoogleFonts.poppins(color: textcolor, fontSize: 12)),
@@ -387,7 +416,7 @@ class _TerminalPage extends State<Term> {
         actions: <Widget>[
           IconButton(onPressed: (){
             Navigator.pop(context);
-          }, icon: Icon(Icons.backspace, color: textcolor,))
+          }, icon: const Icon(Icons.arrow_back, color: textcolor,))
         ],
       ),
       body: Center(
