@@ -188,6 +188,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "in_app_review",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/in_app_review-2.0.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "in_app_review_platform_interface",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/in_app_review_platform_interface-2.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "introduction_screen",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/introduction_screen-3.1.8",
       "packageUri": "lib/",
@@ -500,7 +512,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-06-09T01:59:17.316915Z",
+  "generated": "2023-06-11T23:00:16.297588Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:comfyssh_flutter/main.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
@@ -183,4 +185,11 @@ void open_url2() {
   );
 
   launchUrl(emailLaunchUri);
+}
+
+Future<void> sendFeedback() async {
+  final InAppReview inAppReview = InAppReview.instance;
+  if (await inAppReview.isAvailable()) {
+    inAppReview.requestReview();
+  }
 }

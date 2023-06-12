@@ -18,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:open_url/open_url.dart';
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
+//import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 String? nickname;String? hostname;int port = 22;String? username;String? password;String? color;int _selectedIndex = 0; String? distro;
 ValueNotifier<int> reloadState = ValueNotifier(0);
@@ -29,12 +30,15 @@ List<String> hostList = [];
 List<String> userList = [];
 List<String> passList = [];
 List<String> distroList = [];
-Map<String, Color> colorMap = {"Ubuntu": const Color(0xffE95420), "Raspbian": Colors.green, "Kali Linux": Colors.blue};String currentDistro = colorMap.keys.first;
+Map<String, String> colorMap = {"Ubuntu": "assets/icons/distro/ubuntu-icon.png", "Raspbian": "assets/icons/distro/RPI-icon.png", "Kali Linux": "assets/icons/distro/kali-icon.png", "Fedora": "assets/icons/distro/fedora-icon.png", "Manjaro": "assets/icons/distro/manjaro-icon.png", "Arch Linux": "assets/icons/distro/arch-icon.png", "Mint Linux": "assets/icons/distro/mint-icon.png", "Debian":  "assets/icons/distro/debian-icon.png", "OpenSUSE": "assets/icons/distro/openSUSE-icon.png", "Custom Distro":"assets/icons/distro/linux-icon.png"};
+//Map<String, Color> colorMap = {"Ubuntu": const Color(0xffE95420), "Raspbian": const Color(0xffBC1142), "Kali Linux": const Color(0xff249EFF), "Fedora": const Color(0xff294172), "Manjaro": const Color(0xff35BF5C), "Arch Linux": const Color(0xff1793D1), "Mint Linux": const Color(0xff69B53F), "Debian": const Color(0xffA80030)};
+String currentDistro = colorMap.keys.first;
 const bgcolor = Color(0xffFFFFFF);
 const textcolor = Color(0xff000000);
 const subcolor = Color(0xff000000);
 const keycolor = Color(0xff656366);
-
+const accentcolor = Color(0xff1C3D93);
+const warningcolor = Color(0xffCE031B);
 void main() {
   memoryCheck();
   reAssign();
@@ -60,68 +64,83 @@ class _WelcomePage extends State<Welcome>{
     return Scaffold(
       backgroundColor: bgcolor,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff1C3D93),
+        backgroundColor: accentcolor,
               onPressed: () {showDialog(context: context, builder:(BuildContext context){
                 return AlertDialog(
-                  title: const Text("Add a new host"),
-                  content: Column(
-                    children: [
-                      TextField( //add nickname
-                        onChanged: (name1){
-                          nickname = name1.replaceFirst(name1[0], name1[0].toUpperCase());
-                        },
-                        decoration: const InputDecoration(
-                          hintText: "nickname",
-                        ),textInputAction: TextInputAction.next,
-                      ),
-                      TextField( //add hostname
-                        onChanged: (host1){
-                          hostname = host1;
-                          ;},
-                        decoration: const InputDecoration(
-                          hintText: "hostname",
-                        ),textInputAction: TextInputAction.next,
-                      ),
-                      TextField( //add username
-                        onChanged: (user1){
-                          username = user1;
-                        },
-                        decoration: const InputDecoration(
-                          hintText: "username",
-                        ),textInputAction: TextInputAction.next,
-                      ),
-                      TextField( //add password
-                        onChanged: (pass1){
-                          password = pass1;
-                          print(password);
-                          print(pass1);
-                        },
-                        decoration: const InputDecoration(
-                          hintText: "password",
-                        ),textInputAction: TextInputAction.next,
-                      ),
-                      DropdownButtonFormField<String> (
-                        value: colorMap.keys.toList()![0],
-                        items: colorMap.keys.toList()!.map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: const TextStyle(fontSize: 10),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? value){
-                          currentDistro = value!;
-                        },
-                      ),
-                    ],
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                  contentPadding: const EdgeInsets.all(20.0),
+                  title: const Center(child: Text("New Host")),
+                  titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600,fontSize: 24.0, color: textcolor),
+                  content: SingleChildScrollView(
+                    child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField( //add nickname
+                          onChanged: (name1){
+                            nickname = name1.replaceFirst(name1[0], name1[0].toUpperCase());
+                          },
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.only(left: 15.0, top: 15.0, bottom: 15.0),
+                            hintText: "nickname", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                              focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                              enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                          ),textInputAction: TextInputAction.next,
+                        ), const SizedBox(height: 32, width: double.infinity,),
+                        TextField( //add hostname
+                          onChanged: (host1){hostname = host1;},
+                          decoration: InputDecoration(
+                            hintText: "hostname / IP", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                              focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                              enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                          ),textInputAction: TextInputAction.next,
+                        ), const SizedBox(height: 32, width: double.infinity,),
+                        TextField( //add username
+                          onChanged: (user1){
+                            username = user1;
+                          },
+                          decoration: InputDecoration(
+                            hintText: "username", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                              focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                              enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                          ),textInputAction: TextInputAction.next,
+                        ), const SizedBox(height: 32, width: double.infinity,),
+                        TextField( //add password
+                          onChanged: (pass1){
+                            password = pass1;
+                          },
+                          decoration: InputDecoration(
+                            hintText: "password", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                              focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                              enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                          ),textInputAction: TextInputAction.next,
+                        ), const SizedBox(height: 32, width: double.infinity,),
+                        DropdownButtonFormField<String> (
+                          decoration: const InputDecoration(
+                            border:  OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), borderSide: BorderSide(color: Colors.blue, width: 2.0))
+                          ),
+                          iconSize: 30.0, iconDisabledColor: textcolor, iconEnabledColor: Colors.blue,
+                          value: colorMap.keys.toList()[0],
+                          items: colorMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: GoogleFonts.poppins(fontSize: 18.0),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? value){
+                            currentDistro = value!;
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                   actions: <Widget>[
                     MaterialButton(
-                        color: Colors.green,
+                        color: accentcolor,
                         textColor: Colors.white,
-                        child: const Text("Save"),
+                        child: Text("Done", style: GoogleFonts.poppins(fontSize: 18),),
                         onPressed: (){
                           newName(nickname!);
                           newHost(hostname!);
@@ -135,17 +154,17 @@ class _WelcomePage extends State<Welcome>{
                           currentDistro=colorMap.keys.first;
                         })],);});
               },
-              child: Icon(Icons.add, size: 28,),
+              child: const Icon(Icons.add, size: 28,),
             ),
       appBar: AppBar(
         shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
           toolbarHeight: 64,
           title: Row(
             children: <Widget>[
-              SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor, ),),), Text('COMFYSSH', style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),),
+              const SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor, ),),), Text('HOSTS', style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),),
             ],
           ),
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: bgcolor,
           ),
           elevation: 0,
@@ -163,21 +182,19 @@ class _WelcomePage extends State<Welcome>{
                   onTap:(){
                     showDialog(context: context, builder:(BuildContext context){
                       return AlertDialog(
-                        title: const Text("Add a new host"),
-                        content: Column(
+                        title: Text("Add a new host",  style: GoogleFonts.poppins(fontSize: 18, color: textcolor),),
+                        content: Column(mainAxisSize: MainAxisSize.min,
                           children: [
                             TextField( //add nickname
                               onChanged: (name1){
-                                nickname = name1;
-                              },
+                                nickname = name1;},
                               decoration: const InputDecoration(
                                 hintText: "nickname",
                               ),textInputAction: TextInputAction.next,
                             ),
                             TextField( //add hostname
                               onChanged: (host1){
-                                hostname = host1;
-                                ;},
+                                hostname = host1;},
                               decoration: const InputDecoration(
                                 hintText: "hostname",
                               ),textInputAction: TextInputAction.next,
@@ -193,16 +210,14 @@ class _WelcomePage extends State<Welcome>{
                             TextField( //add password
                               onChanged: (pass1){
                                 password = pass1;
-                                print(password);
-                                print(pass1);
                               },
                               decoration: const InputDecoration(
                                 hintText: "password",
                               ),textInputAction: TextInputAction.next,
                             ),
                             DropdownButtonFormField<String> (
-                              value: colorMap.keys.toList()![0],
-                              items: colorMap.keys.toList()!.map<DropdownMenuItem<String>>((String value) {
+                              value: colorMap.keys.toList()[0],
+                              items: colorMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(
@@ -254,7 +269,42 @@ class _WelcomePage extends State<Welcome>{
                 )),
             Padding(padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                child: Icon(Icons.menu, color: textcolor,),
+                child: const Icon(Icons.menu, color: textcolor,),
+                onTap: (){
+                  showDialog<String>(
+                      context: context, builder: (BuildContext context) =>
+                      AlertDialog(
+                        title: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                Image.asset("assets/comfy-cat.png", width: 40.0,),
+                                const SizedBox(width: 10.0,),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("comfyStudio team",style: GoogleFonts.poppins(fontSize: 21.0,fontWeight: FontWeight.bold )),
+                                    Text("Hey there!",style: GoogleFonts.poppins(fontSize: 12.0, color: const Color(0xff656366))),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10.0,),
+                            Text("Thank you for using comfySSH!",style: GoogleFonts.poppins(fontSize: 16.0, ),),
+                            Text("",style: GoogleFonts.poppins(fontSize: 16.0, ),),
+                            Text("With comfySSH, we want to deliver to you a comfortable development experience - minimal and powerful.",style: GoogleFonts.poppins(fontSize: 16.0, )),
+                            Text("",style: GoogleFonts.poppins(fontSize: 16.0, )),Text("If you have any feedback or feature suggestion, you can do so at our website/email:",style: GoogleFonts.poppins(fontSize: 16.0, )),
+                            Text("",style: GoogleFonts.poppins(fontSize: 16.0, )), SelectableText("comfyStudio.tech",style: GoogleFonts.poppins(fontSize: 16.0, fontWeight:FontWeight.w600 )),
+                            SelectableText("feedback@comfystudio.tech",style: GoogleFonts.poppins(fontSize: 12.0, fontWeight:FontWeight.w600 )),
+                            Text("",style: GoogleFonts.poppins(fontSize: 16.0, )),Text("You can also see how we have planned for feedback & feature request in the past at our website.",style: GoogleFonts.poppins(fontSize: 16.0, )),
+                            Text("",style: GoogleFonts.poppins(fontSize: 16.0, )),Text("In the mean time, look out for more updates and take care!",style: GoogleFonts.poppins(fontSize: 16.0, )),
+                            Text("",style: GoogleFonts.poppins(fontSize: 16.0, ))
+                          ],
+                        ),
+                      )
+                  );
+                },
               ),
             )
           ]
@@ -262,21 +312,21 @@ class _WelcomePage extends State<Welcome>{
       body: Column(
         children: <Widget>[
           //SizedBox(height: 35,),
-          Padding(padding: EdgeInsets.only(top: 35, left: 20),
+          /*Padding(padding: EdgeInsets.only(top: 35, left: 20),
             child: Align(alignment: Alignment.centerLeft, child: Text("HOSTS", style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),)),),
           Padding(padding: EdgeInsets.only(top: 10, left: 20),
-            child: Align(alignment: Alignment.centerLeft, child: Text("Code Away", style: GoogleFonts.poppins(color: textcolor, fontSize: 16),)),),
+            child: Align(alignment: Alignment.centerLeft, child: Text("Code Away", style: GoogleFonts.poppins(color: textcolor, fontSize: 16),)),),*/
           const SizedBox(height: 43),
-
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0), //card wall padding
+              physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
               children: List.generate(nameList.length, (index) => Padding(
                 padding: const EdgeInsets.only(bottom: 20.0), //distance between cards
                 child: Row(
                   children: [
                     Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: textcolor,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(8.0),topRight: Radius.circular(0.0),bottomLeft: Radius.circular(8.0),bottomRight: Radius.circular(0.0),
@@ -284,13 +334,13 @@ class _WelcomePage extends State<Welcome>{
                       ),
                       height: 128, width: 106,
                       child: IconButton(
-                        icon: Image.asset('assets/ubuntu-icon.png'), onPressed: () {
-                        nickname = nameList[index];hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
+                        onPressed: () {
+                        nickname = nameList[index] ;hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) =>  const Term()),
                         );
-                      },
+                      },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
                       ),
                     ),
                     SizedBox(width: MediaQuery.of(context).size.width-40-106, height: 128,
@@ -298,18 +348,27 @@ class _WelcomePage extends State<Welcome>{
                           trailing: Container( width: 40,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
+                              children: const [
                                 Icon(Icons.arrow_forward_ios, color: textcolor,size: 25,),
                               ],
                             ),
                           ),
                           onLongPress: () => showDialog<String>(
                             context: context, builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Delete host?'),
-                            content: const Text('This will permanently remove host information.'),
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)), side: BorderSide(color: warningcolor, width: 2.0)),
+                            title: Text('Delete host?', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold ),),
+                            content: Text('This will permanently remove host information.', style: GoogleFonts.poppins(fontSize: 16 )),
                             actions: <Widget>[
-                              TextButton(onPressed: () => Navigator.pop(context, 'Cancel'), child: const Text('Cancel'),),
-                              TextButton(onPressed: () {removeItem(index); Navigator.pop(context, 'OK'); setState(() {});}, child: const Text('OK'),),],),),
+                              RawMaterialButton(onPressed: () => Navigator.pop(context, 'Cancel'), child: const Text('Cancel'),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                ),
+                              ),
+                              RawMaterialButton(onPressed: () {removeItem(index); Navigator.pop(context, 'Delete'); setState(() {});}, child: const Text('Delete'),
+                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), ),
+                                fillColor: warningcolor,
+                                textStyle: GoogleFonts.poppins(color: bgcolor, fontWeight: FontWeight.w600, fontSize: 16),
+                              ),],),),
                           onTap: (){
                             nickname = nameList[index];hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
                             Navigator.push(
@@ -351,7 +410,6 @@ class _TerminalPage extends State<Term> {
   }
   Future<void> initTerminal() async {
     terminal.write('Connecting...\r\n');
-
     final client = SSHClient(
       await SSHSocket.connect(hostname!, port),
       username: username!,

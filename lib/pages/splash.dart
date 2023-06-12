@@ -40,24 +40,36 @@ class Splash extends StatelessWidget {
         color: bgcolor,height: double.infinity,
         child: Column( crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(width: double.infinity, height: 141, color: bgcolor,),
+            Container(width: double.infinity, height: 90, color: bgcolor,),
             Container(
               //height: 100,
               child: Center(child: Image.asset('assets/codingguy.png', height: 239.0,)),
               width: double.infinity,
               color: bgcolor,
             ),
-            Container(child: Text("Code away your worry", style: GoogleFonts.poppins(color: textcolor,  fontSize: 24)),color: bgcolor,),
             Container(height: 35, color: bgcolor,),
-            Container(width: double.infinity, height: 100,
-              child: IconButton(onPressed: (){
+            SizedBox(width: double.infinity, height: 100,
+              child: InkWell(
+                onLongPress: (){
+                  clearData();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  const HomePage()),
+                  );
+                },
+                onTap: (){
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) =>  const HomePage()),
                 );
                 reAssign();
-              }, icon: Image.asset('assets/play.png', width: 100,), ),
-            )
+              }, child: Image.asset('assets/play.png', width: 100,color: accentcolor,),
+
+              ),
+            ),Container(height: 35, color: bgcolor,),
+            Container(color: bgcolor,child: Text("Press to code comfortably...", style: GoogleFonts.poppins(color: textcolor,  fontSize: 24)),),
+            Container(height: 20, color: bgcolor,),
+            Container(color: bgcolor,child: Text("*long press to wipe all data if error encountered", style: GoogleFonts.poppins(color: textcolor,  fontSize: 12)),),
           ],
         ),
       ),
