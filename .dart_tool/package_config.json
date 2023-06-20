@@ -8,6 +8,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "archive",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.3.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "args",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.4.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "asn1lib",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/asn1lib-1.4.0",
       "packageUri": "lib/",
@@ -30,6 +42,18 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/characters-1.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "checked_yaml",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/checked_yaml-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "cli_util",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/cli_util-0.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "clock",
@@ -146,6 +170,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_launcher_icons",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_launcher_icons-0.13.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-2.0.1",
       "packageUri": "lib/",
@@ -188,6 +218,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "image",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/image-4.0.17",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "in_app_review",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/in_app_review-2.0.6",
       "packageUri": "lib/",
@@ -210,6 +246,12 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.6.5",
       "packageUri": "lib/",
       "languageVersion": "2.16"
+    },
+    {
+      "name": "json_annotation",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/json_annotation-4.8.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "lints",
@@ -280,6 +322,12 @@
     {
       "name": "path_provider_windows",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_windows-2.1.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "petitparser",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-5.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -500,10 +548,22 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "xml",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/xml-6.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "xterm",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/xterm-3.5.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "yaml",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/yaml-3.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "comfyssh_flutter",
@@ -512,7 +572,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-06-11T23:00:16.297588Z",
+  "generated": "2023-06-12T22:51:19.430716Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

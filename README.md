@@ -17,3 +17,7 @@ and make mainapp a stateful widget, and run memorycheck on init
 
 Bug #2:
 List tiles do not show up on first boot (after closing app), but only when hot reload on Android Studio or setState on app
+
+Further improvement:
+Making text copyable
+![img_2.png](img_2.png)
