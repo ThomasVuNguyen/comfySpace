@@ -19,8 +19,9 @@ import 'package:open_url/open_url.dart';
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 //import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:flutter_rfb/flutter_rfb.dart';
 
-String? nickname;String? hostname;int port = 22;String? username;String? password;String? color;int _selectedIndex = 0; String? distro;
+String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
 ValueNotifier<int> reloadState = ValueNotifier(0);
 Color? currentColor; String? currentColorString;
 const borderColor = Colors.black;
@@ -142,10 +143,10 @@ class _WelcomePage extends State<Welcome>{
                         textColor: Colors.white,
                         child: Text("Done", style: GoogleFonts.poppins(fontSize: 18),),
                         onPressed: (){
-                          newName(nickname!);
+                          newName(nickname);
                           newHost(hostname!);
-                          newUser(username!);
-                          newPass(password!);
+                          newUser(username);
+                          newPass(password);
                           newDistro(currentDistro);
                           print("done");
                           setState(() {
@@ -238,12 +239,11 @@ class _WelcomePage extends State<Welcome>{
                               textColor: Colors.white,
                               child: const Text("Save"),
                               onPressed: (){
-                                newName(nickname!);
+                                newName(nickname);
                                 newHost(hostname!);
-                                newUser(username!);
-                                newPass(password!);
+                                newUser(username);
+                                newPass(password);
                                 newDistro(currentDistro);
-                                print("done");
                                 setState(() {
                                 });
                                 Navigator.pop(context);
@@ -338,7 +338,7 @@ class _WelcomePage extends State<Welcome>{
                         nickname = nameList[index] ;hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>  const Term()),
+                          MaterialPageRoute(builder: (context) =>  const VNC()),
                         );
                       },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
                       ),
@@ -494,3 +494,34 @@ class _TerminalPage extends State<Term> {
   }
 } //TerminalState
 
+class VNC extends StatefulWidget {
+  const VNC({super.key});
+
+  @override
+  State<VNC> createState() => _VNCState();
+}
+
+class _VNCState extends State<VNC> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("VNC test"),
+      ),
+      body: Center(
+        child: InteractiveViewer(
+          constrained: true, maxScale: 10,
+          child: RemoteFrameBufferWidget(
+          hostName: hostname,
+            onError: (final Object error){
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Error: $error"))
+            );
+            },
+            password: 'tung20',
+        ),
+        ),
+      ),
+    );
+  }
+}
