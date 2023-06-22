@@ -2,6 +2,15 @@
 <resources>
     <string name="common_google_play_services_unknown_issue">%1$s ima problema sa Google Play uslugama. Probajte ponovo.</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Link je kopiran u privremenu memoriju"</string>
+    <string name="exo_download_completed">Preuzimanje je završeno</string>
+    <string name="exo_download_description">Preuzmi</string>
+    <string name="exo_download_downloading">Preuzima se</string>
+    <string name="exo_download_failed">Preuzimanje nije uspelo</string>
+    <string name="exo_download_notification_channel_name">Preuzimanja</string>
+    <string name="exo_download_paused">Preuzimanja su pauzirana</string>
+    <string name="exo_download_paused_for_network">Preuzimanja čekaju na mrežu</string>
+    <string name="exo_download_paused_for_wifi">Preuzimanja čekaju na WiFi</string>
+    <string name="exo_download_removing">Preuzimanja se uklanjaju</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Kopiraj link"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Otvori u pregledaču"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Deli link"</string>

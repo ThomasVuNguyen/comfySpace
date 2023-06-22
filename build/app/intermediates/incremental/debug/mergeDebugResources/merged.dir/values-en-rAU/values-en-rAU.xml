@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Link copied to clipboard"</string>
+    <string name="exo_download_completed">Download completed</string>
+    <string name="exo_download_description">Download</string>
+    <string name="exo_download_downloading">Downloading</string>
+    <string name="exo_download_failed">Download failed</string>
+    <string name="exo_download_notification_channel_name">Downloads</string>
+    <string name="exo_download_paused">Downloads paused</string>
+    <string name="exo_download_paused_for_network">Downloads waiting for network</string>
+    <string name="exo_download_paused_for_wifi">Downloads waiting for Wi-Fi</string>
+    <string name="exo_download_removing">Removing downloads</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Copy link"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Open in browser"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Share link"</string>

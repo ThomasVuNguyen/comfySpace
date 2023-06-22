@@ -2,6 +2,15 @@
 <resources>
     <string name="common_google_play_services_unknown_issue">%1$s သည် Google Play ဝန်ဆောင်မှုများနှင့် ပြဿနာအနည်းငယ် ရှိနေပါသည်။ ထပ်လုပ်ကြည့်ပါ။</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"လင့်ခ်ကို ကလစ်ဘုတ်သို့ ကူးပြီးပါပြီ"</string>
+    <string name="exo_download_completed">ဒေါင်းလုဒ်လုပ်ပြီးပါပြီ</string>
+    <string name="exo_download_description">ဒေါင်းလုဒ် လုပ်ရန်</string>
+    <string name="exo_download_downloading">ဒေါင်းလုဒ်လုပ်နေသည်</string>
+    <string name="exo_download_failed">ဒေါင်းလုဒ်လုပ်၍ မရပါ</string>
+    <string name="exo_download_notification_channel_name">ဒေါင်းလုဒ်များ</string>
+    <string name="exo_download_paused">ဒေါင်းလုဒ်များ ခဏရပ်ထားသည်</string>
+    <string name="exo_download_paused_for_network">ဒေါင်းလုဒ်များက အင်တာနက်ရရန် စောင့်နေသည်</string>
+    <string name="exo_download_paused_for_wifi">ဒေါင်းလုဒ်များက WiFi ရရန် စောင့်နေသည်</string>
+    <string name="exo_download_removing">ဒေါင်းလုဒ်များ ဖယ်ရှားနေသည်</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"လင့်ခ်ကို ကူးယူရန်"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"ဘရောင်ဇာတွင် ဖွင့်ရန်"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"လင့်ခ်ကို မျှဝေရန်"</string>

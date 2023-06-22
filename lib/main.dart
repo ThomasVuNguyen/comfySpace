@@ -20,6 +20,7 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 //import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_rfb/flutter_rfb.dart';
+import 'package:video_player/video_player.dart';
 
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
 ValueNotifier<int> reloadState = ValueNotifier(0);
@@ -52,13 +53,6 @@ class Welcome extends StatefulWidget {
   _WelcomePage createState() => _WelcomePage();
 }
 
-class Term extends StatefulWidget {
-  const Term({Key? key}) : super(key: key);
-  @override
-  // ignore: library_private_types_in_public_api
-  _TerminalPage createState() => _TerminalPage();
-} //MyHomePage
-
 class _WelcomePage extends State<Welcome>{
   @override
   Widget build(BuildContext context) {
@@ -66,99 +60,99 @@ class _WelcomePage extends State<Welcome>{
       backgroundColor: bgcolor,
       floatingActionButton: FloatingActionButton(
         backgroundColor: accentcolor,
-              onPressed: () {showDialog(context: context, builder:(BuildContext context){
-                return AlertDialog(
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                  contentPadding: const EdgeInsets.all(20.0),
-                  title: const Center(child: Text("New Host")),
-                  titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600,fontSize: 24.0, color: textcolor),
-                  content: SingleChildScrollView(
-                    child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField( //add nickname
-                          onChanged: (name1){
-                            nickname = name1.replaceFirst(name1[0], name1[0].toUpperCase());
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.only(left: 15.0, top: 15.0, bottom: 15.0),
-                            hintText: "nickname", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
-                              focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
-                              enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
-                          ),textInputAction: TextInputAction.next,
-                        ), const SizedBox(height: 32, width: double.infinity,),
-                        TextField( //add hostname
-                          onChanged: (host1){hostname = host1;},
-                          decoration: InputDecoration(
-                            hintText: "hostname / IP", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
-                              focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
-                              enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
-                          ),textInputAction: TextInputAction.next,
-                        ), const SizedBox(height: 32, width: double.infinity,),
-                        TextField( //add username
-                          onChanged: (user1){
-                            username = user1;
-                          },
-                          decoration: InputDecoration(
-                            hintText: "username", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
-                              focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
-                              enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
-                          ),textInputAction: TextInputAction.next,
-                        ), const SizedBox(height: 32, width: double.infinity,),
-                        TextField( //add password
-                          onChanged: (pass1){
-                            password = pass1;
-                          },
-                          decoration: InputDecoration(
-                            hintText: "password", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
-                              focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
-                              enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
-                          ),textInputAction: TextInputAction.next,
-                        ), const SizedBox(height: 32, width: double.infinity,),
-                        DropdownButtonFormField<String> (
-                          decoration: const InputDecoration(
-                            border:  OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), borderSide: BorderSide(color: Colors.blue, width: 2.0))
-                          ),
-                          iconSize: 30.0, iconDisabledColor: textcolor, iconEnabledColor: Colors.blue,
-                          value: colorMap.keys.toList()[0],
-                          items: colorMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: GoogleFonts.poppins(fontSize: 18.0),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? value){
-                            currentDistro = value!;
-                          },
-                        ),
-                      ],
+        onPressed: () {showDialog(context: context, builder:(BuildContext context){
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+            contentPadding: const EdgeInsets.all(20.0),
+            title: const Center(child: Text("New Host")),
+            titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600,fontSize: 24.0, color: textcolor),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField( //add nickname
+                    onChanged: (name1){
+                      nickname = name1.replaceFirst(name1[0], name1[0].toUpperCase());
+                    },
+                    decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(left: 15.0, top: 15.0, bottom: 15.0),
+                        hintText: "nickname", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                        focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                        enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                    ),textInputAction: TextInputAction.next,
+                  ), const SizedBox(height: 32, width: double.infinity,),
+                  TextField( //add hostname
+                    onChanged: (host1){hostname = host1;},
+                    decoration: InputDecoration(
+                        hintText: "hostname / IP", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                        focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                        enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                    ),textInputAction: TextInputAction.next,
+                  ), const SizedBox(height: 32, width: double.infinity,),
+                  TextField( //add username
+                    onChanged: (user1){
+                      username = user1;
+                    },
+                    decoration: InputDecoration(
+                        hintText: "username", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                        focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                        enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                    ),textInputAction: TextInputAction.next,
+                  ), const SizedBox(height: 32, width: double.infinity,),
+                  TextField( //add password
+                    onChanged: (pass1){
+                      password = pass1;
+                    },
+                    decoration: InputDecoration(
+                        hintText: "password", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                        focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                        enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                    ),textInputAction: TextInputAction.next,
+                  ), const SizedBox(height: 32, width: double.infinity,),
+                  DropdownButtonFormField<String> (
+                    decoration: const InputDecoration(
+                        border:  OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), borderSide: BorderSide(color: Colors.blue, width: 2.0))
                     ),
+                    iconSize: 30.0, iconDisabledColor: textcolor, iconEnabledColor: Colors.blue,
+                    value: colorMap.keys.toList()[0],
+                    items: colorMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: GoogleFonts.poppins(fontSize: 18.0),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String? value){
+                      currentDistro = value!;
+                    },
                   ),
-                  actions: <Widget>[
-                    MaterialButton(
-                        color: accentcolor,
-                        textColor: Colors.white,
-                        child: Text("Done", style: GoogleFonts.poppins(fontSize: 18),),
-                        onPressed: (){
-                          newName(nickname);
-                          newHost(hostname!);
-                          newUser(username);
-                          newPass(password);
-                          newDistro(currentDistro);
-                          print("done");
-                          setState(() {
-                          });
-                          Navigator.pop(context);
-                          currentDistro=colorMap.keys.first;
-                        })],);});
-              },
-              child: const Icon(Icons.add, size: 28,),
+                ],
+              ),
             ),
+            actions: <Widget>[
+              MaterialButton(
+                  color: accentcolor,
+                  textColor: Colors.white,
+                  child: Text("Done", style: GoogleFonts.poppins(fontSize: 18),),
+                  onPressed: (){
+                    newName(nickname);
+                    newHost(hostname!);
+                    newUser(username);
+                    newPass(password);
+                    newDistro(currentDistro);
+                    print("done");
+                    setState(() {
+                    });
+                    Navigator.pop(context);
+                    currentDistro=colorMap.keys.first;
+                  })],);});
+        },
+        child: const Icon(Icons.add, size: 28,),
+      ),
       appBar: AppBar(
-        shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
+          shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
           toolbarHeight: 64,
           title: Row(
             children: <Widget>[
@@ -334,13 +328,13 @@ class _WelcomePage extends State<Welcome>{
                       ),
                       height: 128, width: 106,
                       child: IconButton(
-                        onPressed: () {
-                        nickname = nameList[index] ;hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  const VNC()),
-                        );
-                      },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
+                          onPressed: () {
+                            nickname = nameList[index] ;hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>  const Term2()),
+                            );
+                          },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
                       ),
                     ),
                     SizedBox(width: MediaQuery.of(context).size.width-40-106, height: 128,
@@ -361,7 +355,7 @@ class _WelcomePage extends State<Welcome>{
                             actions: <Widget>[
                               RawMaterialButton(onPressed: () => Navigator.pop(context, 'Cancel'), child: const Text('Cancel'),
                                 shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                    borderRadius: BorderRadius.all(Radius.circular(8.0))
                                 ),
                               ),
                               RawMaterialButton(onPressed: () {removeItem(index); Navigator.pop(context, 'Delete'); setState(() {});}, child: const Text('Delete'),
@@ -398,6 +392,13 @@ class _WelcomePage extends State<Welcome>{
     );
   }
 }
+
+class Term extends StatefulWidget {
+  const Term({Key? key}) : super(key: key);
+  @override
+  // ignore: library_private_types_in_public_api
+  _TerminalPage createState() => _TerminalPage();
+} //MyHomePage
 
 class _TerminalPage extends State<Term> {
   late final terminal = Terminal(inputHandler: keyboard);
@@ -525,3 +526,191 @@ class _VNCState extends State<VNC> {
     );
   }
 }
+/*
+class VLC extends StatefulWidget {
+  const VLC({super.key});
+
+  @override
+  State<VLC> createState() => _VLCState();
+}
+
+class _VLCState extends State<VLC> {
+  @override
+  late VideoPlayerController _videoPlayerController; bool startedPlaying = false;
+  @override
+  void initState(){
+    super.initState();
+    _videoPlayerController = VideoPlayerController.network('http://10.0.0.91:8160',
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),);
+    _videoPlayerController.addListener(() {
+      if (startedPlaying && !_videoPlayerController.value.isPlaying){
+        Navigator.pop(context);
+      }
+    });
+  }
+  @override
+  void dispose(){
+    //_videoPlayerController.dispose();
+    //super.dispose();
+  }
+  Future<bool> started() async{
+    await _videoPlayerController.initialize();
+    await _videoPlayerController.play();
+    startedPlaying = true;
+    return true;
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: FutureBuilder<bool>(
+            future: started(),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
+              if (snapshot.data ?? false){
+                return AspectRatio(aspectRatio: _videoPlayerController.value.aspectRatio,
+                child: VideoPlayer(_videoPlayerController),);
+              }
+              else{
+                return const Text("Waiting");
+              }
+            }
+        ),
+      ),
+    );
+  }
+} */
+
+class Term2 extends StatefulWidget {
+  const Term2({Key? key}) : super(key: key);
+  @override
+  // ignore: library_private_types_in_public_api
+  _TerminalPage2 createState() => _TerminalPage2();
+} //MyHomePage
+
+class _TerminalPage2 extends State<Term2> {
+  late final terminal = Terminal(inputHandler: keyboard);
+  late final terminal2 = Terminal(inputHandler: keyboard);
+  final keyboard = VirtualKeyboard(defaultInputHandler);
+  var title = hostname! + username! + password!;
+  @override
+  void initState() {
+    super.initState();
+    initTerminal();
+  }
+  Future<void> initTerminal() async {
+    terminal.write('Connecting...\r\n');terminal2.write('Connecting...\r\n');
+    final client = SSHClient(
+      await SSHSocket.connect(hostname!, port),
+      username: username!,
+      onPasswordRequest: () => password!,
+    );
+    final client2 = SSHClient(
+      await SSHSocket.connect(hostname!, port),
+      username: username!,
+      onPasswordRequest: () => password!,
+    );
+
+    terminal.write('Connected\r\n');terminal2.write('Connected\r\n');
+
+    final session = await client.shell(
+      pty: SSHPtyConfig(
+        width: terminal.viewWidth,
+        height: terminal.viewHeight,
+      ),
+    );
+    final session2 = await client2.shell(
+      pty: SSHPtyConfig(
+        width: terminal2.viewWidth,
+        height: terminal2.viewHeight,
+      ),
+    );
+    terminal.buffer.clear();
+    terminal.buffer.setCursor(0, 0);
+    terminal2.buffer.clear();
+    terminal2.buffer.setCursor(0, 0);
+
+    terminal.onTitleChange = (title) {
+      setState(() => this.title = title);
+    };
+    terminal2.onTitleChange = (title) {
+      setState(() => this.title = title);
+    };
+
+    terminal.onResize = (width, height, pixelWidth, pixelHeight) {
+      session.resizeTerminal(width, height, pixelWidth, pixelHeight);
+    };
+    terminal2.onResize = (width, height, pixelWidth, pixelHeight) {
+      session2.resizeTerminal(width, height, pixelWidth, pixelHeight);
+    };
+
+    terminal.onOutput = (data) {
+      session.write(utf8.encode(data) as Uint8List);
+    };
+    terminal2.onOutput = (data) {
+      session2.write(utf8.encode(data) as Uint8List);
+    };
+
+    session.stdout
+        .cast<List<int>>()
+        .transform(Utf8Decoder())
+        .listen(terminal.write);
+    session2.stdout
+        .cast<List<int>>()
+        .transform(Utf8Decoder())
+        .listen(terminal2.write);
+
+    session.stderr
+        .cast<List<int>>()
+        .transform(Utf8Decoder())
+        .listen(terminal.write);
+    session2.stderr
+        .cast<List<int>>()
+        .transform(Utf8Decoder())
+        .listen(terminal2.write);
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        toolbarHeight: 64,
+        shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: bgcolor,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, //left alignment for texts
+          children: [
+            Text(nickname!,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 21)),
+            Text(distro!,style: GoogleFonts.poppins(color: textcolor, fontSize: 12)),
+          ],
+        ),
+        backgroundColor: bgcolor,
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          IconButton(onPressed: (){
+            Navigator.pop(context);
+          }, icon: const Icon(Icons.arrow_back, color: textcolor,))
+        ],
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            Expanded(
+              child: TerminalView(terminal),
+            ),
+            Expanded(
+              child: TerminalView(terminal2),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: MediaQuery.of(context).viewInsets,
+        child: VirtualKeyboardView(keyboard),
+      ),
+    );
+  }
+} //TerminalState

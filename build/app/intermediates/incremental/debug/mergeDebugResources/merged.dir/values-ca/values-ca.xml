@@ -2,6 +2,15 @@
 <resources>
     <string name="common_google_play_services_unknown_issue">%1$s té problemes amb Serveis de Google Play. Torna-ho a provar.</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"S\'ha copiat l\'enllaç al porta-retalls"</string>
+    <string name="exo_download_completed">S\'ha completat la baixada</string>
+    <string name="exo_download_description">Baixa</string>
+    <string name="exo_download_downloading">S\'està baixant</string>
+    <string name="exo_download_failed">No s\'ha pogut baixar</string>
+    <string name="exo_download_notification_channel_name">Baixades</string>
+    <string name="exo_download_paused">Les baixades estan en pausa</string>
+    <string name="exo_download_paused_for_network">Les baixades estan esperant una xarxa</string>
+    <string name="exo_download_paused_for_wifi">Les baixades estan esperant una Wi‑Fi</string>
+    <string name="exo_download_removing">S\'estan suprimint les baixades</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Copia l\'enllaç"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Obre al navegador"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Comparteix l\'enllaç"</string>

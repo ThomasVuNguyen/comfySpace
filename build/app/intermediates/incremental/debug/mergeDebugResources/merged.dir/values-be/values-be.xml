@@ -2,6 +2,15 @@
 <resources>
     <string name="common_google_play_services_unknown_issue">У праграмы %1$s узніклі праблемы са службамі Google Play. Паўтарыце спробу.</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Спасылка скапіравана ў буфер абмену"</string>
+    <string name="exo_download_completed">Спампоўка завершана</string>
+    <string name="exo_download_description">Спампаваць</string>
+    <string name="exo_download_downloading">Спампоўваецца</string>
+    <string name="exo_download_failed">Збой спампоўкі</string>
+    <string name="exo_download_notification_channel_name">Спампоўкі</string>
+    <string name="exo_download_paused">Спампоўкі прыпынены</string>
+    <string name="exo_download_paused_for_network">Спампоўкі чакаюць падключэння да сеткі</string>
+    <string name="exo_download_paused_for_wifi">Спампоўкі чакаюць падключэння да Wi-Fi</string>
+    <string name="exo_download_removing">Выдаленне спамповак</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Скапіраваць спасылку"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Адкрыць у браўзеры"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Абагуліць спасылку"</string>

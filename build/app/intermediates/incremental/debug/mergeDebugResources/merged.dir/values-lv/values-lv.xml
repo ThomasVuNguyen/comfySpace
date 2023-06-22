@@ -2,6 +2,15 @@
 <resources>
     <string name="common_google_play_services_unknown_issue">Lietotnē %1$s ir radusies problēma ar Google Play pakalpojumu darbību. Lūdzu, mēģiniet vēlreiz.</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Saite ir kopēta starpliktuvē."</string>
+    <string name="exo_download_completed">Lejupielāde ir pabeigta</string>
+    <string name="exo_download_description">Lejupielādēt</string>
+    <string name="exo_download_downloading">Notiek lejupielāde</string>
+    <string name="exo_download_failed">Lejupielāde neizdevās</string>
+    <string name="exo_download_notification_channel_name">Lejupielādes</string>
+    <string name="exo_download_paused">Lejupielādes ir pārtrauktas.</string>
+    <string name="exo_download_paused_for_network">Lejupielādes gaida savienojumu ar tīklu.</string>
+    <string name="exo_download_paused_for_wifi">Lejupielādes gaida savienojumu ar Wi-Fi.</string>
+    <string name="exo_download_removing">Notiek lejupielāžu noņemšana</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Kopēt saiti"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Atvērt pārlūkprogrammā"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Kopīgot saiti"</string>

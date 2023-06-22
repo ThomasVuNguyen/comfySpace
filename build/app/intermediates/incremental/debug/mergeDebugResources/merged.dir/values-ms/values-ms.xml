@@ -2,6 +2,15 @@
 <resources>
     <string name="common_google_play_services_unknown_issue">%1$s menghadapi masalah berhubung perkhidmatan Google Play. Sila cuba lagi.</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Pautan disalin ke papan keratan"</string>
+    <string name="exo_download_completed">Muat turun selesai</string>
+    <string name="exo_download_description">Muat turun</string>
+    <string name="exo_download_downloading">Memuat turun</string>
+    <string name="exo_download_failed">Muat turun gagal</string>
+    <string name="exo_download_notification_channel_name">Muat turun</string>
+    <string name="exo_download_paused">Muat turun dijeda</string>
+    <string name="exo_download_paused_for_network">Muat turun menunggu rangkaian</string>
+    <string name="exo_download_paused_for_wifi">Muat turun menunggu Wi-Fi</string>
+    <string name="exo_download_removing">Mengalih keluar muat turun</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Salin pautan"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Buka dalam penyemak imbas"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Kongsi pautan"</string>

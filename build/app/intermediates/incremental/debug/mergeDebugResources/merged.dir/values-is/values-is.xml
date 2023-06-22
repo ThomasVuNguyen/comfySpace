@@ -2,6 +2,15 @@
 <resources>
     <string name="common_google_play_services_unknown_issue">%1$s á í vandræðum með þjónustu Google Play. Reyndu aftur.</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Tengill afritaður á klippiborð"</string>
+    <string name="exo_download_completed">Niðurhali lokið</string>
+    <string name="exo_download_description">Sækja</string>
+    <string name="exo_download_downloading">Sækir</string>
+    <string name="exo_download_failed">Niðurhal mistókst</string>
+    <string name="exo_download_notification_channel_name">Niðurhal</string>
+    <string name="exo_download_paused">Niðurhöl í bið</string>
+    <string name="exo_download_paused_for_network">Niðurhöl bíða eftir netkerfi</string>
+    <string name="exo_download_paused_for_wifi">Niðurhöl bíða eftir WiFi</string>
+    <string name="exo_download_removing">Fjarlægir niðurhal</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Afrita tengil"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Opna í vafra"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Deila tengli"</string>

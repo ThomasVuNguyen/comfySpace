@@ -2,6 +2,15 @@
 <resources>
     <string name="common_google_play_services_unknown_issue">%1$s има проблеми с услугите за Google Play. Моля, опитайте отново.</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Връзката е копирана в буферната памет"</string>
+    <string name="exo_download_completed">Изтеглянето завърши</string>
+    <string name="exo_download_description">Изтегляне</string>
+    <string name="exo_download_downloading">Изтегля се</string>
+    <string name="exo_download_failed">Изтеглянето не бе успешно</string>
+    <string name="exo_download_notification_channel_name">Изтегляния</string>
+    <string name="exo_download_paused">Изтеглянията са на пауза</string>
+    <string name="exo_download_paused_for_network">Изтеглянията чакат връзка с интернет</string>
+    <string name="exo_download_paused_for_wifi">Изтеглянията чакат връзка с Wi-Fi</string>
+    <string name="exo_download_removing">Изтеглянията се премахват</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Копиране на връзката"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Отваряне в браузър"</string>
     <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"Споделяне на връзката"</string>
