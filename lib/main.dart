@@ -456,6 +456,11 @@ class _TerminalPage extends State<Term> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.toggle_off, color: Colors.blue,),
+          onPressed: () async {
+          },
+        ),
         toolbarHeight: 64,
         shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
         systemOverlayStyle: const SystemUiOverlayStyle(
