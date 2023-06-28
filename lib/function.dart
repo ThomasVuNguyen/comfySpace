@@ -1,4 +1,8 @@
 
+import 'dart:convert';
+import 'dart:ffi';
+
+import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:comfyssh_flutter/main.dart';
@@ -167,6 +171,33 @@ memoryCheck() async{
   if (prefs.getStringList("listPass") == null){ await prefs.setStringList("listPass", <String> []);}
   if (prefs.getStringList("listUser") == null){ await prefs.setStringList("listUser", <String> []);}
   if (prefs.getStringList("listDistro") == null){ await prefs.setStringList("listDistro", <String> []);}
+}
+Future<void> testCommand(String hostname, int port, String username, String password) async {
+  final client2 = SSHClient(
+      await SSHSocket.connect(hostname, port),
+      username: username,
+  onPasswordRequest: () => password,
+  );
+  var result = await client2.run("raspi-gpio set 21 dl");
+}
+Future<SSHClient> createClient(String hostname, int port, String username, String password) async {
+  final client2 = SSHClient(
+    await SSHSocket.connect(hostname, port),
+    username: username,
+    onPasswordRequest: () => password,
+  );
+  //var result = await client2.run("raspi-gpio set 21 dh");
+  print("connection success");
+  print(client2.username);
+  return client2;
+}
+Future<void> sendCommandOff(SSHClient client2) async {
+  print(client2.username);
+  var result = await client2.run("raspi-gpio set 21 dl"); print(utf8.decode(result));print("command sent");
+}
+Future<void> sendCommandON(SSHClient client2) async {
+  print(client2.username);
+  var result = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result));print("command sent");
 }
 
 void open_url() async{

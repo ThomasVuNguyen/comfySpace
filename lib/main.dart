@@ -398,17 +398,20 @@ class Term extends StatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
   _TerminalPage createState() => _TerminalPage();
+
 } //MyHomePage
 
 class _TerminalPage extends State<Term> {
   late final terminal = Terminal(inputHandler: keyboard);
   final keyboard = VirtualKeyboard(defaultInputHandler);
   var title = hostname! + username! + password!;
+  int buttonState = 1;
   @override
   void initState() {
     super.initState();
     initTerminal();
   }
+
   Future<void> initTerminal() async {
     terminal.write('Connecting...\r\n');
     final client = SSHClient(
@@ -418,7 +421,6 @@ class _TerminalPage extends State<Term> {
     );
 
     terminal.write('Connected\r\n');
-
     final session = await client.shell(
       pty: SSHPtyConfig(
         width: terminal.viewWidth,
@@ -455,12 +457,11 @@ class _TerminalPage extends State<Term> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async{
+        },
+      ),
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.toggle_off, color: Colors.blue,),
-          onPressed: () async {
-          },
-        ),
         toolbarHeight: 64,
         shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
         systemOverlayStyle: const SystemUiOverlayStyle(
