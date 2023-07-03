@@ -200,27 +200,3 @@ Future<void> sendCommandON(SSHClient client2) async {
   var result = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result));print("command sent");
 }
 
-void open_url() async{
-    final Uri url = Uri.parse('https://flutter.dev');
-    launchUrl(url);
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch ');
-    }
-    print("yay");
-}
-
-void open_url2() {
-  final Uri emailLaunchUri = Uri(
-    scheme: 'StackOverFlow',
-    path: 'https://stackoverflow.com',
-  );
-
-  launchUrl(emailLaunchUri);
-}
-
-Future<void> sendFeedback() async {
-  final InAppReview inAppReview = InAppReview.instance;
-  if (await inAppReview.isAvailable()) {
-    inAppReview.requestReview();
-  }
-}

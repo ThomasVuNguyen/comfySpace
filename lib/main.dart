@@ -21,26 +21,16 @@ import 'package:ffi/ffi.dart';
 //import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_rfb/flutter_rfb.dart';
 import 'package:video_player/video_player.dart';
-
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
 ValueNotifier<int> reloadState = ValueNotifier(0);
 Color? currentColor; String? currentColorString;
 const borderColor = Colors.black;
 const cardColor = Colors.white;
-List<String> nameList = [];
-List<String> hostList = [];
-List<String> userList = [];
-List<String> passList = [];
-List<String> distroList = [];
+List<String> nameList = [];List<String> hostList = [];List<String> userList = [];List<String> passList = [];List<String> distroList = [];
 Map<String, String> colorMap = {"Ubuntu": "assets/icons/distro/ubuntu-icon.png", "Raspbian": "assets/icons/distro/RPI-icon.png", "Kali Linux": "assets/icons/distro/kali-icon.png", "Fedora": "assets/icons/distro/fedora-icon.png", "Manjaro": "assets/icons/distro/manjaro-icon.png", "Arch Linux": "assets/icons/distro/arch-icon.png", "Mint Linux": "assets/icons/distro/mint-icon.png", "Debian":  "assets/icons/distro/debian-icon.png", "OpenSUSE": "assets/icons/distro/openSUSE-icon.png", "Custom Distro":"assets/icons/distro/linux-icon.png"};
 //Map<String, Color> colorMap = {"Ubuntu": const Color(0xffE95420), "Raspbian": const Color(0xffBC1142), "Kali Linux": const Color(0xff249EFF), "Fedora": const Color(0xff294172), "Manjaro": const Color(0xff35BF5C), "Arch Linux": const Color(0xff1793D1), "Mint Linux": const Color(0xff69B53F), "Debian": const Color(0xffA80030)};
 String currentDistro = colorMap.keys.first;
-const bgcolor = Color(0xffFFFFFF);
-const textcolor = Color(0xff000000);
-const subcolor = Color(0xff000000);
-const keycolor = Color(0xff656366);
-const accentcolor = Color(0xff1C3D93);
-const warningcolor = Color(0xffCE031B);
+const bgcolor = Color(0xffFFFFFF);const textcolor = Color(0xff000000);const subcolor = Color(0xff000000);const keycolor = Color(0xff656366);const accentcolor = Color(0xff1C3D93);const warningcolor = Color(0xffCE031B);
 void main() {
   memoryCheck();
   reAssign();
@@ -332,7 +322,7 @@ class _WelcomePage extends State<Welcome>{
                             nickname = nameList[index] ;hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) =>  const Term2()),
+                              MaterialPageRoute(builder: (context) =>  const Control()),
                             );
                           },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
                       ),
@@ -411,7 +401,6 @@ class _TerminalPage extends State<Term> {
     super.initState();
     initTerminal();
   }
-
   Future<void> initTerminal() async {
     terminal.write('Connecting...\r\n');
     final client = SSHClient(
@@ -419,6 +408,7 @@ class _TerminalPage extends State<Term> {
       username: username!,
       onPasswordRequest: () => password!,
     );
+    print(client.username);
 
     terminal.write('Connected\r\n');
     final session = await client.shell(
@@ -457,10 +447,6 @@ class _TerminalPage extends State<Term> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async{
-        },
-      ),
       appBar: AppBar(
         toolbarHeight: 64,
         shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
@@ -591,7 +577,7 @@ class Term2 extends StatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
   _TerminalPage2 createState() => _TerminalPage2();
-} //MyHomePage
+} //Double Terminal
 
 class _TerminalPage2 extends State<Term2> {
   late final terminal = Terminal(inputHandler: keyboard);
@@ -716,6 +702,82 @@ class _TerminalPage2 extends State<Term2> {
       bottomNavigationBar: Padding(
         padding: MediaQuery.of(context).viewInsets,
         child: VirtualKeyboardView(keyboard),
+      ),
+    );
+  }
+} //Double Terminal
+
+class Control extends StatefulWidget {
+  const Control({Key? key}) : super(key: key);
+  @override
+  // ignore: library_private_types_in_public_api
+  _ControlPage createState() => _ControlPage();
+
+} //ControlPage
+
+class _ControlPage extends State<Control> {
+  var title = hostname! + username! + password!;
+  int buttonState = 1;
+  bool whileLoop = false;late SSHClient client2;
+  @override
+  void initState() {
+    super.initState();
+    initControl();
+  }
+  Future<void> initControl() async {
+    client2 = SSHClient(
+      await SSHSocket.connect(hostname!, port),
+      username: username!,
+      onPasswordRequest: () => password!,
+    );
+    var result1 = await client2.run("raspi-gpio set 21 op"); print("INITIATED");
+    /*while(whileLoop){
+      var result2 = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result2));
+      await Future.delayed(Duration(microseconds: 100000));
+      var result3 = await client2.run("raspi-gpio set 21 dl"); print(utf8.decode(result3));
+      await Future.delayed(Duration(microseconds: 100000));
+    }*/
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          whileLoop = !whileLoop;
+          while(whileLoop){
+            var result2 = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result2));
+            await Future.delayed(const Duration(microseconds: 100000));
+            var result3 = await client2.run("raspi-gpio set 21 dl"); print(utf8.decode(result3));
+            await Future.delayed(Duration(microseconds: 100000));
+          }
+        },
+      ),
+      appBar: AppBar(
+        toolbarHeight: 64,
+        shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: bgcolor,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, //left alignment for texts
+          children: [
+            Text(nickname!,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 21)),
+            Text(distro!,style: GoogleFonts.poppins(color: textcolor, fontSize: 12)),
+          ],
+        ),
+        backgroundColor: bgcolor,
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          IconButton(onPressed: (){
+            Navigator.pop(context);
+          }, icon: const Icon(Icons.arrow_back, color: textcolor,))
+        ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: MediaQuery.of(context).viewInsets,
       ),
     );
   }
