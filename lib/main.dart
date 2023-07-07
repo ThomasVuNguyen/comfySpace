@@ -21,6 +21,8 @@ import 'package:ffi/ffi.dart';
 //import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_rfb/flutter_rfb.dart';
 import 'package:video_player/video_player.dart';
+import 'camera_screen.dart';
+
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
 ValueNotifier<int> reloadState = ValueNotifier(0);
 Color? currentColor; String? currentColorString;
@@ -322,7 +324,7 @@ class _WelcomePage extends State<Welcome>{
                             nickname = nameList[index] ;hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) =>  const Control()),
+                              MaterialPageRoute(builder: (context) =>  const CameraApp()),
                             );
                           },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
                       ),
@@ -724,6 +726,9 @@ class _ControlPage extends State<Control> {
     super.initState();
     initControl();
   }
+  void dispose(){
+    super.dispose();
+  }
   Future<void> initControl() async {
     client2 = SSHClient(
       await SSHSocket.connect(hostname!, port),
@@ -742,17 +747,6 @@ class _ControlPage extends State<Control> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          whileLoop = !whileLoop;
-          while(whileLoop){
-            var result2 = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result2));
-            await Future.delayed(const Duration(microseconds: 100000));
-            var result3 = await client2.run("raspi-gpio set 21 dl"); print(utf8.decode(result3));
-            await Future.delayed(Duration(microseconds: 100000));
-          }
-        },
-      ),
       appBar: AppBar(
         toolbarHeight: 64,
         shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
@@ -775,6 +769,44 @@ class _ControlPage extends State<Control> {
             Navigator.pop(context);
           }, icon: const Icon(Icons.arrow_back, color: textcolor,))
         ],
+      ),
+      body: GridView.count(
+        crossAxisCount: 4,
+        children: [
+          Container(
+            height: 40,
+            width: 40,
+            color: Colors.yellow,
+            child: IconButton(
+              icon: Icon(Icons.upload),
+              onPressed: () async {
+                whileLoop = !whileLoop;
+                while(whileLoop){
+                  var result2 = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result2));
+                  await Future.delayed(const Duration(microseconds: 100000));
+                  var result3 = await client2.run("raspi-gpio set 21 dl"); print(utf8.decode(result3));
+                  await Future.delayed(Duration(microseconds: 100000));
+              }}
+            )
+          ),
+          Container(
+            height: 40,
+            width: 40,
+            color: Colors.grey,
+          ),
+          Container(
+            height: 40,
+            width: 40,
+            color: Colors.green,
+          ),
+          Container(
+            height: 40,
+            width: 40,
+            color: Colors.black,
+          ),
+
+        ],
+
       ),
       bottomNavigationBar: Padding(
         padding: MediaQuery.of(context).viewInsets,
