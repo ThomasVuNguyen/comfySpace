@@ -279,7 +279,7 @@
     },
     {
       "name": "freezed_annotation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/freezed_annotation-2.2.0",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/freezed_annotation-2.4.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -405,7 +405,7 @@
     },
     {
       "name": "path_provider_foundation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.2.3",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -464,12 +464,6 @@
       "languageVersion": "2.14"
     },
     {
-      "name": "process",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/process-4.2.4",
-      "packageUri": "lib/",
-      "languageVersion": "2.14"
-    },
-    {
       "name": "quiver",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/quiver-3.2.1",
       "packageUri": "lib/",
@@ -489,7 +483,7 @@
     },
     {
       "name": "shared_preferences_foundation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.3.0",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.3.2",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -603,9 +597,9 @@
     },
     {
       "name": "url_launcher_macos",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_macos-3.0.5",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_macos-3.0.6",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.18"
     },
     {
       "name": "url_launcher_platform_interface",
@@ -621,9 +615,9 @@
     },
     {
       "name": "url_launcher_windows",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_windows-3.0.6",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_windows-3.0.7",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.18"
     },
     {
       "name": "vector_math",
@@ -681,9 +675,9 @@
     },
     {
       "name": "xdg_directories",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/xdg_directories-1.0.0",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/xdg_directories-1.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.18"
     },
     {
       "name": "xml",
@@ -710,7 +704,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-07-07T01:04:20.678277Z",
+  "generated": "2023-07-14T01:32:55.352701Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

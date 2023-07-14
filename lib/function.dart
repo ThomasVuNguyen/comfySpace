@@ -1,17 +1,16 @@
 
 import 'dart:convert';
-import 'dart:ffi';
+
 
 import 'package:dartssh2/dartssh2.dart';
+import 'package:file/local.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:comfyssh_flutter/main.dart';
-import 'package:flutter/material.dart';
-import 'package:in_app_review/in_app_review.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 newName(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldNameList = prefs.getStringList("listName")!;
@@ -199,4 +198,32 @@ Future<void> sendCommandON(SSHClient client2) async {
   print(client2.username);
   var result = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result));print("command sent");
 }
+void createSpace(String spaceName){
+  final jsonData = '{"name": "tung", "job":"engineer"}';
+  final parsedJson = jsonDecode(jsonData);
+  print(parsedJson.runtimeType.toString() + " " + parsedJson.toString());
+}
+void addButton(int spaceName, int btnIndex, Color btnColor, String btnFunc,{String btnName = "btn", int sizeX = 1, int sizeY = 1}) {
+}
 
+class Restaurant {
+  Restaurant({required this.name, required this.cuisine});
+  final String name;
+  final String cuisine;
+  factory Restaurant.fromJson(Map<String, dynamic> data){
+    final name = data["name"] as String;
+    final cuisine = data['cuisine'] as String;
+    final yearOpened = data['year_opened'] as int?;
+    if(cuisine == null){
+      throw UnsupportedError("cuisine is null");
+    }
+    return Restaurant(name: name, cuisine: cuisine);
+  }
+}
+
+Future<File> createNewFile(String fileName) async {
+  final currentpath = await getApplicationDocumentsDirectory();
+  String pathDoc = currentpath.path;
+  File file = File('$pathDoc/$fileName');
+  return await file.create();
+}

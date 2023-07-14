@@ -31,6 +31,8 @@ dependencies:
   flutter_rfb: ^0.6.2
   video_player: ^2.6.1
   camera: ^0.10.5+2
+  path_provider: ^2.0.15
+  file: ^6.1.4
 
 
 dev_dependencies:
@@ -62,4 +64,5 @@ flutter:
     - assets/
     - assets/icons/
     - assets/icons/distro/
+    - database/
 

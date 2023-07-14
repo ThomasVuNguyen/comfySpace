@@ -1,26 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
-import 'package:comfyssh_flutter/main.dart';
-import 'package:comfyssh_flutter/pages/home_page.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xterm/xterm.dart';
-import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:open_url/open_url.dart';
-import 'dart:ffi';
-import 'package:ffi/ffi.dart';
-//import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:flutter_rfb/flutter_rfb.dart';
-import 'package:video_player/video_player.dart';
 import 'camera_screen.dart';
 
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
@@ -324,7 +311,7 @@ class _WelcomePage extends State<Welcome>{
                             nickname = nameList[index] ;hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) =>  const CameraApp()),
+                              MaterialPageRoute(builder: (context) =>  const Control()),
                             );
                           },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
                       ),
@@ -489,328 +476,24 @@ class _TerminalPage extends State<Term> {
   }
 } //TerminalState
 
-class VNC extends StatefulWidget {
-  const VNC({super.key});
-
-  @override
-  State<VNC> createState() => _VNCState();
-}
-
-class _VNCState extends State<VNC> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("VNC test"),
-      ),
-      body: Center(
-        child: InteractiveViewer(
-          constrained: true, maxScale: 10,
-          child: RemoteFrameBufferWidget(
-          hostName: hostname,
-            onError: (final Object error){
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Error: $error"))
-            );
-            },
-            password: 'tung20',
-        ),
-        ),
-      ),
-    );
-  }
-}
-/*
-class VLC extends StatefulWidget {
-  const VLC({super.key});
-
-  @override
-  State<VLC> createState() => _VLCState();
-}
-
-class _VLCState extends State<VLC> {
-  @override
-  late VideoPlayerController _videoPlayerController; bool startedPlaying = false;
-  @override
-  void initState(){
-    super.initState();
-    _videoPlayerController = VideoPlayerController.network('http://10.0.0.91:8160',
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),);
-    _videoPlayerController.addListener(() {
-      if (startedPlaying && !_videoPlayerController.value.isPlaying){
-        Navigator.pop(context);
-      }
-    });
-  }
-  @override
-  void dispose(){
-    //_videoPlayerController.dispose();
-    //super.dispose();
-  }
-  Future<bool> started() async{
-    await _videoPlayerController.initialize();
-    await _videoPlayerController.play();
-    startedPlaying = true;
-    return true;
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: FutureBuilder<bool>(
-            future: started(),
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
-              if (snapshot.data ?? false){
-                return AspectRatio(aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerController),);
-              }
-              else{
-                return const Text("Waiting");
-              }
-            }
-        ),
-      ),
-    );
-  }
-} */
-
-class Term2 extends StatefulWidget {
-  const Term2({Key? key}) : super(key: key);
-  @override
-  // ignore: library_private_types_in_public_api
-  _TerminalPage2 createState() => _TerminalPage2();
-} //Double Terminal
-
-class _TerminalPage2 extends State<Term2> {
-  late final terminal = Terminal(inputHandler: keyboard);
-  late final terminal2 = Terminal(inputHandler: keyboard);
-  final keyboard = VirtualKeyboard(defaultInputHandler);
-  var title = hostname! + username! + password!;
-  @override
-  void initState() {
-    super.initState();
-    initTerminal();
-  }
-  Future<void> initTerminal() async {
-    terminal.write('Connecting...\r\n');terminal2.write('Connecting...\r\n');
-    final client = SSHClient(
-      await SSHSocket.connect(hostname!, port),
-      username: username!,
-      onPasswordRequest: () => password!,
-    );
-    final client2 = SSHClient(
-      await SSHSocket.connect(hostname!, port),
-      username: username!,
-      onPasswordRequest: () => password!,
-    );
-
-    terminal.write('Connected\r\n');terminal2.write('Connected\r\n');
-
-    final session = await client.shell(
-      pty: SSHPtyConfig(
-        width: terminal.viewWidth,
-        height: terminal.viewHeight,
-      ),
-    );
-    final session2 = await client2.shell(
-      pty: SSHPtyConfig(
-        width: terminal2.viewWidth,
-        height: terminal2.viewHeight,
-      ),
-    );
-    terminal.buffer.clear();
-    terminal.buffer.setCursor(0, 0);
-    terminal2.buffer.clear();
-    terminal2.buffer.setCursor(0, 0);
-
-    terminal.onTitleChange = (title) {
-      setState(() => this.title = title);
-    };
-    terminal2.onTitleChange = (title) {
-      setState(() => this.title = title);
-    };
-
-    terminal.onResize = (width, height, pixelWidth, pixelHeight) {
-      session.resizeTerminal(width, height, pixelWidth, pixelHeight);
-    };
-    terminal2.onResize = (width, height, pixelWidth, pixelHeight) {
-      session2.resizeTerminal(width, height, pixelWidth, pixelHeight);
-    };
-
-    terminal.onOutput = (data) {
-      session.write(utf8.encode(data) as Uint8List);
-    };
-    terminal2.onOutput = (data) {
-      session2.write(utf8.encode(data) as Uint8List);
-    };
-
-    session.stdout
-        .cast<List<int>>()
-        .transform(Utf8Decoder())
-        .listen(terminal.write);
-    session2.stdout
-        .cast<List<int>>()
-        .transform(Utf8Decoder())
-        .listen(terminal2.write);
-
-    session.stderr
-        .cast<List<int>>()
-        .transform(Utf8Decoder())
-        .listen(terminal.write);
-    session2.stderr
-        .cast<List<int>>()
-        .transform(Utf8Decoder())
-        .listen(terminal2.write);
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        toolbarHeight: 64,
-        shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: bgcolor,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, //left alignment for texts
-          children: [
-            Text(nickname!,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 21)),
-            Text(distro!,style: GoogleFonts.poppins(color: textcolor, fontSize: 12)),
-          ],
-        ),
-        backgroundColor: bgcolor,
-        automaticallyImplyLeading: false,
-        actions: <Widget>[
-          IconButton(onPressed: (){
-            Navigator.pop(context);
-          }, icon: const Icon(Icons.arrow_back, color: textcolor,))
-        ],
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              child: TerminalView(terminal),
-            ),
-            Expanded(
-              child: TerminalView(terminal2),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: MediaQuery.of(context).viewInsets,
-        child: VirtualKeyboardView(keyboard),
-      ),
-    );
-  }
-} //Double Terminal
-
 class Control extends StatefulWidget {
-  const Control({Key? key}) : super(key: key);
-  @override
-  // ignore: library_private_types_in_public_api
-  _ControlPage createState() => _ControlPage();
+  const Control({super.key});
 
-} //ControlPage
-
-class _ControlPage extends State<Control> {
-  var title = hostname! + username! + password!;
-  int buttonState = 1;
-  bool whileLoop = false;late SSHClient client2;
   @override
-  void initState() {
-    super.initState();
-    initControl();
-  }
-  void dispose(){
-    super.dispose();
-  }
-  Future<void> initControl() async {
-    client2 = SSHClient(
-      await SSHSocket.connect(hostname!, port),
-      username: username!,
-      onPasswordRequest: () => password!,
-    );
-    var result1 = await client2.run("raspi-gpio set 21 op"); print("INITIATED");
-    /*while(whileLoop){
-      var result2 = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result2));
-      await Future.delayed(Duration(microseconds: 100000));
-      var result3 = await client2.run("raspi-gpio set 21 dl"); print(utf8.decode(result3));
-      await Future.delayed(Duration(microseconds: 100000));
-    }*/
+  State<Control> createState() => _ControlState();
+}
+
+class _ControlState extends State<Control> {
+  void init(){
+    String space1 = "space1";
+    createSpace(space1);
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        toolbarHeight: 64,
-        shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: bgcolor,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, //left alignment for texts
-          children: [
-            Text(nickname!,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 21)),
-            Text(distro!,style: GoogleFonts.poppins(color: textcolor, fontSize: 12)),
-          ],
-        ),
-        backgroundColor: bgcolor,
-        automaticallyImplyLeading: false,
-        actions: <Widget>[
-          IconButton(onPressed: (){
-            Navigator.pop(context);
-          }, icon: const Icon(Icons.arrow_back, color: textcolor,))
-        ],
-      ),
-      body: GridView.count(
-        crossAxisCount: 4,
-        children: [
-          Container(
-            height: 40,
-            width: 40,
-            color: Colors.yellow,
-            child: IconButton(
-              icon: Icon(Icons.upload),
-              onPressed: () async {
-                whileLoop = !whileLoop;
-                while(whileLoop){
-                  var result2 = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result2));
-                  await Future.delayed(const Duration(microseconds: 100000));
-                  var result3 = await client2.run("raspi-gpio set 21 dl"); print(utf8.decode(result3));
-                  await Future.delayed(Duration(microseconds: 100000));
-              }}
-            )
-          ),
-          Container(
-            height: 40,
-            width: 40,
-            color: Colors.grey,
-          ),
-          Container(
-            height: 40,
-            width: 40,
-            color: Colors.green,
-          ),
-          Container(
-            height: 40,
-            width: 40,
-            color: Colors.black,
-          ),
-
-        ],
-
-      ),
-      bottomNavigationBar: Padding(
-        padding: MediaQuery.of(context).viewInsets,
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.connected_tv_sharp), onPressed : () { createNewFile("test"); },
       ),
     );
   }
-} //TerminalState
+}
