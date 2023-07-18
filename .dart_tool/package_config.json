@@ -51,7 +51,7 @@
     },
     {
       "name": "camera_android",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.8+3",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.8+4",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -524,6 +524,18 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "sqflite",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite-2.2.8+4",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "sqflite_common",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common-2.4.5+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "stack_trace",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/stack_trace-1.11.0",
       "packageUri": "lib/",
@@ -552,6 +564,12 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/string_to_color-2.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "synchronized",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/synchronized-3.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "term_glyph",
@@ -639,15 +657,15 @@
     },
     {
       "name": "video_player_avfoundation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_avfoundation-2.4.6",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_avfoundation-2.4.8",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "video_player_platform_interface",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_platform_interface-6.1.0",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_platform_interface-6.2.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.18"
     },
     {
       "name": "video_player_web",
@@ -704,7 +722,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-07-14T01:32:55.352701Z",
+  "generated": "2023-07-18T01:36:02.883837Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

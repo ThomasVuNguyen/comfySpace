@@ -33,6 +33,7 @@ dependencies:
   camera: ^0.10.5+2
   path_provider: ^2.0.15
   file: ^6.1.4
+  sqflite: ^2.2.8+4
 
 
 dev_dependencies:
@@ -65,4 +66,5 @@ flutter:
     - assets/icons/
     - assets/icons/distro/
     - database/
+
 

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xterm/xterm.dart';
-import 'camera_screen.dart';
+import 'package:sqflite/sqflite.dart';
 
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
 ValueNotifier<int> reloadState = ValueNotifier(0);
@@ -492,7 +492,10 @@ class _ControlState extends State<Control> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: IconButton(
-        icon: Icon(Icons.connected_tv_sharp), onPressed : () { createNewFile("test"); },
+        icon: Icon(Icons.connected_tv_sharp), onPressed : () {
+          createSpace('space1');
+          //addButton("space1", "hello button", 1, 1, 1, "echo hello world");
+          checkDB('comfySpace.db'); },
       ),
     );
   }

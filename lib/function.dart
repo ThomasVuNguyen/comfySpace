@@ -1,7 +1,6 @@
 
 import 'dart:convert';
-
-
+import 'dart:ffi';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:file/local.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:sqflite/sqflite.dart';
+
 newName(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldNameList = prefs.getStringList("listName")!;
@@ -198,32 +199,46 @@ Future<void> sendCommandON(SSHClient client2) async {
   print(client2.username);
   var result = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result));print("command sent");
 }
-void createSpace(String spaceName){
-  final jsonData = '{"name": "tung", "job":"engineer"}';
-  final parsedJson = jsonDecode(jsonData);
-  print(parsedJson.runtimeType.toString() + " " + parsedJson.toString());
-}
-void addButton(int spaceName, int btnIndex, Color btnColor, String btnFunc,{String btnName = "btn", int sizeX = 1, int sizeY = 1}) {
+
+Future<void> createSpace(String spaceName) async {
+  String dbName = 'comfySpace.db';
+  int version =1;
+  var dbPath = await getDatabasesPath();
+  var dbDirect = Directory(dbPath);
+  final List<FileSystemEntity> entities = await dbDirect.list().toList();
+  print(entities.toString());
+  var path = p.join(dbPath, dbName);
+  var comfySpacedb = await openDatabase(path,
+  version: version,
+  onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  List<Map> list = await comfySpacedb.rawQuery('SELECT * FROM $spaceName');
+  print(list);
 }
 
-class Restaurant {
-  Restaurant({required this.name, required this.cuisine});
-  final String name;
-  final String cuisine;
-  factory Restaurant.fromJson(Map<String, dynamic> data){
-    final name = data["name"] as String;
-    final cuisine = data['cuisine'] as String;
-    final yearOpened = data['year_opened'] as int?;
-    if(cuisine == null){
-      throw UnsupportedError("cuisine is null");
-    }
-    return Restaurant(name: name, cuisine: cuisine);
-  }
+Future<void> addButton(String spaceName, String name, int size_x, int size_y, int position, String command) async {
+  var dbPath = await getDatabasesPath();
+  String dbName = 'comfySpace.db';
+  String path = p.join(dbPath,dbName);
+  String x_str = size_x.toString(); String y_str = size_y.toString(); String position_str = position.toString();
+  Database database = await openDatabase(path,
+    version:1,
+    onCreate: (Database db, version) async =>
+    await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  int insertID = await database.rawInsert('INSERT INTO $spaceName(name, size_x, size_y, position, command) VALUES("$name", "$x_str", "$y_str", "$position_str", "$command")');
+  print("inserted: $insertID");
 }
 
-Future<File> createNewFile(String fileName) async {
-  final currentpath = await getApplicationDocumentsDirectory();
-  String pathDoc = currentpath.path;
-  File file = File('$pathDoc/$fileName');
-  return await file.create();
+Future<void> checkDB(String dbName)async {
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  List<Map> list = await database.rawQuery('SELECT * FROM Test');
+  print(list);
 }
