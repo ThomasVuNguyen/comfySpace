@@ -242,3 +242,29 @@ Future<void> checkDB(String dbName)async {
   List<Map> list = await database.rawQuery('SELECT * FROM Test');
   print(list);
 }
+
+Future<List<List<String>>> renderer(String spaceName) async{
+  var dbName = 'comfySpace.db';
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  var buttonMap = await database.query(spaceName, columns: ['name']);
+  var sizeXMap = await database.query(spaceName, columns: ['size_x']);
+  var sizeYMap = await database.query(spaceName, columns: ['size_y']);
+  var positionMap = await database.query(spaceName, columns: ['position']);
+  var commandMap = await database.query(spaceName, columns: ['command']);
+  List<String> buttonList = []; List<String> sizeXList = []; List<String> sizeYList = []; List<String> positionList = []; List<String> commandList =[];
+  for (int i = 0; i < buttonMap.length; i++){
+    buttonList.add(buttonMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+    sizeXList.add(sizeXMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+    sizeYList.add(sizeYMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+    positionList.add(positionMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+    commandList.add(commandMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+  }
+  var listTotal = [buttonList, sizeXList, sizeYList, positionList, commandList];
+  return listTotal;
+}

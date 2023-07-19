@@ -484,6 +484,12 @@ class Control extends StatefulWidget {
 }
 
 class _ControlState extends State<Control> {
+  List<String> buttonList = [];
+  List<String> sizeXList =[];
+  List<String> sizeYList = [];
+  List<String> positionList = [];
+  List<String> commandList = [];
+  String message = 'hi im message';
   void init(){
     String space1 = "space1";
     createSpace(space1);
@@ -491,11 +497,26 @@ class _ControlState extends State<Control> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(message),
+      ),
       floatingActionButton: IconButton(
-        icon: Icon(Icons.connected_tv_sharp), onPressed : () {
-          createSpace('space1');
-          //addButton("space1", "hello button", 1, 1, 1, "echo hello world");
-          checkDB('comfySpace.db'); },
+        icon: Icon(Icons.connected_tv_sharp), onPressed : () async {
+          var listTotal = await renderer('space1'); buttonList = listTotal[0]; sizeXList = listTotal[1]; sizeYList = listTotal[2]; positionList = listTotal[3]; commandList = listTotal[4];
+          print(sizeXList.toString());
+          setState(() {message = 'reverted';});
+          },),
+      body: GridView.count(
+        crossAxisCount: 4,
+        children:
+        List.generate(buttonList.length, (index) {
+          return Center(
+            child: IconButton(
+              onPressed: () {setState(() {message = commandList[index];});},
+              icon: const Icon(Icons.ac_unit_rounded),
+            ),
+          );
+        }),
       ),
     );
   }
