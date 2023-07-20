@@ -12,6 +12,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
+Future<List<String>>updateSpaceRender() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<String> oldListSpace = await updateSpaceList('comfySpace');
+  await prefs.setStringList("listSpace", oldListSpace);
+  spaceList = prefs.getStringList("listSpace")!;
+  print("space listed");
+  return spaceList;
+}
 newName(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldNameList = prefs.getStringList("listName")!;
@@ -65,12 +73,36 @@ clearData() async {
 }
 reAssign() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //prefs.reload();
   nameList = prefs.getStringList("listName")!;
   hostList = prefs.getStringList("listHost")!;
   userList = prefs.getStringList("listUser")!;
   passList = prefs.getStringList("listPass")!;
   distroList = prefs.getStringList("listDistro")!;
+}
+Future<List<String>>reAssignNameList() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  nameList = prefs.getStringList("listName")!;
+  return nameList;
+}
+Future<List<String>>reAssignHostList() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  hostList = prefs.getStringList("listHost")!;
+  return hostList;
+}
+Future<List<String>>reAssignUserList() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  userList = prefs.getStringList("listUser")!;
+  return userList;
+}
+Future<List<String>>reAssignPassList() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  passList = prefs.getStringList("listPass")!;
+  return passList;
+}
+Future<List<String>>reAssignDistroList() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  distroList = prefs.getStringList("listDistro")!;
+  return distroList;
 }
 resetData() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -206,40 +238,28 @@ Future<void> createSpace(String spaceName) async {
   var dbPath = await getDatabasesPath();
   var dbDirect = Directory(dbPath);
   final List<FileSystemEntity> entities = await dbDirect.list().toList();
-  print(entities.toString());
+  //print(entities.toString());
   var path = p.join(dbPath, dbName);
   var comfySpacedb = await openDatabase(path,
   version: version,
   onCreate: (Database db, version) async =>
       await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
   );
+  var createTable = await comfySpacedb.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)');
   List<Map> list = await comfySpacedb.rawQuery('SELECT * FROM $spaceName');
-  print(list);
+  List<Map> listTable = await comfySpacedb.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
+  print(listTable.toString());
 }
 
-Future<void> addButton(String spaceName, String name, int size_x, int size_y, int position, String command) async {
-  var dbPath = await getDatabasesPath();
-  String dbName = 'comfySpace.db';
-  String path = p.join(dbPath,dbName);
-  String x_str = size_x.toString(); String y_str = size_y.toString(); String position_str = position.toString();
-  Database database = await openDatabase(path,
-    version:1,
-    onCreate: (Database db, version) async =>
-    await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
-  );
-  int insertID = await database.rawInsert('INSERT INTO $spaceName(name, size_x, size_y, position, command) VALUES("$name", "$x_str", "$y_str", "$position_str", "$command")');
-  print("inserted: $insertID");
-}
-
-Future<void> checkDB(String dbName)async {
+Future<void> checkDB(String dbName, String spaceName)async {
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
   );
-  List<Map> list = await database.rawQuery('SELECT * FROM Test');
+  List<Map> list = await database.rawQuery('SELECT * FROM $spaceName');
   print(list);
 }
 
@@ -250,7 +270,7 @@ Future<List<List<String>>> renderer(String spaceName) async{
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
   );
   var buttonMap = await database.query(spaceName, columns: ['name']);
   var sizeXMap = await database.query(spaceName, columns: ['size_x']);
@@ -267,4 +287,34 @@ Future<List<List<String>>> renderer(String spaceName) async{
   }
   var listTotal = [buttonList, sizeXList, sizeYList, positionList, commandList];
   return listTotal;
+}
+
+Future<void> addButton(String spaceName, String name, int size_x, int size_y, int position, String command )async{
+  var dbName = 'comfySpace.db';
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  var addedButton = database.rawInsert('INSERT INTO $spaceName(name, size_x, size_y, position, command) VALUES("'"$name"'", $size_x, $size_y, $position, "'"$command"'")');
+  print("button added");
+}
+
+Future<List<String>> updateSpaceList(String dbName) async{
+  var dbName = 'comfySpace.db';
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  List<Map> listTableMap = await database.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
+  List<String> listTable = [];
+  for (var mapping in listTableMap){
+    var x = listTable.add(mapping['name']);}
+  var y = listTable.removeAt(0); //remove android_metadata
+  return listTable;
 }

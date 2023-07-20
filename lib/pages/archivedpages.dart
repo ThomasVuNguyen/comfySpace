@@ -244,3 +244,20 @@ class _ControlPage extends State<Control> {
   }
 } //TerminalState
  */
+/*FutureBuilder(
+        future: updateSpaceRender(),
+        builder: (context, AsyncSnapshot snapshot){
+          if(snapshot.hasData){
+            final currentSpaceList = snapshot.data;
+            return ListView.builder(
+              itemCount: currentSpaceList.length,
+                itemBuilder: (context, index){
+                return ListTile(
+                  title: Text(currentSpaceList[index]),
+                  leading: Icon(Icons.one_k),
+                );
+                });
+          }
+          return Text("loading");
+        },
+      ) */

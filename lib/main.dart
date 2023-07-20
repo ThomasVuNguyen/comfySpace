@@ -7,6 +7,7 @@ import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xterm/xterm.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -16,6 +17,7 @@ Color? currentColor; String? currentColorString;
 const borderColor = Colors.black;
 const cardColor = Colors.white;
 List<String> nameList = [];List<String> hostList = [];List<String> userList = [];List<String> passList = [];List<String> distroList = [];
+List<String> spaceList = [];
 Map<String, String> colorMap = {"Ubuntu": "assets/icons/distro/ubuntu-icon.png", "Raspbian": "assets/icons/distro/RPI-icon.png", "Kali Linux": "assets/icons/distro/kali-icon.png", "Fedora": "assets/icons/distro/fedora-icon.png", "Manjaro": "assets/icons/distro/manjaro-icon.png", "Arch Linux": "assets/icons/distro/arch-icon.png", "Mint Linux": "assets/icons/distro/mint-icon.png", "Debian":  "assets/icons/distro/debian-icon.png", "OpenSUSE": "assets/icons/distro/openSUSE-icon.png", "Custom Distro":"assets/icons/distro/linux-icon.png"};
 //Map<String, Color> colorMap = {"Ubuntu": const Color(0xffE95420), "Raspbian": const Color(0xffBC1142), "Kali Linux": const Color(0xff249EFF), "Fedora": const Color(0xff294172), "Manjaro": const Color(0xff35BF5C), "Arch Linux": const Color(0xff1793D1), "Mint Linux": const Color(0xff69B53F), "Debian": const Color(0xffA80030)};
 String currentDistro = colorMap.keys.first;
@@ -243,7 +245,7 @@ class _WelcomePage extends State<Welcome>{
             Padding(padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 child: const Icon(Icons.menu, color: textcolor,),
-                onTap: (){
+                /*onTap: (){
                   showDialog<String>(
                       context: context, builder: (BuildContext context) =>
                       AlertDialog(
@@ -277,97 +279,107 @@ class _WelcomePage extends State<Welcome>{
                         ),
                       )
                   );
-                },
+                },*/
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  const comfySpace()),
+                  );
+                }
               ),
-            )
+            ),
+
           ]
       ),
-      body: Column(
-        children: <Widget>[
-          //SizedBox(height: 35,),
-          /*Padding(padding: EdgeInsets.only(top: 35, left: 20),
-            child: Align(alignment: Alignment.centerLeft, child: Text("HOSTS", style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),)),),
-          Padding(padding: EdgeInsets.only(top: 10, left: 20),
-            child: Align(alignment: Alignment.centerLeft, child: Text("Code Away", style: GoogleFonts.poppins(color: textcolor, fontSize: 16),)),),*/
-          const SizedBox(height: 43),
-          Expanded(
-            child: ListView(
-              physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
-              children: List.generate(nameList.length, (index) => Padding(
-                padding: const EdgeInsets.only(bottom: 20.0), //distance between cards
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                          color: textcolor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8.0),topRight: Radius.circular(0.0),bottomLeft: Radius.circular(8.0),bottomRight: Radius.circular(0.0),
-                          )
-                      ),
-                      height: 128, width: 106,
-                      child: IconButton(
-                          onPressed: () {
-                            nickname = nameList[index] ;hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) =>  const Control()),
-                            );
-                          },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
-                      ),
-                    ),
-                    SizedBox(width: MediaQuery.of(context).size.width-40-106, height: 128,
-                      child: ListTile(contentPadding: const EdgeInsets.only(top:0.0, bottom: 0.0),
-                          trailing: Container( width: 40,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: const [
-                                Icon(Icons.arrow_forward_ios, color: textcolor,size: 25,),
-                              ],
+      body: FutureBuilder(
+        future: Future.wait([reAssignNameList(),reAssignHostList(),reAssignUserList(),reAssignPassList(),reAssignDistroList()]),
+        builder: (context, AsyncSnapshot snapshot){
+          if(snapshot.hasData){
+            return Column(
+              children: <Widget>[
+                const SizedBox(height: 43),
+                Expanded(
+                  child: ListView(
+                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
+                    children: List.generate(snapshot.data[0].length, (index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0), //distance between cards
+                      child: Row(
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                                color: textcolor,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8.0),topRight: Radius.circular(0.0),bottomLeft: Radius.circular(8.0),bottomRight: Radius.circular(0.0),
+                                )
+                            ),
+                            height: 128, width: 106,
+                            child: IconButton(
+                                onPressed: () {
+                                  nickname = snapshot.data[0][index] ;hostname = snapshot.data[1][index]; username = snapshot.data[2][index]; password = snapshot.data[3][index]; distro = snapshot.data[4][index];
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) =>  const Control()),
+                                  );
+                                },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
                             ),
                           ),
-                          onLongPress: () => showDialog<String>(
-                            context: context, builder: (BuildContext context) => AlertDialog(
-                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)), side: BorderSide(color: warningcolor, width: 2.0)),
-                            title: Text('Delete host?', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold ),),
-                            content: Text('This will permanently remove host information.', style: GoogleFonts.poppins(fontSize: 16 )),
-                            actions: <Widget>[
-                              RawMaterialButton(onPressed: () => Navigator.pop(context, 'Cancel'), child: const Text('Cancel'),
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(8.0))
+                          SizedBox(width: MediaQuery.of(context).size.width-40-106, height: 128,
+                            child: ListTile(contentPadding: const EdgeInsets.only(top:0.0, bottom: 0.0),
+                                trailing: Container( width: 40,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: const [
+                                      Icon(Icons.arrow_forward_ios, color: textcolor,size: 25,),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              RawMaterialButton(onPressed: () {removeItem(index); Navigator.pop(context, 'Delete'); setState(() {});}, child: const Text('Delete'),
-                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), ),
-                                fillColor: warningcolor,
-                                textStyle: GoogleFonts.poppins(color: bgcolor, fontWeight: FontWeight.w600, fontSize: 16),
-                              ),],),),
-                          onTap: (){
-                            nickname = nameList[index];hostname = hostList[index]; username = userList[index]; password = passList[index]; distro = distroList[index];
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) =>  const Term()),
-                            );
-                          },
-                          shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color:textcolor) , borderRadius: BorderRadius.only(topLeft: Radius.circular(0.0),topRight: Radius.circular(8.0),bottomLeft: Radius.circular(0.0),bottomRight: Radius.circular(8.0),)),
-                          title: Padding(
-                            padding: const EdgeInsets.only(left: 15.0, top: 23, bottom: 23),
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(nameList[index][0].toUpperCase()+nameList[index].substring(1), style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold,  fontSize: 20)),
-                                Text("${userList[index]} @ ${hostList[index]}", style: GoogleFonts.poppins(color: textcolor, fontSize: 16)),
-                              ],
+                                onLongPress: () => showDialog<String>(
+                                  context: context, builder: (BuildContext context) => AlertDialog(
+                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)), side: BorderSide(color: warningcolor, width: 2.0)),
+                                  title: Text('Delete host?', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold ),),
+                                  content: Text('This will permanently remove host information.', style: GoogleFonts.poppins(fontSize: 16 )),
+                                  actions: <Widget>[
+                                    RawMaterialButton(onPressed: () => Navigator.pop(context, 'Cancel'), child: const Text('Cancel'),
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                      ),
+                                    ),
+                                    RawMaterialButton(onPressed: () {removeItem(index); Navigator.pop(context, 'Delete'); setState(() {});}, child: const Text('Delete'),
+                                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), ),
+                                      fillColor: warningcolor,
+                                      textStyle: GoogleFonts.poppins(color: bgcolor, fontWeight: FontWeight.w600, fontSize: 16),
+                                    ),],),),
+                                onTap: (){
+                                  nickname = snapshot.data[0][index];hostname = snapshot.data[1][index]; username = snapshot.data[2][index]; password = snapshot.data[3][index]; distro = snapshot.data[4][index];
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) =>  const Term()),
+                                  );
+                                },
+                                shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color:textcolor) , borderRadius: BorderRadius.only(topLeft: Radius.circular(0.0),topRight: Radius.circular(8.0),bottomLeft: Radius.circular(0.0),bottomRight: Radius.circular(8.0),)),
+                                title: Padding(
+                                  padding: const EdgeInsets.only(left: 15.0, top: 23, bottom: 23),
+                                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(snapshot.data[0][index][0].toUpperCase()+snapshot.data[0][index].substring(1), style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold,  fontSize: 20)),
+                                      Text("${snapshot.data[2][index]} @ ${snapshot.data[1][index]}", style: GoogleFonts.poppins(color: textcolor, fontSize: 16)),
+                                    ],
+                                  ),
+                                )
                             ),
                           )
+                        ],
                       ),
-                    )
-                  ],
+                    )),
+                  ),
                 ),
-              )),
-            ),
-          ),
-        ],
-      ),
+              ],
+            );
+          }
+          return Text("loading");
+        },
+      )
     );
   }
 }
@@ -503,9 +515,10 @@ class _ControlState extends State<Control> {
       floatingActionButton: IconButton(
         icon: Icon(Icons.connected_tv_sharp), onPressed : () async {
           var listTotal = await renderer('space1'); buttonList = listTotal[0]; sizeXList = listTotal[1]; sizeYList = listTotal[2]; positionList = listTotal[3]; commandList = listTotal[4];
-          print(sizeXList.toString());
-          setState(() {message = 'reverted';});
-          },),
+          createSpace('space1');
+        addButton('space1', "tung", 1, 1, 1, 'echo Im tung');
+        setState(() {});
+        },),
       body: GridView.count(
         crossAxisCount: 4,
         children:
@@ -518,6 +531,88 @@ class _ControlState extends State<Control> {
           );
         }),
       ),
+    );
+  }
+}
+
+class comfySpace extends StatefulWidget {
+  const comfySpace({super.key});
+  @override
+  State<comfySpace> createState() => _comfySpaceState();
+}
+
+class _comfySpaceState extends State<comfySpace> {
+
+  @override
+  void initState(){
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      updateSpaceRender();
+    });
+    super.initState();
+    
+    print(spaceList.toString());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("comfySpace"),
+        actions: <Widget>[
+          IconButton(onPressed: () async {
+            //List<String> ok = await updateSpaceList('comfySpace');
+            //print(ok);
+            setState(() {});
+          }, icon: const Icon(Icons.update))
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.create),
+        onPressed: () {
+          String spaceName = 'space1';
+          showDialog(context: context, builder: (BuildContext context){
+            return AlertDialog(
+              title: const Text("Create a new space"),
+              content: TextField(
+                onChanged: (name){
+                  spaceName = name;
+                },
+              ),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () async{
+                      createSpace(spaceName);
+                      updateSpaceRender();
+                      Navigator.pop(context);
+                      setState(() {});
+                      },
+                    child: const Text("save")
+                )
+              ],
+            );
+          }); },
+
+      ),
+      body: FutureBuilder(
+        future: updateSpaceRender(),
+        builder: (context, AsyncSnapshot snapshot){
+          if(snapshot.connectionState != ConnectionState.done){
+            return ColoredBox(color: Colors.red);
+          }
+          if(snapshot.hasData){
+            final currentSpaceList = snapshot.data;
+            return ListView.builder(
+              itemCount: currentSpaceList.length,
+                itemBuilder: (context, index){
+                return ListTile(
+                  title: Text(currentSpaceList[index]),
+                  leading: Icon(Icons.one_k),
+                );
+                });
+          }
+          return Text("loading");
+        },
+      )
     );
   }
 }

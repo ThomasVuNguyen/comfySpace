@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ComfySSH',
-      home: Splash(),
+      home: Welcome(),
     );
   }
 }
