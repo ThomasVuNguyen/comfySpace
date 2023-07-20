@@ -316,5 +316,6 @@ Future<List<String>> updateSpaceList(String dbName) async{
   for (var mapping in listTableMap){
     var x = listTable.add(mapping['name']);}
   var y = listTable.removeAt(0); //remove android_metadata
+
   return listTable;
 }

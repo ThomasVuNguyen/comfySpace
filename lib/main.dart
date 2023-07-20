@@ -230,18 +230,6 @@ class _WelcomePage extends State<Welcome>{
                   )
               ),
             ),
-            Padding(padding: const EdgeInsets.only(right:20),
-                child: GestureDetector(
-                    onTap:(){ //clear all data
-                      clearData();
-                      setState(() {
-                      });
-                    },
-                    child: const Icon(
-                      Icons.accessibility,
-                      size: 0.0,
-                    )
-                )),
             Padding(padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 child: const Icon(Icons.menu, color: textcolor,),
@@ -542,15 +530,11 @@ class comfySpace extends StatefulWidget {
 }
 
 class _comfySpaceState extends State<comfySpace> {
-
+  bool reloadNeeded = false;
   @override
   void initState(){
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      updateSpaceRender();
-    });
+    setState(() {});
     super.initState();
-    
-    print(spaceList.toString());
   }
 
   @override
@@ -560,8 +544,6 @@ class _comfySpaceState extends State<comfySpace> {
         title: const Text("comfySpace"),
         actions: <Widget>[
           IconButton(onPressed: () async {
-            //List<String> ok = await updateSpaceList('comfySpace');
-            //print(ok);
             setState(() {});
           }, icon: const Icon(Icons.update))
         ],
@@ -582,24 +564,24 @@ class _comfySpaceState extends State<comfySpace> {
                 TextButton(
                     onPressed: () async{
                       createSpace(spaceName);
-                      updateSpaceRender();
+                      setState(() {reloadNeeded = true;});
                       Navigator.pop(context);
-                      setState(() {});
                       },
                     child: const Text("save")
                 )
               ],
             );
           }); },
-
       ),
       body: FutureBuilder(
-        future: updateSpaceRender(),
+        future: updateSpaceList('comfySpace.db'),
         builder: (context, AsyncSnapshot snapshot){
           if(snapshot.connectionState != ConnectionState.done){
+            print("state issue");
             return ColoredBox(color: Colors.red);
           }
           if(snapshot.hasData){
+            print("has data");
             final currentSpaceList = snapshot.data;
             return ListView.builder(
               itemCount: currentSpaceList.length,
@@ -610,7 +592,9 @@ class _comfySpaceState extends State<comfySpace> {
                 );
                 });
           }
+          print("loading");
           return Text("loading");
+
         },
       )
     );
