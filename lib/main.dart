@@ -279,95 +279,95 @@ class _WelcomePage extends State<Welcome>{
 
           ]
       ),
-      body: FutureBuilder(
-        future: Future.wait([reAssignNameList(),reAssignHostList(),reAssignUserList(),reAssignPassList(),reAssignDistroList()]),
-        builder: (context, AsyncSnapshot snapshot){
-          if(snapshot.hasData){
-            return Column(
-              children: <Widget>[
-                const SizedBox(height: 43),
-                Expanded(
-                  child: ListView(
-                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
-                    children: List.generate(snapshot.data[0].length, (index) => Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0), //distance between cards
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                                color: textcolor,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8.0),topRight: Radius.circular(0.0),bottomLeft: Radius.circular(8.0),bottomRight: Radius.circular(0.0),
-                                )
+        body: FutureBuilder(
+          future: Future.wait([reAssignNameList(),reAssignHostList(),reAssignUserList(),reAssignPassList(),reAssignDistroList()]),
+          builder: (context, AsyncSnapshot snapshot){
+            if(snapshot.hasData){
+              return Column(
+                children: <Widget>[
+                  const SizedBox(height: 43),
+                  Expanded(
+                    child: ListView(
+                      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                      padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
+                      children: List.generate(snapshot.data[0].length, (index) => Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0), //distance between cards
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: const BoxDecoration(
+                                  color: textcolor,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8.0),topRight: Radius.circular(0.0),bottomLeft: Radius.circular(8.0),bottomRight: Radius.circular(0.0),
+                                  )
+                              ),
+                              height: 128, width: 106,
+                              child: IconButton(
+                                  onPressed: () {
+                                    nickname = snapshot.data[0][index] ;hostname = snapshot.data[1][index]; username = snapshot.data[2][index]; password = snapshot.data[3][index]; distro = snapshot.data[4][index];
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>  const Control()),
+                                    );
+                                  },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
+                              ),
                             ),
-                            height: 128, width: 106,
-                            child: IconButton(
-                                onPressed: () {
-                                  nickname = snapshot.data[0][index] ;hostname = snapshot.data[1][index]; username = snapshot.data[2][index]; password = snapshot.data[3][index]; distro = snapshot.data[4][index];
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) =>  const Control()),
-                                  );
-                                },icon: Image.asset(colorMap[distroList[index]]!, height: 50,)
-                            ),
-                          ),
-                          SizedBox(width: MediaQuery.of(context).size.width-40-106, height: 128,
-                            child: ListTile(contentPadding: const EdgeInsets.only(top:0.0, bottom: 0.0),
-                                trailing: Container( width: 40,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: const [
-                                      Icon(Icons.arrow_forward_ios, color: textcolor,size: 25,),
-                                    ],
-                                  ),
-                                ),
-                                onLongPress: () => showDialog<String>(
-                                  context: context, builder: (BuildContext context) => AlertDialog(
-                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)), side: BorderSide(color: warningcolor, width: 2.0)),
-                                  title: Text('Delete host?', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold ),),
-                                  content: Text('This will permanently remove host information.', style: GoogleFonts.poppins(fontSize: 16 )),
-                                  actions: <Widget>[
-                                    RawMaterialButton(onPressed: () => Navigator.pop(context, 'Cancel'), child: const Text('Cancel'),
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(8.0))
-                                      ),
+                            SizedBox(width: MediaQuery.of(context).size.width-40-106, height: 128,
+                              child: ListTile(contentPadding: const EdgeInsets.only(top:0.0, bottom: 0.0),
+                                  trailing: Container( width: 40,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: const [
+                                        Icon(Icons.arrow_forward_ios, color: textcolor,size: 25,),
+                                      ],
                                     ),
-                                    RawMaterialButton(onPressed: () {removeItem(index); Navigator.pop(context, 'Delete'); setState(() {});}, child: const Text('Delete'),
-                                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), ),
-                                      fillColor: warningcolor,
-                                      textStyle: GoogleFonts.poppins(color: bgcolor, fontWeight: FontWeight.w600, fontSize: 16),
-                                    ),],),),
-                                onTap: (){
-                                  nickname = snapshot.data[0][index];hostname = snapshot.data[1][index]; username = snapshot.data[2][index]; password = snapshot.data[3][index]; distro = snapshot.data[4][index];
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) =>  const Term()),
-                                  );
-                                },
-                                shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color:textcolor) , borderRadius: BorderRadius.only(topLeft: Radius.circular(0.0),topRight: Radius.circular(8.0),bottomLeft: Radius.circular(0.0),bottomRight: Radius.circular(8.0),)),
-                                title: Padding(
-                                  padding: const EdgeInsets.only(left: 15.0, top: 23, bottom: 23),
-                                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(snapshot.data[0][index][0].toUpperCase()+snapshot.data[0][index].substring(1), style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold,  fontSize: 20)),
-                                      Text("${snapshot.data[2][index]} @ ${snapshot.data[1][index]}", style: GoogleFonts.poppins(color: textcolor, fontSize: 16)),
-                                    ],
                                   ),
-                                )
-                            ),
-                          )
-                        ],
-                      ),
-                    )),
+                                  onLongPress: () => showDialog<String>(
+                                    context: context, builder: (BuildContext context) => AlertDialog(
+                                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)), side: BorderSide(color: warningcolor, width: 2.0)),
+                                    title: Text('Delete host?', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold ),),
+                                    content: Text('This will permanently remove host information.', style: GoogleFonts.poppins(fontSize: 16 )),
+                                    actions: <Widget>[
+                                      RawMaterialButton(onPressed: () => Navigator.pop(context, 'Cancel'), child: const Text('Cancel'),
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                        ),
+                                      ),
+                                      RawMaterialButton(onPressed: () {removeItem(index); Navigator.pop(context, 'Delete'); setState(() {});}, child: const Text('Delete'),
+                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), ),
+                                        fillColor: warningcolor,
+                                        textStyle: GoogleFonts.poppins(color: bgcolor, fontWeight: FontWeight.w600, fontSize: 16),
+                                      ),],),),
+                                  onTap: (){
+                                    nickname = snapshot.data[0][index];hostname = snapshot.data[1][index]; username = snapshot.data[2][index]; password = snapshot.data[3][index]; distro = snapshot.data[4][index];
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>  const Term()),
+                                    );
+                                  },
+                                  shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color:textcolor) , borderRadius: BorderRadius.only(topLeft: Radius.circular(0.0),topRight: Radius.circular(8.0),bottomLeft: Radius.circular(0.0),bottomRight: Radius.circular(8.0),)),
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(left: 15.0, top: 23, bottom: 23),
+                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(snapshot.data[0][index][0].toUpperCase()+snapshot.data[0][index].substring(1), style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold,  fontSize: 20)),
+                                        Text("${snapshot.data[2][index]} @ ${snapshot.data[1][index]}", style: GoogleFonts.poppins(color: textcolor, fontSize: 16)),
+                                      ],
+                                    ),
+                                  )
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
+                    ),
                   ),
-                ),
-              ],
-            );
-          }
-          return Text("loading");
-        },
-      )
+                ],
+              );
+            }
+            return Text("loading");
+          },
+        )
     );
   }
 }
@@ -530,7 +530,6 @@ class comfySpace extends StatefulWidget {
 }
 
 class _comfySpaceState extends State<comfySpace> {
-  bool reloadNeeded = false;
   @override
   void initState(){
     setState(() {});
@@ -564,8 +563,9 @@ class _comfySpaceState extends State<comfySpace> {
                 TextButton(
                     onPressed: () async{
                       createSpace(spaceName);
-                      setState(() {reloadNeeded = true;});
+                      Future.delayed(const Duration(seconds: 5));
                       Navigator.pop(context);
+                      setState(() {});
                       },
                     child: const Text("save")
                 )
@@ -573,14 +573,18 @@ class _comfySpaceState extends State<comfySpace> {
             );
           }); },
       ),
-      body: FutureBuilder(
-        future: updateSpaceList('comfySpace.db'),
+      body: StreamBuilder(
+        stream: Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
+        initialData: const [],
         builder: (context, AsyncSnapshot snapshot){
           if(snapshot.connectionState != ConnectionState.done){
             print("state issue");
-            return ColoredBox(color: Colors.red);
+            return const ColoredBox(color: Colors.red);
           }
-          if(snapshot.hasData){
+          else if(!snapshot.hasData){
+            return const CircularProgressIndicator();
+          }
+          else if(snapshot.hasData){
             print("has data");
             final currentSpaceList = snapshot.data;
             return ListView.builder(
@@ -594,7 +598,6 @@ class _comfySpaceState extends State<comfySpace> {
           }
           print("loading");
           return Text("loading");
-
         },
       )
     );

@@ -232,7 +232,7 @@ Future<void> sendCommandON(SSHClient client2) async {
   var result = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result));print("command sent");
 }
 
-Future<void> createSpace(String spaceName) async {
+Future<void> createSpace(String spaceName) async { //save to local database
   String dbName = 'comfySpace.db';
   int version =1;
   var dbPath = await getDatabasesPath();
@@ -244,6 +244,7 @@ Future<void> createSpace(String spaceName) async {
   version: version,
   onCreate: (Database db, version) async =>
       await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      //add to list
   );
   var createTable = await comfySpacedb.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)');
   List<Map> list = await comfySpacedb.rawQuery('SELECT * FROM $spaceName');
@@ -316,6 +317,6 @@ Future<List<String>> updateSpaceList(String dbName) async{
   for (var mapping in listTableMap){
     var x = listTable.add(mapping['name']);}
   var y = listTable.removeAt(0); //remove android_metadata
-
   return listTable;
 }
+
