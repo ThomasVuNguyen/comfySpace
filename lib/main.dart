@@ -530,6 +530,7 @@ class comfySpace extends StatefulWidget {
 }
 
 class _comfySpaceState extends State<comfySpace> {
+  late String spaceNameHolder;
   @override
   void initState(){
     setState(() {});
@@ -539,67 +540,91 @@ class _comfySpaceState extends State<comfySpace> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("comfySpace"),
-        actions: <Widget>[
-          IconButton(onPressed: () async {
-            setState(() {});
-          }, icon: const Icon(Icons.update))
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.create),
-        onPressed: () {
-          String spaceName = 'space1';
-          showDialog(context: context, builder: (BuildContext context){
-            return AlertDialog(
-              title: const Text("Create a new space"),
-              content: TextField(
-                onChanged: (name){
-                  spaceName = name;
-                },
-              ),
-              actions: <Widget>[
-                TextButton(
-                    onPressed: () async{
-                      createSpace(spaceName);
-                      Future.delayed(const Duration(seconds: 5));
-                      Navigator.pop(context);
-                      setState(() {});
+        appBar: AppBar(
+          title: const Text("comfySpace"),
+          actions: <Widget>[
+            IconButton(onPressed: () async {
+              setState(() {});
+            }, icon: const Icon(Icons.update))
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.create),
+          onPressed: () {
+            String spaceName = 'space1';
+            showDialog(context: context, builder: (BuildContext context){
+              return AlertDialog(
+                title: const Text("Create a new space"),
+                content: TextField(
+                  onChanged: (name){
+                    spaceName = name;
+                  },
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () async{
+                        createSpace(spaceName);
+                        Future.delayed(const Duration(seconds: 5));
+                        Navigator.pop(context);
+                        setState(() {});
                       },
-                    child: const Text("save")
-                )
-              ],
-            );
-          }); },
-      ),
-      body: StreamBuilder(
-        stream: Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
-        initialData: const [],
-        builder: (context, AsyncSnapshot snapshot){
-          if(snapshot.connectionState != ConnectionState.done){
-            print("state issue");
-            return const ColoredBox(color: Colors.red);
-          }
-          else if(!snapshot.hasData){
-            return const CircularProgressIndicator();
-          }
-          else if(snapshot.hasData){
-            print("has data");
-            final currentSpaceList = snapshot.data;
-            return ListView.builder(
-              itemCount: currentSpaceList.length,
-                itemBuilder: (context, index){
-                return ListTile(
-                  title: Text(currentSpaceList[index]),
-                  leading: Icon(Icons.one_k),
-                );
-                });
-          }
-          print("loading");
-          return Text("loading");
-        },
-      )
+                      child: const Text("save")
+                  )
+                ],
+              );
+            }); },
+        ),
+        body: StreamBuilder(
+          stream: Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
+          initialData: const [],
+          builder: (context, AsyncSnapshot snapshot){
+            if(snapshot.connectionState != ConnectionState.done){
+              print("state issue");
+              return const ColoredBox(color: Colors.red);
+            }
+            else if(!snapshot.hasData){
+              return const CircularProgressIndicator();
+            }
+            else if(snapshot.hasData){
+              print("has data");
+              final currentSpaceList = snapshot.data;
+              return ListView.builder(
+                  itemCount: currentSpaceList.length,
+                  itemBuilder: (context, index){
+                    return ListTile(
+                      title: Text(currentSpaceList[index]),
+                      leading: Icon(Icons.one_k),
+                      onLongPress: (){
+                        spaceNameHolder = '';
+                        showDialog(context: context, builder: (BuildContext context){
+                          return AlertDialog(
+                            title: Text("Edit Space"),
+                            content: TextField(
+                              onChanged: (text){
+                                spaceNameHolder = text;
+                              }
+                            ),
+                            actions: <Widget>[
+                              TextButton(onPressed: (){
+                                editSpace('comfySpace.db', currentSpaceList[index], spaceNameHolder);
+                                Navigator.pop(context);
+                                setState(() {});
+                              }, child: Text("Rename")),
+                              TextButton(onPressed: (){
+                                deleteSpace('comfySpace.db', currentSpaceList[index]);
+                                Navigator.pop(context);
+                                setState(() {});
+                              }, child: Text("Delete"))],
+                          );
+                        });
+                      },
+                    );
+                  });
+            }
+            print("loading");
+            return Text("loading");
+          },
+        )
     );
   }
 }

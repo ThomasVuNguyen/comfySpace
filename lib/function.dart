@@ -320,3 +320,25 @@ Future<List<String>> updateSpaceList(String dbName) async{
   return listTable;
 }
 
+Future<void> deleteSpace(String dbName, String spaceName) async {
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  var deleteDB = database.rawDelete('DROP TABLE $spaceName');
+  print('$spaceName has been deleted');
+}
+Future<void> editSpace(String dbName, String oldSpaceName, String newSpaceName) async {
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE $oldSpaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  var spaceRenamed = await database.execute('ALTER TABLE $oldSpaceName RENAME TO $newSpaceName');
+  print("$oldSpaceName has been rename to $newSpaceName");
+}
