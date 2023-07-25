@@ -290,8 +290,7 @@ Future<List<List<String>>> renderer(String spaceName) async{
   return listTotal;
 }
 
-Future<void> addButton(String spaceName, String name, int size_x, int size_y, int position, String command )async{
-  var dbName = 'comfySpace.db';
+Future<void> addButton(String dbName, String spaceName, String name, int size_x, int size_y, int position, String command )async{
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
   Database database = await openDatabase(path,
@@ -302,7 +301,6 @@ Future<void> addButton(String spaceName, String name, int size_x, int size_y, in
   var addedButton = database.rawInsert('INSERT INTO $spaceName(name, size_x, size_y, position, command) VALUES("'"$name"'", $size_x, $size_y, $position, "'"$command"'")');
   print("button added");
 }
-
 Future<List<String>> updateSpaceList(String dbName) async{
   var dbName = 'comfySpace.db';
   var dbPath = await getDatabasesPath();
@@ -341,4 +339,28 @@ Future<void> editSpace(String dbName, String oldSpaceName, String newSpaceName) 
   );
   var spaceRenamed = await database.execute('ALTER TABLE $oldSpaceName RENAME TO $newSpaceName');
   print("$oldSpaceName has been rename to $newSpaceName");
+}
+Future<List<Map>> buttonRenderer(String dbName, String spaceName) async{
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  List<Map> btnNameList = await database.rawQuery('SELECT * FROM $spaceName');
+  return btnNameList;
+}
+
+Future<void> deleteButton(String dbName, String spaceName, String buttonName, int primaryKey) async{
+  var btnName = "'$buttonName'";
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  var deleteBtn = await database.rawDelete('DELETE FROM $spaceName WHERE name= $btnName AND id=$primaryKey');
+  print(deleteBtn.toString());
 }

@@ -7,13 +7,13 @@ import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xterm/xterm.dart';
-import 'package:sqflite/sqflite.dart';
 
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
 ValueNotifier<int> reloadState = ValueNotifier(0);
+String spaceLaunch = '';
 Color? currentColor; String? currentColorString;
+String buttonName = ''; int buttonSizeX = 1; int buttonSizeY = 1; int buttonPosition = 1; String buttonCommand = 'htop';
 const borderColor = Colors.black;
 const cardColor = Colors.white;
 List<String> nameList = [];List<String> hostList = [];List<String> userList = [];List<String> passList = [];List<String> distroList = [];
@@ -504,7 +504,7 @@ class _ControlState extends State<Control> {
         icon: Icon(Icons.connected_tv_sharp), onPressed : () async {
           var listTotal = await renderer('space1'); buttonList = listTotal[0]; sizeXList = listTotal[1]; sizeYList = listTotal[2]; positionList = listTotal[3]; commandList = listTotal[4];
           createSpace('space1');
-        addButton('space1', "tung", 1, 1, 1, 'echo Im tung');
+
         setState(() {});
         },),
       body: GridView.count(
@@ -594,6 +594,13 @@ class _comfySpaceState extends State<comfySpace> {
                     return ListTile(
                       title: Text(currentSpaceList[index]),
                       leading: Icon(Icons.one_k),
+                      onTap: (){
+                        spaceLaunch = currentSpaceList[index];
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  const spacePage()),
+                        );
+                      },
                       onLongPress: (){
                         spaceNameHolder = '';
                         showDialog(context: context, builder: (BuildContext context){
@@ -625,6 +632,117 @@ class _comfySpaceState extends State<comfySpace> {
             return Text("loading");
           },
         )
+    );
+  }
+}
+
+class spacePage extends StatefulWidget {
+  const spacePage({super.key});
+
+  @override
+  State<spacePage> createState() => _spacePageState();
+}
+
+class _spacePageState extends State<spacePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(context: context, builder: (BuildContext context){
+            return AlertDialog(
+              content: Column(
+                children: [
+                  TextField(
+                    onChanged: (btnName){
+                      buttonName = btnName;
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'name',
+                    ),
+                    textInputAction: TextInputAction.next,
+                  ),
+                  TextField(
+                    onChanged: (sizeX){
+                      buttonSizeX = int.parse(sizeX);
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'sizeX',
+                    ),
+                    textInputAction: TextInputAction.next,
+                  ),
+                  TextField(
+                    onChanged: (sizeY){
+                      buttonSizeY = int.parse(sizeY);
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'sizeY',
+                    ),
+                    textInputAction: TextInputAction.next,
+                  ),
+                  TextField(
+                    onChanged: (btnPosition){
+                      buttonPosition = int.parse(btnPosition);
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'position',
+                    ),
+                    textInputAction: TextInputAction.next,
+                    ),
+                  TextField(
+                      onChanged: (btnCommand){
+                        buttonCommand = btnCommand;
+                      },
+                    decoration: const InputDecoration(
+                      hintText: 'command',
+                    ),
+
+                    ),
+                ],
+              ),
+              actions: [
+                TextButton(onPressed: (){
+                  addButton('comfySpace.db', spaceLaunch, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand);
+                  Navigator.pop(context);
+                  setState(() {});
+                }, child: Text("Add button"))
+              ],
+            );
+          });
+        },
+          child: const Text("Add")
+
+      ),
+      body: FutureBuilder(
+        future: buttonRenderer('comfySpace.db', spaceLaunch),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done){
+            //return Center(child: Text(snapshot.data.toString()),);
+            return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                  childAspectRatio: 3 / 2,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                ),
+                itemCount: snapshot.data?.length,
+
+                itemBuilder: (BuildContext context, index){
+                  return ListTile(
+                    title: Text(snapshot.data![index].toString()),
+                    tileColor: Colors.amber,
+                    onLongPress: (){
+                      deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                      setState(() {});
+                    },
+                  );
+                });
+          }
+          else{
+            return const CircularProgressIndicator();
+          }
+        }
+      )
     );
   }
 }
