@@ -491,8 +491,8 @@ class _ControlState extends State<Control> {
   List<String> commandList = [];
   String message = 'hi im message';
   void init(){
-    String space1 = "space1";
-    createSpace(space1);
+    //String space1 = "space1";
+    //createSpace(space1, host, user, password)
   }
   @override
   Widget build(BuildContext context) {
@@ -503,7 +503,7 @@ class _ControlState extends State<Control> {
       floatingActionButton: IconButton(
         icon: Icon(Icons.connected_tv_sharp), onPressed : () async {
           var listTotal = await renderer('space1'); buttonList = listTotal[0]; sizeXList = listTotal[1]; sizeYList = listTotal[2]; positionList = listTotal[3]; commandList = listTotal[4];
-          createSpace('space1');
+          //createSpace('space1');
 
         setState(() {});
         },),
@@ -513,7 +513,9 @@ class _ControlState extends State<Control> {
         List.generate(buttonList.length, (index) {
           return Center(
             child: IconButton(
-              onPressed: () {setState(() {message = commandList[index];});},
+              onPressed: () {
+
+                setState(() {message = commandList[index];});},
               icon: const Icon(Icons.ac_unit_rounded),
             ),
           );
@@ -551,19 +553,48 @@ class _comfySpaceState extends State<comfySpace> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.create),
           onPressed: () {
-            String spaceName = 'space1';
+            print("creating");
+            String spaceName = 'space1'; late String hostInfo; late String userInfo; late String passwordInfo;
             showDialog(context: context, builder: (BuildContext context){
               return AlertDialog(
                 title: const Text("Create a new space"),
-                content: TextField(
-                  onChanged: (name){
-                    spaceName = name;
-                  },
+                content: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        onChanged: (name){
+                          spaceName = name;
+                        },
+                        decoration: InputDecoration(hintText: "space name"), textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        onChanged: (text2){
+                          hostInfo = text2;
+                        }, decoration: InputDecoration(hintText: "host"), textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        onChanged: (text3){
+                          userInfo = text3;
+                        }, decoration: InputDecoration(hintText: "user"), textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                          onChanged: (text4){
+                            passwordInfo = text4;
+                          }, decoration: InputDecoration(hintText: "password")
+                      ),
+                    ),
+                  ],
                 ),
                 actions: <Widget>[
                   TextButton(
                       onPressed: () async{
-                        createSpace(spaceName);
+                        createSpace(spaceName, hostInfo, userInfo, passwordInfo );
                         Future.delayed(const Duration(seconds: 5));
                         Navigator.pop(context);
                         setState(() {});
@@ -573,6 +604,7 @@ class _comfySpaceState extends State<comfySpace> {
                 ],
               );
             }); },
+
         ),
         body: StreamBuilder(
           stream: Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
@@ -607,21 +639,33 @@ class _comfySpaceState extends State<comfySpace> {
                           return AlertDialog(
                             title: Text("Edit Space"),
                             content: TextField(
-                              onChanged: (text){
-                                spaceNameHolder = text;
-                              }
+                              onChanged: (text1){
+                                spaceNameHolder = text1;
+                              }, decoration: InputDecoration(hintText: "space"), textInputAction: TextInputAction.next,
                             ),
                             actions: <Widget>[
+                              TextButton(onPressed: (){
+                                updateAndroidMetaData('comfySpace.db');
+                              }, child: Text("METADATA")),
+
+                              TextButton(onPressed: (){
+                                deleteDB('comfySpace.db');
+                              }, child: Text("Wipe")),
+
+                              TextButton(onPressed: (){
+                                deleteSpace('comfySpace.db', currentSpaceList[index]);
+                                Navigator.pop(context);
+                                setState(() {});
+                              }, child: Text("Delete")),
+
                               TextButton(onPressed: (){
                                 editSpace('comfySpace.db', currentSpaceList[index], spaceNameHolder);
                                 Navigator.pop(context);
                                 setState(() {});
                               }, child: Text("Rename")),
-                              TextButton(onPressed: (){
-                                deleteSpace('comfySpace.db', currentSpaceList[index]);
-                                Navigator.pop(context);
-                                setState(() {});
-                              }, child: Text("Delete"))],
+
+
+                            ],
                           );
                         });
                       },
@@ -726,13 +770,72 @@ class _spacePageState extends State<spacePage> {
                   mainAxisSpacing: 20,
                 ),
                 itemCount: snapshot.data?.length,
-
                 itemBuilder: (BuildContext context, index){
                   return ListTile(
                     title: Text(snapshot.data![index].toString()),
                     tileColor: Colors.amber,
                     onLongPress: (){
-                      deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                      showDialog(context: context, builder: (BuildContext context){
+                        String btnName = snapshot.data![index]["name"];
+                        int btnSizeX = snapshot.data![index]["size_x"];
+                        int btnSizeY = snapshot.data![index]["size_y"];
+                        int btnPosition = snapshot.data![index]["position"];
+                        String btnCommand = snapshot.data![index]["command"];
+                        return AlertDialog(
+                          title: const Text("Edit buttons"),
+                          content: Column(
+                            children: [
+                              TextField(
+                                onChanged: (newName){
+                                  btnName = newName;
+                                },
+                                decoration: const InputDecoration(hintText: 'new name'),
+                                textInputAction: TextInputAction.next,
+                              ),
+                              TextField(
+                                onChanged: (newSizeX){
+                                  btnSizeX = int.parse(newSizeX);
+                                },
+                                decoration: const InputDecoration(hintText: 'new sizeX'),
+                                textInputAction: TextInputAction.next,
+                              ),
+                              TextField(
+                                onChanged: (newSizeY){
+                                  btnSizeY = int.parse(newSizeY);
+                                },
+                                decoration: const InputDecoration(hintText: 'new sizeY'),
+                                textInputAction: TextInputAction.next,
+                              ),
+                              TextField(
+                                onChanged: (newPostion){
+                                  btnPosition = int.parse(newPostion);
+                                },
+                                decoration: const InputDecoration(hintText: 'new position'),
+                                textInputAction: TextInputAction.next,
+                              ),
+                              TextField(
+                                onChanged: (newCommand){
+                                  btnCommand = newCommand;
+                                },
+                                decoration: const InputDecoration(hintText: 'new command'),
+                              ),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            TextButton(onPressed: (){
+                              deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                              Navigator.pop(context);
+                              setState(() {});
+                            }, child: Text("Delete")),
+                            TextButton(onPressed: (){
+                              editButton('comfySpace.db', spaceLaunch, snapshot.data![index]["id"], btnName, btnSizeX, btnSizeY, btnPosition, btnCommand);
+                              Navigator.pop(context);
+                              setState(() {});
+                            }, child: Text("Alter"))
+                          ],
+                        );
+                      });
+                      //deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
                       setState(() {});
                     },
                   );

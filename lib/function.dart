@@ -20,6 +20,7 @@ Future<List<String>>updateSpaceRender() async{
   print("space listed");
   return spaceList;
 }
+
 newName(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldNameList = prefs.getStringList("listName")!;
@@ -28,6 +29,7 @@ newName(String name) async{
   nameList = prefs.getStringList("listName")!;
   //print("new name"); print(nameList!);
 }
+
 newHost(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldHostList = prefs.getStringList("listHost")!;
@@ -36,6 +38,7 @@ newHost(String name) async{
   hostList = prefs.getStringList("listHost")!;
   //print("new host"); print(hostList!);
 }
+
 newUser(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldUserList = prefs.getStringList("listUser")!;
@@ -44,6 +47,7 @@ newUser(String name) async{
   userList = prefs.getStringList("listUser")!;
   //print("new user"); print(userList!);
 }
+
 newPass(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldPassList = prefs.getStringList("listPass")!;
@@ -52,6 +56,7 @@ newPass(String name) async{
   passList = prefs.getStringList("listPass")!;
   //print("new pass"); print(passList!);
 }
+
 newDistro(String name) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldDistroList = prefs.getStringList("listDistro")!;
@@ -62,6 +67,7 @@ newDistro(String name) async{
   //print("new distroList is "+ distroList.toString());
   //print("new distro " + name + "added");
 }
+
 clearData() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setStringList("listName", <String>[]);
@@ -71,6 +77,7 @@ clearData() async {
   prefs.setStringList("listDistro", <String>[]);
   nameList = <String>[];hostList = <String>[];userList = <String>[];passList = <String>[];distroList = <String>[];
 }
+
 reAssign() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   nameList = prefs.getStringList("listName")!;
@@ -79,31 +86,37 @@ reAssign() async{
   passList = prefs.getStringList("listPass")!;
   distroList = prefs.getStringList("listDistro")!;
 }
+
 Future<List<String>>reAssignNameList() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   nameList = prefs.getStringList("listName")!;
   return nameList;
 }
+
 Future<List<String>>reAssignHostList() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   hostList = prefs.getStringList("listHost")!;
   return hostList;
 }
+
 Future<List<String>>reAssignUserList() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   userList = prefs.getStringList("listUser")!;
   return userList;
 }
+
 Future<List<String>>reAssignPassList() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   passList = prefs.getStringList("listPass")!;
   return passList;
 }
+
 Future<List<String>>reAssignDistroList() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   distroList = prefs.getStringList("listDistro")!;
   return distroList;
 }
+
 resetData() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setStringList("listName", nameList);
@@ -111,6 +124,7 @@ resetData() async{
   prefs.setStringList("listPass", passList);
   prefs.setStringList("listColor", distroList);
 }
+
 removeItem(int index) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var tempName = prefs.getStringList("listName");
@@ -133,6 +147,7 @@ removeItem(int index) async{
   print("new list");
   print(tempName);
 }
+
 infoBox(int count, BuildContext context) async{
   if(count == 1) {
     showDialog(
@@ -196,6 +211,7 @@ infoBox(int count, BuildContext context) async{
     );
   }
 }
+
 memoryCheck() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getStringList("listName") == null){ await prefs.setStringList("listName", <String> []); print(null);}
@@ -204,6 +220,7 @@ memoryCheck() async{
   if (prefs.getStringList("listUser") == null){ await prefs.setStringList("listUser", <String> []);}
   if (prefs.getStringList("listDistro") == null){ await prefs.setStringList("listDistro", <String> []);}
 }
+
 Future<void> testCommand(String hostname, int port, String username, String password) async {
   final client2 = SSHClient(
       await SSHSocket.connect(hostname, port),
@@ -212,6 +229,7 @@ Future<void> testCommand(String hostname, int port, String username, String pass
   );
   var result = await client2.run("raspi-gpio set 21 dl");
 }
+
 Future<SSHClient> createClient(String hostname, int port, String username, String password) async {
   final client2 = SSHClient(
     await SSHSocket.connect(hostname, port),
@@ -223,17 +241,52 @@ Future<SSHClient> createClient(String hostname, int port, String username, Strin
   print(client2.username);
   return client2;
 }
+
 Future<void> sendCommandOff(SSHClient client2) async {
   print(client2.username);
   var result = await client2.run("raspi-gpio set 21 dl"); print(utf8.decode(result));print("command sent");
 }
+
 Future<void> sendCommandON(SSHClient client2) async {
   print(client2.username);
   var result = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result));print("command sent");
 }
 
-Future<void> createSpace(String spaceName) async { //save to local database
+Future<void> deleteDB(String dbName) async{
+  var dbPath = await getDatabasesPath();
+  var dbDirect = Directory(dbPath);
+  final List<FileSystemEntity> entities = await dbDirect.list().toList();
+  //print(entities.toString());
+  var path = p.join(dbPath, dbName);
+  var comfySpacedb = await openDatabase(path,
+      version: 1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+    //add to list
+  );
+  await deleteDatabase(path);
+}
+
+Future<void> updateAndroidMetaData(String dbName) async{
+  var dbPath = await getDatabasesPath();
+  var dbDirect = Directory(dbPath);
+  final List<FileSystemEntity> entities = await dbDirect.list().toList();
+  //print(entities.toString());
+  var path = p.join(dbPath, dbName);
+  var database = await openDatabase(path,
+      version: 1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+    //add to list
+  );
+  var enUS = "'en-US'" ;
+  await database.execute('CREATE TABLE android_metadata (locale TEXT)');
+  await database.execute('INSERT INTO android_metadata VALUES($enUS)');
+}
+
+Future<void> createSpace(String spaceName, String host, String user, String password) async { //save to local database
   String dbName = 'comfySpace.db';
+  String spaceNameAdd = "'$spaceName'"; String hostAdd = "'$host'"; String userAdd = "'$user'"; String passwordAdd = "'$password'";
   int version =1;
   var dbPath = await getDatabasesPath();
   var dbDirect = Directory(dbPath);
@@ -244,11 +297,15 @@ Future<void> createSpace(String spaceName) async { //save to local database
   version: version,
   onCreate: (Database db, version) async =>
       await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
-      //add to list
   );
+  await comfySpacedb.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');
   var createTable = await comfySpacedb.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)');
   List<Map> list = await comfySpacedb.rawQuery('SELECT * FROM $spaceName');
+  var addHostInfo = await comfySpacedb.execute('INSERT INTO hostInfo(spaceName, host, user, password) VALUES($spaceNameAdd, $hostAdd, $userAdd, $passwordAdd)');
   List<Map> listTable = await comfySpacedb.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
+
+
+
   print(listTable.toString());
 }
 
@@ -265,6 +322,7 @@ Future<void> checkDB(String dbName, String spaceName)async {
 }
 
 Future<List<List<String>>> renderer(String spaceName) async{
+  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace'];
   var dbName = 'comfySpace.db';
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
@@ -280,13 +338,21 @@ Future<List<List<String>>> renderer(String spaceName) async{
   var commandMap = await database.query(spaceName, columns: ['command']);
   List<String> buttonList = []; List<String> sizeXList = []; List<String> sizeYList = []; List<String> positionList = []; List<String> commandList =[];
   for (int i = 0; i < buttonMap.length; i++){
-    buttonList.add(buttonMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
-    sizeXList.add(sizeXMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
-    sizeYList.add(sizeYMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
-    positionList.add(positionMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
-    commandList.add(commandMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+    if(prohibitedTable.contains(buttonMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), "")!=true ) == false){
+      buttonList.add(buttonMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+      sizeXList.add(sizeXMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+      sizeYList.add(sizeYMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+      positionList.add(positionMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+      commandList.add(commandMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
+    }
+    else{
+      print("info caught");
+    }
   }
+  int indexDelete = buttonList.indexOf('hostInfo');
+  var deletebutton = buttonList.removeAt(indexDelete); sizeXList.removeAt(indexDelete); sizeYList.removeAt(indexDelete); positionList.removeAt(indexDelete); commandList.removeAt(indexDelete);
   var listTotal = [buttonList, sizeXList, sizeYList, positionList, commandList];
+  print(deletebutton);
   return listTotal;
 }
 
@@ -301,7 +367,9 @@ Future<void> addButton(String dbName, String spaceName, String name, int size_x,
   var addedButton = database.rawInsert('INSERT INTO $spaceName(name, size_x, size_y, position, command) VALUES("'"$name"'", $size_x, $size_y, $position, "'"$command"'")');
   print("button added");
 }
+
 Future<List<String>> updateSpaceList(String dbName) async{
+  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace'];
   var dbName = 'comfySpace.db';
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
@@ -313,7 +381,9 @@ Future<List<String>> updateSpaceList(String dbName) async{
   List<Map> listTableMap = await database.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
   List<String> listTable = [];
   for (var mapping in listTableMap){
-    var x = listTable.add(mapping['name']);}
+    if(prohibitedTable.contains(mapping['name']) == false){
+      var x = listTable.add(mapping['name']);
+    }}
   var y = listTable.removeAt(0); //remove android_metadata
   return listTable;
 }
@@ -329,6 +399,7 @@ Future<void> deleteSpace(String dbName, String spaceName) async {
   var deleteDB = database.rawDelete('DROP TABLE $spaceName');
   print('$spaceName has been deleted');
 }
+
 Future<void> editSpace(String dbName, String oldSpaceName, String newSpaceName) async {
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
@@ -340,6 +411,7 @@ Future<void> editSpace(String dbName, String oldSpaceName, String newSpaceName) 
   var spaceRenamed = await database.execute('ALTER TABLE $oldSpaceName RENAME TO $newSpaceName');
   print("$oldSpaceName has been rename to $newSpaceName");
 }
+
 Future<List<Map>> buttonRenderer(String dbName, String spaceName) async{
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
@@ -364,3 +436,17 @@ Future<void> deleteButton(String dbName, String spaceName, String buttonName, in
   var deleteBtn = await database.rawDelete('DELETE FROM $spaceName WHERE name= $btnName AND id=$primaryKey');
   print(deleteBtn.toString());
 }
+
+Future<void> editButton(String dbName, String spaceName, int index, String newName, int newSizeX, int newSizeY, int newPosition, String newCommand) async{
+  String btnName = "'$newName'";
+  String btnCommand = "'$newCommand'";
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  );
+  var buttonChange = await database.execute('UPDATE $spaceName SET name=$btnName, size_x=$newSizeX, size_y=$newSizeY, position=$newPosition, command=$btnCommand WHERE id=$index');
+}
+
