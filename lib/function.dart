@@ -295,18 +295,18 @@ Future<void> createSpace(String spaceName, String host, String user, String pass
   var path = p.join(dbPath, dbName);
   var comfySpacedb = await openDatabase(path,
   version: version,
-  onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+  onCreate: (Database db, version) async {
+      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)');
+      await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');}
   );
-  await comfySpacedb.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');
+
   var createTable = await comfySpacedb.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)');
   List<Map> list = await comfySpacedb.rawQuery('SELECT * FROM $spaceName');
   var addHostInfo = await comfySpacedb.execute('INSERT INTO hostInfo(spaceName, host, user, password) VALUES($spaceNameAdd, $hostAdd, $userAdd, $passwordAdd)');
   List<Map> listTable = await comfySpacedb.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
-
-
-
+  List<Map> listHost = await comfySpacedb.rawQuery('SELECT * FROM hostInfo ORDER BY id;');
   print(listTable.toString());
+  print(listHost.toString());
 }
 
 Future<void> checkDB(String dbName, String spaceName)async {
@@ -319,6 +319,17 @@ Future<void> checkDB(String dbName, String spaceName)async {
   );
   List<Map> list = await database.rawQuery('SELECT * FROM $spaceName');
   print(list);
+}
+Future<List<Map<String, Object?>>> checkHostInfo(String dbName) async{
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)')
+  );
+  var checkHost = await database.rawQuery('SELECT COUNT(*) FROM hostInfo');
+  return checkHost;
 }
 
 Future<List<List<String>>> renderer(String spaceName) async{
@@ -389,6 +400,7 @@ Future<List<String>> updateSpaceList(String dbName) async{
 }
 
 Future<void> deleteSpace(String dbName, String spaceName) async {
+  var spaceNameBraces = "'$spaceName'";
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
   Database database = await openDatabase(path,
@@ -396,20 +408,27 @@ Future<void> deleteSpace(String dbName, String spaceName) async {
       onCreate: (Database db, version) async =>
       await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
   );
-  var deleteDB = database.rawDelete('DROP TABLE $spaceName');
+  var deleteDB = await database.rawDelete('DROP TABLE $spaceName');
   print('$spaceName has been deleted');
+  var deleteHost = await database.rawDelete('DELETE FROM hostInfo WHERE spaceName=$spaceNameBraces');
+  print(deleteHost.toString());
 }
 
-Future<void> editSpace(String dbName, String oldSpaceName, String newSpaceName) async {
+Future<void> editSpace(String dbName, String oldSpaceName, String newSpaceName, String newHostName, String newUser, String newPassword) async {
+  String oldSpaceNameBraces = "'$oldSpaceName'";
+  String newSpaceNameBraces = "'$newSpaceName'";
+  String newHostNameBraces = "'$newHostName'";
+  String newUserBraces = "'$newUser'";
+  String newPasswordBraces = "'$newPassword'";
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE $oldSpaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $newSpaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
   );
   var spaceRenamed = await database.execute('ALTER TABLE $oldSpaceName RENAME TO $newSpaceName');
-  print("$oldSpaceName has been rename to $newSpaceName");
+  var hostRenamed = await database.rawUpdate('UPDATE hostInfo SET spaceName=$newSpaceNameBraces, host=$newHostNameBraces, user=$newUserBraces, password=$newPasswordBraces WHERE spaceName=$oldSpaceNameBraces');
 }
 
 Future<List<Map>> buttonRenderer(String dbName, String spaceName) async{
@@ -447,6 +466,21 @@ Future<void> editButton(String dbName, String spaceName, int index, String newNa
       onCreate: (Database db, version) async =>
       await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
   );
-  var buttonChange = await database.execute('UPDATE $spaceName SET name=$btnName, size_x=$newSizeX, size_y=$newSizeY, position=$newPosition, command=$btnCommand WHERE id=$index');
+  var buttonChange = await database.rawUpdate('UPDATE $spaceName SET name=$btnName, size_x=$newSizeX, size_y=$newSizeY, position=$newPosition, command=$btnCommand WHERE id=$index');
 }
 
+Future<Map<String, Object?>> hostInfoRenderer(String dbName, String spaceName) async{
+  String spaceNameBraces = "'$spaceName'";
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async {
+        await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)');
+        await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');
+      }
+  );
+  var hostRender = await database.rawQuery('SELECT host,user,password FROM hostInfo WHERE spaceName=$spaceNameBraces');
+  return hostRender[0];
+
+}

@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 
 late List<CameraDescription> _cameras;
 
-
-
 /// CameraApp is the Main Application.
 class CameraApp extends StatefulWidget {
   /// Default Constructor

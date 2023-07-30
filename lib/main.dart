@@ -378,7 +378,7 @@ class Term extends StatefulWidget {
   // ignore: library_private_types_in_public_api
   _TerminalPage createState() => _TerminalPage();
 
-} //MyHomePage
+} //Term
 
 class _TerminalPage extends State<Term> {
   late final terminal = Terminal(inputHandler: keyboard);
@@ -533,6 +533,10 @@ class comfySpace extends StatefulWidget {
 
 class _comfySpaceState extends State<comfySpace> {
   late String spaceNameHolder;
+  late String hostNameHolder;
+  late String userNameHolder;
+  late String passwordHolder;
+
   @override
   void initState(){
     setState(() {});
@@ -547,6 +551,8 @@ class _comfySpaceState extends State<comfySpace> {
           actions: <Widget>[
             IconButton(onPressed: () async {
               setState(() {});
+              String testHost = await checkHostInfo('comfySpace.db').toString();
+              print(testHost);
             }, icon: const Icon(Icons.update))
           ],
         ),
@@ -558,7 +564,7 @@ class _comfySpaceState extends State<comfySpace> {
             showDialog(context: context, builder: (BuildContext context){
               return AlertDialog(
                 title: const Text("Create a new space"),
-                content: Row(
+                content: Column(
                   children: [
                     Expanded(
                       child: TextField(
@@ -626,22 +632,43 @@ class _comfySpaceState extends State<comfySpace> {
                     return ListTile(
                       title: Text(currentSpaceList[index]),
                       leading: Icon(Icons.one_k),
-                      onTap: (){
+                      onTap: () async {
                         spaceLaunch = currentSpaceList[index];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  const spacePage()),
-                        );
+                        var spaceInfo = await hostInfoRenderer('comfySpace.db', spaceLaunch);
+                        String spaceHost = spaceInfo['host'].toString();
+                        String spaceUser = spaceInfo['user'].toString();
+                        String spacePass = spaceInfo['password'].toString();
+                        print(spacePass);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  const spacePage()),);
                       },
                       onLongPress: (){
                         spaceNameHolder = '';
                         showDialog(context: context, builder: (BuildContext context){
                           return AlertDialog(
                             title: Text("Edit Space"),
-                            content: TextField(
-                              onChanged: (text1){
-                                spaceNameHolder = text1;
-                              }, decoration: InputDecoration(hintText: "space"), textInputAction: TextInputAction.next,
+                            content: Column(
+                              children: [
+                                TextField(
+                                  onChanged: (text1){
+                                    spaceNameHolder = text1;
+                                  }, decoration: InputDecoration(hintText: "space"), textInputAction: TextInputAction.next,
+                                ),
+                                TextField(
+                                  onChanged: (hostname){
+                                    hostNameHolder = hostname;
+                                  }, decoration: InputDecoration(hintText: "hostname"), textInputAction: TextInputAction.next,
+                                ),
+                                TextField(
+                                  onChanged: (username){
+                                    userNameHolder = username;
+                                  }, decoration: InputDecoration(hintText: "username"), textInputAction: TextInputAction.next,
+                                ),
+                                TextField(
+                                  onChanged: (password){
+                                    passwordHolder = password;
+                                  }, decoration: InputDecoration(hintText: "password"), textInputAction: TextInputAction.next,
+                                ),
+                              ],
                             ),
                             actions: <Widget>[
                               TextButton(onPressed: (){
@@ -659,12 +686,10 @@ class _comfySpaceState extends State<comfySpace> {
                               }, child: Text("Delete")),
 
                               TextButton(onPressed: (){
-                                editSpace('comfySpace.db', currentSpaceList[index], spaceNameHolder);
+                                editSpace('comfySpace.db', currentSpaceList[index], spaceNameHolder, hostNameHolder, userNameHolder, passwordHolder);
                                 Navigator.pop(context);
                                 setState(() {});
                               }, child: Text("Rename")),
-
-
                             ],
                           );
                         });
