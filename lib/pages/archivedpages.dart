@@ -136,7 +136,7 @@ class _TerminalPage2 extends State<Term2> {
 } //Double Terminal
 */
 //Early control page
-/*
+
 class Control extends StatefulWidget {
   const Control({Key? key}) : super(key: key);
   @override
@@ -243,7 +243,7 @@ class _ControlPage extends State<Control> {
     );
   }
 } //TerminalState
- */
+
 /*FutureBuilder(
         future: updateSpaceRender(),
         builder: (context, AsyncSnapshot snapshot){

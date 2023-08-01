@@ -639,6 +639,7 @@ class _comfySpaceState extends State<comfySpace> {
                         String spaceUser = spaceInfo['user'].toString();
                         String spacePass = spaceInfo['password'].toString();
                         print(spacePass);
+                        hostname = spaceHost; username = spaceUser; password = spacePass;
                         Navigator.push(context, MaterialPageRoute(builder: (context) =>  const spacePage()),);
                       },
                       onLongPress: (){
@@ -713,9 +714,32 @@ class spacePage extends StatefulWidget {
 }
 
 class _spacePageState extends State<spacePage> {
+  late SSHClient clientControl;
+  String spaceTitle = hostname! + username! + password!;
+
+  @override
+  void initState(){
+    super.initState();
+    initControl();
+  }
+  @override
+  void dispose(){
+    super.dispose();
+    clientControl.close();
+  }
+  Future<void> initControl() async{
+    clientControl = SSHClient(
+        await SSHSocket.connect(hostname!, port),
+        username: username,
+      onPasswordRequest: () => password!,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(spaceTitle),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(context: context, builder: (BuildContext context){
@@ -799,6 +823,10 @@ class _spacePageState extends State<spacePage> {
                   return ListTile(
                     title: Text(snapshot.data![index].toString()),
                     tileColor: Colors.amber,
+                    onTap: () async {
+                      var command = await clientControl.run(snapshot.data![index]["command"]);
+                      print("command is " + snapshot.data![index]["command"]);
+                    },
                     onLongPress: (){
                       showDialog(context: context, builder: (BuildContext context){
                         String btnName = snapshot.data![index]["name"];
