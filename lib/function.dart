@@ -221,37 +221,6 @@ memoryCheck() async{
   if (prefs.getStringList("listDistro") == null){ await prefs.setStringList("listDistro", <String> []);}
 }
 
-Future<void> testCommand(String hostname, int port, String username, String password) async {
-  final client2 = SSHClient(
-      await SSHSocket.connect(hostname, port),
-      username: username,
-  onPasswordRequest: () => password,
-  );
-  var result = await client2.run("raspi-gpio set 21 dl");
-}
-
-Future<SSHClient> createClient(String hostname, int port, String username, String password) async {
-  final client2 = SSHClient(
-    await SSHSocket.connect(hostname, port),
-    username: username,
-    onPasswordRequest: () => password,
-  );
-  //var result = await client2.run("raspi-gpio set 21 dh");
-  print("connection success");
-  print(client2.username);
-  return client2;
-}
-
-Future<void> sendCommandOff(SSHClient client2) async {
-  print(client2.username);
-  var result = await client2.run("raspi-gpio set 21 dl"); print(utf8.decode(result));print("command sent");
-}
-
-Future<void> sendCommandON(SSHClient client2) async {
-  print(client2.username);
-  var result = await client2.run("raspi-gpio set 21 dh"); print(utf8.decode(result));print("command sent");
-}
-
 Future<void> deleteDB(String dbName) async{
   var dbPath = await getDatabasesPath();
   var dbDirect = Directory(dbPath);
@@ -261,7 +230,7 @@ Future<void> deleteDB(String dbName) async{
   var comfySpacedb = await openDatabase(path,
       version: 1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
     //add to list
   );
   await deleteDatabase(path);
@@ -276,7 +245,7 @@ Future<void> updateAndroidMetaData(String dbName) async{
   var database = await openDatabase(path,
       version: 1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
     //add to list
   );
   var enUS = "'en-US'" ;
@@ -300,7 +269,7 @@ Future<void> createSpace(String spaceName, String host, String user, String pass
       await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');}
   );
 
-  var createTable = await comfySpacedb.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)');
+  var createTable = await comfySpacedb.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)');
   List<Map> list = await comfySpacedb.rawQuery('SELECT * FROM $spaceName');
   var addHostInfo = await comfySpacedb.execute('INSERT INTO hostInfo(spaceName, host, user, password) VALUES($spaceNameAdd, $hostAdd, $userAdd, $passwordAdd)');
   List<Map> listTable = await comfySpacedb.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
@@ -315,7 +284,7 @@ Future<void> checkDB(String dbName, String spaceName)async {
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
   List<Map> list = await database.rawQuery('SELECT * FROM $spaceName');
   print(list);
@@ -340,7 +309,7 @@ Future<List<List<String>>> renderer(String spaceName) async{
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
   var buttonMap = await database.query(spaceName, columns: ['name']);
   var sizeXMap = await database.query(spaceName, columns: ['size_x']);
@@ -367,15 +336,15 @@ Future<List<List<String>>> renderer(String spaceName) async{
   return listTotal;
 }
 
-Future<void> addButton(String dbName, String spaceName, String name, int size_x, int size_y, int position, String command )async{
+Future<void> addButton(String dbName, String spaceName, String name, int size_x, int size_y, int position, String command, String buttonType)async{
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
-  var addedButton = database.rawInsert('INSERT INTO $spaceName(name, size_x, size_y, position, command) VALUES("'"$name"'", $size_x, $size_y, $position, "'"$command"'")');
+  var addedButton = database.rawInsert('INSERT INTO $spaceName(name, size_x, size_y, position, command, buttonType) VALUES("'"$name"'", $size_x, $size_y, $position, "'"$command"'","'"$buttonType"'")');
   print("button added");
 }
 
@@ -387,7 +356,7 @@ Future<List<String>> updateSpaceList(String dbName) async{
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
   List<Map> listTableMap = await database.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
   List<String> listTable = [];
@@ -406,7 +375,7 @@ Future<void> deleteSpace(String dbName, String spaceName) async {
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
   var deleteDB = await database.rawDelete('DROP TABLE $spaceName');
   print('$spaceName has been deleted');
@@ -425,7 +394,7 @@ Future<void> editSpace(String dbName, String oldSpaceName, String newSpaceName, 
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE $newSpaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $newSpaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
   var spaceRenamed = await database.execute('ALTER TABLE $oldSpaceName RENAME TO $newSpaceName');
   var hostRenamed = await database.rawUpdate('UPDATE hostInfo SET spaceName=$newSpaceNameBraces, host=$newHostNameBraces, user=$newUserBraces, password=$newPasswordBraces WHERE spaceName=$oldSpaceNameBraces');
@@ -437,7 +406,7 @@ Future<List<Map>> buttonRenderer(String dbName, String spaceName) async{
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
   List<Map> btnNameList = await database.rawQuery('SELECT * FROM $spaceName');
   return btnNameList;
@@ -450,7 +419,7 @@ Future<void> deleteButton(String dbName, String spaceName, String buttonName, in
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
   var deleteBtn = await database.rawDelete('DELETE FROM $spaceName WHERE name= $btnName AND id=$primaryKey');
   print(deleteBtn.toString());
@@ -464,7 +433,7 @@ Future<void> editButton(String dbName, String spaceName, int index, String newNa
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)')
+      await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
   var buttonChange = await database.rawUpdate('UPDATE $spaceName SET name=$btnName, size_x=$newSizeX, size_y=$newSizeY, position=$newPosition, command=$btnCommand WHERE id=$index');
 }
@@ -476,11 +445,25 @@ Future<Map<String, Object?>> hostInfoRenderer(String dbName, String spaceName) a
   Database database = await openDatabase(path,
       version:1,
       onCreate: (Database db, version) async {
-        await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)');
+        await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)');
         await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');
       }
   );
   var hostRender = await database.rawQuery('SELECT host,user,password FROM hostInfo WHERE spaceName=$spaceNameBraces');
   return hostRender[0];
 
+}
+
+Future<void> addColumn(String dbName, String spaceName, String columnName, String columnDataType) async{
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async {
+        await db.execute('CREATE TABLE $spaceName INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)');
+        await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');
+      }
+  );
+  var addColumn = await database.rawUpdate('ALTER TABLE $spaceName ADD COLUMN $columnName $columnDataType');
+  print(addColumn.toString());
 }

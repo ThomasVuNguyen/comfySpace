@@ -45,19 +45,19 @@
     },
     {
       "name": "camera",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera-0.10.5+2",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera-0.10.5+3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "camera_android",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.8+4",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.8+6",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "camera_avfoundation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_avfoundation-0.9.13+2",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_avfoundation-0.9.13+3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -69,7 +69,7 @@
     },
     {
       "name": "camera_web",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_web-0.3.1+4",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_web-0.3.2+1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -254,6 +254,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "flutter_speed_dial",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_speed_dial-7.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///E:/Flutter/flutter/packages/flutter_test",
       "packageUri": "lib/",
@@ -393,37 +399,37 @@
     },
     {
       "name": "path_provider",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider-2.0.15",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider-2.1.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.18"
     },
     {
       "name": "path_provider_android",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_android-2.0.27",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_android-2.1.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.18"
     },
     {
       "name": "path_provider_foundation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.2.4",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "path_provider_linux",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_linux-2.1.11",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_linux-2.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "path_provider_platform_interface",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_platform_interface-2.0.6",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_platform_interface-2.1.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "path_provider_windows",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_windows-2.1.7",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_windows-2.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -453,9 +459,9 @@
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.4",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.5",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.18"
     },
     {
       "name": "pointycastle",
@@ -597,7 +603,7 @@
     },
     {
       "name": "url_launcher_android",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.0.36",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.0.37",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -657,7 +663,7 @@
     },
     {
       "name": "video_player_avfoundation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_avfoundation-2.4.8",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_avfoundation-2.4.9",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -693,7 +699,7 @@
     },
     {
       "name": "xdg_directories",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/xdg_directories-1.0.1",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/xdg_directories-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -722,7 +728,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-07-19T01:23:57.005607Z",
+  "generated": "2023-08-09T00:11:48.427786Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }
