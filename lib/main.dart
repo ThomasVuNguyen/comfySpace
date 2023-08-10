@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
@@ -547,16 +546,20 @@ class _comfySpaceState extends State<comfySpace> {
     setState(() {});
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        width: 0,
+      ),
         appBar: AppBar(
-          title: const Text("comfySpace"),
+          title: const Text("ComfySpace"),
+          backgroundColor: Color(0xffF4BF56),
+          toolbarHeight: 88,
           actions: <Widget>[
             IconButton(onPressed: () async {
               setState(() {});
-              String testHost = await checkHostInfo('comfySpace.db').toString();
+              String testHost = checkHostInfo('comfySpace.db').toString();
               print(testHost);
             }, icon: const Icon(Icons.update))
           ],
@@ -617,95 +620,146 @@ class _comfySpaceState extends State<comfySpace> {
             }); },
 
         ),
-        body: StreamBuilder(
-          stream: Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
-          initialData: const [],
-          builder: (context, AsyncSnapshot snapshot){
-            if(snapshot.connectionState != ConnectionState.done){
-              print("state issue");
-              return const ColoredBox(color: Colors.red);
-            }
-            else if(!snapshot.hasData){
-              return const CircularProgressIndicator();
-            }
-            else if(snapshot.hasData){
-              print("has data");
-              final currentSpaceList = snapshot.data;
-              return ListView.builder(
-                  itemCount: currentSpaceList.length,
-                  itemBuilder: (context, index){
-                    return ListTile(
-                      title: Text(currentSpaceList[index]),
-                      leading: Icon(Icons.one_k),
-                      onTap: () async {
-                        spaceLaunch = currentSpaceList[index];
-                        var spaceInfo = await hostInfoRenderer('comfySpace.db', spaceLaunch);
-                        String spaceHost = spaceInfo['host'].toString();
-                        String spaceUser = spaceInfo['user'].toString();
-                        String spacePass = spaceInfo['password'].toString();
-                        print(spacePass);
-                        hostname = spaceHost; username = spaceUser; password = spacePass;
-                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  const spacePage()),);
-                      },
-                      onLongPress: (){
-                        spaceNameHolder = '';
-                        showDialog(context: context, builder: (BuildContext context){
-                          return AlertDialog(
-                            title: Text("Edit Space"),
-                            content: Column(
-                              children: [
-                                TextField(
-                                  onChanged: (text1){
-                                    spaceNameHolder = text1;
-                                  }, decoration: InputDecoration(hintText: "space"), textInputAction: TextInputAction.next,
-                                ),
-                                TextField(
-                                  onChanged: (hostname){
-                                    hostNameHolder = hostname;
-                                  }, decoration: InputDecoration(hintText: "hostname"), textInputAction: TextInputAction.next,
-                                ),
-                                TextField(
-                                  onChanged: (username){
-                                    userNameHolder = username;
-                                  }, decoration: InputDecoration(hintText: "username"), textInputAction: TextInputAction.next,
-                                ),
-                                TextField(
-                                  onChanged: (password){
-                                    passwordHolder = password;
-                                  }, decoration: InputDecoration(hintText: "password"), textInputAction: TextInputAction.next,
-                                ),
-                              ],
+        body: Padding(
+          padding: const EdgeInsets.only(top:43),
+          child: StreamBuilder(
+            stream: Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
+            initialData: const [],
+            builder: (context, AsyncSnapshot snapshot){
+              if(snapshot.connectionState != ConnectionState.done){
+                print("state issue");
+                return const ColoredBox(color: Colors.red);
+              }
+              else if(!snapshot.hasData){
+                return const CircularProgressIndicator();
+              }
+              else if(snapshot.hasData){
+                print("has data");
+                final currentSpaceList = snapshot.data;
+                return ListView.builder(
+                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
+                    itemCount: currentSpaceList.length,
+                    itemBuilder: (context, index){
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: const BoxDecoration(
+                                  color: textcolor,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8.0),topRight: Radius.circular(0.0),bottomLeft: Radius.circular(8.0),bottomRight: Radius.circular(0.0),
+                                  )
+                              ),
+                              height: 128, width: 106,
+                              child: IconButton(
+                                  onPressed: () {
+                                  },
+                                  icon: Icon(Icons.add, size: 50,)
+                              ),
                             ),
-                            actions: <Widget>[
-                              TextButton(onPressed: (){
-                                updateAndroidMetaData('comfySpace.db');
-                              }, child: Text("METADATA")),
+                            Container(
+                              width: MediaQuery.of(context).size.width-40-106, height: 128,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [BoxShadow(
+                                  color: Colors.blue,
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(10,10),
+                                )]
+                              ),
+                              child: ListTile(contentPadding: const EdgeInsets.only(top:0.0, bottom: 0.0),
+                                  trailing: Container( width: 40,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: const [
+                                        Icon(Icons.arrow_forward_ios, color: textcolor,size: 25,),
+                                      ],
+                                    ),
+                                  ),
+                                  onLongPress: () { spaceNameHolder = '';
+                                showDialog(context: context, builder: (BuildContext context){
+                                  return AlertDialog(
+                                    title: Text("Edit Space"),
+                                    content: Column(
+                                      children: [
+                                        TextField(
+                                          onChanged: (text1){
+                                            spaceNameHolder = text1;},
+                                          decoration: InputDecoration(hintText: "space"), textInputAction: TextInputAction.next),
+                                        TextField(
+                                          onChanged: (hostname){
+                                            hostNameHolder = hostname;},
+                                  decoration: InputDecoration(hintText: "hostname"), textInputAction: TextInputAction.next,),
+                                  TextField(
+                                    onChanged: (username){
+                                      userNameHolder = username;
+                                      }, decoration: InputDecoration(hintText: "username"), textInputAction: TextInputAction.next,
+                                  ),
+                                        TextField(
+                                          onChanged: (password){
+                                            passwordHolder = password;
+                                            }, decoration: InputDecoration(hintText: "password"), textInputAction: TextInputAction.next,
+                                        ),
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(onPressed: (){
+                                        updateAndroidMetaData('comfySpace.db');
+                                        }, child: Text("METADATA")),
 
-                              TextButton(onPressed: (){
-                                deleteDB('comfySpace.db');
-                              }, child: Text("Wipe")),
+                                      TextButton(onPressed: (){
+                                        deleteDB('comfySpace.db');
+                                        }, child: Text("Wipe")),
+                                      TextButton(onPressed: (){
+                                        deleteSpace('comfySpace.db', currentSpaceList[index]);
+                                        Navigator.pop(context);
+                                        setState(() {});
+                                        }, child: Text("Delete")),
 
-                              TextButton(onPressed: (){
-                                deleteSpace('comfySpace.db', currentSpaceList[index]);
-                                Navigator.pop(context);
-                                setState(() {});
-                              }, child: Text("Delete")),
+                                      TextButton(onPressed: (){
+                                        editSpace('comfySpace.db', currentSpaceList[index], spaceNameHolder, hostNameHolder, userNameHolder, passwordHolder);
+                                        Navigator.pop(context);
+                                        setState(() {});
+                                        }, child: Text("Rename")),
+                                    ],
+                                  );
+                                });
+                                },
+                                  onTap: () async {
+                                    spaceLaunch = currentSpaceList[index];
+                                    var spaceInfo = await hostInfoRenderer('comfySpace.db', spaceLaunch);
+                                    String spaceHost = spaceInfo['host'].toString();
+                                    String spaceUser = spaceInfo['user'].toString();
+                                    String spacePass = spaceInfo['password'].toString();
+                                    print(spacePass);
+                                    hostname = spaceHost; username = spaceUser; password = spacePass;
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  const spacePage()),);
+                                  },
+                                  shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color:textcolor) , borderRadius: BorderRadius.only(topLeft: Radius.circular(0.0),topRight: Radius.circular(8.0),bottomLeft: Radius.circular(0.0),bottomRight: Radius.circular(8.0),)),
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(left: 15.0, top: 23, bottom: 23),
+                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(currentSpaceList[index], style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold,  fontSize: 20)),
+                                        Text("${currentSpaceList[index]} @ ${currentSpaceList[index]}", style: GoogleFonts.poppins(color: textcolor, fontSize: 16)),
+                                      ],
+                                    ),
+                                  )
+                              ),
 
-                              TextButton(onPressed: (){
-                                editSpace('comfySpace.db', currentSpaceList[index], spaceNameHolder, hostNameHolder, userNameHolder, passwordHolder);
-                                Navigator.pop(context);
-                                setState(() {});
-                              }, child: Text("Rename")),
-                            ],
-                          );
-                        });
-                      },
-                    );
-                  });
-            }
-            print("loading");
-            return Text("loading");
-          },
+                            )
+                          ],
+                        ),
+                      );
+                    });
+              }
+              print("loading");
+              return Text("loading");
+            },
+          ),
         )
     );
   }
