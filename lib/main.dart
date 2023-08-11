@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
+import 'package:comfyssh_flutter/comfyScript/servo.dart';
 import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
@@ -774,6 +775,7 @@ class spacePage extends StatefulWidget {
 
 class _spacePageState extends State<spacePage> {
   Map<int, bool> toggleState = {};
+  Map<int, int> servoState = {};
   late SSHClient clientControl;
   String spaceTitle = hostname! + username! + password!;
 
@@ -920,7 +922,44 @@ class _spacePageState extends State<spacePage> {
                 );
               });
             }
-          )
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.refresh),
+            onTap: (){
+              late String servoPin;
+              showDialog(context: context, builder: (BuildContext context){
+                return AlertDialog(
+                  content: Column(
+                    children: [
+                      TextField(
+                        onChanged: (btnName){
+                          buttonName = btnName;
+                        },),
+                      TextField(
+                        decoration: const InputDecoration(labelText: 'Pin Number'),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        onChanged: (pinNum){
+                          servoPin = pinNum;
+                        },
+                      )
+                    ],
+                  ),
+                  actions: <Widget>[
+                    TextButton(onPressed: (){
+                      addButton('comfySpace.db', spaceLaunch, buttonName, buttonSizeX, buttonSizeY, buttonPosition, servoPin,'servo');
+                      Navigator.pop(context);
+                      setState(() {});
+                    },
+                        child: const Text("servo")
+                    )
+                  ],
+                );
+              });
+            }
+
+          ),
+
         ],
       ),
       body: FutureBuilder(
@@ -955,17 +994,44 @@ class _spacePageState extends State<spacePage> {
                             value: toggleState[index]!,
                             onChanged:(value) async {
                               setState(() {
-                                print("value is $value");
+                                print(value);
                                 toggleState[index] = value;
                               });
                               print('state is ${toggleState[index].toString()}');
-                              //var command = await clientControl.run(toggleLED(snapshot.data![index]["command"], toggleState[index]!));
-                              print(toggleLED(snapshot.data![index]["command"], toggleState[index]!));
+                              var command = await clientControl.run(toggleLED(snapshot.data![index]["command"], toggleState[index]!));
+                              //print(toggleLED(snapshot.data![index]["command"], toggleState[index]!));
                             },
                             activeColor: Colors.lightGreenAccent,
                             activeTrackColor: Colors.blue,
 
                           ),
+                        );
+                      },
+                    );
+                  }
+                  else if (snapshot.data![index]["buttonType"] == "servo"){
+                    if(servoState[index]==null){
+                      servoState[index] = 0;
+                    };
+                    return StatefulBuilder(
+                      builder: (context, setState) {
+                        return GestureDetector(
+                          onLongPress: (){
+                            deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                            servoState.remove(index);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) => super.widget));
+                          },
+                          child: Slider(
+                            onChanged: (newAngle) async {
+                              setState(() {servoState[index] = newAngle.toInt();});
+
+                              var command = await clientControl.run(servoAngle(snapshot.data![index]["command"], servoState[index]!));
+                            }, value: servoState[index]!.toDouble(),
+                            min: 0.0, max: 180.0, divisions: 4,
+                          )
                         );
                       },
                     );
