@@ -489,7 +489,7 @@
     },
     {
       "name": "shared_preferences_foundation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.3.2",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.3.3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -538,6 +538,18 @@
     {
       "name": "sqflite_common",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common-2.4.5+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "sqflite_common_ffi",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common_ffi-2.2.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "sqlite3",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqlite3-1.11.2",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -603,7 +615,7 @@
     },
     {
       "name": "url_launcher_android",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.0.37",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.0.38",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -728,7 +740,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-08-09T00:11:48.427786Z",
+  "generated": "2023-08-12T15:44:50.323326Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

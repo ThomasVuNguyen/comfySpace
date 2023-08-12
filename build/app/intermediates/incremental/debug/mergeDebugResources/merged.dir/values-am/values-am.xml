@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string msgid="881409763997275156" name="call_notification_answer_action">"መልስ"</string>
+    <string msgid="8793775615905189152" name="call_notification_answer_video_action">"ቪዲዮ"</string>
+    <string msgid="3229508546291798546" name="call_notification_decline_action">"አትቀበል"</string>
+    <string msgid="2659457946726154263" name="call_notification_hang_up_action">"ስልኩን ዝጋ"</string>
+    <string msgid="6107532579223922871" name="call_notification_incoming_text">"ገቢ ጥሪ"</string>
+    <string msgid="8623827134497363134" name="call_notification_ongoing_text">"እየተካሄደ ያለ ጥሪ"</string>
+    <string msgid="59049573811482460" name="call_notification_screening_text">"ገቢ ጥሪ ማጣራት"</string>
     <string name="common_google_play_services_unknown_issue">%1$s በGoogle Play አገልግሎቶች ላይ ችግሮች እያጋጠሙት ነው። እባክዎ እንደገና ይሞክሩ።</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"አገናኝ ወደ ቅንጥብ ሰሌዳ ተቀድቷል"</string>
     <string name="exo_download_completed">ማውረድ ተጠናቋል</string>

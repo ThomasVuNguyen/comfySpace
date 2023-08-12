@@ -29,8 +29,9 @@ List<String> buttonTypeList = ['toggleButton', 'slider', 'slider'];
 const bgcolor = Color(0xffFFFFFF);const textcolor = Color(0xff000000);const subcolor = Color(0xff000000);const keycolor = Color(0xff656366);const accentcolor = Color(0xff1C3D93);const warningcolor = Color(0xffCE031B);
 void main() {
   memoryCheck();
-  reAssign();
+  //reAssign();
   runApp(const MyApp());
+  createHostInfo();
 }  //main function, execute MyApp
 
 class Welcome extends StatefulWidget {

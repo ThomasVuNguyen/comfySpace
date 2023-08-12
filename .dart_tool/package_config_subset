@@ -312,8 +312,8 @@ file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_android-2.2.0/lib/
 shared_preferences_foundation
 2.18
-file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.3.2/
-file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.3.2/lib/
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.3.3/
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.3.3/lib/
 shared_preferences_linux
 2.18
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_linux-2.3.0/
@@ -342,6 +342,14 @@ sqflite_common
 2.18
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common-2.4.5+1/
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common-2.4.5+1/lib/
+sqflite_common_ffi
+2.18
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common_ffi-2.2.5/
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common_ffi-2.2.5/lib/
+sqlite3
+2.18
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqlite3-1.11.2/
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sqlite3-1.11.2/lib/
 stack_trace
 2.18
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/stack_trace-1.11.0/
@@ -384,8 +392,8 @@ file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.1.1
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.1.11/lib/
 url_launcher_android
 2.18
-file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.0.37/
-file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.0.37/lib/
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.0.38/
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.0.38/lib/
 url_launcher_ios
 2.18
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_ios-6.1.4/

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string msgid="881409763997275156" name="call_notification_answer_action">"Vasta"</string>
+    <string msgid="8793775615905189152" name="call_notification_answer_video_action">"Video"</string>
+    <string msgid="3229508546291798546" name="call_notification_decline_action">"Keeldu"</string>
+    <string msgid="2659457946726154263" name="call_notification_hang_up_action">"Lõpeta kõne"</string>
+    <string msgid="6107532579223922871" name="call_notification_incoming_text">"Sissetulev kõne"</string>
+    <string msgid="8623827134497363134" name="call_notification_ongoing_text">"Käimasolev kõne"</string>
+    <string msgid="59049573811482460" name="call_notification_screening_text">"Sissetuleva kõne filtreerimine"</string>
     <string name="common_google_play_services_unknown_issue">Rakendusel %1$s on probleeme Google Play teenustega. Proovige uuesti.</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Link kopeeriti lõikelauale"</string>
     <string name="exo_download_completed">Allalaadimine lõpetati</string>

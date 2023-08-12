@@ -1,6 +1,5 @@
 
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:file/local.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:sqflite/sqflite.dart';
-
+//import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 Future<List<String>>updateSpaceRender() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> oldListSpace = await updateSpaceList('comfySpace');
@@ -253,6 +252,20 @@ Future<void> updateAndroidMetaData(String dbName) async{
   await database.execute('INSERT INTO android_metadata VALUES($enUS)');
 }
 
+Future<void> createHostInfo() async{
+  String dbName = 'comfySpace.db';
+  int version =1;
+  var dbPath = await getDatabasesPath();
+  var dbDirect = Directory(dbPath);
+  final List<FileSystemEntity> entities = await dbDirect.list().toList();
+  //print(entities.toString());
+  var path = p.join(dbPath, dbName);
+  var comfySpacedb = await openDatabase(path,
+      version: version,
+      onCreate: (Database db, version) async {
+    await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');});
+  var createTable = await comfySpacedb.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');
+}
 Future<void> createSpace(String spaceName, String host, String user, String password) async { //save to local database
   String dbName = 'comfySpace.db';
   String spaceNameAdd = "'$spaceName'"; String hostAdd = "'$host'"; String userAdd = "'$user'"; String passwordAdd = "'$password'";
@@ -302,7 +315,7 @@ Future<List<Map<String, Object?>>> checkHostInfo(String dbName) async{
 }
 
 Future<List<List<String>>> renderer(String spaceName) async{
-  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace'];
+  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace','android_metadata'];
   var dbName = 'comfySpace.db';
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
