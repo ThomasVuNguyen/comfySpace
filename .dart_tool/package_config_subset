@@ -31,9 +31,9 @@ camera
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera-0.10.5+3/
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera-0.10.5+3/lib/
 camera_android
-2.18
-file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.8+6/
-file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.8+6/lib/
+2.19
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.8+7/
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.8+7/lib/
 camera_avfoundation
 2.18
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_avfoundation-0.9.13+3/
@@ -166,6 +166,10 @@ flutter_speed_dial
 2.12
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_speed_dial-7.0.0/
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_speed_dial-7.0.0/lib/
+flutter_staggered_grid_view
+2.12
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_staggered_grid_view-0.7.0/
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_staggered_grid_view-0.7.0/lib/
 flutter_web_browser
 2.12
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_web_browser-0.17.1/
@@ -283,9 +287,9 @@ pinenacl
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/pinenacl-0.5.1/
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/pinenacl-0.5.1/lib/
 platform
-2.12
-file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/platform-3.1.0/
-file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/platform-3.1.0/lib/
+2.18
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/platform-3.1.1/
+file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/platform-3.1.1/lib/
 platform_info
 2.12
 file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/platform_info-3.2.0/
