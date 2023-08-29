@@ -395,8 +395,10 @@ class _TerminalPage extends State<Term> {
   int buttonState = 1;
   @override
   void initState() {
+    print(hostname);
     super.initState();
     initTerminal();
+
   }
   Future<void> initTerminal() async {
     terminal.write('Connecting...\r\n');
@@ -662,8 +664,8 @@ class _comfySpaceState extends State<comfySpace> {
 }
 
 class spacePage extends StatefulWidget {
-  const spacePage({super.key});
-
+  const spacePage({super.key, required this.spaceName, required this.hostname, required this.username, required this.password});
+  final String spaceName; final String hostname; final String username; final String password;
   @override
   State<spacePage> createState() => _spacePageState();
 }
@@ -672,13 +674,11 @@ class _spacePageState extends State<spacePage> {
   Map<int, bool> toggleState = {};
   Map<int, int> servoState = {};
   late SSHClient clientControl;
-  String spaceTitle = hostname! + username! + password!;
-
   @override
   void initState(){
-    //addColumn('comfySpace.db', spaceLaunch, 'buttonType', 'TEXT');
     super.initState();
-    initControl();
+    //initControl();
+    print("welcome to ${widget.spaceName}");
   }
   @override
   void dispose(){
@@ -687,19 +687,18 @@ class _spacePageState extends State<spacePage> {
   }
   Future<void> initControl() async{
     clientControl = SSHClient(
-        await SSHSocket.connect(hostname!, port),
-        username: username,
-      onPasswordRequest: () => password!,
+        await SSHSocket.connect(widget.hostname, port),
+        username: widget.username,
+      onPasswordRequest: () => widget.password,
     );
+    print("${clientControl.username} is ready");
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(spaceTitle),
-        actions: [
-
-        ],
+        title: Text(widget.hostname+widget.username+widget.password),
+        actions: [],
       ),
       floatingActionButton: SpeedDial(
         icon: Icons.menu,
@@ -773,7 +772,8 @@ class _spacePageState extends State<spacePage> {
                   ),
                   actions: [
                     TextButton(onPressed: (){
-                      addButton('comfySpace.db', spaceLaunch, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'custom');
+                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'custom');
+                      print("$buttonName has been added to ${widget.spaceName}");
                       Navigator.pop(context);
                       setState(() {});
                     }, child: Text("Add button"))
@@ -807,7 +807,7 @@ class _spacePageState extends State<spacePage> {
                   ),
                   actions: <Widget>[
                     TextButton(onPressed: (){
-                            addButton('comfySpace.db', spaceLaunch, buttonName, buttonSizeX, buttonSizeY, buttonPosition, pinOut,'LED');
+                            addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, pinOut,'LED');
                             Navigator.pop(context);
                             setState(() {});
                           },
@@ -842,7 +842,7 @@ class _spacePageState extends State<spacePage> {
                   ),
                   actions: <Widget>[
                     TextButton(onPressed: (){
-                      addButton('comfySpace.db', spaceLaunch, buttonName, buttonSizeX, buttonSizeY, buttonPosition, servoPin,'servo');
+                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, servoPin,'servo');
                       Navigator.pop(context);
                       setState(() {});
                     },
@@ -858,7 +858,7 @@ class _spacePageState extends State<spacePage> {
         ],
       ),
       body: FutureBuilder(
-        future: buttonRenderer('comfySpace.db', spaceLaunch),
+        future: buttonRenderer('comfySpace.db', widget.spaceName),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done){
             return GridView.builder(
@@ -871,38 +871,7 @@ class _spacePageState extends State<spacePage> {
                 itemCount: snapshot.data?.length,
                 itemBuilder: (BuildContext context, index){
                   if (snapshot.data![index]["buttonType"] == "LED"){
-                    if(toggleState[index]==null){
-                      toggleState[index] = false;
-                    };
-                    return StatefulBuilder(
-                      builder: (context, setState) {
-                        return GestureDetector(
-                          onLongPress: (){
-                              deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                              toggleState.remove(index);
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) => super.widget));
-                            },
-                          child: Switch(
-                            value: toggleState[index]!,
-                            onChanged:(value) async {
-                              setState(() {
-                                print(value);
-                                toggleState[index] = value;
-                              });
-                              print('state is ${toggleState[index].toString()}');
-                              var command = await clientControl.run(toggleLED(snapshot.data![index]["command"], toggleState[index]!));
-                              //print(toggleLED(snapshot.data![index]["command"], toggleState[index]!));
-                            },
-                            activeColor: Colors.lightGreenAccent,
-                            activeTrackColor: Colors.blue,
-
-                          ),
-                        );
-                      },
-                    );
+                        return LedToggle(name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,);
                   }
                   else if (snapshot.data![index]["buttonType"] == "servo"){
                     if(servoState[index]==null){
@@ -934,7 +903,7 @@ class _spacePageState extends State<spacePage> {
                   else{
                     return ListTile(
                       title: Text(snapshot.data![index].toString()),
-                      tileColor: Colors.amber,
+                      tileColor: Colors.grey,
                       onTap: () async {
                         var command = await clientControl.run(snapshot.data![index]["command"]);
                         print("command is " + snapshot.data![index]["command"]);

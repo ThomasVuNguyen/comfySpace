@@ -8,6 +8,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "animated_toggle_switch",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/animated_toggle_switch-0.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "archive",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.3.7",
       "packageUri": "lib/",
@@ -338,6 +344,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "intl",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.18.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "introduction_screen",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/introduction_screen-3.1.8",
       "packageUri": "lib/",
@@ -360,6 +372,12 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/lints-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "lite_rolling_switch",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/lite_rolling_switch-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
     },
     {
       "name": "logging",
@@ -746,7 +764,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-08-22T00:45:26.095272Z",
+  "generated": "2023-08-29T01:05:34.367014Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

@@ -349,7 +349,7 @@ Future<List<List<String>>> renderer(String spaceName) async{
   return listTotal;
 }
 
-Future<void> addButton(String dbName, String spaceName, String name, int size_x, int size_y, int position, String command, String buttonType)async{
+Future<void> addButton(String dbName, String spaceName, String name, int size_x, int size_y, int position, String command, String buttonType) async{
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
   Database database = await openDatabase(path,
@@ -358,7 +358,7 @@ Future<void> addButton(String dbName, String spaceName, String name, int size_x,
       await db.execute('CREATE TABLE $spaceName(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
   var addedButton = database.rawInsert('INSERT INTO $spaceName(name, size_x, size_y, position, command, buttonType) VALUES("'"$name"'", $size_x, $size_y, $position, "'"$command"'","'"$buttonType"'")');
-  print("button added");
+  print("button added to $spaceName space");
 }
 
 Future<List<String>> updateSpaceList(String dbName) async{

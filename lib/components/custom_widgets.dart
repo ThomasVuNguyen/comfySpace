@@ -1,6 +1,10 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:comfyssh_flutter/comfyScript/LED.dart';
+import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 
 import '../function.dart';
 import '../main.dart';
@@ -15,11 +19,21 @@ class spaceTile extends StatefulWidget {
 }
 
 class _spaceTileState extends State<spaceTile> {
-  late String spaceNameHolder;
-  late String hostNameHolder;
-  late String userNameHolder;
-  late String passwordHolder;
+  late String spaceNameHolder; late String hostNameHolder; late String userNameHolder; late String passwordHolder;
+  @override
+  void initState(){
+    super.initState();
+    getSpaceInfo(widget.spaceName);
 
+  }
+
+  Future<void> getSpaceInfo(String spaceName) async{
+    var spaceInfo = await hostInfoRenderer('comfySpace.db', widget.spaceName);
+    print(spaceInfo.toString());
+    hostNameHolder = spaceInfo['host'].toString();
+    userNameHolder = spaceInfo['user'].toString();
+    passwordHolder = spaceInfo['password'].toString();
+  }
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -110,14 +124,8 @@ class _spaceTileState extends State<spaceTile> {
               });
               },
               onTap: () async {
-                spaceLaunch = widget.spaceName;
-                var spaceInfo = await hostInfoRenderer('comfySpace.db', spaceLaunch);
-                String spaceHost = spaceInfo['host'].toString();
-                String spaceUser = spaceInfo['user'].toString();
-                String spacePass = spaceInfo['password'].toString();
-                print(spacePass);
-                hostname = spaceHost; username = spaceUser; password = spacePass;
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>  const spacePage()),);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => spacePage(spaceName: widget.spaceName, hostname: hostNameHolder, username: userNameHolder, password: passwordHolder)),);
+                print("$userNameHolder@$hostNameHolder");
               },
               shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color:textcolor) , borderRadius: BorderRadius.only(topLeft: Radius.circular(0.0),topRight: Radius.circular(8.0),bottomLeft: Radius.circular(0.0),bottomRight: Radius.circular(8.0),)),
               title: Padding(
@@ -133,6 +141,66 @@ class _spaceTileState extends State<spaceTile> {
 
         )
       ],
+    );
+  }
+}
+
+class LedToggle extends StatefulWidget {
+  const LedToggle({super.key, required this.name, required this.pin, required this.id, required this.hostname, required this.username, required this.password});
+  final String name;
+  final String pin;
+  final int id;
+  final String hostname; final String username; final String password;
+  @override
+  State<LedToggle> createState() => _LedToggleState();
+}
+
+class _LedToggleState extends State<LedToggle> {
+  bool toggleState=false;
+  late SSHClient client;
+  @override
+  void initState(){
+    super.initState();
+    initClient();
+    //toggleLED(widget.pin.toString(), false);
+    //toggleState = false;
+  }
+  Future<void> initClient() async{
+    client = SSHClient(
+      await SSHSocket.connect(widget.hostname, 22),
+      username: widget.username,
+      onPasswordRequest: () => widget.password,
+    );
+    print("initClient username: ${client.username}");
+  }
+  @override
+  Widget build(BuildContext context) {
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return GestureDetector(
+          onLongPress: (){
+            deleteButton('comfySpace.db', spaceLaunch, widget.name, widget.id);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => super.widget));
+          },
+          child: Switch(
+            value: toggleState,
+            onChanged:(value) async {
+              setState(() {
+                print(value);
+                toggleState = value;
+              });
+              print('state is ${toggleState.toString()}');
+              var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
+            },
+            activeColor: Colors.lightGreenAccent,
+            activeTrackColor: Colors.blue,
+
+          ),
+        );
+      },
     );
   }
 }

@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.6"
+  animated_toggle_switch:
+    dependency: "direct main"
+    description:
+      name: animated_toggle_switch
+      sha256: d2c7a477dc2799645089838a9bfebcbfd7f829ea07909cd9dbdae2e857939746
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   archive:
     dependency: transitive
     description:
@@ -440,6 +448,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.4"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.1"
   introduction_screen:
     dependency: "direct main"
     description:
@@ -472,6 +488,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  lite_rolling_switch:
+    dependency: "direct main"
+    description:
+      name: lite_rolling_switch
+      sha256: f5685911d249534ac6ac9862622f18846d31799c90fa4600b475d902d132b090
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   logging:
     dependency: transitive
     description:
