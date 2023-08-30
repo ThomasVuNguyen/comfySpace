@@ -11,6 +11,7 @@ import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xterm/xterm.dart';
 
@@ -46,202 +47,202 @@ class _WelcomePage extends State<Welcome>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgcolor,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: accentcolor,
-        onPressed: () {showDialog(context: context, builder:(BuildContext context){
-          return AlertDialog(
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-            contentPadding: const EdgeInsets.all(20.0),
-            title: const Center(child: Text("New Host")),
-            titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600,fontSize: 24.0, color: textcolor),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField( //add nickname
-                    onChanged: (name1){
-                      nickname = name1.replaceFirst(name1[0], name1[0].toUpperCase());
-                    },
-                    decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(left: 15.0, top: 15.0, bottom: 15.0),
-                        hintText: "nickname", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
-                        focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
-                        enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
-                    ),textInputAction: TextInputAction.next,
-                  ), const SizedBox(height: 32, width: double.infinity,),
-                  TextField( //add hostname
-                    onChanged: (host1){hostname = host1;},
-                    decoration: InputDecoration(
-                        hintText: "hostname / IP", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
-                        focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
-                        enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
-                    ),textInputAction: TextInputAction.next,
-                  ), const SizedBox(height: 32, width: double.infinity,),
-                  TextField( //add username
-                    onChanged: (user1){
-                      username = user1;
-                    },
-                    decoration: InputDecoration(
-                        hintText: "username", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
-                        focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
-                        enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
-                    ),textInputAction: TextInputAction.next,
-                  ), const SizedBox(height: 32, width: double.infinity,),
-                  TextField( //add password
-                    onChanged: (pass1){
-                      password = pass1;
-                    },
-                    decoration: InputDecoration(
-                        hintText: "password", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
-                        focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
-                        enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
-                    ),textInputAction: TextInputAction.next,
-                  ), const SizedBox(height: 32, width: double.infinity,),
-                  DropdownButtonFormField<String> (
-                    decoration: const InputDecoration(
-                        border:  OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), borderSide: BorderSide(color: Colors.blue, width: 2.0))
+        backgroundColor: bgcolor,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: accentcolor,
+          onPressed: () {showDialog(context: context, builder:(BuildContext context){
+            return AlertDialog(
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+              contentPadding: const EdgeInsets.all(20.0),
+              title: const Center(child: Text("New Host")),
+              titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600,fontSize: 24.0, color: textcolor),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField( //add nickname
+                      onChanged: (name1){
+                        nickname = name1.replaceFirst(name1[0], name1[0].toUpperCase());
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 15.0, top: 15.0, bottom: 15.0),
+                          hintText: "nickname", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                          focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                          enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                      ),textInputAction: TextInputAction.next,
+                    ), const SizedBox(height: 32, width: double.infinity,),
+                    TextField( //add hostname
+                      onChanged: (host1){hostname = host1;},
+                      decoration: InputDecoration(
+                          hintText: "hostname / IP", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                          focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                          enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                      ),textInputAction: TextInputAction.next,
+                    ), const SizedBox(height: 32, width: double.infinity,),
+                    TextField( //add username
+                      onChanged: (user1){
+                        username = user1;
+                      },
+                      decoration: InputDecoration(
+                          hintText: "username", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                          focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                          enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                      ),textInputAction: TextInputAction.next,
+                    ), const SizedBox(height: 32, width: double.infinity,),
+                    TextField( //add password
+                      onChanged: (pass1){
+                        password = pass1;
+                      },
+                      decoration: InputDecoration(
+                          hintText: "password", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                          focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+                          enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+                      ),textInputAction: TextInputAction.next,
+                    ), const SizedBox(height: 32, width: double.infinity,),
+                    DropdownButtonFormField<String> (
+                      decoration: const InputDecoration(
+                          border:  OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), borderSide: BorderSide(color: Colors.blue, width: 2.0))
+                      ),
+                      iconSize: 30.0, iconDisabledColor: textcolor, iconEnabledColor: Colors.blue,
+                      value: colorMap.keys.toList()[0],
+                      items: colorMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: GoogleFonts.poppins(fontSize: 18.0),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? value){
+                        currentDistro = value!;
+                      },
                     ),
-                    iconSize: 30.0, iconDisabledColor: textcolor, iconEnabledColor: Colors.blue,
-                    value: colorMap.keys.toList()[0],
-                    items: colorMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: GoogleFonts.poppins(fontSize: 18.0),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (String? value){
-                      currentDistro = value!;
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
+              actions: <Widget>[
+                MaterialButton(
+                    color: accentcolor,
+                    textColor: Colors.white,
+                    child: Text("Done", style: GoogleFonts.poppins(fontSize: 18),),
+                    onPressed: (){
+                      newName(nickname);
+                      newHost(hostname!);
+                      newUser(username);
+                      newPass(password);
+                      newDistro(currentDistro);
+                      print("done");
+                      setState(() {
+                      });
+                      Navigator.pop(context);
+                      currentDistro=colorMap.keys.first;
+                    })],);});
+          },
+          child: const Icon(Icons.add, size: 28,),
+        ),
+        appBar: AppBar(
+            shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
+            toolbarHeight: 64,
+            title: Row(
+              children: <Widget>[
+                const SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor, ),),), Text('HOSTS', style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),),
+              ],
+            ),
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarColor: bgcolor,
+            ),
+            elevation: 0,
+            backgroundColor: bgcolor,
+            // title: const Text("My Hosts", style: TextStyle( color: Colors.black,),),
+            //backgroundColor: bgcolor,
+            actionsIconTheme: const IconThemeData(
+                size: 30.0,
+                color: Colors.white,
+                opacity: 10.0
             ),
             actions: <Widget>[
-              MaterialButton(
-                  color: accentcolor,
-                  textColor: Colors.white,
-                  child: Text("Done", style: GoogleFonts.poppins(fontSize: 18),),
-                  onPressed: (){
-                    newName(nickname);
-                    newHost(hostname!);
-                    newUser(username);
-                    newPass(password);
-                    newDistro(currentDistro);
-                    print("done");
-                    setState(() {
-                    });
-                    Navigator.pop(context);
-                    currentDistro=colorMap.keys.first;
-                  })],);});
-        },
-        child: const Icon(Icons.add, size: 28,),
-      ),
-      appBar: AppBar(
-          shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
-          toolbarHeight: 64,
-          title: Row(
-            children: <Widget>[
-              const SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor, ),),), Text('HOSTS', style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),),
-            ],
-          ),
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: bgcolor,
-          ),
-          elevation: 0,
-          backgroundColor: bgcolor,
-          // title: const Text("My Hosts", style: TextStyle( color: Colors.black,),),
-          //backgroundColor: bgcolor,
-          actionsIconTheme: const IconThemeData(
-              size: 30.0,
-              color: Colors.white,
-              opacity: 10.0
-          ),
-          actions: <Widget>[
-            Padding(padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                  onTap:(){
-                    showDialog(context: context, builder:(BuildContext context){
-                      return AlertDialog(
-                        title: Text("Add a new host",  style: GoogleFonts.poppins(fontSize: 18, color: textcolor),),
-                        content: Column(mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextField( //add nickname
-                              onChanged: (name1){
-                                nickname = name1;},
-                              decoration: const InputDecoration(
-                                hintText: "nickname",
-                              ),textInputAction: TextInputAction.next,
-                            ),
-                            TextField( //add hostname
-                              onChanged: (host1){
-                                hostname = host1;},
-                              decoration: const InputDecoration(
-                                hintText: "hostname",
-                              ),textInputAction: TextInputAction.next,
-                            ),
-                            TextField( //add username
-                              onChanged: (user1){
-                                username = user1;
-                              },
-                              decoration: const InputDecoration(
-                                hintText: "username",
-                              ),textInputAction: TextInputAction.next,
-                            ),
-                            TextField( //add password
-                              onChanged: (pass1){
-                                password = pass1;
-                              },
-                              decoration: const InputDecoration(
-                                hintText: "password",
-                              ),textInputAction: TextInputAction.next,
-                            ),
-                            DropdownButtonFormField<String> (
-                              value: colorMap.keys.toList()[0],
-                              items: colorMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: const TextStyle(fontSize: 10),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (String? value){
-                                currentDistro = value!;
-                              },
-                            ),
-                          ],
-                        ),
-                        actions: <Widget>[
-                          MaterialButton(
-                              color: Colors.green,
-                              textColor: Colors.white,
-                              child: const Text("Save"),
-                              onPressed: (){
-                                newName(nickname);
-                                newHost(hostname!);
-                                newUser(username);
-                                newPass(password);
-                                newDistro(currentDistro);
-                                setState(() {
-                                });
-                                Navigator.pop(context);
-                                currentDistro=colorMap.keys.first;
-                              })],);});},
-                  child: const Icon(
-                    Icons.add,
-                    size: 0,
-                  )
+              Padding(padding: const EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                    onTap:(){
+                      showDialog(context: context, builder:(BuildContext context){
+                        return AlertDialog(
+                          title: Text("Add a new host",  style: GoogleFonts.poppins(fontSize: 18, color: textcolor),),
+                          content: Column(mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextField( //add nickname
+                                onChanged: (name1){
+                                  nickname = name1;},
+                                decoration: const InputDecoration(
+                                  hintText: "nickname",
+                                ),textInputAction: TextInputAction.next,
+                              ),
+                              TextField( //add hostname
+                                onChanged: (host1){
+                                  hostname = host1;},
+                                decoration: const InputDecoration(
+                                  hintText: "hostname",
+                                ),textInputAction: TextInputAction.next,
+                              ),
+                              TextField( //add username
+                                onChanged: (user1){
+                                  username = user1;
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: "username",
+                                ),textInputAction: TextInputAction.next,
+                              ),
+                              TextField( //add password
+                                onChanged: (pass1){
+                                  password = pass1;
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: "password",
+                                ),textInputAction: TextInputAction.next,
+                              ),
+                              DropdownButtonFormField<String> (
+                                value: colorMap.keys.toList()[0],
+                                items: colorMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (String? value){
+                                  currentDistro = value!;
+                                },
+                              ),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            MaterialButton(
+                                color: Colors.green,
+                                textColor: Colors.white,
+                                child: const Text("Save"),
+                                onPressed: (){
+                                  newName(nickname);
+                                  newHost(hostname!);
+                                  newUser(username);
+                                  newPass(password);
+                                  newDistro(currentDistro);
+                                  setState(() {
+                                  });
+                                  Navigator.pop(context);
+                                  currentDistro=colorMap.keys.first;
+                                })],);});},
+                    child: const Icon(
+                      Icons.add,
+                      size: 0,
+                    )
+                ),
               ),
-            ),
-            Padding(padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                child: const Icon(Icons.menu, color: textcolor,),
-                /*onTap: (){
+              Padding(padding: const EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                    child: const Icon(Icons.menu, color: textcolor,),
+                    /*onTap: (){
                   showDialog<String>(
                       context: context, builder: (BuildContext context) =>
                       AlertDialog(
@@ -276,17 +277,17 @@ class _WelcomePage extends State<Welcome>{
                       )
                   );
                 },*/
-                onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>  const comfySpace()),
-                  );
-                }
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  const comfySpace()),
+                      );
+                    }
+                ),
               ),
-            ),
 
-          ]
-      ),
+            ]
+        ),
         body: FutureBuilder(
           future: Future.wait([reAssignNameList(),reAssignHostList(),reAssignUserList(),reAssignPassList(),reAssignDistroList()]),
           builder: (context, AsyncSnapshot snapshot){
@@ -455,7 +456,7 @@ class _TerminalPage extends State<Term> {
           statusBarBrightness: Brightness.light,
         ),
         title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start, //left alignment for texts
+          crossAxisAlignment: CrossAxisAlignment.start, //left alignment for texts
           children: [
             Text(nickname!,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 21)),
             Text(distro!,style: GoogleFonts.poppins(color: textcolor, fontSize: 12)),
@@ -512,11 +513,11 @@ class _ControlState extends State<Control> {
       ),
       floatingActionButton: IconButton(
         icon: Icon(Icons.connected_tv_sharp), onPressed : () async {
-          var listTotal = await renderer('space1'); buttonList = listTotal[0]; sizeXList = listTotal[1]; sizeYList = listTotal[2]; positionList = listTotal[3]; commandList = listTotal[4];
-          //createSpace('space1');
+        var listTotal = await renderer('space1'); buttonList = listTotal[0]; sizeXList = listTotal[1]; sizeYList = listTotal[2]; positionList = listTotal[3]; commandList = listTotal[4];
+        //createSpace('space1');
 
         setState(() {});
-        },),
+      },),
       body: GridView.count(
         crossAxisCount: 4,
         children:
@@ -550,9 +551,9 @@ class _comfySpaceState extends State<comfySpace> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        width: 0,
-      ),
+        drawer: Drawer(
+          width: 0,
+        ),
         appBar: AppBar(
           title: const Text("ComfySpace"),
           backgroundColor: Color(0xffF4BF56),
@@ -687,8 +688,8 @@ class _spacePageState extends State<spacePage> {
   }
   Future<void> initControl() async{
     clientControl = SSHClient(
-        await SSHSocket.connect(widget.hostname, port),
-        username: widget.username,
+      await SSHSocket.connect(widget.hostname, port),
+      username: widget.username,
       onPasswordRequest: () => widget.password,
     );
     print("${clientControl.username} is ready");
@@ -696,43 +697,43 @@ class _spacePageState extends State<spacePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.hostname+widget.username+widget.password),
-        actions: [],
-      ),
-      floatingActionButton: SpeedDial(
-        icon: Icons.menu,
-        activeIcon: Icons.close,
-        visible: true,
-        closeManually: false,
-        curve: Curves.bounceIn,
-        overlayColor: Colors.black,
-        onOpen: (){},onClose: (){},
-        children: [
-          SpeedDialChild(
-            child: Icon(Icons.dashboard_customize),
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            label: "custom", labelStyle: TextStyle(fontSize: 18),
-            onTap: (){
-              showDialog(context: context, builder: (BuildContext context){
-                String buttonType = 'custom';
-                buttonSizeY = 1;
-                buttonSizeX=1;
-                buttonPosition=1;
-                return AlertDialog(
-                  content: Column(
-                    children: [
-                      TextField(
-                        onChanged: (btnName){
-                          buttonName = btnName;
-                        },
-                        decoration: const InputDecoration(
-                          hintText: 'name',
-                        ),
-                        textInputAction: TextInputAction.next,
-                      ),
-                      /*TextField(
+        appBar: AppBar(
+          title: Text(widget.hostname+widget.username+widget.password),
+          actions: [],
+        ),
+        floatingActionButton: SpeedDial(
+          icon: Icons.menu,
+          activeIcon: Icons.close,
+          visible: true,
+          closeManually: false,
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          onOpen: (){},onClose: (){},
+          children: [
+            SpeedDialChild(
+                child: Icon(Icons.dashboard_customize),
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                label: "custom", labelStyle: TextStyle(fontSize: 18),
+                onTap: (){
+                  showDialog(context: context, builder: (BuildContext context){
+                    String buttonType = 'custom';
+                    buttonSizeY = 1;
+                    buttonSizeX=1;
+                    buttonPosition=1;
+                    return AlertDialog(
+                      content: Column(
+                        children: [
+                          TextField(
+                            onChanged: (btnName){
+                              buttonName = btnName;
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'name',
+                            ),
+                            textInputAction: TextInputAction.next,
+                          ),
+                          /*TextField(
                     onChanged: (sizeX){
                       buttonSizeX = int.parse(sizeX);
                     },
@@ -759,175 +760,236 @@ class _spacePageState extends State<spacePage> {
                     ),
                     textInputAction: TextInputAction.next,
                     ),*/
-                      TextField(
-                        onChanged: (btnCommand){
-                          buttonCommand = btnCommand;
-                        },
-                        decoration: const InputDecoration(
-                          hintText: 'command',
-                        ),
+                          TextField(
+                            onChanged: (btnCommand){
+                              buttonCommand = btnCommand;
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'command',
+                            ),
 
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(onPressed: (){
-                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'custom');
-                      print("$buttonName has been added to ${widget.spaceName}");
-                      Navigator.pop(context);
-                      setState(() {});
-                    }, child: Text("Add button"))
-                  ],
-                );
-              });
-            }
-
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.sunny),
-            onTap: (){
-              late String pinOut;
-              showDialog(context: context, builder: (BuildContext context){
-                return AlertDialog(
-                  content: Column(
-                    children: [
-                      TextField(
-                        onChanged: (btnName){
-                          buttonName = btnName;
-                        },),
-                      TextField(
-                        decoration: const InputDecoration(labelText: 'Pin Number'),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        onChanged: (pinNum){
-                          pinOut = pinNum;
-                        },
-                      )
-                    ],
-                  ),
-                  actions: <Widget>[
-                    TextButton(onPressed: (){
-                            addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, pinOut,'LED');
-                            Navigator.pop(context);
-                            setState(() {});
-                          },
-                        child: const Text("LED")
-                    )
-                  ],
-                );
-              });
-            }
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.refresh),
-            onTap: (){
-              late String servoPin;
-              showDialog(context: context, builder: (BuildContext context){
-                return AlertDialog(
-                  content: Column(
-                    children: [
-                      TextField(
-                        onChanged: (btnName){
-                          buttonName = btnName;
-                        },),
-                      TextField(
-                        decoration: const InputDecoration(labelText: 'Pin Number'),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        onChanged: (pinNum){
-                          servoPin = pinNum;
-                        },
-                      )
-                    ],
-                  ),
-                  actions: <Widget>[
-                    TextButton(onPressed: (){
-                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, servoPin,'servo');
-                      Navigator.pop(context);
-                      setState(() {});
-                    },
-                        child: const Text("servo")
-                    )
-                  ],
-                );
-              });
-            }
-
-          ),
-
-        ],
-      ),
-      body: FutureBuilder(
-        future: buttonRenderer('comfySpace.db', widget.spaceName),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done){
-            return GridView.builder(
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                  childAspectRatio: 3 / 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                ),
-                itemCount: snapshot.data?.length,
-                itemBuilder: (BuildContext context, index){
-                  if (snapshot.data![index]["buttonType"] == "LED"){
-                        return LedToggle(name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,);
-                  }
-                  else if (snapshot.data![index]["buttonType"] == "servo"){
-                    if(servoState[index]==null){
-                      servoState[index] = 0;
-                    };
-                    return StatefulBuilder(
-                      builder: (context, setState) {
-                        return GestureDetector(
-                          onLongPress: (){
-                            deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                            servoState.remove(index);
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) => super.widget));
-                          },
-                          child: Slider(
-                            onChanged: (newAngle) async {
-                              setState(() {servoState[index] = newAngle.toInt();});
-
-                              var command = await clientControl.run(servoAngle(snapshot.data![index]["command"], servoState[index]!));
-                            }, value: servoState[index]!.toDouble(),
-                            min: 0.0, max: 180.0, divisions: 4,
-                          )
-                        );
-                      },
+                      actions: [
+                        TextButton(onPressed: (){
+                          addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'custom');
+                          print("$buttonName has been added to ${widget.spaceName}");
+                          Navigator.pop(context);
+                          setState(() {});
+                        }, child: Text("Add button"))
+                      ],
                     );
-                  }
-                  else{
-                    return ListTile(
-                      title: Text(snapshot.data![index].toString()),
-                      tileColor: Colors.grey,
-                      onTap: () async {
-                        var command = await clientControl.run(snapshot.data![index]["command"]);
-                        print("command is " + snapshot.data![index]["command"]);
-                        print(toggleState.toString());
+                  });
+                }
+
+            ),
+            SpeedDialChild(
+                child: const Icon(Icons.sunny),
+                onTap: (){
+                  late String pinOut;
+                  showDialog(context: context, builder: (BuildContext context){
+                    return AlertDialog(
+                      content: Column(
+                        children: [
+                          TextField(
+                            onChanged: (btnName){
+                              buttonName = btnName;
+                            },),
+                          TextField(
+                            decoration: const InputDecoration(labelText: 'Pin Number'),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            onChanged: (pinNum){
+                              pinOut = pinNum;
+                            },
+                          )
+                        ],
+                      ),
+                      actions: <Widget>[
+                        TextButton(onPressed: (){
+                          addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, pinOut,'LED');
+                          Navigator.pop(context);
+                          setState(() {});
+                        },
+                            child: const Text("LED")
+                        )
+                      ],
+                    );
+                  });
+                }
+            ),
+            SpeedDialChild(
+                child: Icon(Icons.refresh),
+                onTap: (){
+                  late String servoPin;
+                  showDialog(context: context, builder: (BuildContext context){
+                    return AlertDialog(
+                      content: Column(
+                        children: [
+                          TextField(
+                            onChanged: (btnName){
+                              buttonName = btnName;
+                            },),
+                          TextField(
+                            decoration: const InputDecoration(labelText: 'Pin Number'),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            onChanged: (pinNum){
+                              servoPin = pinNum;
+                            },
+                          )
+                        ],
+                      ),
+                      actions: <Widget>[
+                        TextButton(onPressed: (){
+                          addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, servoPin,'servo');
+                          Navigator.pop(context);
+                          setState(() {});
+                        },
+                            child: const Text("servo")
+                        )
+                      ],
+                    );
+                  });
+                }
+
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.stairs),
+              onTap: (){
+                late String pin1; late String pin2; late String pin3; late String pin4;
+                showDialog(context: context, builder: (BuildContext context){
+                  return AlertDialog(
+                    content: Column(
+                      children: [
+                        TextField(
+                          onChanged: (btnName){
+                            buttonName = btnName;
+                          },
+                          textInputAction: TextInputAction.next,
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(labelText: 'pin1'),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (pin){
+                            pin1 = pin;
+                          },
+                          textInputAction: TextInputAction.next,
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(labelText: 'pin2'),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (pin){
+                            pin2 = pin;
+                          },
+                          textInputAction: TextInputAction.next,
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(labelText: 'pin3'),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (pin){
+                            pin3 = pin;
+                          },
+                          textInputAction: TextInputAction.next,
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(labelText: 'pin4'),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (pin){
+                            pin4 = pin;
+                          },
+                          textInputAction: TextInputAction.next,
+                        )
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(onPressed: (){
+                        String stepperPinList = "$pin1 $pin2 $pin3 $pin4";
+                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, stepperPinList,'stepperMotor');
+                        Navigator.pop(context);
+                        setState(() {});
                       },
-                      onLongPress: (){
-                        showDialog(context: context, builder: (BuildContext context){
-                          String btnName = snapshot.data![index]["name"];
-                          int btnSizeX = snapshot.data![index]["size_x"];
-                          int btnSizeY = snapshot.data![index]["size_y"];
-                          int btnPosition = snapshot.data![index]["position"];
-                          String btnCommand = snapshot.data![index]["command"];
-                          return AlertDialog(
-                            title: const Text("Edit buttons"),
-                            content: Column(
-                              children: [
-                                TextField(
-                                  onChanged: (newName){
-                                    btnName = newName;
-                                  },
-                                  decoration: const InputDecoration(hintText: 'new name'),
-                                  textInputAction: TextInputAction.next,
-                                ),
-                                /*
+                          child: const Text("servo")
+                      )
+                    ],
+                  );
+                });
+              }
+            )
+
+          ],
+        ),
+        body: FutureBuilder(
+            future: buttonRenderer('comfySpace.db', widget.spaceName),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done){
+                return MasonryGridView.builder(
+                    gridDelegate:  const SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,),
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (BuildContext context, index){
+                      if (snapshot.data![index]["buttonType"] == "LED"){
+                        return LedToggle(name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,);
+                      }
+                      else if (snapshot.data![index]["buttonType"] == "servo"){
+                        if(servoState[index]==null){
+                          servoState[index] = 0;
+                        };
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return GestureDetector(
+                                onLongPress: (){
+                                  deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                  servoState.remove(index);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) => super.widget));
+                                },
+                                child: Slider(
+                                  onChanged: (newAngle) async {
+                                    setState(() {servoState[index] = newAngle.toInt();});
+
+                                    var command = await clientControl.run(servoAngle(snapshot.data![index]["command"], servoState[index]!));
+                                  }, value: servoState[index]!.toDouble(),
+                                  min: 0.0, max: 180.0, divisions: 4,
+                                )
+                            );
+                          },
+                        );
+                      }
+                      else{
+                        return ListTile(
+                          title: Text(snapshot.data![index].toString()),
+                          tileColor: Colors.grey,
+                          onTap: () async {
+                            var command = await clientControl.run(snapshot.data![index]["command"]);
+                            print("command is " + snapshot.data![index]["command"]);
+                            print(toggleState.toString());
+                          },
+                          onLongPress: (){
+                            showDialog(context: context, builder: (BuildContext context){
+                              String btnName = snapshot.data![index]["name"];
+                              int btnSizeX = snapshot.data![index]["size_x"];
+                              int btnSizeY = snapshot.data![index]["size_y"];
+                              int btnPosition = snapshot.data![index]["position"];
+                              String btnCommand = snapshot.data![index]["command"];
+                              return AlertDialog(
+                                title: const Text("Edit buttons"),
+                                content: Column(
+                                  children: [
+                                    TextField(
+                                      onChanged: (newName){
+                                        btnName = newName;
+                                      },
+                                      decoration: const InputDecoration(hintText: 'new name'),
+                                      textInputAction: TextInputAction.next,
+                                    ),
+                                    /*
                               TextField(
                                 onChanged: (newSizeX){
                                   btnSizeX = int.parse(newSizeX);
@@ -951,40 +1013,40 @@ class _spacePageState extends State<spacePage> {
                               ),
                               */
 
-                                TextField(
-                                  onChanged: (newCommand){
-                                    btnCommand = newCommand;
-                                  },
-                                  decoration: const InputDecoration(hintText: 'new command'),
+                                    TextField(
+                                      onChanged: (newCommand){
+                                        btnCommand = newCommand;
+                                      },
+                                      decoration: const InputDecoration(hintText: 'new command'),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            actions: <Widget>[
-                              TextButton(onPressed: (){
-                                deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                Navigator.pop(context);
-                                setState(() {});
-                              }, child: Text("Delete")),
-                              TextButton(onPressed: (){
-                                editButton('comfySpace.db', spaceLaunch, snapshot.data![index]["id"], btnName, btnSizeX, btnSizeY, btnPosition, btnCommand);
-                                Navigator.pop(context);
-                                setState(() {});
-                              }, child: Text("Alter"))
-                            ],
-                          );
-                        });
-                        //deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                        setState(() {});
-                      },
-                    );
-                  }
-                });
-          }
-          else{
-            return const CircularProgressIndicator();
-          }
-        }
-      )
+                                actions: <Widget>[
+                                  TextButton(onPressed: (){
+                                    deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                    Navigator.pop(context);
+                                    setState(() {});
+                                  }, child: Text("Delete")),
+                                  TextButton(onPressed: (){
+                                    editButton('comfySpace.db', spaceLaunch, snapshot.data![index]["id"], btnName, btnSizeX, btnSizeY, btnPosition, btnCommand);
+                                    Navigator.pop(context);
+                                    setState(() {});
+                                  }, child: Text("Alter"))
+                                ],
+                              );
+                            });
+                            //deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                            setState(() {});
+                          },
+                        );
+                      }
+                    });
+              }
+              else{
+                return const CircularProgressIndicator();
+              }
+            }
+        )
     );
   }
 }

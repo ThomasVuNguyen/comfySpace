@@ -2,10 +2,13 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 
+import '../comfyScript/stepperMotor.dart';
 import '../function.dart';
 import '../main.dart';
 
@@ -162,8 +165,6 @@ class _LedToggleState extends State<LedToggle> {
   void initState(){
     super.initState();
     initClient();
-    //toggleLED(widget.pin.toString(), false);
-    //toggleState = false;
   }
   Future<void> initClient() async{
     client = SSHClient(
@@ -175,32 +176,79 @@ class _LedToggleState extends State<LedToggle> {
   }
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return GestureDetector(
-          onLongPress: (){
-            deleteButton('comfySpace.db', spaceLaunch, widget.name, widget.id);
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => super.widget));
-          },
-          child: Switch(
-            value: toggleState,
-            onChanged:(value) async {
+        return Container(
+          height: 100,
+          color: Colors.red,
+          child: GestureDetector(
+            onLongPress: (){
+              deleteButton('comfySpace.db', spaceLaunch, widget.name, widget.id);
               setState(() {
-                print(value);
-                toggleState = value;
               });
-              print('state is ${toggleState.toString()}');
-              var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
             },
-            activeColor: Colors.lightGreenAccent,
-            activeTrackColor: Colors.blue,
+            child: FlutterSwitch(
+              value: toggleState,
+              width: 100, height: 80,
+              activeColor: Colors.orange,
+              activeIcon: Text("ON"), inactiveIcon: Text("OFF"), activeTextFontWeight: FontWeight.normal, inactiveTextFontWeight: FontWeight.normal,
+              padding: 0,
+              activeText: "yo", inactiveText: "nah",
+              onToggle: (val) async {
+                setState(() {toggleState = val;});
+                var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
+                HapticFeedback.heavyImpact();
+              },
 
+            )
           ),
         );
-      },
+
+
+  }
+}
+
+class StepperMotor extends StatefulWidget {
+  const StepperMotor({super.key, required this.name, required this.id, required this.pin1, required this.pin2, required this.pin3, required this.pin4, required this.hostname, required this.username, required this.password});
+  final String name; final int id; final String pin1; final String pin2; final String pin3; final String pin4;
+  final String hostname; final String username; final String password;
+
+  @override
+  State<StepperMotor> createState() => _StepperMotorState();
+}
+
+class _StepperMotorState extends State<StepperMotor> {
+  int rotationDirection = 1; //0 means counterclockwise, 1 means stop, 2 means clockwise
+  final List<bool> _stepperState = <bool>[false, true, false];
+  late SSHClient client;
+  void initState(){
+    super.initState();
+    initClient();
+  }
+  Future<void> initClient() async{
+    client = SSHClient(
+      await SSHSocket.connect(widget.hostname, 22),
+      username: widget.username,
+      onPasswordRequest: () => widget.password,
+    );
+    print("initClient username: ${client.username}");
+  }
+  @override
+  Widget build(BuildContext context) {
+    return ToggleButtons(
+        children: const <Widget>[
+          Icon(Icons.arrow_left),
+          Icon(Icons.stop),
+          Icon(Icons.arrow_right),
+        ],
+        direction: Axis.vertical,
+        isSelected: _stepperState,
+        onPressed: (int index){
+          for (int i=0; i<_stepperState.length; i++){
+            _stepperState[i] = i==index;
+            if(i==index){
+              stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, index.toString());
+            }
+          }
+    },
     );
   }
 }
