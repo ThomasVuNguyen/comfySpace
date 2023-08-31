@@ -149,11 +149,11 @@ class _spaceTileState extends State<spaceTile> {
 }
 
 class LedToggle extends StatefulWidget {
-  const LedToggle({super.key, required this.name, required this.pin, required this.id, required this.hostname, required this.username, required this.password});
+  const LedToggle({super.key, required this.spaceName, required this.name, required this.pin, required this.id, required this.hostname, required this.username, required this.password});
   final String name;
   final String pin;
   final int id;
-  final String hostname; final String username; final String password;
+  final String hostname; final String username; final String password; final String spaceName;
   @override
   State<LedToggle> createState() => _LedToggleState();
 }
@@ -176,33 +176,16 @@ class _LedToggleState extends State<LedToggle> {
   }
   @override
   Widget build(BuildContext context) {
-        return Container(
-          height: 100,
-          color: Colors.red,
-          child: GestureDetector(
-            onLongPress: (){
-              deleteButton('comfySpace.db', spaceLaunch, widget.name, widget.id);
-              setState(() {
-              });
-            },
-            child: FlutterSwitch(
-              value: toggleState,
-              width: 100, height: 80,
-              activeColor: Colors.orange,
-              activeIcon: Text("ON"), inactiveIcon: Text("OFF"), activeTextFontWeight: FontWeight.normal, inactiveTextFontWeight: FontWeight.normal,
-              padding: 0,
-              activeText: "yo", inactiveText: "nah",
-              onToggle: (val) async {
-                setState(() {toggleState = val;});
-                var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
-                HapticFeedback.heavyImpact();
-              },
-
-            )
-          ),
+        return ListTile(
+          tileColor: toggleState ?Colors.red :Colors.blue,
+          leading: toggleState ?const Icon(Icons.upload) :const Icon(Icons.download),
+          onTap: (){
+            setState(() async {
+              toggleState = !toggleState;
+              var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
+            });
+          },
         );
-
-
   }
 }
 
@@ -210,7 +193,6 @@ class StepperMotor extends StatefulWidget {
   const StepperMotor({super.key, required this.name, required this.id, required this.pin1, required this.pin2, required this.pin3, required this.pin4, required this.hostname, required this.username, required this.password});
   final String name; final int id; final String pin1; final String pin2; final String pin3; final String pin4;
   final String hostname; final String username; final String password;
-
   @override
   State<StepperMotor> createState() => _StepperMotorState();
 }
@@ -219,6 +201,7 @@ class _StepperMotorState extends State<StepperMotor> {
   int rotationDirection = 1; //0 means counterclockwise, 1 means stop, 2 means clockwise
   final List<bool> _stepperState = <bool>[false, true, false];
   late SSHClient client;
+  @override
   void initState(){
     super.initState();
     initClient();
@@ -241,12 +224,16 @@ class _StepperMotorState extends State<StepperMotor> {
         ],
         direction: Axis.vertical,
         isSelected: _stepperState,
-        onPressed: (int index){
+        onPressed: (int index) async{
           for (int i=0; i<_stepperState.length; i++){
-            _stepperState[i] = i==index;
+            _stepperState[i] = i == index;
             if(i==index){
-              stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, index.toString());
+              index = index-1;
+              var stepperCommand = stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, index.toString());
+              var command = await client.run(stepperCommand);
             }
+            setState(() {
+            });
           }
     },
     );

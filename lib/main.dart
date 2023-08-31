@@ -933,7 +933,13 @@ class _spacePageState extends State<spacePage> {
                     itemCount: snapshot.data?.length,
                     itemBuilder: (BuildContext context, index){
                       if (snapshot.data![index]["buttonType"] == "LED"){
-                        return LedToggle(name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,);
+                        return GestureDetector(
+                            onLongPress: (){
+                              setState(() {
+                                deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                              });
+                            },
+                            child: LedToggle(spaceName: widget.spaceName, name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,));
                       }
                       else if (snapshot.data![index]["buttonType"] == "servo"){
                         if(servoState[index]==null){
@@ -960,6 +966,17 @@ class _spacePageState extends State<spacePage> {
                                 )
                             );
                           },
+                        );
+                      }
+                      else if (snapshot.data![index]["buttonType"] == "stepperMotor"){
+                        List<String> pinList = snapshot.data![index]["command"].split(" ");
+                        return GestureDetector(
+                          onLongPress: (){
+                            setState(() {
+                              deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                            });
+                          },
+                          child: StepperMotor(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], pin3: pinList[2], pin4: pinList[3], hostname: widget.hostname, username: widget.username, password: widget.password),
                         );
                       }
                       else{
