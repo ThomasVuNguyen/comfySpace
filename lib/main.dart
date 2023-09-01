@@ -680,6 +680,7 @@ class _spacePageState extends State<spacePage> {
     super.initState();
     //initControl();
     print("welcome to ${widget.spaceName}");
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
   @override
   void dispose(){
@@ -697,9 +698,20 @@ class _spacePageState extends State<spacePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //backgroundColor: Colors.black,
         appBar: AppBar(
-          title: Text(widget.hostname+widget.username+widget.password),
-          actions: [],
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.black,
+          toolbarHeight: 48,
+          title: Column(
+            children: [
+              Text(widget.spaceName, style: TextStyle(fontWeight: FontWeight.bold),),
+              //Text(widget.hostname+widget.username+widget.password),
+            ],
+          ),
+          actions: [
+            IconButton(onPressed: (){}, icon: Icon(Icons.info))
+          ],
         ),
         floatingActionButton: SpeedDial(
           icon: Icons.menu,
@@ -928,136 +940,138 @@ class _spacePageState extends State<spacePage> {
             future: buttonRenderer('comfySpace.db', widget.spaceName),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done){
-                return MasonryGridView.builder(
-                    gridDelegate:  const SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,),
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (BuildContext context, index){
-                      if (snapshot.data![index]["buttonType"] == "LED"){
-                        return GestureDetector(
+                return Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: MasonryGridView.builder(
+                      gridDelegate:  const SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,), crossAxisSpacing: 8, mainAxisSpacing: 8,
+                      itemCount: snapshot.data?.length,
+                      itemBuilder: (BuildContext context, index){
+                        if (snapshot.data![index]["buttonType"] == "LED"){
+                          return GestureDetector(
+                              onLongPress: (){
+                                setState(() {
+                                  deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                });
+                              },
+                              child: LedToggle(spaceName: widget.spaceName, name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,));
+                        }
+                        else if (snapshot.data![index]["buttonType"] == "servo"){
+                          if(servoState[index]==null){
+                            servoState[index] = 0;
+                          };
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              return GestureDetector(
+                                  onLongPress: (){
+                                    deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                    servoState.remove(index);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) => super.widget));
+                                  },
+                                  child: Slider(
+                                    onChanged: (newAngle) async {
+                                      setState(() {servoState[index] = newAngle.toInt();});
+
+                                      var command = await clientControl.run(servoAngle(snapshot.data![index]["command"], servoState[index]!));
+                                    }, value: servoState[index]!.toDouble(),
+                                    min: 0.0, max: 180.0, divisions: 4,
+                                  )
+                              );
+                            },
+                          );
+                        }
+                        else if (snapshot.data![index]["buttonType"] == "stepperMotor"){
+                          List<String> pinList = snapshot.data![index]["command"].split(" ");
+                          return GestureDetector(
                             onLongPress: (){
                               setState(() {
                                 deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                              });
+                              });},
+                            child: StepperMotor(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], pin3: pinList[2], pin4: pinList[3], hostname: widget.hostname, username: widget.username, password: widget.password),
+                          );
+                        }
+                        else{
+                          return ListTile(
+                            title: Text(snapshot.data![index].toString()),
+                            tileColor: Colors.grey,
+                            onTap: () async {
+                              var command = await clientControl.run(snapshot.data![index]["command"]);
+                              print("command is " + snapshot.data![index]["command"]);
+                              print(toggleState.toString());
                             },
-                            child: LedToggle(spaceName: widget.spaceName, name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,));
-                      }
-                      else if (snapshot.data![index]["buttonType"] == "servo"){
-                        if(servoState[index]==null){
-                          servoState[index] = 0;
-                        };
-                        return StatefulBuilder(
-                          builder: (context, setState) {
-                            return GestureDetector(
-                                onLongPress: (){
-                                  deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                  servoState.remove(index);
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) => super.widget));
-                                },
-                                child: Slider(
-                                  onChanged: (newAngle) async {
-                                    setState(() {servoState[index] = newAngle.toInt();});
-
-                                    var command = await clientControl.run(servoAngle(snapshot.data![index]["command"], servoState[index]!));
-                                  }, value: servoState[index]!.toDouble(),
-                                  min: 0.0, max: 180.0, divisions: 4,
-                                )
-                            );
-                          },
-                        );
-                      }
-                      else if (snapshot.data![index]["buttonType"] == "stepperMotor"){
-                        List<String> pinList = snapshot.data![index]["command"].split(" ");
-                        return GestureDetector(
-                          onLongPress: (){
-                            setState(() {
-                              deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                            });
-                          },
-                          child: StepperMotor(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], pin3: pinList[2], pin4: pinList[3], hostname: widget.hostname, username: widget.username, password: widget.password),
-                        );
-                      }
-                      else{
-                        return ListTile(
-                          title: Text(snapshot.data![index].toString()),
-                          tileColor: Colors.grey,
-                          onTap: () async {
-                            var command = await clientControl.run(snapshot.data![index]["command"]);
-                            print("command is " + snapshot.data![index]["command"]);
-                            print(toggleState.toString());
-                          },
-                          onLongPress: (){
-                            showDialog(context: context, builder: (BuildContext context){
-                              String btnName = snapshot.data![index]["name"];
-                              int btnSizeX = snapshot.data![index]["size_x"];
-                              int btnSizeY = snapshot.data![index]["size_y"];
-                              int btnPosition = snapshot.data![index]["position"];
-                              String btnCommand = snapshot.data![index]["command"];
-                              return AlertDialog(
-                                title: const Text("Edit buttons"),
-                                content: Column(
-                                  children: [
-                                    TextField(
-                                      onChanged: (newName){
-                                        btnName = newName;
-                                      },
-                                      decoration: const InputDecoration(hintText: 'new name'),
-                                      textInputAction: TextInputAction.next,
-                                    ),
-                                    /*
-                              TextField(
-                                onChanged: (newSizeX){
-                                  btnSizeX = int.parse(newSizeX);
-                                },
-                                decoration: const InputDecoration(hintText: 'new sizeX'),
-                                textInputAction: TextInputAction.next,
-                              ),
-                              TextField(
-                                onChanged: (newSizeY){
-                                  btnSizeY = int.parse(newSizeY);
-                                },
-                                decoration: const InputDecoration(hintText: 'new sizeY'),
-                                textInputAction: TextInputAction.next,
-                              ),
-                              TextField(
-                                onChanged: (newPostion){
-                                  btnPosition = int.parse(newPostion);
-                                },
-                                decoration: const InputDecoration(hintText: 'new position'),
-                                textInputAction: TextInputAction.next,
-                              ),
-                              */
-
-                                    TextField(
-                                      onChanged: (newCommand){
-                                        btnCommand = newCommand;
-                                      },
-                                      decoration: const InputDecoration(hintText: 'new command'),
-                                    ),
-                                  ],
+                            onLongPress: (){
+                              showDialog(context: context, builder: (BuildContext context){
+                                String btnName = snapshot.data![index]["name"];
+                                int btnSizeX = snapshot.data![index]["size_x"];
+                                int btnSizeY = snapshot.data![index]["size_y"];
+                                int btnPosition = snapshot.data![index]["position"];
+                                String btnCommand = snapshot.data![index]["command"];
+                                return AlertDialog(
+                                  title: const Text("Edit buttons"),
+                                  content: Column(
+                                    children: [
+                                      TextField(
+                                        onChanged: (newName){
+                                          btnName = newName;
+                                        },
+                                        decoration: const InputDecoration(hintText: 'new name'),
+                                        textInputAction: TextInputAction.next,
+                                      ),
+                                      /*
+                                TextField(
+                                  onChanged: (newSizeX){
+                                    btnSizeX = int.parse(newSizeX);
+                                  },
+                                  decoration: const InputDecoration(hintText: 'new sizeX'),
+                                  textInputAction: TextInputAction.next,
                                 ),
-                                actions: <Widget>[
-                                  TextButton(onPressed: (){
-                                    deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                    Navigator.pop(context);
-                                    setState(() {});
-                                  }, child: Text("Delete")),
-                                  TextButton(onPressed: (){
-                                    editButton('comfySpace.db', spaceLaunch, snapshot.data![index]["id"], btnName, btnSizeX, btnSizeY, btnPosition, btnCommand);
-                                    Navigator.pop(context);
-                                    setState(() {});
-                                  }, child: Text("Alter"))
-                                ],
-                              );
-                            });
-                            //deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                            setState(() {});
-                          },
-                        );
-                      }
-                    });
+                                TextField(
+                                  onChanged: (newSizeY){
+                                    btnSizeY = int.parse(newSizeY);
+                                  },
+                                  decoration: const InputDecoration(hintText: 'new sizeY'),
+                                  textInputAction: TextInputAction.next,
+                                ),
+                                TextField(
+                                  onChanged: (newPostion){
+                                    btnPosition = int.parse(newPostion);
+                                  },
+                                  decoration: const InputDecoration(hintText: 'new position'),
+                                  textInputAction: TextInputAction.next,
+                                ),
+                                */
+
+                                      TextField(
+                                        onChanged: (newCommand){
+                                          btnCommand = newCommand;
+                                        },
+                                        decoration: const InputDecoration(hintText: 'new command'),
+                                      ),
+                                    ],
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(onPressed: (){
+                                      deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                      Navigator.pop(context);
+                                      setState(() {});
+                                    }, child: Text("Delete")),
+                                    TextButton(onPressed: (){
+                                      editButton('comfySpace.db', spaceLaunch, snapshot.data![index]["id"], btnName, btnSizeX, btnSizeY, btnPosition, btnCommand);
+                                      Navigator.pop(context);
+                                      setState(() {});
+                                    }, child: Text("Alter"))
+                                  ],
+                                );
+                              });
+                              //deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                              setState(() {});
+                            },
+                          );
+                        }
+                      }),
+                );
               }
               else{
                 return const CircularProgressIndicator();

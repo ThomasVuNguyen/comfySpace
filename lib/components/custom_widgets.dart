@@ -166,6 +166,11 @@ class _LedToggleState extends State<LedToggle> {
     super.initState();
     initClient();
   }
+  @override
+  void dispose(){
+    super.dispose();
+    client.close();
+  }
   Future<void> initClient() async{
     client = SSHClient(
       await SSHSocket.connect(widget.hostname, 22),
@@ -174,17 +179,31 @@ class _LedToggleState extends State<LedToggle> {
     );
     print("initClient username: ${client.username}");
   }
+  Future<void> closeClient() async{
+    final shell = await client.shell();
+    await shell.done;
+    client.close();
+
+  }
   @override
   Widget build(BuildContext context) {
-        return ListTile(
-          tileColor: toggleState ?Colors.red :Colors.blue,
-          leading: toggleState ?const Icon(Icons.upload) :const Icon(Icons.download),
-          onTap: (){
-            setState(() async {
-              toggleState = !toggleState;
+        return Container(
+          height: 120,
+          child: ListTile(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
+            tileColor: toggleState ?Colors.red :Colors.blue,
+            leading: toggleState? IconButton(onPressed: (){}, icon: Icon(Icons.upload)) : IconButton(onPressed: (){}, icon: Icon(Icons.download)),
+            //toggleState ?Icon(Icons.upload) : Icon(Icons.download),
+            title: Text(widget.name),
+            onTap: () async {
+              HapticFeedback.vibrate();
               var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
-            });
-          },
+              setState((){
+                toggleState = !toggleState;
+                print(toggleState.toString());
+              });
+            },
+          ),
         );
   }
 }
@@ -206,6 +225,11 @@ class _StepperMotorState extends State<StepperMotor> {
     super.initState();
     initClient();
   }
+  @override
+  void dispose(){
+    closeClient();
+    super.dispose();
+  }
   Future<void> initClient() async{
     client = SSHClient(
       await SSHSocket.connect(widget.hostname, 22),
@@ -214,28 +238,38 @@ class _StepperMotorState extends State<StepperMotor> {
     );
     print("initClient username: ${client.username}");
   }
+  Future<void> closeClient() async{
+    final shell = await client.shell();
+    await shell.done;
+    client.close();
+
+  }
   @override
   Widget build(BuildContext context) {
-    return ToggleButtons(
-        children: const <Widget>[
-          Icon(Icons.arrow_left),
-          Icon(Icons.stop),
-          Icon(Icons.arrow_right),
-        ],
-        direction: Axis.vertical,
-        isSelected: _stepperState,
-        onPressed: (int index) async{
-          for (int i=0; i<_stepperState.length; i++){
-            _stepperState[i] = i == index;
-            if(i==index){
-              index = index-1;
-              var stepperCommand = stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, index.toString());
-              var command = await client.run(stepperCommand);
+    return Container(
+      height: 180,
+      child: ToggleButtons(
+        borderRadius: BorderRadius.circular(32.0),
+          children: const <Widget>[
+            Icon(Icons.arrow_left),
+            Icon(Icons.stop),
+            Icon(Icons.arrow_right),
+          ],
+          direction: Axis.vertical,
+          isSelected: _stepperState,
+          onPressed: (int index) async{
+            for (int i=0; i<_stepperState.length; i++){
+              _stepperState[i] = i == index;
+              if(i==index){
+                index = index-1;
+                var stepperCommand = stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, index.toString());
+                var command = await client.run(stepperCommand);
+              }
+              setState(() {
+              });
             }
-            setState(() {
-            });
-          }
-    },
+      },
+      ),
     );
   }
 }
