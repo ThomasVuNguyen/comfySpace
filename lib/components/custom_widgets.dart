@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:dartssh2/dartssh2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -187,24 +190,58 @@ class _LedToggleState extends State<LedToggle> {
   }
   @override
   Widget build(BuildContext context) {
-        return Container(
-          height: 120,
-          child: ListTile(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
-            tileColor: toggleState ?Colors.red :Colors.blue,
-            leading: toggleState? IconButton(onPressed: (){}, icon: Icon(Icons.upload)) : IconButton(onPressed: (){}, icon: Icon(Icons.download)),
-            //toggleState ?Icon(Icons.upload) : Icon(Icons.download),
-            title: Text(widget.name),
-            onTap: () async {
-              HapticFeedback.vibrate();
-              var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
-              setState((){
-                toggleState = !toggleState;
-                print(toggleState.toString());
-              });
-            },
+    return Padding(
+        padding: EdgeInsets.all(15.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24.0),
+          color: toggleState ? Colors.grey[900] : const Color.fromARGB(44, 164, 167, 189),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                alignment: Alignment.topCenter,
+                child: Icon(Icons.add, color: toggleState? Colors.white :Colors.grey.shade700,),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      child: Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                        child: Text(
+                          widget.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: toggleState? Colors.white :Colors.black,
+                          ),
+                        ),
+                  )),
+                  Transform.rotate(
+                      angle: pi/2,
+                    child: CupertinoSwitch(
+                      activeColor: Colors.blue,
+                      value: toggleState,
+                      onChanged: (bool? value) async {
+                        setState((){
+                          toggleState = value!;
+                          print(toggleState.toString());
+                        });
+                        HapticFeedback.vibrate();
+                        var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
+                      },
+                    ),
+                  )
+                ],
+              )
+            ],
           ),
-        );
+        ),
+      ),
+    );
   }
 }
 
@@ -248,7 +285,8 @@ class _StepperMotorState extends State<StepperMotor> {
   Widget build(BuildContext context) {
     return Container(
       height: 180,
-      child: ToggleButtons(
+      child:
+      ToggleButtons(
         borderRadius: BorderRadius.circular(32.0),
           children: const <Widget>[
             Icon(Icons.arrow_left),
