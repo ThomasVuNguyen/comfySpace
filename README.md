@@ -16,4 +16,4 @@
 
 **`Use Raspberry Pi more comfortably`**
 
-Built with Flutter, comfySSH is an open-source project sort to make Raspberry Pi projects more comfortable to develop & use
+Built with Flutter, comfySSH is an source-available project sort to make Raspberry Pi projects more comfortable to develop & use
