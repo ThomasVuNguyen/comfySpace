@@ -7,9 +7,11 @@ import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/pages/Experimental.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
+import 'package:comfyssh_flutter/state.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,9 +33,10 @@ List<String> componentTypeList = ['LED', 'RGBLED', 'Servo'];
 List<String> buttonTypeList = ['toggleButton', 'slider', 'slider'];
 const bgcolor = Color(0xffFFFFFF);const textcolor = Color(0xff000000);const subcolor = Color(0xff000000);const keycolor = Color(0xff656366);const accentcolor = Color(0xff1C3D93);const warningcolor = Color(0xffCE031B);
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   memoryCheck();
   //reAssign();
-  runApp(const MyApp());
+  runApp( ProviderScope(child: const MyApp()));
   createHostInfo();
 }  //main function, execute MyApp
 
@@ -672,6 +675,8 @@ class spacePage extends StatefulWidget {
 }
 
 class _spacePageState extends State<spacePage> {
+  late final terminal = Terminal(inputHandler: keyboard);
+  final keyboard = null;
   Map<int, bool> toggleState = {};
   Map<int, int> servoState = {};
   late SSHClient clientControl;
@@ -680,15 +685,16 @@ class _spacePageState extends State<spacePage> {
   @override
   void initState(){
     super.initState();
-    //initControl();
     print("welcome to ${widget.spaceName}");
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
   @override
   void dispose(){
     super.dispose();
     clientControl.close();
   }
+  Future<void> initTerminal() async{
+    terminal.write('yo');
+}
   Future<void> initControl() async{
     clientControl = SSHClient(
       await SSHSocket.connect(widget.hostname, port),
@@ -700,6 +706,9 @@ class _spacePageState extends State<spacePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(64),
+          child: comfyAppBar(title: widget.spaceName)),
         backgroundColor: Colors.grey[300],
         floatingActionButton: SpeedDial(
           icon: Icons.menu,
@@ -767,7 +776,6 @@ class _spacePageState extends State<spacePage> {
                             decoration: const InputDecoration(
                               hintText: 'command',
                             ),
-
                           ),
                         ],
                       ),
@@ -928,7 +936,12 @@ class _spacePageState extends State<spacePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              IgnorePointer(
+                child: Container(
+                  height: 100,
+                    child: TerminalView(terminal)),
+              ),
+              /*Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: horizontalPadding,
                   vertical: verticalPadding,
@@ -942,7 +955,7 @@ class _spacePageState extends State<spacePage> {
                       size:45,
                       color: Colors.grey[800],
                     ),
-
+                    TextButton(onPressed: (){}, child: Text(widget.spaceName,style: GoogleFonts.bebasNeue(fontSize: 72, color: Colors.black),)),
                     // account icon
                     Icon(
                       Icons.person,
@@ -951,40 +964,8 @@ class _spacePageState extends State<spacePage> {
                     )
                   ],
                 ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // welcome home
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /*Text(
-                      "Welcome Home,",
-                      style: TextStyle(fontSize: 20, color: Colors.grey.shade800),
-                    ),*/
-                    Text(
-                      widget.spaceName,
-                      style: GoogleFonts.bebasNeue(fontSize: 72),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 25),
-              /*
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.0),
-                child: Divider(
-                  thickness: 1,
-                  color: Color.fromARGB(255, 204, 204, 204),
-                ),
-              ),
-              */
-              const SizedBox(height: 25),
-
+              ),*/
+              SizedBox(height: 64,),
               Expanded(
                 child: FutureBuilder(
                     future: buttonRenderer('comfySpace.db', widget.spaceName),
@@ -1006,7 +987,7 @@ class _spacePageState extends State<spacePage> {
                                           deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
                                         });
                                       },
-                                      child: LedToggle(spaceName: widget.spaceName, name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,));
+                                      child: LedToggle(spaceName: widget.spaceName, name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,terminal: terminal));
                                 }
                                 else if (snapshot.data![index]["buttonType"] == "servo"){
                                   if(servoState[index]==null){

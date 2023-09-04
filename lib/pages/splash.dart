@@ -2,6 +2,7 @@ import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/main.dart';
 import 'package:flutter/material.dart';
 import 'package:comfyssh_flutter/pages/home_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 class MyApp extends StatefulWidget {
@@ -19,6 +20,7 @@ class _MyAppState extends State<MyApp> {
     memoryCheck();
   }
   Widget build(BuildContext context) {
+
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ComfySSH',

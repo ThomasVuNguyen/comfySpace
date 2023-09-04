@@ -6,15 +6,44 @@ import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
-
+import 'package:xterm/core.dart';
 import '../comfyScript/stepperMotor.dart';
 import '../function.dart';
 import '../main.dart';
+import '../state.dart';
 
+
+class comfyAppBar extends StatefulWidget {
+  const comfyAppBar({super.key, required this.title});
+  final String title;
+
+  @override
+  State<comfyAppBar> createState() => _comfyAppBarState();
+}
+
+class _comfyAppBarState extends State<comfyAppBar> {
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
+      toolbarHeight: 64,
+      title: Row(
+        children: <Widget>[
+          const SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor)),),
+          Text(widget.title, style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),),
+        ],
+      ),
+      systemOverlayStyle: const SystemUiOverlayStyle(statusBarColor: bgcolor),
+      elevation: 0,
+      backgroundColor: bgcolor,
+    );
+  }
+}
 
 class spaceTile extends StatefulWidget {
   const spaceTile({super.key, required this.spaceName});
@@ -30,7 +59,6 @@ class _spaceTileState extends State<spaceTile> {
   void initState(){
     super.initState();
     getSpaceInfo(widget.spaceName);
-
   }
 
   Future<void> getSpaceInfo(String spaceName) async{
@@ -40,6 +68,7 @@ class _spaceTileState extends State<spaceTile> {
     userNameHolder = spaceInfo['user'].toString();
     passwordHolder = spaceInfo['password'].toString();
   }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -151,23 +180,41 @@ class _spaceTileState extends State<spaceTile> {
   }
 }
 
+class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(padding: EdgeInsets.all(15.0),child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.0),
+        color: const Color.fromARGB(44, 164, 167, 189),
+      ),
+      child: Center(child: Text("loading"),),
+    ),);
+  }
+}
+
 class LedToggle extends StatefulWidget {
-  const LedToggle({super.key, required this.spaceName, required this.name, required this.pin, required this.id, required this.hostname, required this.username, required this.password});
+  const LedToggle({super.key, required this.spaceName, required this.name, required this.pin, required this.id, required this.hostname, required this.username, required this.password, required this.terminal});
   final String name;
   final String pin;
   final int id;
   final String hostname; final String username; final String password; final String spaceName;
+  final Terminal terminal;
   @override
   State<LedToggle> createState() => _LedToggleState();
 }
 
 class _LedToggleState extends State<LedToggle> {
   bool toggleState=false;
+  bool SSHLoadingFinished = false;
   late SSHClient client;
   @override
   void initState(){
     super.initState();
     initClient();
+
   }
   @override
   void dispose(){
@@ -181,6 +228,8 @@ class _LedToggleState extends State<LedToggle> {
       onPasswordRequest: () => widget.password,
     );
     print("initClient username: ${client.username}");
+    setState(() {SSHLoadingFinished = true;});
+
   }
   Future<void> closeClient() async{
     final shell = await client.shell();
@@ -190,7 +239,8 @@ class _LedToggleState extends State<LedToggle> {
   }
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    if(SSHLoadingFinished == true){
+      return Padding(
         padding: EdgeInsets.all(15.0),
       child: Container(
         decoration: BoxDecoration(
@@ -226,6 +276,13 @@ class _LedToggleState extends State<LedToggle> {
                       activeColor: Colors.blue,
                       value: toggleState,
                       onChanged: (bool? value) async {
+                        if (value == true){
+                          widget.terminal.write('LED ${widget.pin} on \r\n');
+                        }
+                        else{
+                          widget.terminal.write('LED ${widget.pin} off \r\n');
+                        }
+
                         setState((){
                           toggleState = value!;
                           print(toggleState.toString());
@@ -241,7 +298,10 @@ class _LedToggleState extends State<LedToggle> {
           ),
         ),
       ),
-    );
+    );}
+    else{
+      return const LoadingWidget();
+    }
   }
 }
 
@@ -254,6 +314,7 @@ class StepperMotor extends StatefulWidget {
 }
 
 class _StepperMotorState extends State<StepperMotor> {
+  bool SSHLoadingFinished = false;
   int rotationDirection = 1; //0 means counterclockwise, 1 means stop, 2 means clockwise
   final List<bool> _stepperState = <bool>[false, true, false];
   late SSHClient client;
@@ -274,6 +335,7 @@ class _StepperMotorState extends State<StepperMotor> {
       onPasswordRequest: () => widget.password,
     );
     print("initClient username: ${client.username}");
+    setState(() {SSHLoadingFinished = true;});
   }
   Future<void> closeClient() async{
     final shell = await client.shell();
@@ -283,7 +345,8 @@ class _StepperMotorState extends State<StepperMotor> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
+    if(SSHLoadingFinished == true){
+      return Container(
       height: 180,
       child:
       ToggleButtons(
@@ -308,6 +371,9 @@ class _StepperMotorState extends State<StepperMotor> {
             }
       },
       ),
-    );
+    );}
+    else{
+      return const LoadingWidget();
+    }
   }
 }
