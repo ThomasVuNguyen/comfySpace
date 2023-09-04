@@ -675,8 +675,7 @@ class spacePage extends StatefulWidget {
 }
 
 class _spacePageState extends State<spacePage> {
-  late final terminal = Terminal(inputHandler: keyboard);
-  final keyboard = null;
+  late final terminal = Terminal();
   Map<int, bool> toggleState = {};
   Map<int, int> servoState = {};
   late SSHClient clientControl;
@@ -709,7 +708,7 @@ class _spacePageState extends State<spacePage> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(64),
           child: comfyAppBar(title: widget.spaceName)),
-        backgroundColor: Colors.grey[300],
+        backgroundColor: bgcolor,
         floatingActionButton: SpeedDial(
           icon: Icons.menu,
           activeIcon: Icons.close,
@@ -928,8 +927,55 @@ class _spacePageState extends State<spacePage> {
                   );
                 });
               }
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.sensors),
+              onTap: (){
+                late String trig; late String echo;
+                showDialog(context: context, builder: (BuildContext context){
+                  return AlertDialog(
+                    content: Column(
+                      children: [
+                        TextField(
+                          onChanged: (btnName){
+                            buttonName = btnName;
+                          },
+                          textInputAction: TextInputAction.next,
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(labelText: 'trig'),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (pin){
+                            trig = pin;
+                          },
+                          textInputAction: TextInputAction.next,
+                        ),
+                        TextField(
+                          decoration: const InputDecoration(labelText: 'echo'),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (pin){
+                            echo = pin;
+                          },
+                          textInputAction: TextInputAction.next,
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: (){
+                          String HCSR04PinList = '$trig $echo';
+                          addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, HCSR04PinList, 'HCSR04');
+                          Navigator.pop(context);
+                          setState(() {});
+                        }, child: Text("Add distance sensor"),
+                      )
+                    ],
+                  );
+                });
+              }
             )
-
           ],
         ),
         body: SafeArea(
@@ -941,30 +987,6 @@ class _spacePageState extends State<spacePage> {
                   height: 100,
                     child: TerminalView(terminal)),
               ),
-              /*Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: horizontalPadding,
-                  vertical: verticalPadding,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // menu icon
-                    Icon(
-                      Icons.menu,
-                      size:45,
-                      color: Colors.grey[800],
-                    ),
-                    TextButton(onPressed: (){}, child: Text(widget.spaceName,style: GoogleFonts.bebasNeue(fontSize: 72, color: Colors.black),)),
-                    // account icon
-                    Icon(
-                      Icons.person,
-                      size: 45,
-                      color: Colors.grey[800],
-                    )
-                  ],
-                ),
-              ),*/
               SizedBox(height: 64,),
               Expanded(
                 child: FutureBuilder(
@@ -1024,6 +1046,15 @@ class _spacePageState extends State<spacePage> {
                                         deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
                                       });},
                                     child: StepperMotor(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], pin3: pinList[2], pin4: pinList[3], hostname: widget.hostname, username: widget.username, password: widget.password),
+                                  );
+                                }
+                                else if (snapshot.data![index]["buttonType"] == "HCSR04"){
+                                  List<String> pinList = snapshot.data![index]["command"].split(" ");
+                                  return GestureDetector(
+                                    onLongPress: (){
+                                      setState(() {deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);});
+                                    },
+                                    child: DistanceSensor(spaceName: widget.spaceName, name: snapshot.data![index]["name"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password, trig: pinList[0], echo: pinList[1]),
                                   );
                                 }
                                 else{

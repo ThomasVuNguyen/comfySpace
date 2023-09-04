@@ -1,6 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
-
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:comfyssh_flutter/comfyScript/HC_SR04.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:xterm/core.dart';
+import 'package:xterm/ui.dart';
 import '../comfyScript/stepperMotor.dart';
 import '../function.dart';
 import '../main.dart';
@@ -185,13 +188,7 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.all(15.0),child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.0),
-        color: const Color.fromARGB(44, 164, 167, 189),
-      ),
-      child: Center(child: Text("loading"),),
-    ),);
+    return const CircularProgressIndicator();
   }
 }
 
@@ -346,34 +343,154 @@ class _StepperMotorState extends State<StepperMotor> {
   @override
   Widget build(BuildContext context) {
     if(SSHLoadingFinished == true){
-      return Container(
-      height: 180,
-      child:
-      ToggleButtons(
-        borderRadius: BorderRadius.circular(32.0),
-          children: const <Widget>[
-            Icon(Icons.arrow_left),
-            Icon(Icons.stop),
-            Icon(Icons.arrow_right),
+      return Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Row(
+          children: [
+            Expanded(child: Container(color: Colors.orange,),),
+            ToggleButtons(
+              borderRadius: BorderRadius.circular(32.0),
+                direction: Axis.vertical,
+                isSelected: _stepperState,
+                onPressed: (int index) async{
+                  for (int i=0; i<_stepperState.length; i++){
+                    _stepperState[i] = i == index;
+                    if(i==index){
+                      index = index-1;
+                      var stepperCommand = stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, index.toString());
+                      var command = await client.run(stepperCommand);
+                    }
+                    setState(() {
+                    });
+                  }
+            },
+                children: <Widget>[
+                  Container(child: Icon(Icons.arrow_left,),),
+                  Container(child: Icon(Icons.stop)),
+                  Container(child: Icon(Icons.arrow_right)),
+                ],
+            ),
           ],
-          direction: Axis.vertical,
-          isSelected: _stepperState,
-          onPressed: (int index) async{
-            for (int i=0; i<_stepperState.length; i++){
-              _stepperState[i] = i == index;
-              if(i==index){
-                index = index-1;
-                var stepperCommand = stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, index.toString());
-                var command = await client.run(stepperCommand);
-              }
-              setState(() {
-              });
-            }
-      },
-      ),
-    );}
+        ),
+      );}
     else{
       return const LoadingWidget();
+    }
+  }
+}
+
+class DistanceSensor extends StatefulWidget {
+  const DistanceSensor({super.key, required this.spaceName, required this.name, required this.id, required this.hostname, required this.username, required this.password, required this.trig,required this.echo});
+  final String spaceName; final String name; final int id;
+  final String hostname; final String username; final String password;
+  final String trig; final String echo;
+  @override
+  State<DistanceSensor> createState() => _DistanceSensorState();
+}
+
+class _DistanceSensorState extends State<DistanceSensor> {
+  bool SSHLoadingFinished = false; late SSHClient client;
+  late Timer timer; late String data;
+  @override
+  void initState(){
+    timer = Timer.periodic(Duration(seconds:1), (timer) {
+      updateData();
+      setState(() {});
+    });
+    super.initState();
+    initClient();
+    //SSHLoadingFinished = true;
+  }
+  @override
+  void dispose(){
+    super.dispose();
+    client.close();
+    timer?.cancel();
+  }
+  Future<void> updateData() async{
+    data = await readDistance(client, widget.trig, widget.echo);
+  }
+  Future<void> initClient() async{
+    //terminal.write("Connecting... \r\n");
+    client = SSHClient(
+      await SSHSocket.connect(widget.hostname, port),
+      username: widget.username,
+      onPasswordRequest: () => widget.password
+    );
+    //terminal.write("Connected \r\n");
+    /*final session = await client.shell(
+      pty: SSHPtyConfig(
+        width: terminal.viewWidth, height: terminal.viewWidth,
+      )
+    );
+    terminal.buffer.clear(); terminal.buffer.setCursor(0, 0);
+    terminal.onOutput = (data){
+      session.write(utf8.encode(data) as Uint8List);
+    };
+    session.stdout
+        .cast<List<int>>()
+        .transform(Utf8Decoder())
+        .listen(terminal.write);
+
+    session.stderr
+        .cast<List<int>>()
+        .transform(Utf8Decoder())
+        .listen(terminal.write);*/
+    SSHLoadingFinished = true;
+  }
+  @override
+  Widget build(BuildContext context) {
+    if(SSHLoadingFinished == false){
+      return LoadingWidget();
+    }
+    else if(client!=null){
+      return Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: StreamBuilder(
+          stream: readDistanceStream(client, widget.trig, widget.echo),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if(!snapshot.hasData){
+              print("loading");
+              return const LoadingWidget();
+            }
+            else if(snapshot.hasData && snapshot.data?[0] != "T"){
+              return Padding(
+                  padding: EdgeInsets.all(15.0),
+                child: Container(
+                  decoration: BoxDecoration( borderRadius: BorderRadius.circular(24.0), color: Colors.grey[900] ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25.0),
+                    child: Center(child: Text('${snapshot.data}', style: TextStyle(color: Colors.orange),)),
+
+                  ),
+                ),
+              );
+              
+              //return Text('${snapshot.data}');
+            }
+            else if(snapshot.hasData && snapshot.data?[0] == "T"){
+              return Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Container(
+                  decoration: BoxDecoration( borderRadius: BorderRadius.circular(24.0), color: Colors.grey[900] ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 25.0),
+                    child: Center(child: Text('...', style: TextStyle(color: Colors.orange),)),
+
+                  ),
+                ),
+              );
+
+              //return Text('${snapshot.data}');
+            }
+            return const CircularProgressIndicator();
+
+          },
+        )
+      );
+    }
+    else{
+      return CircularProgressIndicator();
     }
   }
 }
