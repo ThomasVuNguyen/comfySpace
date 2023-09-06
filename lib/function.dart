@@ -266,6 +266,7 @@ Future<void> createHostInfo() async{
     await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');});
   var createTable = await comfySpacedb.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');
 }
+
 Future<void> createSpace(String spaceName, String host, String user, String password) async { //save to local database
   String dbName = 'comfySpace.db';
   String spaceNameAdd = "'$spaceName'"; String hostAdd = "'$host'"; String userAdd = "'$user'"; String passwordAdd = "'$password'";
@@ -302,6 +303,7 @@ Future<void> checkDB(String dbName, String spaceName)async {
   List<Map> list = await database.rawQuery('SELECT * FROM $spaceName');
   print(list);
 }
+
 Future<List<Map<String, Object?>>> checkHostInfo(String dbName) async{
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
@@ -329,9 +331,11 @@ Future<List<List<String>>> renderer(String spaceName) async{
   var sizeYMap = await database.query(spaceName, columns: ['size_y']);
   var positionMap = await database.query(spaceName, columns: ['position']);
   var commandMap = await database.query(spaceName, columns: ['command']);
+
   List<String> buttonList = []; List<String> sizeXList = []; List<String> sizeYList = []; List<String> positionList = []; List<String> commandList =[];
   for (int i = 0; i < buttonMap.length; i++){
-    if(prohibitedTable.contains(buttonMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), "")!=true ) == false){
+    if(buttonMap[i].values.toList().toString()!='android_metadata'){
+      print("new space added ${buttonMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), "")}");
       buttonList.add(buttonMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
       sizeXList.add(sizeXMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
       sizeYList.add(sizeYMap[i].values.toList().toString().replaceAll(RegExp(r'\[|\]'), ""));
@@ -342,12 +346,14 @@ Future<List<List<String>>> renderer(String spaceName) async{
       print("info caught");
     }
   }
+
   int indexDelete = buttonList.indexOf('hostInfo');
   var deletebutton = buttonList.removeAt(indexDelete); sizeXList.removeAt(indexDelete); sizeYList.removeAt(indexDelete); positionList.removeAt(indexDelete); commandList.removeAt(indexDelete);
   var listTotal = [buttonList, sizeXList, sizeYList, positionList, commandList];
   print(deletebutton);
   return listTotal;
 }
+
 
 Future<void> addButton(String dbName, String spaceName, String name, int size_x, int size_y, int position, String command, String buttonType) async{
   var dbPath = await getDatabasesPath();
@@ -362,7 +368,7 @@ Future<void> addButton(String dbName, String spaceName, String name, int size_x,
 }
 
 Future<List<String>> updateSpaceList(String dbName) async{
-  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace'];
+  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace','android_metadata'];
   var dbName = 'comfySpace.db';
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
@@ -377,8 +383,28 @@ Future<List<String>> updateSpaceList(String dbName) async{
     if(prohibitedTable.contains(mapping['name']) == false){
       var x = listTable.add(mapping['name']);
     }}
-  var y = listTable.removeAt(0); //remove android_metadata
   return listTable;
+}
+
+Stream<List<String>> updateSpaceListStream(String dbName) async*{
+  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace','android_metadata'];
+  var dbName = 'comfySpace.db';
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE defaultSpace(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
+  );
+  List<Map> listTableMap = await database.rawQuery('SELECT * FROM sqlite_master ORDER BY name;');
+  List<String> listTable = [];
+  for (var mapping in listTableMap){
+    if(prohibitedTable.contains(mapping['name']) == false){
+      var x = listTable.add(mapping['name']);
+    }}
+  print("working");
+  yield listTable;
+  updateSpaceListStream(dbName);
 }
 
 Future<void> deleteSpace(String dbName, String spaceName) async {

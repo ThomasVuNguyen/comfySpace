@@ -8,9 +8,11 @@ import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/pages/Experimental.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
 import 'package:comfyssh_flutter/state.dart';
+import 'package:comfyssh_flutter/states/spaceState.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -35,8 +37,9 @@ const bgcolor = Color(0xffFFFFFF);const textcolor = Color(0xff000000);const subc
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   memoryCheck();
+  Bloc.observer = const spaceListStateObserver();
   //reAssign();
-  runApp( ProviderScope(child: const MyApp()));
+  runApp(MyApp());
   createHostInfo();
 }  //main function, execute MyApp
 
@@ -131,7 +134,7 @@ class _WelcomePage extends State<Welcome>{
                     child: Text("Done", style: GoogleFonts.poppins(fontSize: 18),),
                     onPressed: (){
                       newName(nickname);
-                      newHost(hostname!);
+                      newHost(hostname);
                       newUser(username);
                       newPass(password);
                       newDistro(currentDistro);
@@ -546,29 +549,35 @@ class comfySpace extends StatefulWidget {
 }
 
 class _comfySpaceState extends State<comfySpace> {
+
   @override
   void initState(){
-    setState(() {});
     super.initState();
+    setState(() {});
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer(
-          width: 0,
-        ),
         appBar: AppBar(
           title: const Text("ComfySpace"),
           backgroundColor: Color(0xffF4BF56),
           toolbarHeight: 88,
           actions: <Widget>[
-            IconButton(onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) =>  const testPage()),
-              );
-            }, icon: Icon(Icons.flag)),
-            IconButton(onPressed: () async {
+            IconButton(
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  const Welcome()),
+                );
+              },
+              icon: Icon(Icons.flag),
+            ),
+            IconButton(onPressed: () {
               setState(() {});
               String testHost = checkHostInfo('comfySpace.db').toString();
               print(testHost);
@@ -618,11 +627,18 @@ class _comfySpaceState extends State<comfySpace> {
                 ),
                 actions: <Widget>[
                   TextButton(
-                      onPressed: () async{
+                      onPressed: () {
                         createSpace(spaceName, hostInfo, userInfo, passwordInfo );
-                        Future.delayed(const Duration(seconds: 5));
+                        Future.delayed(const Duration(milliseconds: 50), (){
+                          setState(() {
+                          });
+                        });
                         Navigator.pop(context);
-                        setState(() {});
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
+                        //setState(() {});
+
+
+
                       },
                       child: const Text("save")
                   )
@@ -633,35 +649,35 @@ class _comfySpaceState extends State<comfySpace> {
         ),
         body: Padding(
           padding: const EdgeInsets.only(top:43),
-          child: StreamBuilder(
-            stream: Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
-            initialData: const [],
-            builder: (context, AsyncSnapshot snapshot){
-              if(snapshot.connectionState != ConnectionState.done){
-                print("state issue");
-                return const ColoredBox(color: Colors.red);
-              }
-              else if(!snapshot.hasData){
-                return const CircularProgressIndicator();
-              }
-              else if(snapshot.hasData){
-                print("has data");
-                final currentSpaceList = snapshot.data;
-                return ListView.builder(
-                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
-                    itemCount: currentSpaceList.length,
-                    itemBuilder: (context, index){
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: spaceTile(spaceName: currentSpaceList[index]),
-                      );
-                    });
-              }
-              print("loading");
-              return Text("loading");
-            },
-          ),
+          child: FutureBuilder(
+            future: updateSpaceList('comfySpace.db'),
+            //updateSpaceListStream('comfySpace.db'),
+      //Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
+      initialData: const [],
+      builder: (context, AsyncSnapshot snapshot){
+        /*if(snapshot.connectionState != ConnectionState.done){
+          print("state issue");
+          return const ColoredBox(color: Colors.red);
+        }
+        else if(!snapshot.hasData){
+          return const CircularProgressIndicator();
+        }*/
+        if(snapshot.hasData){
+          print("has data");
+          return ListView.builder(
+              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index){
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: spaceTile(spaceName: snapshot.data[index]),
+                );
+              });
+        }
+        return Text("loading");
+      },
+    ),
         )
     );
   }
@@ -826,7 +842,7 @@ class _spacePageState extends State<spacePage> {
                   });
                 }
             ),
-            SpeedDialChild(
+            /*SpeedDialChild(
                 child: Icon(Icons.refresh),
                 onTap: (){
                   late String servoPin;
@@ -861,7 +877,7 @@ class _spacePageState extends State<spacePage> {
                   });
                 }
 
-            ),
+            ),*/
             SpeedDialChild(
               child: Icon(Icons.stairs),
               onTap: (){
@@ -987,7 +1003,7 @@ class _spacePageState extends State<spacePage> {
                   height: 100,
                     child: TerminalView(terminal)),
               ),
-              SizedBox(height: 64,),
+              const SizedBox(height: 64,),
               Expanded(
                 child: FutureBuilder(
                     future: buttonRenderer('comfySpace.db', widget.spaceName),
