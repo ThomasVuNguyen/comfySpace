@@ -160,8 +160,6 @@ class _WelcomePage extends State<Welcome>{
             ),
             elevation: 0,
             backgroundColor: bgcolor,
-            // title: const Text("My Hosts", style: TextStyle( color: Colors.black,),),
-            //backgroundColor: bgcolor,
             actionsIconTheme: const IconThemeData(
                 size: 30.0,
                 color: Colors.white,
@@ -563,27 +561,39 @@ class _comfySpaceState extends State<comfySpace> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("ComfySpace"),
-          backgroundColor: Color(0xffF4BF56),
-          toolbarHeight: 88,
-          actions: <Widget>[
-            IconButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) =>  const Welcome()),
-                );
-              },
-              icon: Icon(Icons.flag),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(64.0),
+          child: AppBar(
+            automaticallyImplyLeading: false,
+            shape: const Border(bottom: BorderSide(color: textcolor, width:2)),
+            title: Row(
+              children: <Widget>[
+                const SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor,)),),
+                Text('comfySpace', style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),)
+              ],
             ),
-            IconButton(onPressed: () {
-              setState(() {});
-              String testHost = checkHostInfo('comfySpace.db').toString();
-              print(testHost);
-            }, icon: const Icon(Icons.update))
-          ],
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarColor: bgcolor,
+            ),
+            elevation: 0, backgroundColor: bgcolor,
+            actionsIconTheme: const IconThemeData(size: 30, color: Colors.black, opacity: 10.0),
+            actions: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  child: Icon(Icons.delete, color: Colors.black,),
+                  onTap: (){
+                    setState(() {});
+                    String testHost = checkHostInfo('comfySpace.db').toString();
+                    print(testHost);
+                  },
+                ),
+              ),
+
+            ],
+          ),
         ),
+
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.create),
           onPressed: () {
@@ -629,16 +639,12 @@ class _comfySpaceState extends State<comfySpace> {
                   TextButton(
                       onPressed: () {
                         createSpace(spaceName, hostInfo, userInfo, passwordInfo );
-                        Future.delayed(const Duration(milliseconds: 50), (){
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
+                        Future.delayed(const Duration(milliseconds: 100), (){
                           setState(() {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
                           });
                         });
-                        Navigator.pop(context);
-                        //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-                        //setState(() {});
-
-
-
                       },
                       child: const Text("save")
                   )
@@ -668,7 +674,7 @@ class _comfySpaceState extends State<comfySpace> {
               physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
               padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
               itemCount: snapshot.data.length,
-              itemBuilder: (context, index){
+              itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: spaceTile(spaceName: snapshot.data[index]),
