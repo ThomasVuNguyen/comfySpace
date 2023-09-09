@@ -707,6 +707,7 @@ class _spacePageState extends State<spacePage> {
   void initState(){
     super.initState();
     print("welcome to ${widget.spaceName}");
+    initControl();
   }
   @override
   void dispose(){
