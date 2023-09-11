@@ -20,6 +20,7 @@
 
 
 **`Credit`**
+<br />
 <a href="https://iconscout.com/icons/space-dog" target="_blank">Free Space Dog  Icon</a> by <a href="https://iconscout.com/contributors/chanut-is-industries" target="_blank">Rafiico Creative</a><br />
 <a href="https://iconscout.com/icons/astronaut" target="_blank">Free Astronaut  Icon</a> by <a href="https://iconscout.com/contributors/chanut-is-industries">Rafiico Creative</a> on <a href="https://iconscout.com">IconScout</a><br />
 <a href="https://iconscout.com/icons/moon-surface" target="_blank">Free Moon Surface  Icon</a> by <a href="https://iconscout.com/contributors/chanut-is-industries" target="_blank">Rafiico Creative</a><br />
