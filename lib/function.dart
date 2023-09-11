@@ -265,6 +265,7 @@ Future<void> createHostInfo() async{
       onCreate: (Database db, version) async {
     await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');});
   var createTable = await comfySpacedb.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');
+  print('host added');
 }
 
 Future<void> createSpace(String spaceName, String host, String user, String password) async { //save to local database

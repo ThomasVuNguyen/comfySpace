@@ -75,5 +75,6 @@ flutter:
     - assets/icons/
     - assets/icons/distro/
     - database/
+    - assets/icons/space-dog.png
 
 

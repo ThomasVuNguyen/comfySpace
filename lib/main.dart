@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/servo.dart';
+import 'package:comfyssh_flutter/components/custom_ui_components.dart';
 import 'package:comfyssh_flutter/components/custom_widgets.dart';
 import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:xterm/xterm.dart';
 
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
@@ -37,7 +39,9 @@ const bgcolor = Color(0xffFFFFFF);const textcolor = Color(0xff000000);const subc
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   memoryCheck();
-  Bloc.observer = const spaceListStateObserver();
+  //Bloc.observer = const spaceListStateObserver();
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
   //reAssign();
   runApp(MyApp());
   createHostInfo();
@@ -564,8 +568,16 @@ class _comfySpaceState extends State<comfySpace> {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(64.0),
           child: AppBar(
-            automaticallyImplyLeading: false,
+            //automaticallyImplyLeading: false,
             shape: const Border(bottom: BorderSide(color: textcolor, width:2)),
+            leading: IconButton(
+              icon: Image.asset('assets/icons/space-dog.png', height: 40,),
+              onPressed: (){
+                showDialog(context: context, builder: (BuildContext context){
+                  return Credit();
+                });
+              },
+            ),
             title: Row(
               children: <Widget>[
                 const SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor,)),),
@@ -764,33 +776,6 @@ class _spacePageState extends State<spacePage> {
                             ),
                             textInputAction: TextInputAction.next,
                           ),
-                          /*TextField(
-                    onChanged: (sizeX){
-                      buttonSizeX = int.parse(sizeX);
-                    },
-                    decoration: const InputDecoration(
-                      hintText: 'sizeX',
-                    ),
-                    textInputAction: TextInputAction.next,
-                  ),
-                  TextField(
-                    onChanged: (sizeY){
-                      buttonSizeY = int.parse(sizeY);
-                    },
-                    decoration: const InputDecoration(
-                      hintText: 'sizeY',
-                    ),
-                    textInputAction: TextInputAction.next,
-                  ),
-                  TextField(
-                    onChanged: (btnPosition){
-                      buttonPosition = int.parse(btnPosition);
-                    },
-                    decoration: const InputDecoration(
-                      hintText: 'position',
-                    ),
-                    textInputAction: TextInputAction.next,
-                    ),*/
                           TextField(
                             onChanged: (btnCommand){
                               buttonCommand = btnCommand;
@@ -1081,7 +1066,7 @@ class _spacePageState extends State<spacePage> {
                                   );
                                 }
                                 else{
-                                  return ListTile(
+                                  /*return ListTile(
                                     title: Text(snapshot.data![index].toString()),
                                     tileColor: Colors.grey,
                                     onTap: () async {
@@ -1156,6 +1141,12 @@ class _spacePageState extends State<spacePage> {
                                       //deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
                                       setState(() {});
                                     },
+                                  );*/
+                                  //return CustomToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: snapshot.data![index]["command"], commandOff: snapshot.data![index]["command"], terminal: terminal);
+                                  return GestureDetector(
+                                    onLongPress: (){deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]); setState(() {
+                                    });},
+                                    child: CustomToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: snapshot.data![index]["command"], commandOff: snapshot.data![index]["command"], terminal: terminal),
                                   );
                                 }
                               }),

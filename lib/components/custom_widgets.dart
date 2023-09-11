@@ -287,7 +287,7 @@ class _spaceTileState extends State<spaceTile> {
               height: 128, width: 106,
               child: IconButton(
                 onPressed: (){},
-                icon: const Icon(Icons.code, size: 50,)
+                icon: const Icon(Icons.terminal, size: 50, color: Colors.white,)
               ),
             ),
             SizedBox(
@@ -377,7 +377,6 @@ class _LedToggleState extends State<LedToggle> {
     final shell = await client.shell();
     await shell.done;
     client.close();
-
   }
   @override
   Widget build(BuildContext context) {
@@ -545,7 +544,6 @@ class _DistanceSensorState extends State<DistanceSensor> {
     });
     super.initState();
     initClient();
-    //SSHLoadingFinished = true;
   }
   @override
   void dispose(){
@@ -637,6 +635,107 @@ class _DistanceSensorState extends State<DistanceSensor> {
     }
     else{
       return CircularProgressIndicator();
+    }
+  }
+}
+
+class CustomToggleButton extends StatefulWidget {
+  const CustomToggleButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.commandOn, required this.commandOff, required this.terminal});
+  final String name; final String hostname; final String username; final String password; final String commandOn; final String commandOff; final Terminal terminal;
+  @override
+  State<CustomToggleButton> createState() => _CustomToggleButtonState();
+}
+
+class _CustomToggleButtonState extends State<CustomToggleButton> {
+  bool SSHLoaded = false; bool toggleState = false; late SSHClient client;
+  @override
+  void initState(){
+    print(widget.commandOn);
+    super.initState();
+    initClient();
+  }
+  void dispose(){
+    super.dispose();
+    closeClient();
+  }
+  Future<void> initClient() async{
+    client = SSHClient(
+      await SSHSocket.connect(widget.hostname, 22),
+      username: widget.username,
+      onPasswordRequest: () => widget.password,
+    );
+    print("initClient username: ${client.username}");
+    setState(() {SSHLoaded = true;});
+  }
+  Future<void> closeClient() async{
+    final shell = await client.shell();
+    await shell.done;
+    client.close();
+
+  }
+  Future<void> sendCommand() async{
+    if (toggleState == false){
+      var command = await client.run(widget.commandOn);
+      widget.terminal.write('${widget.commandOn}\r\n');
+      toggleState =!toggleState;
+    }
+    else{
+      var command = await client.run(widget.commandOff);
+      widget.terminal.write('${widget.commandOff}\r\n');
+      toggleState =!toggleState;
+    }
+    setState(() {HapticFeedback.vibrate();});
+  }
+  @override
+  Widget build(BuildContext context) {
+    if (SSHLoaded == true){
+      return Padding(
+        padding: EdgeInsets.all(15.0),
+        child: GestureDetector(
+          onTap: (){
+            sendCommand();
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24.0),
+              color: toggleState? Colors.grey[900] : const Color.fromARGB(44, 164, 167, 189),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 25.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      alignment: Alignment.topCenter,
+                      child: IconButton(
+                        icon: Icon(Icons.add, color: toggleState? Colors.white :Colors.green.shade700,),
+                        onPressed: (){
+                          sendCommand();
+
+                        },
+                      )
+                  ),
+                  Row(
+                    children: [
+                      Expanded(child: Padding(
+                        padding: EdgeInsets.only(left: 25.0),
+                        child: Text(widget.name,
+                          style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold, color: toggleState? Colors.white :Colors.black,
+                          ),),
+                      ))
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+
+      );
+    }
+    else{
+    return const LoadingWidget();
     }
   }
 }
