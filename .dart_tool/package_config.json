@@ -15,7 +15,7 @@
     },
     {
       "name": "archive",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.3.8",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.3.9",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -818,7 +818,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-09-10T22:44:27.578263Z",
+  "generated": "2023-09-11T23:53:11.179345Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

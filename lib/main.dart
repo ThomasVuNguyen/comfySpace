@@ -20,6 +20,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:xterm/xterm.dart';
+import 'dart:io' show Platform;
+
 
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
 ValueNotifier<int> reloadState = ValueNotifier(0);
@@ -39,10 +41,13 @@ const bgcolor = Color(0xffFFFFFF);const textcolor = Color(0xff000000);const subc
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   memoryCheck();
-  //Bloc.observer = const spaceListStateObserver();
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
-  //reAssign();
+  //sqfliteFfiInit();
+  //databaseFactory = databaseFactoryFfi;
+  if (Platform.isWindows){
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+  reAssign();
   runApp(MyApp());
   createHostInfo();
 }  //main function, execute MyApp
