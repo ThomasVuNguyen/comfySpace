@@ -573,22 +573,16 @@ class _comfySpaceState extends State<comfySpace> {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(64.0),
           child: AppBar(
-            //automaticallyImplyLeading: false,
+            titleSpacing: 20,
+            automaticallyImplyLeading: false,
             shape: const Border(bottom: BorderSide(color: textcolor, width:2)),
-            leading: IconButton(
-              icon: Image.asset('assets/icons/space-dog.png', height: 40,),
-              onPressed: (){
+            title: GestureDetector(
+              onTap: (){
                 showDialog(context: context, builder: (BuildContext context){
                   return Credit();
                 });
               },
-            ),
-            title: Row(
-              children: <Widget>[
-                const SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor,)),),
-                Text('comfySpace', style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),)
-              ],
-            ),
+                child: Text('ComfySpace', style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),)),
             systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarColor: bgcolor,
             ),
@@ -598,7 +592,7 @@ class _comfySpaceState extends State<comfySpace> {
               Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
-                  child: Icon(Icons.delete, color: Colors.black,),
+                  child: Icon(Icons.restart_alt, color: Colors.black),
                   onTap: (){
                     setState(() {});
                     String testHost = checkHostInfo('comfySpace.db').toString();
@@ -1000,7 +994,7 @@ class _spacePageState extends State<spacePage> {
                   height: 100,
                     child: TerminalView(terminal)),
               ),
-              const SizedBox(height: 64,),
+              const SizedBox(height: 32,),
               Expanded(
                 child: FutureBuilder(
                     future: buttonRenderer('comfySpace.db', widget.spaceName),

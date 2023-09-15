@@ -276,12 +276,13 @@ class _spaceTileState extends State<spaceTile> {
   Widget build(BuildContext context) {
     return Material(
       child: Padding(
-          padding: const EdgeInsets.only(bottom: 20.0),
+          padding: const EdgeInsets.only(bottom: 10.0),
         child: Row(
           children: [
-            Container(
+            /*Container(
               decoration: const BoxDecoration(
                 color: textcolor,
+
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(0.0), bottomLeft: Radius.circular(8.0), bottomRight: Radius.circular(0.0))
               ),
               height: 128, width: 106,
@@ -289,11 +290,12 @@ class _spaceTileState extends State<spaceTile> {
                 onPressed: (){},
                 icon: const Icon(Icons.terminal, size: 50, color: Colors.white,)
               ),
-            ),
+            ),*/
             SizedBox(
-              width: MediaQuery.of(context).size.width-146, height: 128,
+              //width: MediaQuery.of(context).size.width-146, height: 128,
+              width: MediaQuery.of(context).size.width-40, height: 128,
               child: ListTile(
-                contentPadding: EdgeInsets.only(top:0.0, bottom: 0.0),
+                contentPadding: EdgeInsets.only(top:10.0, bottom: 0.0, left: 17.0),
                 trailing: Container(
                   width: 40,
                   child: Column(
@@ -310,10 +312,10 @@ class _spaceTileState extends State<spaceTile> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => spacePage(spaceName: widget.spaceName, hostname: hostNameHolder, username: userNameHolder, password: passwordHolder)),);
                   print("$userNameHolder@$hostNameHolder");
                 },
-                shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color: textcolor), borderRadius: BorderRadius.only(topLeft: Radius.circular(0.0), bottomLeft: Radius.circular(0.0), topRight: Radius.circular(8.0), bottomRight: Radius.circular(8.0)), ),
-                title: Padding(
-                  padding: const EdgeInsets.only(left: 15.0, top: 23, bottom: 23),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
+                shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color: textcolor), borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), bottomLeft: Radius.circular(8.0), topRight: Radius.circular(8.0), bottomRight: Radius.circular(8.0)), ),
+                //title: Text(widget.spaceName, style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 20),),
+                //subtitle: hostInfoLoaded? Text('$userNameHolder @ $hostNameHolder', style: GoogleFonts.poppins(color: textcolor, fontSize: 16), ) : Text(''),
+                  title: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(widget.spaceName, style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 20),),
                       hostInfoLoaded? Text('$userNameHolder @ $hostNameHolder', style: GoogleFonts.poppins(color: textcolor, fontSize: 16), ) : Text('')
@@ -321,7 +323,6 @@ class _spaceTileState extends State<spaceTile> {
                   ),
                 ),
               ),
-            )
           ],
         ),
       ),
@@ -381,65 +382,82 @@ class _LedToggleState extends State<LedToggle> {
   @override
   Widget build(BuildContext context) {
     if(SSHLoadingFinished == true){
-      return Padding(
-        padding: EdgeInsets.all(15.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24.0),
-          color: toggleState ? Colors.grey[900] : const Color.fromARGB(44, 164, 167, 189),
-        ),
+      return GestureDetector(
+        onTap: () async {
+          if (toggleState == true){
+            widget.terminal.write('LED ${widget.pin} off \r\n');
+          }
+          else{
+            widget.terminal.write('LED ${widget.pin} on \r\n');
+          }
+          setState((){
+            toggleState = !toggleState;
+            print(toggleState.toString());
+          });
+          HapticFeedback.vibrate();
+          var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
+        },
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                alignment: Alignment.topCenter,
-                child: Icon(Icons.add, color: toggleState? Colors.white :Colors.grey.shade700,),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: Padding(
-                    padding: EdgeInsets.only(left: 25.0),
-                        child: Text(
-                          widget.name,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: toggleState? Colors.white :Colors.black,
+          padding: EdgeInsets.all(15.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 2),
+            borderRadius: BorderRadius.circular(24.0),
+            color: toggleState ? Colors.grey[900] : const Color.fromARGB(44, 164, 167, 189),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 25.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  alignment: Alignment.topCenter,
+                  child: Icon(toggleState? Icons.emoji_objects :Icons.lightbulb, color: toggleState? Colors.white :Colors.grey.shade700,),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                        child: Padding(
+                      padding: EdgeInsets.only(left: 25.0),
+                          child: Text(
+                            widget.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: toggleState? Colors.white :Colors.black,
+                            ),
                           ),
-                        ),
-                  )),
-                  Transform.rotate(
-                      angle: pi/2,
-                    child: CupertinoSwitch(
-                      activeColor: Colors.blue,
-                      value: toggleState,
-                      onChanged: (bool? value) async {
-                        if (value == true){
-                          widget.terminal.write('LED ${widget.pin} on \r\n');
-                        }
-                        else{
-                          widget.terminal.write('LED ${widget.pin} off \r\n');
-                        }
+                    )),
+                    Transform.rotate(
+                        angle: pi/2,
+                      child: CupertinoSwitch(
+                        activeColor: Colors.blue,
+                        value: toggleState,
+                        onChanged: (bool? value) async {
+                          if (value == true){
+                            widget.terminal.write('LED ${widget.pin} on \r\n');
+                          }
+                          else{
+                            widget.terminal.write('LED ${widget.pin} off \r\n');
+                          }
 
-                        setState((){
-                          toggleState = value!;
-                          print(toggleState.toString());
-                        });
-                        HapticFeedback.vibrate();
-                        var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
-                      },
-                    ),
-                  )
-                ],
-              )
-            ],
+                          setState((){
+                            toggleState = value!;
+                            print(toggleState.toString());
+                          });
+                          HapticFeedback.vibrate();
+                          var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
+                        },
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
-      ),
-    );}
+    ),
+      );}
     else{
       return const LoadingWidget();
     }
