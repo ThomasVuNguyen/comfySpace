@@ -34,8 +34,22 @@ class _comfyAppBarState extends State<comfyAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
+
+      actions: [
+        Row(
+          children: [
+            IconButton(onPressed: (){}, icon: Icon(Icons.menu), iconSize: 40,),
+            SizedBox(width: 10,)
+          ],
+        )
+      ],
+      iconTheme: IconThemeData(
+        color: textcolor,
+      ),
       shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
       toolbarHeight: 64,
+      titleSpacing: 20,
       title: Row(
         children: <Widget>[
           const SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor)),),
@@ -567,7 +581,7 @@ class _DistanceSensorState extends State<DistanceSensor> {
   void dispose(){
     super.dispose();
     client.close();
-    timer?.cancel();
+    timer.cancel();
   }
   Future<void> updateData() async{
     data = await readDistance(client, widget.trig, widget.echo);
@@ -694,6 +708,7 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
   Future<void> sendCommand() async{
     if (toggleState == false){
       var command = await client.run(widget.commandOn);
+      String commandString = utf8.decode(command);
       widget.terminal.write('${widget.commandOn}\r\n');
       toggleState =!toggleState;
     }

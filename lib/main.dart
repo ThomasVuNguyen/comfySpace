@@ -18,6 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:xterm/xterm.dart';
 import 'dart:io' show Platform;
@@ -38,6 +39,7 @@ String currentDistro = colorMap.keys.first;
 List<String> componentTypeList = ['LED', 'RGBLED', 'Servo'];
 List<String> buttonTypeList = ['toggleButton', 'slider', 'slider'];
 const bgcolor = Color(0xffFFFFFF);const textcolor = Color(0xff000000);const subcolor = Color(0xff000000);const keycolor = Color(0xff656366);const accentcolor = Color(0xff1C3D93);const warningcolor = Color(0xffCE031B);
+const keyGreen = Color(0xff3DDB87);
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   memoryCheck();
@@ -556,7 +558,7 @@ class comfySpace extends StatefulWidget {
 }
 
 class _comfySpaceState extends State<comfySpace> {
-
+  int bottomBarIndex = 0;
   @override
   void initState(){
     super.initState();
@@ -570,6 +572,13 @@ class _comfySpaceState extends State<comfySpace> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            children: [
+              IconButton(onPressed: (){}, icon: Icon(Icons.home))
+            ],
+          ),
+        ),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(64.0),
           child: AppBar(
@@ -604,9 +613,14 @@ class _comfySpaceState extends State<comfySpace> {
             ],
           ),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
 
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.create),
+          shape: BeveledRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+          ),
+          tooltip: 'Add New Space',
+          child: const Icon(Icons.add),
           onPressed: () {
             print("creating");
             String spaceName = 'space1'; late String hostInfo; late String userInfo; late String passwordInfo;
@@ -708,12 +722,13 @@ class spacePage extends StatefulWidget {
 }
 
 class _spacePageState extends State<spacePage> {
-  late final terminal = Terminal();
+  late final terminal = Terminal(maxLines: 6,);
   Map<int, bool> toggleState = {};
   Map<int, int> servoState = {};
   late SSHClient clientControl;
   final double horizontalPadding = 40;
   final double verticalPadding = 25;
+
   @override
   void initState(){
     super.initState();
@@ -739,6 +754,8 @@ class _spacePageState extends State<spacePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(64),
           child: comfyAppBar(title: widget.spaceName)),
@@ -989,10 +1006,17 @@ class _spacePageState extends State<spacePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IgnorePointer(
+              const SizedBox(height: 20,),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, right: 15.0),
                 child: Container(
-                  height: 100,
-                    child: TerminalView(terminal)),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: keyGreen, width: 5),
+                      borderRadius: BorderRadius.circular(0.0),
+                      //color: Colors.black,
+                    ),
+                  height: 120,
+                    child: TerminalView(terminal, readOnly: true, autoResize: true, padding: const EdgeInsets.only(left: 20, top: 10),textStyle: const TerminalStyle(fontSize: 13,))),
               ),
               const SizedBox(height: 32,),
               Expanded(
@@ -1036,7 +1060,6 @@ class _spacePageState extends State<spacePage> {
                                           child: Slider(
                                             onChanged: (newAngle) async {
                                               setState(() {servoState[index] = newAngle.toInt();});
-
                                               var command = await clientControl.run(servoAngle(snapshot.data![index]["command"], servoState[index]!));
                                             }, value: servoState[index]!.toDouble(),
                                             min: 0.0, max: 180.0, divisions: 4,

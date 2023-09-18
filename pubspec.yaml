@@ -44,6 +44,7 @@ dependencies:
   equatable: ^2.0.5
   flutter_riverpod: ^2.3.6
   flutter_slidable: ^3.0.0
+  salomon_bottom_bar: ^3.3.2
 
 dev_dependencies:
   flutter_test:
