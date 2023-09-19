@@ -7,6 +7,7 @@ import 'package:comfyssh_flutter/components/custom_widgets.dart';
 import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/pages/Experimental.dart';
+import 'package:comfyssh_flutter/pages/settings.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
 import 'package:comfyssh_flutter/state.dart';
 import 'package:comfyssh_flutter/states/spaceState.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:xterm/xterm.dart';
@@ -559,6 +561,43 @@ class comfySpace extends StatefulWidget {
 
 class _comfySpaceState extends State<comfySpace> {
   int bottomBarIndex = 0;
+  final List<Widget> pageLists = [
+    Padding(
+      padding: const EdgeInsets.only(top:43),
+      child: FutureBuilder(
+        future: updateSpaceList('comfySpace.db'),
+        //updateSpaceListStream('comfySpace.db'),
+        //Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
+        initialData: const [],
+        builder: (context, AsyncSnapshot snapshot){
+          /*if(snapshot.connectionState != ConnectionState.done){
+          print("state issue");
+          return const ColoredBox(color: Colors.red);
+        }
+        else if(!snapshot.hasData){
+          return const CircularProgressIndicator();
+        }*/
+          if(snapshot.hasData){
+            print("has data");
+            return ListView.builder(
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: spaceTile(spaceName: snapshot.data[index]),
+                  );
+                });
+          }
+          return Text("loading");
+        },
+      ),
+    ),
+    SettingPage(),
+    Center(child: Text("documentation"),),
+    Center(child: Text("about us"),),
+  ];
   @override
   void initState(){
     super.initState();
@@ -572,11 +611,36 @@ class _comfySpaceState extends State<comfySpace> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: BottomAppBar(
-          child: Row(
-            children: [
-              IconButton(onPressed: (){}, icon: Icon(Icons.home))
-            ],
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            color: bgcolor,
+            border: Border(top: BorderSide(color: borderColor, width: 2.0),)
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10,),
+              child: GNav(
+                rippleColor: Colors.blue, haptic: true, duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutExpo,
+                backgroundColor: Colors.white, color: Colors.black, activeColor: Colors.white, tabBackgroundColor: Colors.black,
+                tabActiveBorder: Border.all(color: Colors.black, width: 1), tabBorderRadius: 10.0,
+                padding: const EdgeInsets.all(16),
+                gap: 8,
+                tabs: [
+                  GButton(icon: Icons.home, ),
+                  GButton(icon: Icons.settings, ),
+                  GButton(icon: Icons.help_center, ),
+                  GButton(icon: Icons.more, ),
+                ],
+                selectedIndex: bottomBarIndex,
+                onTabChange: (index){
+                  //print(index);
+                  setState(() {
+                    bottomBarIndex = index;
+                  });
+                },
+              ),
+            ),
           ),
         ),
         appBar: PreferredSize(
@@ -613,8 +677,7 @@ class _comfySpaceState extends State<comfySpace> {
             ],
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-
+        //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButton: FloatingActionButton(
           shape: BeveledRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
@@ -678,38 +741,7 @@ class _comfySpaceState extends State<comfySpace> {
             }); },
 
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(top:43),
-          child: FutureBuilder(
-            future: updateSpaceList('comfySpace.db'),
-            //updateSpaceListStream('comfySpace.db'),
-      //Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
-      initialData: const [],
-      builder: (context, AsyncSnapshot snapshot){
-        /*if(snapshot.connectionState != ConnectionState.done){
-          print("state issue");
-          return const ColoredBox(color: Colors.red);
-        }
-        else if(!snapshot.hasData){
-          return const CircularProgressIndicator();
-        }*/
-        if(snapshot.hasData){
-          print("has data");
-          return ListView.builder(
-              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: spaceTile(spaceName: snapshot.data[index]),
-                );
-              });
-        }
-        return Text("loading");
-      },
-    ),
-        )
+        body: pageLists[bottomBarIndex],
     );
   }
 }
