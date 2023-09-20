@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:comfyssh_flutter/comfyScript/HC_SR04.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
+import 'package:comfyssh_flutter/components/pop_up.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -217,7 +218,8 @@ class _spaceTileState extends State<spaceTile> {
   }
   void editPrompt(){
     showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
+      return EditSpaceDialog(spaceName: widget.spaceName);
+      /*return AlertDialog(
         title: const Text("Edit Space"),
         content: Column(
           children: [
@@ -273,7 +275,7 @@ class _spaceTileState extends State<spaceTile> {
             });
           }, child: const Text("Rename")),
         ],
-      );
+      );*/
     });
   }
   Future<void> getSpaceInfo(String spaceName) async{
@@ -631,7 +633,7 @@ class _DistanceSensorState extends State<DistanceSensor> {
             }
             else if(snapshot.hasData && snapshot.data?[0] != "T"){
               return Padding(
-                  padding: EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(15.0),
                 child: Container(
                   decoration: BoxDecoration( borderRadius: BorderRadius.circular(24.0), color: Colors.grey[900] ),
                   child: Padding(

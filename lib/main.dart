@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/servo.dart';
+import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
 import 'package:comfyssh_flutter/components/custom_ui_components.dart';
 import 'package:comfyssh_flutter/components/custom_widgets.dart';
+import 'package:comfyssh_flutter/components/pop_up.dart';
 import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/pages/Experimental.dart';
@@ -626,7 +628,7 @@ class _comfySpaceState extends State<comfySpace> {
                 tabActiveBorder: Border.all(color: Colors.black, width: 1), tabBorderRadius: 10.0,
                 padding: const EdgeInsets.all(16),
                 gap: 8,
-                tabs: [
+                tabs: const [
                   GButton(icon: Icons.home, ),
                   GButton(icon: Icons.settings, ),
                   GButton(icon: Icons.help_center, ),
@@ -652,7 +654,7 @@ class _comfySpaceState extends State<comfySpace> {
             title: GestureDetector(
               onTap: (){
                 showDialog(context: context, builder: (BuildContext context){
-                  return Credit();
+                  return const Credit();
                 });
               },
                 child: Text('ComfySpace', style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),)),
@@ -679,16 +681,18 @@ class _comfySpaceState extends State<comfySpace> {
         ),
         //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButton: FloatingActionButton(
-          shape: BeveledRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
           ),
           tooltip: 'Add New Space',
           child: const Icon(Icons.add),
           onPressed: () {
             print("creating");
-            String spaceName = 'space1'; late String hostInfo; late String userInfo; late String passwordInfo;
+
+            //String spaceName = 'space1'; late String hostInfo; late String userInfo; late String passwordInfo;
             showDialog(context: context, builder: (BuildContext context){
-              return AlertDialog(
+              return const NewSpaceDialog();
+              /*return AlertDialog(
                 title: const Text("Create a new space"),
                 content: Column(
                   children: [
@@ -737,8 +741,9 @@ class _comfySpaceState extends State<comfySpace> {
                       child: const Text("save")
                   )
                 ],
-              );
-            }); },
+              );*/
+            }
+            ); },
 
         ),
         body: pageLists[bottomBarIndex],
@@ -754,7 +759,9 @@ class spacePage extends StatefulWidget {
 }
 
 class _spacePageState extends State<spacePage> {
-  late final terminal = Terminal(maxLines: 6,);
+  late final terminal = Terminal(
+    maxLines: 6,
+  );
   Map<int, bool> toggleState = {};
   Map<int, int> servoState = {};
   late SSHClient clientControl;
@@ -786,8 +793,6 @@ class _spacePageState extends State<spacePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(64),
           child: comfyAppBar(title: widget.spaceName)),
@@ -1038,6 +1043,7 @@ class _spacePageState extends State<spacePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal),
               const SizedBox(height: 20,),
               Padding(
                 padding: const EdgeInsets.only(left: 15.0, right: 15.0),
