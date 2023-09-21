@@ -48,6 +48,7 @@ dependencies:
   google_nav_bar: ^5.0.6
   webview_flutter: ^4.2.4
   flutter_inappwebview: ^5.7.2+3
+  loading_animation_widget: ^1.2.0+4
 
 dev_dependencies:
   flutter_test:

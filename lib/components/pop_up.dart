@@ -101,8 +101,8 @@ class _NewSpaceDialogState extends State<NewSpaceDialog> {
               });
 
             },
-          color: accentcolor,
-          child: Text("Done", style: GoogleFonts.poppins(fontSize: 18)),
+          color: Colors.teal,
+          child: Text("Done", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
             )
       ],
 
@@ -197,17 +197,22 @@ class _EditSpaceDialogState extends State<EditSpaceDialog> {
       ),
       actions: <Widget>[
         Row(
-          children: [
-            TextButton(onPressed: (){
-              deleteSpace('comfySpace.db', widget.spaceName);
-              //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-              Future.delayed(const Duration(milliseconds: 100), (){
-                setState(() {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-                });
-              });
-              Navigator.pop(context);
-            }, child: Text("Delete")),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+            MaterialButton(
+                onPressed: (){
+                  deleteSpace('comfySpace.db', widget.spaceName);
+                  //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
+                  Future.delayed(const Duration(milliseconds: 100), (){
+                    setState(() {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
+                    });
+                  });
+                  Navigator.pop(context);
+                },
+              color: Colors.red,
+              child: Text("Delete", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
+            ),
             MaterialButton(
               onPressed: (){
                 editSpace('comfySpace.db', widget.spaceName, spaceNameHolder, hostNameHolder, usernameHolder, passwordHolder);
@@ -225,8 +230,8 @@ class _EditSpaceDialogState extends State<EditSpaceDialog> {
                 });
 
               },
-              color: accentcolor,
-              child: Text("Done", style: GoogleFonts.poppins(fontSize: 18)),
+              color: Colors.teal,
+              child: Text("Done", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
             ),
           ],
         )

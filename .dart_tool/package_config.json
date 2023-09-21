@@ -422,6 +422,12 @@
       "languageVersion": "2.15"
     },
     {
+      "name": "loading_animation_widget",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/loading_animation_widget-1.2.0+4",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
       "name": "logging",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/logging-1.2.0",
       "packageUri": "lib/",
@@ -860,7 +866,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-09-19T02:28:13.440163Z",
+  "generated": "2023-09-21T01:16:34.510128Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

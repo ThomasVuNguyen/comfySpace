@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:comfyssh_flutter/comfyScript/HC_SR04.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
+import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:comfyssh_flutter/components/pop_up.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/cupertino.dart';
@@ -346,15 +347,6 @@ class _spaceTileState extends State<spaceTile> {
   }
 }
 
-class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const CircularProgressIndicator();
-  }
-}
-
 class LedToggle extends StatefulWidget {
   const LedToggle({super.key, required this.spaceName, required this.name, required this.pin, required this.id, required this.hostname, required this.username, required this.password, required this.terminal});
   final String name;
@@ -475,7 +467,7 @@ class _LedToggleState extends State<LedToggle> {
     ),
       );}
     else{
-      return const LoadingWidget();
+      return const LoadingSpaceWidget();
     }
   }
 }
@@ -553,7 +545,7 @@ class _StepperMotorState extends State<StepperMotor> {
         ),
       );}
     else{
-      return const LoadingWidget();
+      return const LoadingSpaceWidget();
     }
   }
 }
@@ -619,7 +611,7 @@ class _DistanceSensorState extends State<DistanceSensor> {
   @override
   Widget build(BuildContext context) {
     if(SSHLoadingFinished == false){
-      return LoadingWidget();
+      return const LoadingSpaceWidget();
     }
     else if(client!=null){
       return Padding(
@@ -629,7 +621,7 @@ class _DistanceSensorState extends State<DistanceSensor> {
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if(!snapshot.hasData){
               print("loading");
-              return const LoadingWidget();
+              return const LoadingSpaceWidget();
             }
             else if(snapshot.hasData && snapshot.data?[0] != "T"){
               return Padding(
@@ -661,7 +653,7 @@ class _DistanceSensorState extends State<DistanceSensor> {
 
               //return Text('${snapshot.data}');
             }
-            return const CircularProgressIndicator();
+            return const LoadingSpaceWidget();
 
           },
         )
@@ -770,7 +762,7 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
       );
     }
     else{
-    return const LoadingWidget();
+    return LoadingSpaceWidget();
     }
   }
 }

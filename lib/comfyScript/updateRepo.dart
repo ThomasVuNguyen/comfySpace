@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,10 +55,6 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
     }
     client.close();
     setState(() {Finished = true;});
-    //var result = await client.run('rm -r comfyScript');
-    //terminal.write('${String.fromCharCodes(result)}\r\n');
-    //var resultDownload = await client.run('git clone https://github.com/ThomasVuNguyen/comfyScript.git');
-    //terminal.write('${String.fromCharCodes(resultDownload)}\r\n');
   }
   Future<void> updateRepoRoot(String hostname, String username, String password, Terminal terminal) async{
     SSHClient client = SSHClient(
@@ -95,8 +92,8 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
   Widget build(BuildContext context) {
     if (StrangeError == false){
       return Center(
-        child: Finished? Text("finished")
-            :Text("not finished"),
+        child: Finished? null
+            :LoadingWaveDots(),
       );
     }
     else{
@@ -105,3 +102,5 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
 
   }
 }
+
+
