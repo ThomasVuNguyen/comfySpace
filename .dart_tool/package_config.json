@@ -15,7 +15,7 @@
     },
     {
       "name": "archive",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.3.9",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.4.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -369,7 +369,7 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/image-4.0.17",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/image-4.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -825,7 +825,7 @@
     },
     {
       "name": "webview_flutter_wkwebview",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_wkwebview-3.7.4",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_wkwebview-3.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -866,7 +866,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-09-21T01:16:34.510128Z",
+  "generated": "2023-09-23T15:47:42.794981Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

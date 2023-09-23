@@ -797,13 +797,17 @@ class _spacePageState extends State<spacePage> {
           preferredSize: const Size.fromHeight(64),
           child: comfyAppBar(title: widget.spaceName)),
         backgroundColor: bgcolor,
-        floatingActionButton: SpeedDial(
-          icon: Icons.menu,
+        floatingActionButton:
+        //AddingButtonDial(databaseName: 'comfySpace.db', spaceName: widget.spaceName, ),
+        SpeedDial(
+          //animatedIcon: AnimatedIcons.event_add,
+          tooltip: "Add Button",
+          icon: Icons.add_circle,
           activeIcon: Icons.close,
           visible: true,
           closeManually: false,
           curve: Curves.bounceIn,
-          overlayColor: Colors.black,
+          overlayColor: Colors.black, backgroundColor: textcolor,
           onOpen: (){},onClose: (){},
           children: [
             SpeedDialChild(
@@ -837,6 +841,7 @@ class _spacePageState extends State<spacePage> {
                               hintText: 'command',
                             ),
                           ),
+                          Icon8Credit(),
                         ],
                       ),
                       actions: [
@@ -850,7 +855,6 @@ class _spacePageState extends State<spacePage> {
                     );
                   });
                 }
-
             ),
             SpeedDialChild(
                 child: const Icon(Icons.sunny),
