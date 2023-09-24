@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../function.dart';
@@ -240,4 +241,49 @@ class _EditSpaceDialogState extends State<EditSpaceDialog> {
     );
   }
 }
+
+class ButtonAlertDialog extends StatelessWidget {
+  const ButtonAlertDialog({super.key, required this.title, required this.content, required this.actions});
+  final String title; final Widget content; final List <Widget> actions;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+        contentPadding: const EdgeInsets.all(20.0),
+      title: Text(title), content: content, actions: actions
+    );
+  }
+}
+
+class comfyTextField extends StatelessWidget {
+  const comfyTextField({super.key, required this.text, required this.onChanged, this.keyboardType, this.inputFormatters});
+  final void Function(String) onChanged;  final String text; final TextInputType? keyboardType; final List<TextInputFormatter>? inputFormatters;
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      onChanged: onChanged,
+      keyboardType: keyboardType, inputFormatters: inputFormatters,
+      decoration: InputDecoration(
+          hintText: text, hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+          focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
+          enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
+      ),textInputAction: TextInputAction.next,
+    );
+  }
+}
+
+class comfyActionButton extends StatelessWidget {
+  const comfyActionButton({super.key, this.onPressed});
+  final void Function()? onPressed;
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      onPressed: onPressed,
+      color: Colors.teal,
+      child: Text("Done", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
+    );
+  }
+}
+
 

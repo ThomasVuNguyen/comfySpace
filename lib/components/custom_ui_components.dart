@@ -299,11 +299,18 @@ class _AddingButtonDialState extends State<AddingButtonDial> {
 }
 
 class Icon8Credit extends StatelessWidget {
-  const Icon8Credit({super.key});
+  const Icon8Credit({super.key, required this.iconLink, required this.iconName});
+  final String iconLink; final String iconName;
   Future<void> launchIcon8() async{
     final Uri icon8URL = Uri.parse('https://icons8.com/');
     if(!await launchUrl(icon8URL)){
       throw Exception('could not launch $icon8URL');
+    }
+  }
+  Future<void> launchIcon() async{
+    final Uri iconURL = Uri.parse(iconLink);
+    if(!await launchUrl(iconURL)){
+      throw Exception('could not launch $iconURL');
     }
   }
   @override
@@ -314,9 +321,52 @@ class Icon8Credit extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Icon by "),
+            InkWell(
+              child: Text(iconName, style: TextStyle(decoration: TextDecoration.underline,),),
+              onTap: () => launchIcon(),
+            ),
+            Text(" icon by "),
             InkWell(
               child: const Text("Icon8", style: TextStyle(decoration: TextDecoration.underline,),),
+              onTap: () => launchIcon8(),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class IconDuckCredit extends StatelessWidget {
+  const IconDuckCredit({super.key, required this.iconLink, required this.iconName});
+  final String iconLink; final String iconName;
+  Future<void> launchIcon8() async{
+    final Uri icon8URL = Uri.parse('https://icons8.com/');
+    if(!await launchUrl(icon8URL)){
+      throw Exception('could not launch $icon8URL');
+    }
+  }
+  Future<void> launchIcon() async{
+    final Uri iconURL = Uri.parse(iconLink);
+    if(!await launchUrl(iconURL)){
+      throw Exception('could not launch $iconURL');
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: 20,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              child: Text(iconName, style: TextStyle(decoration: TextDecoration.underline,),),
+              onTap: () => launchIcon(),
+            ),
+            Text(" icon by "),
+            InkWell(
+              child: const Text("IconDuck", style: TextStyle(decoration: TextDecoration.underline,),),
               onTap: () => launchIcon8(),
             )
           ],

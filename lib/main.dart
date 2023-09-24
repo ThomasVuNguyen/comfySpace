@@ -811,7 +811,7 @@ class _spacePageState extends State<spacePage> {
           onOpen: (){},onClose: (){},
           children: [
             SpeedDialChild(
-                child: Icon(Icons.dashboard_customize),
+                child: Image.asset('assets/speedDialIcons/custom_button.png',),
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
                 label: "custom", labelStyle: TextStyle(fontSize: 18),
@@ -821,114 +821,74 @@ class _spacePageState extends State<spacePage> {
                     buttonSizeY = 1;
                     buttonSizeX=1;
                     buttonPosition=1;
-                    return AlertDialog(
-                      content: Column(
-                        children: [
-                          TextField(
-                            onChanged: (btnName){
-                              buttonName = btnName;
-                            },
-                            decoration: const InputDecoration(
-                              hintText: 'name',
-                            ),
-                            textInputAction: TextInputAction.next,
+                    return ButtonAlertDialog(
+                        title: 'Custom button',
+                        content: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              comfyTextField(onChanged: (btnName){
+                                buttonName = btnName;
+                              }, text: 'button name'),
+                              const SizedBox(height: 32, width: double.infinity,),
+                              comfyTextField(onChanged: (btnCommand){
+                                buttonCommand = btnCommand;
+                              }, text: 'command'),
+                            ],
                           ),
-                          TextField(
-                            onChanged: (btnCommand){
-                              buttonCommand = btnCommand;
-                            },
-                            decoration: const InputDecoration(
-                              hintText: 'command',
-                            ),
+                        ),
+                        actions: [
+                          comfyActionButton(
+                            onPressed: (){
+                              addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'custom');
+                              print("$buttonName has been added to ${widget.spaceName}");
+                              Navigator.pop(context);
+                              setState(() {});
+                              },
                           ),
-                          Icon8Credit(),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(onPressed: (){
-                          addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'custom');
-                          print("$buttonName has been added to ${widget.spaceName}");
-                          Navigator.pop(context);
-                          setState(() {});
-                        }, child: Text("Add button"))
-                      ],
-                    );
+                        ]);
                   });
                 }
             ),
             SpeedDialChild(
-                child: const Icon(Icons.sunny),
+              backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: Image.asset('assets/speedDialIcons/led.png', width: 40,),
+                label: 'LED',
                 onTap: (){
                   late String pinOut;
                   showDialog(context: context, builder: (BuildContext context){
-                    return AlertDialog(
-                      content: Column(
-                        children: [
-                          TextField(
-                            onChanged: (btnName){
+                    return ButtonAlertDialog(
+                        title: 'LED toggle',
+                        content: Column(
+                          children: [
+                            comfyTextField(text: 'button name', onChanged: (btnName){
                               buttonName = btnName;
-                            },),
-                          TextField(
-                            decoration: const InputDecoration(labelText: 'Pin Number'),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                            onChanged: (pinNum){
-                              pinOut = pinNum;
-                            },
-                          )
-                        ],
-                      ),
+                            }),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(text: 'pin number',
+                              onChanged: (pinNum){pinOut = pinNum;},
+                              keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            ),
+                            Icon8Credit(iconName: 'LED',iconLink: 'https://icons8.com/icon/8BGi5ks3s1pY/led-diode',),
+                          ],
+                        ),
                       actions: <Widget>[
-                        TextButton(onPressed: (){
+                        comfyActionButton(onPressed: (){
                           addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, pinOut,'LED');
                           Navigator.pop(context);
                           setState(() {});
-                        },
-                            child: const Text("LED")
-                        )
+                        },)
                       ],
                     );
                   });
                 }
             ),
-            /*SpeedDialChild(
-                child: Icon(Icons.refresh),
-                onTap: (){
-                  late String servoPin;
-                  showDialog(context: context, builder: (BuildContext context){
-                    return AlertDialog(
-                      content: Column(
-                        children: [
-                          TextField(
-                            onChanged: (btnName){
-                              buttonName = btnName;
-                            },),
-                          TextField(
-                            decoration: const InputDecoration(labelText: 'Pin Number'),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                            onChanged: (pinNum){
-                              servoPin = pinNum;
-                            },
-                          )
-                        ],
-                      ),
-                      actions: <Widget>[
-                        TextButton(onPressed: (){
-                          addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, servoPin,'servo');
-                          Navigator.pop(context);
-                          setState(() {});
-                        },
-                            child: const Text("servo")
-                        )
-                      ],
-                    );
-                  });
-                }
-
-            ),*/
             SpeedDialChild(
-              child: Icon(Icons.stairs),
+              backgroundColor: Colors.transparent,
+              label: 'Stepper Motor',
+              child: Image.asset('assets/speedDialIcons/stepperMotor.png', width: 40,),
               onTap: (){
                 late String pin1; late String pin2; late String pin3; late String pin4;
                 showDialog(context: context, builder: (BuildContext context){
@@ -976,7 +936,8 @@ class _spacePageState extends State<spacePage> {
                             pin4 = pin;
                           },
                           textInputAction: TextInputAction.next,
-                        )
+                        ),
+                        const Icon8Credit(iconLink: 'https://icons8.com/icon/lOL-oIF5khIW/stepper-motor', iconName: 'Stepper Motor')
                       ],
                     ),
                     actions: <Widget>[
@@ -994,7 +955,8 @@ class _spacePageState extends State<spacePage> {
               }
             ),
             SpeedDialChild(
-              child: Icon(Icons.sensors),
+              backgroundColor: Colors.transparent,
+              child: Image.asset('assets/speedDialIcons/ultrasonic_distance_sensor.png'), label: 'Ultrasonic sensor',
               onTap: (){
                 late String trig; late String echo;
                 showDialog(context: context, builder: (BuildContext context){
@@ -1025,6 +987,7 @@ class _spacePageState extends State<spacePage> {
                           },
                           textInputAction: TextInputAction.next,
                         ),
+                        const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190115/ultrasonic-distance-sensor', iconName: 'Sensor'),
                       ],
                     ),
                     actions: <Widget>[
