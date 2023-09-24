@@ -1,5 +1,5 @@
 <div id="header" align="center">
-  <img src="android/app/src/main/res/mipmap-xxxhdpi/launcher_icon.png" width="100"/>
+  <img src="assets/comfySpaceIcon.png" width="100"/>
 </div>
 <h1 align="center">comfySpace</h1>
 <div id="badges" align="center">
