@@ -861,18 +861,21 @@ class _spacePageState extends State<spacePage> {
                   showDialog(context: context, builder: (BuildContext context){
                     return ButtonAlertDialog(
                         title: 'LED toggle',
-                        content: Column(
-                          children: [
-                            comfyTextField(text: 'button name', onChanged: (btnName){
-                              buttonName = btnName;
-                            }),
-                            const SizedBox(height: 32, width: double.infinity,),
-                            comfyTextField(text: 'pin number',
-                              onChanged: (pinNum){pinOut = pinNum;},
-                              keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                            ),
-                            Icon8Credit(iconName: 'LED',iconLink: 'https://icons8.com/icon/8BGi5ks3s1pY/led-diode',),
-                          ],
+                        content: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              comfyTextField(text: 'button name', onChanged: (btnName){
+                                buttonName = btnName;
+                              }),
+                              const SizedBox(height: 32, width: double.infinity,),
+                              comfyTextField(text: 'pin number',
+                                onChanged: (pinNum){pinOut = pinNum;},
+                                keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              ),
+                              Icon8Credit(iconName: 'LED',iconLink: 'https://icons8.com/icon/8BGi5ks3s1pY/led-diode',),
+                            ],
+                          ),
                         ),
                       actions: <Widget>[
                         comfyActionButton(onPressed: (){
@@ -892,53 +895,35 @@ class _spacePageState extends State<spacePage> {
               onTap: (){
                 late String pin1; late String pin2; late String pin3; late String pin4;
                 showDialog(context: context, builder: (BuildContext context){
-                  return AlertDialog(
-                    content: Column(
-                      children: [
-                        TextField(
-                          onChanged: (btnName){
+                  return ButtonAlertDialog(
+                    title: 'Stepper Motor',
+                    content: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          comfyTextField(text: 'button name', onChanged: (btnName){
                             buttonName = btnName;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        TextField(
-                          decoration: const InputDecoration(labelText: 'pin1'),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                          onChanged: (pin){
+                          }),
+                          const SizedBox(height: 32, width: double.infinity,),
+                          comfyTextField(text: 'pin1', onChanged: (pin){
                             pin1 = pin;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        TextField(
-                          decoration: const InputDecoration(labelText: 'pin2'),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                          onChanged: (pin){
+                          }),
+                          const SizedBox(height: 32, width: double.infinity,),
+                          comfyTextField(text: 'pin2', onChanged: (pin){
                             pin2 = pin;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        TextField(
-                          decoration: const InputDecoration(labelText: 'pin3'),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                          onChanged: (pin){
+                          }),
+                          const SizedBox(height: 32, width: double.infinity,),
+                          comfyTextField(text: 'pin3', onChanged: (pin){
                             pin3 = pin;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        TextField(
-                          decoration: const InputDecoration(labelText: 'pin4'),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                          onChanged: (pin){
+                          }),
+                          const SizedBox(height: 32, width: double.infinity,),
+                          comfyTextField(text: 'pin4', onChanged: (pin){
                             pin4 = pin;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        const Icon8Credit(iconLink: 'https://icons8.com/icon/lOL-oIF5khIW/stepper-motor', iconName: 'Stepper Motor')
-                      ],
+                          }),
+                          const SizedBox(height: 32, width: double.infinity,),
+                          const Icon8Credit(iconLink: 'https://icons8.com/icon/lOL-oIF5khIW/stepper-motor', iconName: 'Stepper Motor')
+                        ],
+                      ),
                     ),
                     actions: <Widget>[
                       TextButton(onPressed: (){
@@ -955,40 +940,85 @@ class _spacePageState extends State<spacePage> {
               }
             ),
             SpeedDialChild(
+                backgroundColor: Colors.transparent,
+                label: 'DC Motor',
+                child: Image.asset('assets/speedDialIcons/dc-motor.png', width: 40,),
+                onTap: (){
+                  late String pin1; late String pin2; late String pin3; late String pin4;
+                  showDialog(context: context, builder: (BuildContext context){
+                    return ButtonAlertDialog(
+                      title: 'DC Motor',
+                      content: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            comfyTextField(text: 'button name', onChanged: (btnName){
+                              buttonName = btnName;
+                            }),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(text: 'pin1', onChanged: (pin){
+                              pin1 = pin;
+                            }),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(text: 'pin2', onChanged: (pin){
+                              pin2 = pin;
+                            }),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            const Icon8Credit(iconLink: 'https://icons8.com/icon/lOL-oIF5khIW/stepper-motor', iconName: 'DC Motor')
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        TextButton(onPressed: (){
+                          String stepperPinList = "$pin1 $pin2";
+                            addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, stepperPinList,'DCMotor');
+                          Navigator.pop(context);
+                          setState(() {});
+                        },
+                            child: const Text("servo")
+                        )
+                      ],
+                    );
+                  });
+                }
+            ),
+            SpeedDialChild(
               backgroundColor: Colors.transparent,
               child: Image.asset('assets/speedDialIcons/ultrasonic_distance_sensor.png'), label: 'Ultrasonic sensor',
               onTap: (){
                 late String trig; late String echo;
                 showDialog(context: context, builder: (BuildContext context){
-                  return AlertDialog(
-                    content: Column(
-                      children: [
-                        TextField(
-                          onChanged: (btnName){
+                  return ButtonAlertDialog(
+                    title: "Distance sensor",
+                    content: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+
+                          comfyTextField(text: 'button name', onChanged: (btnName){
                             buttonName = btnName;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        TextField(
-                          decoration: const InputDecoration(labelText: 'trig'),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                          onChanged: (pin){
+                          }),
+                          const SizedBox(height: 32, width: double.infinity,),
+
+                          comfyTextField(text: 'trigger pin',
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              onChanged: (pin){
                             trig = pin;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        TextField(
-                          decoration: const InputDecoration(labelText: 'echo'),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                          onChanged: (pin){
-                            echo = pin;
-                          },
-                          textInputAction: TextInputAction.next,
-                        ),
-                        const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190115/ultrasonic-distance-sensor', iconName: 'Sensor'),
-                      ],
+                          }),
+                          const SizedBox(height: 32, width: double.infinity,),
+
+                          comfyTextField(text: 'echo pin',
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              onChanged: (pin){
+                                echo = pin;
+                              }),
+                          const SizedBox(height: 32, width: double.infinity,),
+
+                          const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190115/ultrasonic-distance-sensor', iconName: 'Sensor'),
+                        ],
+                      ),
                     ),
                     actions: <Widget>[
                       TextButton(
@@ -1090,6 +1120,17 @@ class _spacePageState extends State<spacePage> {
                                       setState(() {deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);});
                                     },
                                     child: DistanceSensor(spaceName: widget.spaceName, name: snapshot.data![index]["name"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password, trig: pinList[0], echo: pinList[1]),
+                                  );
+                                }
+                                else if (snapshot.data![index]["buttonType"] == "DCMotor"){
+                                  List<String> pinList = snapshot.data![index]["command"].split(" ");
+                                  return GestureDetector(
+                                    onLongPress: (){
+                                      setState(() {
+                                        deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                      });
+                                    },
+                                    child: DCMotorSingle(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], hostname: widget.hostname, username: widget.username, password: widget.password),
                                   );
                                 }
                                 else{

@@ -53,7 +53,6 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
     else{
       StrangeError = true;
     }
-    client.close();
     setState(() {Finished = true;});
   }
   Future<void> updateRepoRoot(String hostname, String username, String password, Terminal terminal) async{
