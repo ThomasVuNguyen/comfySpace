@@ -49,6 +49,7 @@ dependencies:
   webview_flutter: ^4.2.4
   flutter_inappwebview: ^5.7.2+3
   loading_animation_widget: ^1.2.0+4
+  flutter_markdown: ^0.6.15
 
 dev_dependencies:
   flutter_test:
@@ -79,9 +80,9 @@ flutter:
     - assets/
     - assets/icons/
     - assets/icons/distro/
+    - assets/comfyWeb/
     - database/
     - assets/comfySpaceIcon.png
-    - webDocumentation/
     - assets/speedDialIcons/
 
 

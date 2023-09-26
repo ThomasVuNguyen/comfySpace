@@ -8,6 +8,7 @@ import 'package:comfyssh_flutter/components/custom_widgets.dart';
 import 'package:comfyssh_flutter/components/pop_up.dart';
 import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
+import 'package:comfyssh_flutter/pages/AboutUs.dart';
 import 'package:comfyssh_flutter/pages/Experimental.dart';
 import 'package:comfyssh_flutter/pages/settings.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
@@ -598,7 +599,7 @@ class _comfySpaceState extends State<comfySpace> {
     ),
     SettingPage(),
     Center(child: Text("documentation"),),
-    Center(child: Text("about us"),),
+    aboutUs(),
   ];
   @override
   void initState(){
