@@ -508,3 +508,14 @@ Future<void> addColumn(String dbName, String spaceName, String columnName, Strin
   var addColumn = await database.rawUpdate('ALTER TABLE $spaceName ADD COLUMN $columnName $columnDataType');
   print(addColumn.toString());
 }
+Future<List<Map<String, Object?>>> countSpace(String dbName) async{
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async {
+      await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');}
+  );
+  var checkHost = await database.rawQuery('SELECT count(*) FROM sqlite_master WHERE type = ${"'table'"} AND name != ${"'android_metadata'"} AND name != ${"'sqlite_sequence'"} AND name != ${"'hostInfo'"}');
+  return checkHost;
+}

@@ -563,14 +563,12 @@ class comfySpace extends StatefulWidget {
 }
 
 class _comfySpaceState extends State<comfySpace> {
-  int bottomBarIndex = 0;
+  int bottomBarIndex = 0; bool FloatingButtonTip = false;
   final List<Widget> pageLists = [
     Padding(
       padding: const EdgeInsets.only(top:43),
       child: FutureBuilder(
         future: updateSpaceList('comfySpace.db'),
-        //updateSpaceListStream('comfySpace.db'),
-        //Stream<List<String>>.fromFuture(updateSpaceList('comfySpace.db')),
         initialData: const [],
         builder: (context, AsyncSnapshot snapshot){
           /*if(snapshot.connectionState != ConnectionState.done){
@@ -581,19 +579,45 @@ class _comfySpaceState extends State<comfySpace> {
           return const CircularProgressIndicator();
         }*/
           if(snapshot.hasData){
-            print("has data");
-            return ListView.builder(
-                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: spaceTile(spaceName: snapshot.data[index]),
-                  );
-                });
+            if(snapshot.data.length !=0){
+              return ListView.builder(
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: spaceTile(spaceName: snapshot.data[index]),
+                    );
+                  });
+            }
+            else{
+              return Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Let's a space with ", style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),),
+                  FloatingActionButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    tooltip: 'Add New Space',
+                    child: const Icon(Icons.add),
+                    onPressed: (){
+                      showDialog(context: context, builder: (BuildContext context){
+                        return const NewSpaceDialog();
+                      });
+                    },
+                  )
+                ],
+              ),);
+            }
+
           }
-          return Text("loading");
+          else{
+            return Center(child: Text("loading database"));
+          }
+
         },
       ),
     ),
@@ -610,6 +634,16 @@ class _comfySpaceState extends State<comfySpace> {
   @override
   void dispose(){
     super.dispose();
+  }
+  Future<void> countingSpace() async{
+    var lists = await countSpace('comfySpace.db');
+    print(lists[0]['count(*)'].toString());
+    if (lists[0]['count(*)'] == 0){
+      FloatingButtonTip = true;
+    }
+    else{
+      FloatingButtonTip = false;
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -632,8 +666,8 @@ class _comfySpaceState extends State<comfySpace> {
                 tabs: const [
                   GButton(icon: Icons.home, ),
                   GButton(icon: Icons.settings, ),
-                  GButton(icon: Icons.help_center, ),
-                  GButton(icon: Icons.more, ),
+                  GButton(icon: Icons.bug_report, ),
+                  GButton(icon: Icons.public, ),
                 ],
                 selectedIndex: bottomBarIndex,
                 onTabChange: (index){
@@ -812,18 +846,18 @@ class _spacePageState extends State<spacePage> {
           onOpen: (){},onClose: (){},
           children: [
             SpeedDialChild(
-                child: Image.asset('assets/speedDialIcons/custom_button.png',),
-                backgroundColor: Colors.red,
+                child: Image.asset('assets/speedDialIcons/custom_button.png', width: 30),
+                backgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
-                label: "custom", labelStyle: TextStyle(fontSize: 18),
+                label: "custom command", labelStyle: TextStyle(fontSize: 18),
                 onTap: (){
                   showDialog(context: context, builder: (BuildContext context){
-                    String buttonType = 'custom';
+                    String buttonType = 'customOutput';
                     buttonSizeY = 1;
                     buttonSizeX=1;
                     buttonPosition=1;
                     return ButtonAlertDialog(
-                        title: 'Custom button',
+                        title: 'Custom command button',
                         content: SingleChildScrollView(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -852,6 +886,46 @@ class _spacePageState extends State<spacePage> {
                 }
             ),
             SpeedDialChild(
+                child: Image.asset('assets/speedDialIcons/custom_button.png',width: 30,),
+                backgroundColor: Colors.transparent,
+                foregroundColor: Colors.white,
+                label: "custom data read", labelStyle: TextStyle(fontSize: 18),
+                onTap: (){
+                  showDialog(context: context, builder: (BuildContext context){
+                    String buttonType = 'customInput';
+                    buttonSizeY = 1;
+                    buttonSizeX=1;
+                    buttonPosition=1;
+                    return ButtonAlertDialog(
+                        title: 'Custom data read',
+                        content: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              comfyTextField(onChanged: (btnName){
+                                buttonName = btnName;
+                              }, text: 'button name'),
+                              const SizedBox(height: 32, width: double.infinity,),
+                              comfyTextField(onChanged: (btnCommand){
+                                buttonCommand = btnCommand;
+                              }, text: 'command'),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          comfyActionButton(
+                            onPressed: (){
+                              addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'customInput');
+                              print("$buttonName has been added to ${widget.spaceName}");
+                              Navigator.pop(context);
+                              setState(() {});
+                            },
+                          ),
+                        ]);
+                  });
+                }
+            ),
+            SpeedDialChild(
               backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -874,7 +948,7 @@ class _spacePageState extends State<spacePage> {
                                 onChanged: (pinNum){pinOut = pinNum;},
                                 keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                               ),
-                              Icon8Credit(iconName: 'LED',iconLink: 'https://icons8.com/icon/8BGi5ks3s1pY/led-diode',),
+                              IconDuckCredit(iconLink: 'https://iconduck.com/icons/190075/led-unit', iconName: 'LED' )
                             ],
                           ),
                         ),
@@ -892,7 +966,7 @@ class _spacePageState extends State<spacePage> {
             SpeedDialChild(
               backgroundColor: Colors.transparent,
               label: 'Stepper Motor',
-              child: Image.asset('assets/speedDialIcons/stepperMotor.png', width: 40,),
+              child: Image.asset('assets/speedDialIcons/stepperMotor.png', width: 35,),
               onTap: (){
                 late String pin1; late String pin2; late String pin3; late String pin4;
                 showDialog(context: context, builder: (BuildContext context){
@@ -908,21 +982,29 @@ class _spacePageState extends State<spacePage> {
                           const SizedBox(height: 32, width: double.infinity,),
                           comfyTextField(text: 'pin1', onChanged: (pin){
                             pin1 = pin;
-                          }),
+                          },
+                            keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          ),
                           const SizedBox(height: 32, width: double.infinity,),
                           comfyTextField(text: 'pin2', onChanged: (pin){
                             pin2 = pin;
-                          }),
+                          },
+                            keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          ),
                           const SizedBox(height: 32, width: double.infinity,),
                           comfyTextField(text: 'pin3', onChanged: (pin){
                             pin3 = pin;
-                          }),
+                          },
+                            keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          ),
                           const SizedBox(height: 32, width: double.infinity,),
                           comfyTextField(text: 'pin4', onChanged: (pin){
                             pin4 = pin;
-                          }),
+                          },
+                            keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          ),
                           const SizedBox(height: 32, width: double.infinity,),
-                          const Icon8Credit(iconLink: 'https://icons8.com/icon/lOL-oIF5khIW/stepper-motor', iconName: 'Stepper Motor')
+                          const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190110/stepper-motor', iconName: 'Stepper Motor')
                         ],
                       ),
                     ),
@@ -959,13 +1041,17 @@ class _spacePageState extends State<spacePage> {
                             const SizedBox(height: 32, width: double.infinity,),
                             comfyTextField(text: 'pin1', onChanged: (pin){
                               pin1 = pin;
-                            }),
+                            },
+                              keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            ),
                             const SizedBox(height: 32, width: double.infinity,),
                             comfyTextField(text: 'pin2', onChanged: (pin){
                               pin2 = pin;
-                            }),
+                            },
+                              keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            ),
                             const SizedBox(height: 32, width: double.infinity,),
-                            const Icon8Credit(iconLink: 'https://icons8.com/icon/lOL-oIF5khIW/stepper-motor', iconName: 'DC Motor')
+                            const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
                           ],
                         ),
                       ),
@@ -995,7 +1081,6 @@ class _spacePageState extends State<spacePage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-
                           comfyTextField(text: 'button name', onChanged: (btnName){
                             buttonName = btnName;
                           }),
@@ -1120,7 +1205,8 @@ class _spacePageState extends State<spacePage> {
                                     onLongPress: (){
                                       setState(() {deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);});
                                     },
-                                    child: DistanceSensor(spaceName: widget.spaceName, name: snapshot.data![index]["name"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password, trig: pinList[0], echo: pinList[1]),
+                                    child: CustomInputButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandIn: 'python3 comfyScript/distance_sensor/HC-SR04.py ${pinList[0]} ${pinList[1]} 1', terminal: terminal,)
+                                    //child: DistanceSensor(spaceName: widget.spaceName, name: snapshot.data![index]["name"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password, trig: pinList[0], echo: pinList[1]),
                                   );
                                 }
                                 else if (snapshot.data![index]["buttonType"] == "DCMotor"){
@@ -1132,6 +1218,13 @@ class _spacePageState extends State<spacePage> {
                                       });
                                     },
                                     child: DCMotorSingle(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], hostname: widget.hostname, username: widget.username, password: widget.password),
+                                  );
+                                }
+                                else if (snapshot.data![index]["buttonType"] == "customInput"){
+                                  return GestureDetector(
+                                    onLongPress: (){deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]); setState(() {
+                                    });},
+                                    child: CustomInputButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandIn: snapshot.data![index]["command"], terminal: terminal),
                                   );
                                 }
                                 else{
@@ -1218,6 +1311,7 @@ class _spacePageState extends State<spacePage> {
                                     child: CustomToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: snapshot.data![index]["command"], commandOff: snapshot.data![index]["command"], terminal: terminal),
                                   );
                                 }
+
                               }),
                         );
                       }

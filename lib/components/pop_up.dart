@@ -232,7 +232,7 @@ class _EditSpaceDialogState extends State<EditSpaceDialog> {
 
               },
               color: Colors.teal,
-              child: Text("Done", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
+              child: Text("Rename", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
             ),
           ],
         )

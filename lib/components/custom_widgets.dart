@@ -19,6 +19,7 @@ import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:xterm/core.dart';
 import 'package:xterm/ui.dart';
 import '../comfyScript/DCmotor.dart';
+import '../comfyScript/customInput.dart';
 import '../comfyScript/stepperMotor.dart';
 import '../function.dart';
 import '../main.dart';
@@ -473,85 +474,7 @@ class _LedToggleState extends State<LedToggle> {
   }
 }
 
-class StepperMotor extends StatefulWidget {
-  const StepperMotor({super.key, required this.name, required this.id, required this.pin1, required this.pin2, required this.pin3, required this.pin4, required this.hostname, required this.username, required this.password});
-  final String name; final int id; final String pin1; final String pin2; final String pin3; final String pin4;
-  final String hostname; final String username; final String password;
-  @override
-  State<StepperMotor> createState() => _StepperMotorState();
-}
-
-class _StepperMotorState extends State<StepperMotor> {
-  bool SSHLoadingFinished = false;
-  int rotationDirection = 1; //0 means counterclockwise, 1 means stop, 2 means clockwise
-  final List<bool> _stepperState = <bool>[false, true, false];
-  late SSHClient client;
-  @override
-  void initState(){
-    super.initState();
-    initClient();
-  }
-  @override
-  void dispose(){
-    closeClient();
-    client.close();
-    super.dispose();
-  }
-  Future<void> initClient() async{
-    client = SSHClient(
-      await SSHSocket.connect(widget.hostname, 22),
-      username: widget.username,
-      onPasswordRequest: () => widget.password,
-    );
-    print("initClient username: ${client.username}");
-    setState(() {SSHLoadingFinished = true;});
-  }
-  Future<void> closeClient() async{
-    final shell = await client.shell();
-    await shell.done;
-    client.close();
-
-  }
-  @override
-  Widget build(BuildContext context) {
-    if(SSHLoadingFinished == true){
-      return Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Row(
-          children: [
-            Expanded(child: Container(color: Colors.orange,),),
-            ToggleButtons(
-              borderRadius: BorderRadius.circular(32.0),
-                direction: Axis.vertical,
-                isSelected: _stepperState,
-                onPressed: (int index) async{
-                  for (int i=0; i<_stepperState.length; i++){
-                    _stepperState[i] = i == index;
-                    if(i==index){
-                      index = index-1;
-                      var stepperCommand = stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, index.toString());
-                      var command = await client.run(stepperCommand);
-                    }
-                    setState(() {
-                    });
-                  }
-            },
-                children: <Widget>[
-                  Container(child: Icon(Icons.arrow_left,),),
-                  Container(child: Icon(Icons.stop)),
-                  Container(child: Icon(Icons.arrow_right)),
-                ],
-            ),
-          ],
-        ),
-      );}
-    else{
-      return const LoadingSpaceWidget();
-    }
-  }
-}
-
-class DistanceSensor extends StatefulWidget {
+/*class DistanceSensor extends StatefulWidget {
   const DistanceSensor({super.key, required this.spaceName, required this.name, required this.id, required this.hostname, required this.username, required this.password, required this.trig,required this.echo});
   final String spaceName; final String name; final int id;
   final String hostname; final String username; final String password;
@@ -561,14 +484,9 @@ class DistanceSensor extends StatefulWidget {
 }
 
 class _DistanceSensorState extends State<DistanceSensor> {
-  bool SSHLoadingFinished = false; late SSHClient client;
-  late Timer timer; late String data;
+  bool SSHLoadingFinished = false; late SSHClient client; late String data;
   @override
   void initState(){
-    timer = Timer.periodic(Duration(seconds:1), (timer) {
-      updateData();
-      setState(() {});
-    });
     super.initState();
     initClient();
   }
@@ -576,7 +494,6 @@ class _DistanceSensorState extends State<DistanceSensor> {
   void dispose(){
     super.dispose();
     client.close();
-    timer.cancel();
   }
   Future<void> updateData() async{
     data = await readDistance(client, widget.trig, widget.echo);
@@ -588,44 +505,28 @@ class _DistanceSensorState extends State<DistanceSensor> {
       username: widget.username,
       onPasswordRequest: () => widget.password
     );
-    //terminal.write("Connected \r\n");
-    /*final session = await client.shell(
-      pty: SSHPtyConfig(
-        width: terminal.viewWidth, height: terminal.viewWidth,
-      )
-    );
-    terminal.buffer.clear(); terminal.buffer.setCursor(0, 0);
-    terminal.onOutput = (data){
-      session.write(utf8.encode(data) as Uint8List);
-    };
-    session.stdout
-        .cast<List<int>>()
-        .transform(Utf8Decoder())
-        .listen(terminal.write);
-
-    session.stderr
-        .cast<List<int>>()
-        .transform(Utf8Decoder())
-        .listen(terminal.write);*/
     SSHLoadingFinished = true;
+    print('distance sensor connected');
   }
   @override
   Widget build(BuildContext context) {
     if(SSHLoadingFinished == false){
       return const LoadingSpaceWidget();
     }
-    else if(client!=null){
+    else{
+      print("lets load");
       return Padding(
         padding: const EdgeInsets.all(0.0),
         child: StreamBuilder(
           stream: readDistanceStream(client, widget.trig, widget.echo),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if(!snapshot.hasData){
-              print("loading");
-              return const LoadingSpaceWidget();
+              return Text("no data");
+              //return const LoadingSpaceWidget();
             }
-            else if(snapshot.hasData && snapshot.data?[0] != "T"){
-              return Padding(
+            else if(snapshot.hasData){
+              return Text(snapshot.data!);
+              /*return Padding(
                   padding: const EdgeInsets.all(15.0),
                 child: Container(
                   decoration: BoxDecoration( borderRadius: BorderRadius.circular(24.0), color: Colors.grey[900] ),
@@ -635,11 +536,11 @@ class _DistanceSensorState extends State<DistanceSensor> {
 
                   ),
                 ),
-              );
-              
+              );*/
+
               //return Text('${snapshot.data}');
             }
-            else if(snapshot.hasData && snapshot.data?[0] == "T"){
+            /*else if(snapshot.hasData && snapshot.data?[0] == "T"){
               return Padding(
                 padding: EdgeInsets.all(15.0),
                 child: Container(
@@ -653,18 +554,16 @@ class _DistanceSensorState extends State<DistanceSensor> {
               );
 
               //return Text('${snapshot.data}');
+            }*/
+            else{
+              return Text("something else");
             }
-            return const LoadingSpaceWidget();
-
           },
         )
       );
     }
-    else{
-      return CircularProgressIndicator();
-    }
   }
-}
+}*/
 
 class CustomToggleButton extends StatefulWidget {
   const CustomToggleButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.commandOn, required this.commandOff, required this.terminal});
@@ -768,6 +667,81 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
   }
 }
 
+class CustomInputButton extends StatefulWidget {
+  const CustomInputButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.commandIn, required this.terminal});
+  final String name; final String hostname; final String username; final String password; final String commandIn; final Terminal terminal;
+  @override
+  State<CustomInputButton> createState() => _CustomInputButtonState();
+}
+
+class _CustomInputButtonState extends State<CustomInputButton> {
+  late final terminal = Terminal();
+  bool SSHLoaded = false; bool toggleState = false; late SSHClient client;
+  @override
+  void initState(){
+    print(widget.commandIn);
+    super.initState();
+    initClient();
+  }
+  void dispose(){
+    super.dispose();
+    closeClient();
+  }
+  Future<void> initClient() async{
+    client = SSHClient(
+      await SSHSocket.connect(widget.hostname, 22),
+      username: widget.username,
+      onPasswordRequest: () => widget.password,
+    );
+    print("initClient username: ${client.username}");
+    setState(() {SSHLoaded = true;});
+  }
+
+  Future<void> closeClient() async{
+    final shell = await client.shell();
+    await shell.done;
+    client.close();
+
+  }
+  Future<void> sendCommand() async{
+    var command = await client.run(widget.commandIn);
+  }
+  @override
+  Widget build(BuildContext context) {
+    if (SSHLoaded == true){
+      return StreamBuilder(
+        stream: readInputStream(client, widget.commandIn),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot,){
+            if(snapshot.hasData){
+              return Padding(padding: const EdgeInsets.all(15.0),
+                child: Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(24.0), color: Colors.grey[900]),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25.0),
+                    child: Stack(
+                      alignment: AlignmentDirectional.topCenter,
+                      children:[
+                        const SizedBox(height: 4),
+                        Text(widget.name,style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 18),),
+                        Center(child: Text(snapshot.data!, style: TextStyle(color: Colors.orange, fontSize: 24))),
+                      ]
+
+                    ),
+                  ),
+                )
+              );
+            }
+            else{
+              return LoadingSpaceWidget();
+            }
+          });
+    }
+    else{
+      return LoadingSpaceWidget();
+    }
+  }
+}
+
 class DCMotorSingle extends StatefulWidget {
   const DCMotorSingle({super.key, required this.name, required this.id, required this.pin1, required this.pin2, required this.hostname, required this.username, required this.password});
   final String name; final int id; final String pin1; final String pin2;
@@ -782,7 +756,7 @@ class _DCMotorSingleState extends State<DCMotorSingle> {
   final List<bool> _DCState = <bool>[true, false];
   late SSHClient client;
   int index = 0;
-
+  String direction = 'pause'; //either pause, forward or backward
   List<Widget> motorIcon = [Icon(Icons.pause_circle_filled, size: 60,), Icon(Icons.arrow_upward, size: 60), Icon(Icons.arrow_downward, size:60)];
   List<Color> motorColor = [const Color.fromARGB(44, 164, 167, 189),Colors.red,Colors.red];
   @override
@@ -823,39 +797,168 @@ class _DCMotorSingleState extends State<DCMotorSingle> {
       return Padding(
         padding: const EdgeInsets.all(15.0),
         child: GestureDetector(
+          onVerticalDragStart: (dragDetail){
+          },
           onVerticalDragUpdate: (dragDetail){
-            print(dragDetail.primaryDelta);
             if(dragDetail.primaryDelta!<0){
               //dragged up
-              motorRun(1,0);
+              direction = 'up';
               setState(() {index = 1;});
-
             }
             else if(dragDetail.primaryDelta!>0){
               //dragged down
-              motorRun(0,1);
+              direction = 'down';
               setState(() {index = 2;});
             }
           },
           onVerticalDragEnd: (dragDetail){
-            motorRun(0,0);
+            if(direction == 'up'){
+              motorRun(1,0);
+              print(direction);
+              setState(() {index = 1;});
+            }
+            if(direction =='down'){
+              motorRun(0,1);
+              print(direction);
+            }
 
           },
           onTap: (){
+            direction = 'pause';
             motorRun(0,0);
+            print('tap');
             setState(() {index = 0;});
           },
 
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 2),
-              borderRadius: BorderRadius.circular(24.0),
-              //color: Colors.grey[900],
-              color: motorColor[index],
-            ),
-            child: Center(child: motorIcon[index]),
+          child: Stack(
+            alignment: AlignmentDirectional.topCenter,
+            children: [
+              const SizedBox(height: 4),
+              Text(widget.name,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.w400, fontSize: 18),),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2),
+                  borderRadius: BorderRadius.circular(24.0),
+                  //color: Colors.grey[900],
+                  color: motorColor[index],
+                ),
+                child: Center(child: motorIcon[index]),
+              ),
+            ],
           ),
         )
+      );}
+    else{
+      return const LoadingSpaceWidget();
+    }
+  }
+}
+
+class StepperMotor extends StatefulWidget {
+  const StepperMotor({super.key, required this.name, required this.id, required this.pin1, required this.pin2, required this.pin3, required this.pin4, required this.hostname, required this.username, required this.password});
+  final String name; final int id; final String pin1; final String pin2; final String pin3; final String pin4;
+  final String hostname; final String username; final String password;
+  @override
+  State<StepperMotor> createState() => _StepperMotorState();
+}
+
+class _StepperMotorState extends State<StepperMotor> {
+  bool SSHLoadingFinished = false;
+  int rotationDirection = 1; //0 means counterclockwise, 1 means stop, 2 means clockwise
+  final List<bool> _stepperState = <bool>[false, true, false];
+  String direction = 'pause';
+  late SSHClient client;
+  int index = 0;
+  List<Widget> motorIcon = [Icon(Icons.pause_circle_filled, size: 60,), Icon(Icons.arrow_right, size: 60), Icon(Icons.arrow_left, size:60)];
+  List<Color> motorColor = [const Color.fromARGB(44, 164, 167, 189),Colors.red,Colors.red];
+  @override
+  void initState(){
+    super.initState();
+    initClient();
+  }
+  @override
+  void dispose(){
+    closeClient();
+    client.close();
+    super.dispose();
+  }
+  Future<void> initClient() async{
+    client = SSHClient(
+      await SSHSocket.connect(widget.hostname, 22),
+      username: widget.username,
+      onPasswordRequest: () => widget.password,
+    );
+    print("initClient username: ${client.username}");
+    setState(() {SSHLoadingFinished = true;});
+  }
+  Future<void> closeClient() async{
+    final shell = await client.shell();
+    await shell.done;
+    client.close();
+  }
+  Future<void> motorRun(int stepperState) async{
+    HapticFeedback.selectionClick();
+    String command = stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, stepperState.toString());
+    var motorRun = await client.run(command);
+    print('stepper state is $stepperState');
+  }
+  @override
+  Widget build(BuildContext context) {
+    if(SSHLoadingFinished == true){
+      return Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: GestureDetector(
+            onHorizontalDragStart: (dragDetail){
+            },
+            onHorizontalDragUpdate: (dragDetail){
+              if(dragDetail.primaryDelta!>0){
+                //clockwise
+                setState(() {index = 1;direction = 'down';});
+
+              }
+              else if(dragDetail.primaryDelta!<0){
+                //counter-clockwise
+                setState(() {index = 2;direction = 'up';});
+              }
+            },
+            onHorizontalDragEnd: (dragDetail){
+              if(direction == 'up'){
+                motorRun(-1);
+                print(direction);
+              }
+              if(direction =='down'){
+                motorRun(1);
+                print(direction);
+              }
+            },
+            onTap: (){
+              direction = 'pause';
+              motorRun(0);
+              setState(() {index = 0;});
+              print(direction);
+            },
+            child: Stack(
+                alignment: AlignmentDirectional.topCenter,
+                children: <Widget>[
+
+                  Column(
+                    children: [
+                      const SizedBox(height: 4),
+                      Text(widget.name,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.w400, fontSize: 18),),
+                    ],
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: 2),
+                      borderRadius: BorderRadius.circular(24.0),
+                      //color: Colors.grey[900],
+                      color: motorColor[index],
+                    ),
+                    child: Center(child: motorIcon[index]),
+                  ),
+                ]
+            )
+        ),
       );}
     else{
       return const LoadingSpaceWidget();
