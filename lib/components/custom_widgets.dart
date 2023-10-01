@@ -15,7 +15,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:xterm/core.dart';
 import 'package:xterm/ui.dart';
 import '../comfyScript/DCmotor.dart';
@@ -27,9 +26,9 @@ import '../state.dart';
 
 
 class comfyAppBar extends StatefulWidget {
-  const comfyAppBar({super.key, required this.title});
-  final String title;
 
+  const comfyAppBar({super.key, required this.title, required this.function});
+  final String title; final void Function() function;
   @override
   State<comfyAppBar> createState() => _comfyAppBarState();
 }
@@ -43,8 +42,9 @@ class _comfyAppBarState extends State<comfyAppBar> {
       actions: [
         Row(
           children: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.menu), iconSize: 40,),
-            SizedBox(width: 10,)
+            IconButton(onPressed: (){}, icon: Icon(Icons.menu), iconSize: 0,),
+            IconButton(onPressed: (){}, icon: Icon(Icons.menu), iconSize: 0,),
+            SizedBox(width: 10,),
           ],
         )
       ],

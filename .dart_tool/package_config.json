@@ -15,7 +15,7 @@
     },
     {
       "name": "archive",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.4.2",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.4.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -57,19 +57,19 @@
     },
     {
       "name": "camera",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera-0.10.5+4",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera-0.10.5+5",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "camera_android",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.8+10",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android-0.10.8+12",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "camera_avfoundation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_avfoundation-0.9.13+5",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_avfoundation-0.9.13+6",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -266,6 +266,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "flutter_localizations",
+      "rootUri": "file:///E:/Flutter/flutter/packages/flutter_localizations",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "flutter_markdown",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_markdown-0.6.15",
       "packageUri": "lib/",
@@ -375,7 +381,7 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/image-4.1.2",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/image-4.1.3",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -393,7 +399,7 @@
     },
     {
       "name": "intl",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.18.1",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.17.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -420,12 +426,6 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/lints-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
-    },
-    {
-      "name": "lite_rolling_switch",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/lite_rolling_switch-1.0.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.15"
     },
     {
       "name": "loading_animation_widget",
@@ -789,7 +789,7 @@
     },
     {
       "name": "video_player_avfoundation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_avfoundation-2.4.10",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/video_player_avfoundation-2.4.11",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -819,13 +819,13 @@
     },
     {
       "name": "webview_flutter",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter-4.2.4",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter-4.4.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "webview_flutter_android",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_android-3.10.1",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_android-3.12.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -837,13 +837,19 @@
     },
     {
       "name": "webview_flutter_wkwebview",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_wkwebview-3.8.0",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_wkwebview-3.9.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "win32",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/win32-4.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "wiredash",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/wiredash-1.7.4",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -878,7 +884,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-09-30T21:04:50.390090Z",
+  "generated": "2023-10-01T14:59:08.318744Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }
