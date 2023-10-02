@@ -1492,7 +1492,9 @@ class WireDashSpacePage extends StatelessWidget {
   final String spaceName; final String hostname; final String username; final String password;
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(builder: (context, AsyncSnapshot<List<String>> snapshot){
+    return FutureBuilder(
+      future: WireDashInfo(),
+        builder: (context, AsyncSnapshot<List<String>> snapshot){
       if(snapshot.hasData){
         return Wiredash(projectId: snapshot.data![0], secret: snapshot.data![1],
             feedbackOptions: const WiredashFeedbackOptions(email: EmailPrompt.hidden),
