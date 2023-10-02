@@ -519,3 +519,22 @@ Future<List<Map<String, Object?>>> countSpace(String dbName) async{
   var checkHost = await database.rawQuery('SELECT count(*) FROM sqlite_master WHERE type = ${"'table'"} AND name != ${"'android_metadata'"} AND name != ${"'sqlite_sequence'"} AND name != ${"'hostInfo'"}');
   return checkHost;
 }
+
+int PopulateButton(BuildContext context){
+  int width = MediaQuery.of(context).size.width.round();
+  return (width/200).round();
+}
+
+Future<List<String>> WireDashInfo() async {
+  try {
+    String secret = await rootBundle.loadString('assets/secretshit/WireDashSecret.txt');
+    String projectID = await rootBundle.loadString('assets/secretshit/WireDashProjectID.txt');
+    return [projectID, secret];
+  } catch (e) {
+    return ["Error loading the file: $e","Error loading the file: $e" ];
+  }
+}
+
+Future<void> launchDoc() async{
+
+}

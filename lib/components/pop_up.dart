@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -285,5 +287,54 @@ class comfyActionButton extends StatelessWidget {
     );
   }
 }
+
+class deleteButtonPrompt extends StatelessWidget {
+  const deleteButtonPrompt({super.key, this.onPressed});
+  final void Function()? onPressed;
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      onPressed: onPressed,
+      color: Colors.red,
+      child: Text("Yes", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
+    );
+  }
+}
+
+class CancelButtonPrompt extends StatelessWidget {
+  const CancelButtonPrompt({super.key, this.onPressed});
+  final void Function()? onPressed;
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      onPressed: onPressed,
+      color: Colors.black,
+      child: Text("Cancel", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
+    );
+  }
+}
+
+class DeleteButtonDialog extends StatelessWidget {
+  const DeleteButtonDialog({super.key, required this.function});
+  final Future<void> function;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+      contentPadding: const EdgeInsets.all(20.0),
+      title: Text('Delete Button'),
+      actions: [
+        comfyActionButton(
+          onPressed: () async{
+            function;
+            Navigator.pop(context);
+          },
+        )
+      ],
+    );
+  }
+}
+
 
 

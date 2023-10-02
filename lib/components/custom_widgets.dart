@@ -27,8 +27,10 @@ import '../state.dart';
 
 class comfyAppBar extends StatefulWidget {
 
-  const comfyAppBar({super.key, required this.title, required this.function});
-  final String title; final void Function() function;
+
+
+  const comfyAppBar({super.key, required this.title, this.WiredashWidget, this.automaticallyImplyLeading = false});
+  final String title; final Widget? WiredashWidget; final bool automaticallyImplyLeading;
   @override
   State<comfyAppBar> createState() => _comfyAppBarState();
 }
@@ -37,13 +39,11 @@ class _comfyAppBarState extends State<comfyAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
-
+      automaticallyImplyLeading: widget.automaticallyImplyLeading,
       actions: [
         Row(
           children: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.menu), iconSize: 0,),
-            IconButton(onPressed: (){}, icon: Icon(Icons.menu), iconSize: 0,),
+            widget.WiredashWidget!,
             SizedBox(width: 10,),
           ],
         )
@@ -328,7 +328,7 @@ class _spaceTileState extends State<spaceTile> {
                   ),
                 ),
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => spacePage(spaceName: widget.spaceName, hostname: hostNameHolder, username: userNameHolder, password: passwordHolder)),);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => WireDashSpacePage(spaceName: widget.spaceName, hostname: hostNameHolder, username: userNameHolder, password: passwordHolder)),);
                   print("$userNameHolder@$hostNameHolder");
                 },
                 shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color: textcolor), borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), bottomLeft: Radius.circular(8.0), topRight: Radius.circular(8.0), bottomRight: Radius.circular(8.0)), ),
@@ -723,7 +723,7 @@ class _CustomInputButtonState extends State<CustomInputButton> {
                       children:[
                         const SizedBox(height: 4),
                         Text(widget.name,style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 18),),
-                        Center(child: Text(snapshot.data!, style: TextStyle(color: Colors.orange, fontSize: 24))),
+                        Center(child: Text(snapshot.data!, style: TextStyle(color: Colors.orange, fontSize: 18))),
                       ]
 
                     ),

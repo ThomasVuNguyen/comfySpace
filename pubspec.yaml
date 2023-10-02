@@ -83,5 +83,7 @@ flutter:
     - database/
     - assets/comfySpaceIcon.png
     - assets/speedDialIcons/
+    - assets/secretshit/WireDashSecret.txt
+    - assets/secretshit/WireDashProjectID.txt
 
 
