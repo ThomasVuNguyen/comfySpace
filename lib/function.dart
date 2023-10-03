@@ -419,7 +419,7 @@ Future<void> deleteSpace(String dbName, String spaceName) async {
   );
   var deleteDB = await database.rawDelete('DROP TABLE `$spaceName`');
   print('$spaceName has been deleted');
-  var deleteHost = await database.rawDelete('DELETE FROM hostInfo WHERE spaceName=`$spaceName`');
+  var deleteHost = await database.rawDelete('DELETE FROM hostInfo WHERE spaceName=$spaceNameBraces');
   print(deleteHost.toString());
 }
 
