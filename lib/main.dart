@@ -598,8 +598,8 @@ class _comfySpaceState extends State<comfySpace> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Let's a space with ", style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),),
-                  FloatingActionButton(
+                  Text("Such emptiness... ", style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.w400, fontSize: 24),),
+                  /*FloatingActionButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),
@@ -610,7 +610,7 @@ class _comfySpaceState extends State<comfySpace> {
                         return const NewSpaceDialog();
                       });
                     },
-                  )
+                  )*/
                 ],
               ),);
             }
@@ -718,7 +718,7 @@ class _comfySpaceState extends State<comfySpace> {
           ),
         ),
         //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        floatingActionButton: (bottomBarIndex != 0)? null:
+        floatingActionButton: (bottomBarIndex != 0 )? null:
         FloatingActionButton(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
