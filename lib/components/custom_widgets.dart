@@ -328,7 +328,7 @@ class _spaceTileState extends State<spaceTile> {
                   ),
                 ),
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => WireDashSpacePage(spaceName: widget.spaceName, hostname: hostNameHolder, username: userNameHolder, password: passwordHolder)),);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => spacePage(spaceName: widget.spaceName, hostname: hostNameHolder, username: userNameHolder, password: passwordHolder)),);
                   print("$userNameHolder@$hostNameHolder");
                 },
                 shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color: textcolor), borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), bottomLeft: Radius.circular(8.0), topRight: Radius.circular(8.0), bottomRight: Radius.circular(8.0)), ),

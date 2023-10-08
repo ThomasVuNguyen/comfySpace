@@ -52,6 +52,7 @@ void main() {
   memoryCheck();
   //sqfliteFfiInit();
   //databaseFactory = databaseFactoryFfi;
+
   if (Platform.isWindows){
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
@@ -862,9 +863,9 @@ class _spacePageState extends State<spacePage> {
           child: comfyAppBar(
             automaticallyImplyLeading: true,
               title: widget.spaceName,
-            WiredashWidget: IconButton(onPressed: (){
+            /*WiredashWidget: IconButton(onPressed: (){
               Wiredash.of(context).show();
-            }, icon: Icon(Icons.bug_report_outlined), iconSize: 30,),
+            }, icon: Icon(Icons.bug_report_outlined), iconSize: 30,),*/
           )),
         backgroundColor: bgcolor,
         floatingActionButton:
@@ -1188,8 +1189,8 @@ class _spacePageState extends State<spacePage> {
                           child: GridView.builder(
                             shrinkWrap: true,
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:
-                                PopulateButton(context),
+                                crossAxisCount:2
+                                //PopulateButton(context),
                               ),
                               itemCount: snapshot.data?.length,
                               itemBuilder: (BuildContext context, index){
@@ -1365,82 +1366,6 @@ class _spacePageState extends State<spacePage> {
                                   );
                                 }
                                 else{
-                                  /*return ListTile(
-                                    title: Text(snapshot.data![index].toString()),
-                                    tileColor: Colors.grey,
-                                    onTap: () async {
-                                      var command = await clientControl.run(snapshot.data![index]["command"]);
-                                      print("command is " + snapshot.data![index]["command"]);
-                                      print(toggleState.toString());
-                                    },
-                                    onLongPress: (){
-                                      showDialog(context: context, builder: (BuildContext context){
-                                        String btnName = snapshot.data![index]["name"];
-                                        int btnSizeX = snapshot.data![index]["size_x"];
-                                        int btnSizeY = snapshot.data![index]["size_y"];
-                                        int btnPosition = snapshot.data![index]["position"];
-                                        String btnCommand = snapshot.data![index]["command"];
-                                        return AlertDialog(
-                                          title: const Text("Edit buttons"),
-                                          content: Column(
-                                            children: [
-                                              TextField(
-                                                onChanged: (newName){
-                                                  btnName = newName;
-                                                },
-                                                decoration: const InputDecoration(hintText: 'new name'),
-                                                textInputAction: TextInputAction.next,
-                                              ),
-                                              /*
-                                        TextField(
-                                          onChanged: (newSizeX){
-                                            btnSizeX = int.parse(newSizeX);
-                                          },
-                                          decoration: const InputDecoration(hintText: 'new sizeX'),
-                                          textInputAction: TextInputAction.next,
-                                        ),
-                                        TextField(
-                                          onChanged: (newSizeY){
-                                            btnSizeY = int.parse(newSizeY);
-                                          },
-                                          decoration: const InputDecoration(hintText: 'new sizeY'),
-                                          textInputAction: TextInputAction.next,
-                                        ),
-                                        TextField(
-                                          onChanged: (newPostion){
-                                            btnPosition = int.parse(newPostion);
-                                          },
-                                          decoration: const InputDecoration(hintText: 'new position'),
-                                          textInputAction: TextInputAction.next,
-                                        ),
-                                        */
-
-                                              TextField(
-                                                onChanged: (newCommand){
-                                                  btnCommand = newCommand;
-                                                },
-                                                decoration: const InputDecoration(hintText: 'new command'),
-                                              ),
-                                            ],
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(onPressed: (){
-                                              deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                              Navigator.pop(context);
-                                              setState(() {});
-                                            }, child: Text("Delete")),
-                                            TextButton(onPressed: (){
-                                              editButton('comfySpace.db', spaceLaunch, snapshot.data![index]["id"], btnName, btnSizeX, btnSizeY, btnPosition, btnCommand);
-                                              Navigator.pop(context);
-                                              setState(() {});
-                                            }, child: Text("Alter"))
-                                          ],
-                                        );
-                                      });
-                                      //deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                      setState(() {});
-                                    },
-                                  );*/
                                   //return CustomToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: snapshot.data![index]["command"], commandOff: snapshot.data![index]["command"], terminal: terminal);
                                   return GestureDetector(
                                     onLongPress: (){
@@ -1487,6 +1412,7 @@ class _spacePageState extends State<spacePage> {
   }
 }
 
+/*
 class WireDashSpacePage extends StatelessWidget {
   const WireDashSpacePage({super.key, required this.spaceName, required this.hostname, required this.username, required this.password});
   final String spaceName; final String hostname; final String username; final String password;
@@ -1509,5 +1435,5 @@ class WireDashSpacePage extends StatelessWidget {
       }
     });
   }
-}
+} */
 
