@@ -26,9 +26,6 @@ import '../state.dart';
 
 
 class comfyAppBar extends StatefulWidget {
-
-
-
   const comfyAppBar({super.key, required this.title, this.WiredashWidget, this.automaticallyImplyLeading = false});
   final String title; final Widget? WiredashWidget; final bool automaticallyImplyLeading;
   @override
@@ -43,7 +40,7 @@ class _comfyAppBarState extends State<comfyAppBar> {
       actions: [
         Row(
           children: [
-            widget.WiredashWidget!,
+            (widget.WiredashWidget != null)? widget.WiredashWidget! :SizedBox(width: 0,),
             SizedBox(width: 10,),
           ],
         )

@@ -830,7 +830,7 @@ class _spacePageState extends State<spacePage> {
   late SSHClient clientControl;
   final double horizontalPadding = 40;
   final double verticalPadding = 25;
-  late String projectID; late String secretCode;
+  late String projectID; late String secretCode; bool TerminalShow = false;
   @override
   void initState(){
     super.initState();
@@ -856,9 +856,9 @@ class _spacePageState extends State<spacePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: (MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux )? null
-          :PreferredSize(
+    return Scaffold(//uncomment mediaquery for windows build
+      appBar: //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux )? null :
+          PreferredSize(
           preferredSize: const Size.fromHeight(64),
           child: comfyAppBar(
             automaticallyImplyLeading: true,
@@ -869,7 +869,7 @@ class _spacePageState extends State<spacePage> {
           )),
         backgroundColor: bgcolor,
         floatingActionButton:
-        (MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
+        //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
         SpeedDial(
           //animatedIcon: AnimatedIcons.event_add,
           tooltip: "Add Button",
@@ -1163,21 +1163,28 @@ class _spacePageState extends State<spacePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal),
-              (MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
+              //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
               const SizedBox(height: 20,),
-              (MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
+              //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
               Padding(
                 padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: keyGreen, width: 5),
-                      borderRadius: BorderRadius.circular(0.0),
-                      //color: Colors.black,
-                    ),
-                  height: 120,
-                    child: TerminalView(terminal, readOnly: true, autoResize: true, padding: const EdgeInsets.only(left: 20, top: 10),textStyle: const TerminalStyle(fontSize: 13,))),
+                child: ExpansionTile(
+                  title: Text("hi"),
+                  onExpansionChanged: (bool expanded){
+                    setState(){
+                      TerminalShow = expanded;
+                      print(TerminalShow);
+                    }
+                  },
+                  children: [
+                    Container(
+                        decoration: BoxDecoration( border: Border.all(color: keyGreen, width: 5), borderRadius: BorderRadius.circular(0.0),),
+                        height: 120,
+                        child: TerminalView(terminal, readOnly: true, autoResize: true, padding: const EdgeInsets.only(left: 20, top: 10),textStyle: const TerminalStyle(fontSize: 13,)))
+                  ],
+                )
               ),
-              (MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
+              //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
               const SizedBox(height: 32,),
               Expanded(
                 child: FutureBuilder(
