@@ -16,13 +16,13 @@
 
 
 **`A comfortable interface for Raspberry Pi projects`**
-    <img src="Demo1.gif" alt="Demo video" width="300"/>
+<br><br><img src="Demo1.gif" alt="Demo video" width="300"/>
 
 Learn how to use with documentation at <a href="https://comfystudio.tech/" target="_blank"><img src="https://img.shields.io/badge/documentation-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="Documentation Badge"/></a>
 
 Download from <a href="https://play.google.com/store/apps/details?id=tech.comfyStudio.comfySpace&hl=en_US&gl=US"  target="_blank"><img src="https://img.shields.io/badge/Google_Play-414141?style=for-the-badge&logo=google-play&logoColor=white" alt="Documentation Badge"/></a>
 
-Download for Windows & APK in Release <a href="https://play.google.com/store/apps/details?id=tech.comfyStudio.comfySpace&hl=en_US&gl=US" target="_blank"><img src="https://img.shields.io/badge/Release-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="Documentation Badge"/></a>
+Download for Windows & APK in Release <a href="https://github.com/ThomasVuNguyen/comfySpace/releases" target="_blank"><img src="https://img.shields.io/badge/Release-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="Documentation Badge"/></a>
 
 Linux, Web, MacOS & iOS releases coming soon.
 
