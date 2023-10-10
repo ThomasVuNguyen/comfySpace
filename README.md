@@ -15,8 +15,8 @@
 </div>
 
 
-**`Comfortable interface for Raspberry Pi projects`**
-
+**`A comfortable interface for Raspberry Pi projects`**
+![](Demo1.gif)
 
 
 **`Credit`**
