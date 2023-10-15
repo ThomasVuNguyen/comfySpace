@@ -14,19 +14,34 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Feel free to ',style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.w500, fontSize: 18),),
-              MaterialButton(
-                onPressed: (){
-                  Wiredash.of(context).show(inheritMaterialTheme: true);
-                },
-                color: Colors.blue,
-                child: Text("Suggest a setting!", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
-              ),
-            ],
+      child: Column(
+        children: [
+          ToggleButtons(
+              children: [
+                Icon(Icons.light_mode),
+                Icon(Icons.dark_mode)
+              ],
+              isSelected: [false, true],
+            onPressed: (int index){
+                if(index==0){
+                }
+            },
           ),
+          Row(
+                mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Feel free to ',style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.w500, fontSize: 18),),
+                  MaterialButton(
+                    onPressed: (){
+                      Wiredash.of(context).show(inheritMaterialTheme: true);
+                    },
+                    color: Colors.blue,
+                    child: Text("Suggest a setting!", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
+                  ),
+                ],
+              ),
+        ],
+      ),
     );
   }
 }

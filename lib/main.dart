@@ -651,10 +651,11 @@ class _comfySpaceState extends State<comfySpace> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
         bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            color: bgcolor,
-            border: Border(top: BorderSide(color: borderColor, width: 2.0),)
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.background,
+            border: const Border(top: BorderSide(color: borderColor, width: 2.0),)
           ),
           child: SafeArea(
             child: Padding(
@@ -683,40 +684,37 @@ class _comfySpaceState extends State<comfySpace> {
             ),
           ),
         ),
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(64.0),
-          child: AppBar(
-            titleSpacing: 20,
-            automaticallyImplyLeading: false,
-            shape: const Border(bottom: BorderSide(color: textcolor, width:2)),
-            title: GestureDetector(
-              onTap: (){
-                showDialog(context: context, builder: (BuildContext context){
-                  return const Credit();
-                });
-              },
-                child: Text('ComfySpace', style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),)),
-            systemOverlayStyle: const SystemUiOverlayStyle(
-              statusBarColor: bgcolor,
-            ),
-            elevation: 0, backgroundColor: bgcolor,
-            actionsIconTheme: const IconThemeData(size: 30, color: Colors.black, opacity: 10.0),
-            actions: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  child: Icon(Icons.feedback_outlined, color: Colors.black),
-                  onTap: (){
-                    Wiredash.of(context).show();
-                    //setState(() {});
-                    //String testHost = checkHostInfo('comfySpace.db').toString();
-                    //print(testHost);
-                  },
-                ),
-              ),
-
-            ],
+        appBar: AppBar(
+          titleSpacing: 20,
+          automaticallyImplyLeading: false,
+          shape: const Border(bottom: BorderSide(width:2)),
+          title: GestureDetector(
+            onTap: (){
+              showDialog(context: context, builder: (BuildContext context){
+                return const Credit();
+              });
+            },
+              child: Text('ComfySpace', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 24),)),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Theme.of(context).colorScheme.background,
           ),
+          elevation: 0, backgroundColor: Theme.of(context).colorScheme.background,
+          actionsIconTheme: const IconThemeData(size: 30, opacity: 10.0),
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                child: Icon(Icons.feedback_outlined, color: Colors.black),
+                onTap: (){
+                  Wiredash.of(context).show();
+                  //setState(() {});
+                  //String testHost = checkHostInfo('comfySpace.db').toString();
+                  //print(testHost);
+                },
+              ),
+            ),
+
+          ],
         ),
         //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButton: (bottomBarIndex != 0 )? null:
@@ -800,7 +798,8 @@ class WireDashComfySpacePage extends StatelessWidget {
         builder: (context, AsyncSnapshot<List<String>> snapshot){
       if(snapshot.hasData){
         print(snapshot.data);
-        return Wiredash(projectId: snapshot.data![0], secret: snapshot.data![1],
+        return Wiredash(
+            projectId: snapshot.data![0], secret: snapshot.data![1],
             child: comfySpace()
         );
       }

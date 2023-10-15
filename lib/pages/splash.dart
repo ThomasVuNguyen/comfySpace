@@ -1,10 +1,13 @@
 import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/main.dart';
+import 'package:comfyssh_flutter/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:comfyssh_flutter/pages/home_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+
+import '../theme/dark_theme.dart';
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -21,10 +24,12 @@ class _MyAppState extends State<MyApp> {
   }
   Widget build(BuildContext context) {
 
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ComfySSH',
       home: WireDashComfySpacePage(),
+      theme: lightMode,
+      darkTheme: darkMode,
       //home: Welcome(),
     );
   }
