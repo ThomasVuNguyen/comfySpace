@@ -651,24 +651,21 @@ class _comfySpaceState extends State<comfySpace> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
       backgroundColor: Theme.of(context).colorScheme.background,
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
-            border: const Border(top: BorderSide(color: borderColor, width: 2.0),)
-          ),
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10,),
               child: GNav(
-                rippleColor: Colors.blue, haptic: true, duration: const Duration(milliseconds: 200),
+                //rippleColor: Colors.blue, haptic: true, duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutExpo,
-                backgroundColor: Colors.white, color: Colors.black, activeColor: Colors.white, tabBackgroundColor: Colors.black,
+                //backgroundColor: Colors.white, color: Colors.black, activeColor: Colors.white, tabBackgroundColor: Colors.black,
                 tabActiveBorder: Border.all(color: Colors.black, width: 1), tabBorderRadius: 10.0,
                 padding: const EdgeInsets.all(16),
-                gap: 8,
+                gap: 2,
                 tabs: const [
-                  GButton(icon: Icons.home, ),
+                  GButton(icon: Icons.home,text:' Home' ),
                   GButton(icon: Icons.settings, ),
                   GButton(icon: Icons.lightbulb ),
                   GButton(icon: Icons.public, ),
@@ -687,7 +684,6 @@ class _comfySpaceState extends State<comfySpace> {
         appBar: AppBar(
           titleSpacing: 20,
           automaticallyImplyLeading: false,
-          shape: const Border(bottom: BorderSide(width:2)),
           title: GestureDetector(
             onTap: (){
               showDialog(context: context, builder: (BuildContext context){
@@ -695,22 +691,14 @@ class _comfySpaceState extends State<comfySpace> {
               });
             },
               child: Text('ComfySpace', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 24),)),
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Theme.of(context).colorScheme.background,
-          ),
-          elevation: 0, backgroundColor: Theme.of(context).colorScheme.background,
-          actionsIconTheme: const IconThemeData(size: 30, opacity: 10.0),
+          elevation: 0,
+          //actionsIconTheme: const IconThemeData(size: 30, opacity: 10.0),
           actions: <Widget>[
             Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                child: Icon(Icons.feedback_outlined, color: Colors.black),
-                onTap: (){
-                  Wiredash.of(context).show();
-                  //setState(() {});
-                  //String testHost = checkHostInfo('comfySpace.db').toString();
-                  //print(testHost);
-                },
+                child: Icon(Icons.feedback_outlined),
+                onTap: (){ Wiredash.of(context).show(); },
               ),
             ),
 
@@ -720,7 +708,7 @@ class _comfySpaceState extends State<comfySpace> {
         floatingActionButton: (bottomBarIndex != 0 )? null:
         FloatingActionButton(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
+              borderRadius: BorderRadius.circular(16.0),
           ),
           tooltip: 'Add New Space',
           child: const Icon(Icons.add),
@@ -1163,10 +1151,10 @@ class _spacePageState extends State<spacePage> {
             children: [
               updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal),
               //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
-              const SizedBox(height: 20,),
+              const SizedBox(height: 8,),
               //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
               Padding(
-                padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: ExpansionTile(
                   title: Text("hi"),
                   onExpansionChanged: (bool expanded){
@@ -1184,18 +1172,18 @@ class _spacePageState extends State<spacePage> {
                 )
               ),
               //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
-              const SizedBox(height: 32,),
+              const SizedBox(height: 8,),
               Expanded(
                 child: FutureBuilder(
                     future: buttonRenderer('comfySpace.db', widget.spaceName),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done){
                         return Padding(
-                          padding: const EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(4.0),
                           child: GridView.builder(
                             shrinkWrap: true,
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:2
+                                crossAxisCount:3
                                 //PopulateButton(context),
                               ),
                               itemCount: snapshot.data?.length,
@@ -1206,7 +1194,7 @@ class _spacePageState extends State<spacePage> {
                                           showDialog(context: context, builder: (BuildContext context){
                                             return AlertDialog(
                                               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                              contentPadding: const EdgeInsets.all(20.0),
+                                              contentPadding: const EdgeInsets.all(8.0),
                                               title: Text('Delete Button'),
                                               actions: [
                                                 CancelButtonPrompt(

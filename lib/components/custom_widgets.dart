@@ -24,6 +24,7 @@ import '../function.dart';
 import '../main.dart';
 import '../state.dart';
 
+const double buttonPadding = 2.0;
 
 class comfyAppBar extends StatefulWidget {
   const comfyAppBar({super.key, required this.title, this.WiredashWidget, this.automaticallyImplyLeading = false});
@@ -46,20 +47,16 @@ class _comfyAppBarState extends State<comfyAppBar> {
         )
       ],
       iconTheme: IconThemeData(
-        color: textcolor,
+        //color: textcolor,
       ),
-      shape: const Border(bottom: BorderSide(color: textcolor, width: 2)),
       toolbarHeight: 64,
       titleSpacing: 20,
       title: Row(
         children: <Widget>[
-          const SizedBox(width: 0, height: 20, child: DecoratedBox(decoration: BoxDecoration(color: bgcolor)),),
-          Text(widget.title, style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 24),),
+          Text(widget.title,),
         ],
       ),
-      systemOverlayStyle: const SystemUiOverlayStyle(statusBarColor: bgcolor),
       elevation: 0,
-      backgroundColor: bgcolor,
     );
   }
 }
@@ -308,33 +305,36 @@ class _spaceTileState extends State<spaceTile> {
               ),
             ),*/
             SizedBox(
-              //width: MediaQuery.of(context).size.width-146, height: 128,
-              width: MediaQuery.of(context).size.width-40, height: 128,
+              width: MediaQuery.of(context).size.width-40,
               child: ListTile(
-                contentPadding: EdgeInsets.only(top:10.0, bottom: 0.0, left: 17.0),
-                trailing: Container(
-                  width: 40,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                          onPressed: (){
-                            editPrompt();
-                      }, icon: const Icon(Icons.edit))
-                    ],
+                dense: true,
+                contentPadding: EdgeInsets.only(top:16.0, bottom: 16.0, left: 16.0, right: 16.0),
+                trailing: AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect( borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      color: Theme.of(context).colorScheme.primary,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                              onPressed: (){
+                                editPrompt();
+                          }, icon: const Icon(Icons.edit_outlined, color: Color(0xffEADDFF),))
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => spacePage(spaceName: widget.spaceName, hostname: hostNameHolder, username: userNameHolder, password: passwordHolder)),);
                   print("$userNameHolder@$hostNameHolder");
                 },
-                shape: const RoundedRectangleBorder(side: BorderSide(width: 2, color: textcolor), borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), bottomLeft: Radius.circular(8.0), topRight: Radius.circular(8.0), bottomRight: Radius.circular(8.0)), ),
-                //title: Text(widget.spaceName, style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 20),),
-                //subtitle: hostInfoLoaded? Text('$userNameHolder @ $hostNameHolder', style: GoogleFonts.poppins(color: textcolor, fontSize: 16), ) : Text(''),
+                shape: RoundedRectangleBorder(side: BorderSide(width: 2, color: Theme.of(context).colorScheme.tertiary), borderRadius: BorderRadius.only(topLeft: Radius.circular(12.0), bottomLeft: Radius.circular(8.0), topRight: Radius.circular(8.0), bottomRight: Radius.circular(8.0)), ),
                   title: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(widget.spaceName, style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 20),),
-                      hostInfoLoaded? Text('$userNameHolder @ $hostNameHolder', style: GoogleFonts.poppins(color: textcolor, fontSize: 16), ) : Text('')
+                      Text(widget.spaceName, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 18),),
+                      hostInfoLoaded? Text('$userNameHolder @ $hostNameHolder', style: GoogleFonts.poppins(fontSize: 16), ) : Text('')
                     ],
                   ),
                 ),
@@ -405,7 +405,7 @@ class _LedToggleState extends State<LedToggle> {
           var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
         },
         child: Padding(
-          padding: EdgeInsets.all(15.0),
+          padding: EdgeInsets.all(buttonPadding),
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 2),
@@ -614,7 +614,7 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
   Widget build(BuildContext context) {
     if (SSHLoaded == true){
       return Padding(
-        padding: EdgeInsets.all(15.0),
+        padding: EdgeInsets.all(buttonPadding),
         child: GestureDetector(
           onTap: (){
             sendCommand();
@@ -710,7 +710,7 @@ class _CustomInputButtonState extends State<CustomInputButton> {
         stream: readInputStream(client, widget.commandIn),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot,){
             if(snapshot.hasData){
-              return Padding(padding: const EdgeInsets.all(15.0),
+              return Padding(padding: const EdgeInsets.all(buttonPadding),
                 child: Container(
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(24.0), color: Colors.grey[900]),
                   child: Padding(
@@ -792,7 +792,7 @@ class _DCMotorSingleState extends State<DCMotorSingle> {
     if(SSHLoadingFinished == true){
       print(index);
       return Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(buttonPadding),
         child: GestureDetector(
           onVerticalDragStart: (dragDetail){
           },
@@ -903,7 +903,7 @@ class _StepperMotorState extends State<StepperMotor> {
   Widget build(BuildContext context) {
     if(SSHLoadingFinished == true){
       return Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(buttonPadding),
         child: GestureDetector(
             onHorizontalDragStart: (dragDetail){
             },
