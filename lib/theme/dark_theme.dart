@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 ThemeData darkMode = ThemeData(
+  buttonTheme: ButtonThemeData(
+    buttonColor: Colors.red,
+
+  ),
+  dialogTheme: DialogTheme(
+    backgroundColor: Color(0xff2B2930),
+    titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Color(0xffE6E0E9), fontSize: 22),
+    contentTextStyle: GoogleFonts.poppins(fontSize: 18.0),
+    iconColor: Colors.red,
+  ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: Colors.red,
   ),
@@ -22,11 +32,13 @@ ThemeData darkMode = ThemeData(
       primary: Color(0xff4F378B),
       onPrimary: Color(0xffEADDFF),
       primaryContainer: Color(0xff4F378B),
-      secondary: Colors.purple,
+      secondary: Color(0xff42287B),
+      onSecondaryContainer: Color(0xffD0BCFF),
       onSecondary: Colors.green,
       tertiary: Color(0xffCAC4D0),
-      secondaryContainer: Colors.cyan,
+      secondaryContainer: Color(0xffE8DEF8),
       inversePrimary: Colors.yellow,
+      surfaceVariant: Color(0xff211F26),
 
     ),
     /*textTheme: ThemeData.light().textTheme.apply(

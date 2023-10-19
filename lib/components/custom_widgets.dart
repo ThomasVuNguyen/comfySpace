@@ -385,6 +385,7 @@ class _LedToggleState extends State<LedToggle> {
     final shell = await client.shell();
     await shell.done;
     client.close();
+    print("closed");
   }
   @override
   Widget build(BuildContext context) {
@@ -392,10 +393,10 @@ class _LedToggleState extends State<LedToggle> {
       return GestureDetector(
         onTap: () async {
           if (toggleState == true){
-            widget.terminal.write('LED ${widget.pin} off \r\n');
+            widget.terminal.write('LED ${widget.pin} on \r\n');
           }
           else{
-            widget.terminal.write('LED ${widget.pin} on \r\n');
+            widget.terminal.write('LED ${widget.pin} off \r\n');
           }
           setState((){
             toggleState = !toggleState;
@@ -406,64 +407,39 @@ class _LedToggleState extends State<LedToggle> {
         },
         child: Padding(
           padding: EdgeInsets.all(buttonPadding),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 2),
-            borderRadius: BorderRadius.circular(24.0),
-            color: toggleState ? Colors.grey[900] : const Color.fromARGB(44, 164, 167, 189),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 25.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  alignment: Alignment.topCenter,
-                  child: Icon(toggleState? Icons.emoji_objects :Icons.lightbulb, color: toggleState? Colors.white :Colors.grey.shade700,),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: Padding(
-                      padding: EdgeInsets.only(left: 25.0),
-                          child: Text(
-                            widget.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: toggleState? Colors.white :Colors.black,
-                            ),
-                          ),
-                    )),
-                    Transform.rotate(
-                        angle: pi/2,
-                      child: CupertinoSwitch(
-                        activeColor: Colors.blue,
-                        value: toggleState,
-                        onChanged: (bool? value) async {
-                          if (value == true){
-                            widget.terminal.write('LED ${widget.pin} on \r\n');
-                          }
-                          else{
-                            widget.terminal.write('LED ${widget.pin} off \r\n');
-                          }
-
-                          setState((){
-                            toggleState = value!;
-                            print(toggleState.toString());
-                          });
-                          HapticFeedback.vibrate();
-                          var command = await client.run(toggleLED(widget.pin.toString(), toggleState));
-                        },
+          child: Container(
+            color: toggleState? Colors.white :Colors.black,
+            child: Padding(
+              padding: EdgeInsets.all(buttonPadding),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity, alignment: AlignmentDirectional.center,
+                    color: toggleState? Colors.black: Colors.white,
+                    child: Text(
+                      widget.name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: toggleState? Colors.white :Colors.black,
                       ),
-                    )
-                  ],
-                )
-              ],
+                    ),
+                  ),
+                  Container(height: 2.0,
+                      color: toggleState? Colors.black: Colors.white,
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      color: toggleState? Colors.black: Colors.white,
+                        child: Icon(toggleState? Icons.emoji_objects :Icons.lightbulb, color: toggleState? Colors.white :Colors.grey.shade700,)),
+                  )
+                ],
+              ),
             ),
           ),
         ),
-    ),
       );}
     else{
       return const LoadingSpaceWidget();

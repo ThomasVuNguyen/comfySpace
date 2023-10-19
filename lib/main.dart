@@ -654,29 +654,32 @@ class _comfySpaceState extends State<comfySpace> {
       //floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
       backgroundColor: Theme.of(context).colorScheme.background,
         bottomNavigationBar: Container(
-          child: SafeArea(
+          child: Container(
+            color: Color(0xff211F26),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10,),
-              child: GNav(
-                //rippleColor: Colors.blue, haptic: true, duration: const Duration(milliseconds: 200),
-                curve: Curves.easeOutExpo,
-                //backgroundColor: Colors.white, color: Colors.black, activeColor: Colors.white, tabBackgroundColor: Colors.black,
-                tabActiveBorder: Border.all(color: Colors.black, width: 1), tabBorderRadius: 10.0,
-                padding: const EdgeInsets.all(16),
-                gap: 2,
-                tabs: const [
-                  GButton(icon: Icons.home,text:' Home' ),
-                  GButton(icon: Icons.settings, ),
-                  GButton(icon: Icons.lightbulb ),
-                  GButton(icon: Icons.public, ),
-                ],
-                selectedIndex: bottomBarIndex,
-                onTabChange: (index){
-                  //print(index);
-                  setState(() {
-                    bottomBarIndex = index;
-                  });
-                },
+              padding: const EdgeInsets.only(left: 20.0, top:20.0, bottom: 20.0, right: 20.0),
+              child: SafeArea(
+                child: GNav(
+                  color: Theme.of(context).colorScheme.secondaryContainer, activeColor: Theme.of(context).colorScheme.secondary,
+                  curve: Curves.linear,
+                  tabBackgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                  backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                  tabActiveBorder: Border.all(color: Theme.of(context).colorScheme.onSecondaryContainer, width: 1), tabBorderRadius: 40.0, iconSize: 30.0,
+                  padding: const EdgeInsets.all(12),
+                  tabs: const [
+                    GButton(icon: Icons.home),
+                    GButton(icon: Icons.settings, ),
+                    GButton(icon: Icons.lightbulb ),
+                    GButton(icon: Icons.public, ),
+                  ],
+                  selectedIndex: bottomBarIndex,
+                  onTabChange: (index){
+                    //print(index);
+                    setState(() {
+                      bottomBarIndex = index;
+                    });
+                  },
+                ),
               ),
             ),
           ),
@@ -854,7 +857,6 @@ class _spacePageState extends State<spacePage> {
               Wiredash.of(context).show();
             }, icon: Icon(Icons.bug_report_outlined), iconSize: 30,),*/
           )),
-        backgroundColor: bgcolor,
         floatingActionButton:
         //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
         SpeedDial(
@@ -1153,23 +1155,44 @@ class _spacePageState extends State<spacePage> {
               //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
               const SizedBox(height: 8,),
               //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                child: ExpansionTile(
-                  title: Text("hi"),
-                  onExpansionChanged: (bool expanded){
-                    setState(){
-                      TerminalShow = expanded;
-                      print(TerminalShow);
-                    }
-                  },
-                  children: [
-                    Container(
-                        decoration: BoxDecoration( border: Border.all(color: keyGreen, width: 5), borderRadius: BorderRadius.circular(0.0),),
-                        height: 120,
-                        child: TerminalView(terminal, readOnly: true, autoResize: true, padding: const EdgeInsets.only(left: 20, top: 10),textStyle: const TerminalStyle(fontSize: 13,)))
-                  ],
-                )
+              Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(21))),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: ExpansionTile(
+                    collapsedBackgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                    backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                    title: Text("terminal"),
+                    onExpansionChanged: (bool expanded){
+                      setState(){
+                        TerminalShow = expanded;
+                        print(TerminalShow);
+                      }
+                    },
+                    children: [
+                      SizedBox(
+                          //decoration: BoxDecoration( border: Border.all(color: keyGreen, width: 5), borderRadius: BorderRadius.circular(0.0),),
+                          height: 120,
+                          child: TerminalView(
+                              terminal, readOnly: true, padding: const EdgeInsets.all(10.0),
+                            textStyle: TerminalStyle(
+                              fontSize: 18.0,
+                              fontFamily: 'poppins',
+                            ),
+                            theme: TerminalTheme(
+                              cursor: Theme.of(context).colorScheme.onSecondaryContainer,
+                              selection: Colors.black,
+                              foreground: Colors.black,
+                              background: Theme.of(context).colorScheme.onSecondaryContainer,
+                              white: Colors.white, red: Colors.red, green: Colors.green, yellow: Colors.yellow, blue: Colors.blue,
+                              magenta: Colors.white, cyan: Colors.cyan, brightBlack: Colors.black38, brightBlue: Colors.blue, brightRed: Colors.redAccent,
+                              brightGreen: Colors.greenAccent, brightCyan: Colors.cyanAccent, brightMagenta: Colors.purpleAccent, brightWhite: Colors.white30,
+                              brightYellow: Colors.yellowAccent, searchHitBackground: Colors.white30, searchHitBackgroundCurrent: Colors.white30, searchHitForeground: Colors.black, black: Colors.black38,
+                            )
+                          ))
+                    ],
+                  )
+                ),
               ),
               //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
               const SizedBox(height: 8,),
@@ -1183,8 +1206,7 @@ class _spacePageState extends State<spacePage> {
                           child: GridView.builder(
                             shrinkWrap: true,
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:3
-                                //PopulateButton(context),
+                                crossAxisCount: PopulateButton(context),
                               ),
                               itemCount: snapshot.data?.length,
                               itemBuilder: (BuildContext context, index){

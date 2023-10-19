@@ -23,7 +23,6 @@ class _NewSpaceDialogState extends State<NewSpaceDialog> {
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
       contentPadding: const EdgeInsets.all(20.0),
       title: showTitle? Center(child: Text("New Space"),) :null,
-      titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600,fontSize: 24.0, color: textcolor),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -49,7 +48,7 @@ class _NewSpaceDialogState extends State<NewSpaceDialog> {
                 hostNameHolder = hostName;
               },
               decoration: InputDecoration(
-                  hintText: "hostname / IP", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                  hintText: "Hostname / IP", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
                   focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
                   enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
               ),textInputAction: TextInputAction.next,),
@@ -62,7 +61,7 @@ class _NewSpaceDialogState extends State<NewSpaceDialog> {
                 usernameHolder = userName;
               },
               decoration: InputDecoration(
-                  hintText: "username", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                  hintText: "Username", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
                   focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
                   enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
               ),textInputAction: TextInputAction.next,),
@@ -84,7 +83,7 @@ class _NewSpaceDialogState extends State<NewSpaceDialog> {
                     });
                   },
                 ),
-                  hintText: "password", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
+                  hintText: "Password", hintStyle: GoogleFonts.poppins(fontSize: 18.0),
                   focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: Colors.blue, width: 2.0)),
                   enabledBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)),borderSide: BorderSide(color: textcolor, width: 2.0))
               ),textInputAction: TextInputAction.next,),
@@ -104,8 +103,8 @@ class _NewSpaceDialogState extends State<NewSpaceDialog> {
               });
 
             },
-          color: Colors.teal,
-          child: Text("Done", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
+          color: Theme.of(context).colorScheme.onSecondaryContainer,
+          child: Text("Done", style: GoogleFonts.poppins(fontSize: 18, color: Theme.of(context).colorScheme.secondary,)),
             )
       ],
 
