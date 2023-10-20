@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/servo.dart';
 import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
@@ -30,12 +31,17 @@ import 'package:wiredash/wiredash.dart';
 import 'package:xterm/xterm.dart';
 import 'dart:io' show Platform;
 
+import 'comfyScript/DCmotor.dart';
+import 'comfyScript/customInput.dart';
+import 'comfyScript/stepperMotor.dart';
+
 
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
 ValueNotifier<int> reloadState = ValueNotifier(0);
 String spaceLaunch = '';
 Color? currentColor; String? currentColorString;
 String buttonName = ''; int buttonSizeX = 1; int buttonSizeY = 1; int buttonPosition = 1; String buttonCommand = 'htop';
+String ConnectionCharacter = '!@@@###'; //used for connecting commands together in a string that allows easy extraction
 const borderColor = Colors.black;
 const cardColor = Colors.white;
 List<String> nameList = [];List<String> hostList = [];List<String> userList = [];List<String> passList = [];List<String> distroList = [];
@@ -911,6 +917,52 @@ class _spacePageState extends State<spacePage> {
                 }
             ),
             SpeedDialChild(
+                child: Image.asset('assets/speedDialIcons/custom_button.png', width: 30),
+                backgroundColor: Colors.transparent,
+                foregroundColor: Colors.white,
+                label: "Custom Toggle Button", labelStyle: TextStyle(fontSize: 18),
+                onTap: (){
+                  String CommandOn = 'htop'; String CommandOff = 'htop';
+                  showDialog(context: context, builder: (BuildContext context){
+                    String buttonType = 'ComfyToggleButton';
+                    buttonSizeY = 1;
+                    buttonSizeX=1;
+                    buttonPosition=1;
+                    return ButtonAlertDialog(
+                        title: 'Custom toggle button',
+                        content: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              comfyTextField(onChanged: (btnName){
+                                buttonName = btnName;
+                              }, text: 'button name'),
+                              const SizedBox(height: 32, width: double.infinity,),
+                              comfyTextField(onChanged: (btnCommand){
+                                CommandOn = btnCommand;
+                              }, text: 'command #1'),
+                              const SizedBox(height: 32, width: double.infinity,),
+                              comfyTextField(onChanged: (btnCommand){
+                                CommandOff = btnCommand;
+                              }, text: 'command #2'),
+
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          comfyActionButton(
+                            onPressed: (){
+                              addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, CommandOn + ConnectionCharacter + CommandOff, buttonType);
+                              print("$buttonName has been added to ${widget.spaceName}");
+                              Navigator.pop(context);
+                              setState(() {});
+                            },
+                          ),
+                        ]);
+                  });
+                }
+            ),
+            SpeedDialChild(
                 child: Image.asset('assets/speedDialIcons/custom_button.png',width: 30,),
                 backgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
@@ -1381,6 +1433,35 @@ class _spacePageState extends State<spacePage> {
                                     child: CustomInputButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandIn: snapshot.data![index]["command"], terminal: terminal),
                                   );
                                 }
+                                else if (snapshot.data![index]["buttonType"] == "ComfyToggleButton"){
+                                  return GestureDetector(
+                                    onLongPress: (){
+                                      showDialog(context: context, builder: (BuildContext context){
+                                        return AlertDialog(
+                                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                          contentPadding: const EdgeInsets.all(20.0),
+                                          title: Text('Delete Button'),
+                                          actions: [
+                                            CancelButtonPrompt(
+                                              onPressed: (){
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            deleteButtonPrompt(
+                                              onPressed: () {
+                                                setState(() {
+                                                  deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                            )
+                                          ],
+                                        );
+                                      });
+                                    },
+                                    child: ComfyToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: CommandExtract(snapshot.data![index]["command"])[0],commandOff: CommandExtract(snapshot.data![index]["command"])[1], terminal: terminal),
+                                  );
+                                }
                                 else{
                                   //return CustomToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: snapshot.data![index]["command"], commandOff: snapshot.data![index]["command"], terminal: terminal);
                                   return GestureDetector(
@@ -1408,7 +1489,7 @@ class _spacePageState extends State<spacePage> {
                                         );
                                       });
                                     },
-                                    child: CustomToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: snapshot.data![index]["command"], commandOff: snapshot.data![index]["command"], terminal: terminal),
+                                    child: SinglePressButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: snapshot.data![index]["command"], commandOff: snapshot.data![index]["command"], terminal: terminal),
                                   );
                                 }
 

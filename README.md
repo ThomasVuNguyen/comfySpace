@@ -48,3 +48,6 @@ Powered with <a href="https://github.com/ThomasVuNguyen/comfyScript" target="_bl
 <a target="_blank" href="https://icons8.com/icon/SRBNGzl2dc2m/raspberry">Raspberry</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br/>
 
 
+**`Tip to self`**
+
+For custom widgets, in Gesture Detector, run setState before executing commands -> less lagging
