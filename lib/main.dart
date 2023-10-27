@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
+import 'package:comfyssh_flutter/comfyScript/ComfyVerticalSwipeButton.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/servo.dart';
 import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
@@ -31,6 +32,7 @@ import 'package:wiredash/wiredash.dart';
 import 'package:xterm/xterm.dart';
 import 'dart:io' show Platform;
 
+import 'comfyScript/ComfyHorizontalSwipeButton.dart';
 import 'comfyScript/DCmotor.dart';
 import 'comfyScript/customInput.dart';
 import 'comfyScript/stepperMotor.dart';
@@ -1196,7 +1198,105 @@ class _spacePageState extends State<spacePage> {
                     );
                   });
                 }
-            )
+            ),
+            SpeedDialChild(
+                backgroundColor: Colors.transparent,
+                label: 'Vertical Swipe Button',
+                child: Image.asset('assets/speedDialIcons/vertical_swipe.png', width: 40,),
+                onTap: (){
+                  late String up; late String middle; late String down;
+                  showDialog(context: context, builder: (BuildContext context){
+                    return ButtonAlertDialog(
+                      title: 'Vertical Swipe Button',
+                      content: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            comfyTextField(text: 'button name', onChanged: (btnName){
+                              buttonName = btnName;
+                            }),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(text: 'Up Function', onChanged: (txt){
+                              up = txt;
+                            },
+                            ),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(text: 'Middle Func', onChanged: (txt){
+                              middle = txt;
+                            },
+                            ),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(text: 'Down Func', onChanged: (txt){
+                              down = txt;
+                            },
+                            ),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        comfyActionButton(
+                          onPressed: (){
+                            addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,up + ConnectionCharacter + middle + ConnectionCharacter + down,'ComfyVerticalButton');
+                            Navigator.pop(context);
+                            setState(() {});
+                          },
+                        )
+                      ],
+                    );
+                  });
+                }
+            ),
+            SpeedDialChild(
+                backgroundColor: Colors.transparent,
+                label: 'Horizontal Swipe Button',
+                child: Image.asset('assets/speedDialIcons/vertical_swipe.png', width: 40,),
+                onTap: (){
+                  late String left; late String middle; late String right;
+                  showDialog(context: context, builder: (BuildContext context){
+                    return ButtonAlertDialog(
+                      title: 'Horizontal Swipe Button',
+                      content: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            comfyTextField(text: 'button name', onChanged: (btnName){
+                              buttonName = btnName;
+                            }),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(text: 'Left Function', onChanged: (txt){
+                              left = txt;
+                            },
+                            ),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(text: 'Middle Func', onChanged: (txt){
+                              middle = txt;
+                            },
+                            ),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(text: 'Right Func', onChanged: (txt){
+                              right = txt;
+                            },
+                            ),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        comfyActionButton(
+                          onPressed: (){
+                            addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,left + ConnectionCharacter + middle + ConnectionCharacter + right,'ComfyHorizontalButton');
+                            Navigator.pop(context);
+                            setState(() {});
+                          },
+                        )
+                      ],
+                    );
+                  });
+                }
+            ),
           ],
         ),
         body: SafeArea(
@@ -1460,6 +1560,64 @@ class _spacePageState extends State<spacePage> {
                                       });
                                     },
                                     child: ComfyToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: CommandExtract(snapshot.data![index]["command"])[0],commandOff: CommandExtract(snapshot.data![index]["command"])[1], terminal: terminal),
+                                  );
+                                }
+                                else if (snapshot.data![index]["buttonType"] == "ComfyVerticalButton"){
+                                  return GestureDetector(
+                                    onLongPress: (){
+                                      showDialog(context: context, builder: (BuildContext context){
+                                        return AlertDialog(
+                                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                          contentPadding: const EdgeInsets.all(20.0),
+                                          title: Text('Delete Button'),
+                                          actions: [
+                                            CancelButtonPrompt(
+                                              onPressed: (){
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            deleteButtonPrompt(
+                                              onPressed: () {
+                                                setState(() {
+                                                  deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                            )
+                                          ],
+                                        );
+                                      });
+                                    },
+                                    child: ComfyVerticalButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, up: CommandExtract(snapshot.data![index]["command"])[0], middle: CommandExtract(snapshot.data![index]["command"])[1], down: CommandExtract(snapshot.data![index]["command"])[2] ),
+                                  );
+                                }
+                                else if (snapshot.data![index]["buttonType"] == "ComfyHorizontalButton"){
+                                  return GestureDetector(
+                                    onLongPress: (){
+                                      showDialog(context: context, builder: (BuildContext context){
+                                        return AlertDialog(
+                                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                          contentPadding: const EdgeInsets.all(20.0),
+                                          title: Text('Delete Button'),
+                                          actions: [
+                                            CancelButtonPrompt(
+                                              onPressed: (){
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            deleteButtonPrompt(
+                                              onPressed: () {
+                                                setState(() {
+                                                  deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                            )
+                                          ],
+                                        );
+                                      });
+                                    },
+                                    child: ComfyHorizontalButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, left: CommandExtract(snapshot.data![index]["command"])[0], middle: CommandExtract(snapshot.data![index]["command"])[1], right: CommandExtract(snapshot.data![index]["command"])[2] ),
                                   );
                                 }
                                 else{

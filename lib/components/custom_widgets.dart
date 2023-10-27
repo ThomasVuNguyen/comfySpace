@@ -81,63 +81,6 @@ class _spaceTileState extends State<spaceTile> {
   void editPrompt(){
     showDialog(context: context, builder: (BuildContext context){
       return EditSpaceDialog(spaceName: widget.spaceName);
-      /*return AlertDialog(
-        title: const Text("Edit Space"),
-        content: Column(
-          children: [
-            TextField(
-                onChanged: (text1){
-                  spaceNameHolder = text1;},
-                decoration: const InputDecoration(hintText: "space"), textInputAction: TextInputAction.next),
-            TextField(
-              onChanged: (hostname){
-                hostNameHolder = hostname;},
-              decoration: const InputDecoration(hintText: "hostname"), textInputAction: TextInputAction.next,),
-            TextField(
-              onChanged: (username){
-                userNameHolder = username;
-              }, decoration: const InputDecoration(hintText: "username"), textInputAction: TextInputAction.next,
-            ),
-            TextField(
-              onChanged: (password){
-                passwordHolder = password;
-              }, decoration: const InputDecoration(hintText: "password"), textInputAction: TextInputAction.next,
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          /*TextButton(onPressed: (){
-            updateAndroidMetaData('comfySpace.db');
-          }, child: const Text("METADATA")),
-          TextButton(onPressed: (){
-            deleteDB('comfySpace.db');
-          }, child: Text("Wipe")),*/
-          TextButton(onPressed: (){
-            deleteSpace('comfySpace.db', widget.spaceName);
-            //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-            Future.delayed(const Duration(milliseconds: 100), (){
-              setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-              });
-            });
-            Navigator.pop(context);
-          }, child: Text("Delete")),
-          TextButton(onPressed: (){
-            editSpace('comfySpace.db', widget.spaceName, spaceNameHolder, hostNameHolder, userNameHolder, passwordHolder);
-            //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-            Future.delayed(const Duration(milliseconds: 100), (){
-              setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-              });
-            });
-            Navigator.pop(context);
-            setState(() {
-              print(widget.spaceName);
-              print(spaceNameHolder);
-            });
-          }, child: const Text("Rename")),
-        ],
-      );*/
     });
   }
   Future<void> getSpaceInfo(String spaceName) async{
@@ -157,18 +100,6 @@ class _spaceTileState extends State<spaceTile> {
           padding: const EdgeInsets.only(bottom: 10.0),
         child: Row(
           children: [
-            /*Container(
-              decoration: const BoxDecoration(
-                color: textcolor,
-
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(0.0), bottomLeft: Radius.circular(8.0), bottomRight: Radius.circular(0.0))
-              ),
-              height: 128, width: 106,
-              child: IconButton(
-                onPressed: (){},
-                icon: const Icon(Icons.terminal, size: 50, color: Colors.white,)
-              ),
-            ),*/
             SizedBox(
               width: MediaQuery.of(context).size.width-40,
               child: ListTile(
@@ -210,7 +141,6 @@ class _spaceTileState extends State<spaceTile> {
     );
   }
 }
-
 
 class SinglePressButton extends StatefulWidget {
   const SinglePressButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.commandOn, required this.commandOff, required this.terminal});
