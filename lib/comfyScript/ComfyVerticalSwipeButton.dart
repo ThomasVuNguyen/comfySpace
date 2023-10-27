@@ -1,8 +1,10 @@
 import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:comfyssh_flutter/components/custom_widgets.dart';
+import 'package:comfyssh_flutter/states/CounterModel.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class ComfyVerticalButton extends StatefulWidget {
   const ComfyVerticalButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.up, required this.down, required this.middle});
@@ -20,6 +22,7 @@ class _ComfyVerticalButtonState extends State<ComfyVerticalButton> {
   int index = 1;
   List<Widget> buttonIcon = [const Icon(Icons.arrow_upward, size: 60, color: Colors.cyan,), const Icon(Icons.pause_circle_filled, size: 60, color: Colors.white,), const Icon(Icons.arrow_downward, size:60, color: Colors.cyanAccent,)];
   List<Color> buttonColor = [Colors.red,const Color.fromARGB(44, 164, 167, 189),Colors.red];
+
   @override
   void initState(){
     super.initState();
@@ -30,6 +33,8 @@ class _ComfyVerticalButtonState extends State<ComfyVerticalButton> {
     closeClient();
     client.close();
     super.dispose();
+    final counter = context.read<CounterModel>();
+    counter.decrement();
   }
   Future<void> initClient() async{
     client = SSHClient(
@@ -38,7 +43,10 @@ class _ComfyVerticalButtonState extends State<ComfyVerticalButton> {
       onPasswordRequest: () => widget.password,
     );
     print("initClient username: ${client.username}");
-    setState(() {SSHLoadingFinished = true;});
+    setState(() {
+      SSHLoadingFinished = true;
+    });
+
   }
   Future<void> UpFunction() async{
     HapticFeedback.selectionClick();
@@ -60,68 +68,73 @@ class _ComfyVerticalButtonState extends State<ComfyVerticalButton> {
   @override
   Widget build(BuildContext context) {
     if(SSHLoadingFinished ==true){
-      return Padding(
-        padding: const EdgeInsets.all(buttonPadding),
-        child: GestureDetector(
-          onVerticalDragUpdate: (dragDetail){
-            if(dragDetail.primaryDelta!<0){
-              direction = 'up';
-              setState((){
-                index=0;
-              });
-            }
-            else if(dragDetail.primaryDelta!>0){
-              direction = 'down';
-              setState(() {
-                index=2;
-              });
-            }
-          },
-          onVerticalDragEnd: (dragDetail){
-            if(direction =='up'){
-              UpFunction();
-              print(direction);
-            }
-            else if(direction =='down'){
-              DownFunction();
-              print(direction);
-            }
-          },
-          onTap: (){
-            direction = 'middle';
-            MiddleFunction();
-            setState(() {
-              index=1;
-            });
-          },
-          child: Padding(
-            padding: EdgeInsets.all(buttonPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  width: double.infinity, alignment: AlignmentDirectional.center,
-                  color: buttonColor[index],
-                  child: Text(
-                    widget.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.red,
+      final counter = context.read<CounterModel>();
+      counter.increment();
+      return Consumer<CounterModel>(
+          builder: (context, value, child) =>
+              Padding(
+                padding: const EdgeInsets.all(buttonPadding),
+                child: GestureDetector(
+                  onVerticalDragUpdate: (dragDetail){
+                    if(dragDetail.primaryDelta!<0){
+                      direction = 'up';
+                      setState((){
+                        index=0;
+                      });
+                    }
+                    else if(dragDetail.primaryDelta!>0){
+                      direction = 'down';
+                      setState(() {
+                        index=2;
+                      });
+                    }
+                  },
+                  onVerticalDragEnd: (dragDetail){
+                    if(direction =='up'){
+                      UpFunction();
+                      print(direction);
+                    }
+                    else if(direction =='down'){
+                      DownFunction();
+                      print(direction);
+                    }
+                  },
+                  onTap: (){
+                    direction = 'middle';
+                    MiddleFunction();
+                    setState(() {
+                      index=1;
+                    });
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(buttonPadding),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: double.infinity, alignment: AlignmentDirectional.center,
+                          color: buttonColor[index],
+                          child: Text(
+                            widget.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        Container(height: 2.0, color: Colors.red,),
+                        Expanded(child: Container(
+                          width: double.infinity,
+                          color: buttonColor[index],
+                          child: buttonIcon[index],
+                        ))
+                      ],
                     ),
                   ),
                 ),
-                Container(height: 2.0, color: Colors.red,),
-                Expanded(child: Container(
-                  width: double.infinity,
-                  color: buttonColor[index],
-                  child: buttonIcon[index],
-                ))
-              ],
-            ),
-          ),
-          ),
-        );
+              )
+      );
     }
     else{
       return const LoadingSpaceWidget();
