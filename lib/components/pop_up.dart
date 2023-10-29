@@ -128,7 +128,7 @@ class _EditSpaceDialogState extends State<EditSpaceDialog> {
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
       contentPadding: const EdgeInsets.all(20.0),
       title: showTitle? const Center(child: Text("Edit Space"),) :null,
-      titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600,fontSize: 24.0, color: textcolor),
+      titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600,fontSize: 24.0),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -203,14 +203,10 @@ class _EditSpaceDialogState extends State<EditSpaceDialog> {
               children: [
             MaterialButton(
                 onPressed: (){
-                  deleteSpace('comfySpace.db', widget.spaceName);
-                  //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-                  Future.delayed(const Duration(milliseconds: 100), (){
-                    setState(() {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-                    });
+                  showDialog(context: context, builder: (BuildContext context){
+                    return DeleteSpaceConfirmation(spaceName: widget.spaceName);
                   });
-                  Navigator.pop(context);
+
                 },
               color: Colors.red,
               child: Text("Delete", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
@@ -334,6 +330,41 @@ class DeleteButtonDialog extends StatelessWidget {
     );
   }
 }
+
+class DeleteSpaceConfirmation extends StatelessWidget {
+  const DeleteSpaceConfirmation({super.key, required this.spaceName});
+  final String spaceName;
+  @override
+  Widget build(BuildContext context) {
+
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+      contentPadding: const EdgeInsets.all(20.0),
+      title: Text('Delete space $spaceName?'),
+      actions: [
+        MaterialButton(
+          color: Colors.teal,
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          child: Text("No", style: GoogleFonts.poppins(fontSize: 18)),
+        ),
+        MaterialButton(
+        onPressed: (){
+          deleteSpace('comfySpace.db', spaceName); //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
+            Future.delayed(const Duration(milliseconds: 100), (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
+            });
+            Navigator.pop(context);
+            },
+          color: Colors.red,
+          child: Text("Yes", style: GoogleFonts.poppins(fontSize: 18)),
+    )
+      ],
+    );
+  }
+}
+
 
 
 

@@ -24,7 +24,7 @@ import '../function.dart';
 import '../main.dart';
 import '../state.dart';
 
-const double buttonPadding = 2.0;
+const double buttonPadding = 8.0;
 
 class comfyAppBar extends StatefulWidget {
   const comfyAppBar({super.key, required this.title, this.WiredashWidget, this.automaticallyImplyLeading = false});
@@ -143,8 +143,8 @@ class _spaceTileState extends State<spaceTile> {
 }
 
 class SinglePressButton extends StatefulWidget {
-  const SinglePressButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.commandOn, required this.commandOff, required this.terminal});
-  final String name; final String hostname; final String username; final String password; final String commandOn; final String commandOff; final Terminal terminal;
+  const SinglePressButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.command, required this.terminal});
+  final String name; final String hostname; final String username; final String password; final String command; final Terminal terminal;
   @override
   State<SinglePressButton> createState() => _SinglePressButtonState();
 }
@@ -153,7 +153,7 @@ class _SinglePressButtonState extends State<SinglePressButton> {
   bool SSHLoaded = false; bool toggleState = false; late SSHClient client;
   @override
   void initState(){
-    print(widget.commandOn);
+    print(widget.command);
     super.initState();
     initClient();
   }
@@ -177,18 +177,24 @@ class _SinglePressButtonState extends State<SinglePressButton> {
 
   }
   Future<void> sendCommand() async{
-    if (toggleState == false){
-      var command = await client.run(widget.commandOn);
+    HapticFeedback.vibrate();
+      var command = await client.run(widget.command);
       String commandString = utf8.decode(command);
-      widget.terminal.write('${widget.commandOn}\r\n');
-      toggleState =!toggleState;
-    }
-    else{
-      var command = await client.run(widget.commandOff);
-      widget.terminal.write('${widget.commandOff}\r\n');
-      toggleState =!toggleState;
-    }
-    setState(() {HapticFeedback.vibrate();});
+      widget.terminal.write('\r\n${widget.command}');
+    setState(() {
+      toggleState = !toggleState;
+    });
+      Future.delayed(Duration(milliseconds: 50), (){
+        setState(() {
+          toggleState = !toggleState;
+        });
+
+      });
+
+
+
+
+
   }
   @override
   Widget build(BuildContext context) {
@@ -199,7 +205,25 @@ class _SinglePressButtonState extends State<SinglePressButton> {
           onTap: (){
             sendCommand();
           },
-          child: Container(
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2),
+                  borderRadius: BorderRadius.circular(24.0),
+                  color: toggleState? Colors.white :Colors.black,
+                ),
+                child: Center(child: toggleState? Icon(Icons.toggle_on, size: 60,color: Colors.black,) :Icon(Icons.toggle_off, size: 60,color: Colors.white,),),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18, color:!toggleState? Colors.white :Colors.black, )),
+              ),
+            ],
+
+          ),
+          /*Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24.0),
               color: toggleState? Colors.grey[900] : const Color.fromARGB(44, 164, 167, 189),
@@ -233,7 +257,7 @@ class _SinglePressButtonState extends State<SinglePressButton> {
                 ],
               ),
             ),
-          ),
+          ),*/
         ),
 
       );

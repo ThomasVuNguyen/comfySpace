@@ -2,6 +2,7 @@ import 'package:comfyssh_flutter/main.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:xterm/xterm.dart';
 
 import '../components/LoadingWidget.dart';
@@ -62,53 +63,38 @@ class _ComfyToggleButtonState extends State<ComfyToggleButton> {
             print(toggleState.toString());
           });
           if (toggleState == true){
-            widget.terminal.write('${widget.commandOff} \r\n');
+            widget.terminal.write('\r\n${widget.commandOff} ');
             var command = await client.run(widget.commandOff);
           }
           else{
-            widget.terminal.write('${widget.commandOn} \r\n');
+            widget.terminal.write('\r\n${widget.commandOn} ');
             var command = await client.run(widget.commandOn);
           }
-          //HapticFeedback.vibrate();
 
           SystemSound.play(SystemSoundType.click);
 
         },
         child: Padding(
           padding: const EdgeInsets.all(buttonPadding),
-          child: Container(
-            color: toggleState? Colors.white :Colors.black,
-            child: Padding(
-              padding: const EdgeInsets.all(buttonPadding),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: double.infinity, alignment: AlignmentDirectional.center,
-                    color: toggleState? Colors.black: Colors.white,
-                    child: Text(
-                      widget.name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: toggleState? Colors.white :Colors.black,
-                      ),
-                    ),
-                  ),
-                  Container(height: 2.0,
-                    color: toggleState? Colors.white: Colors.black,
-                  ),
-                  Expanded(
-                    child: Container(
-                        width: double.infinity,
-                        color: toggleState? Colors.black: Colors.white,
-                        child: Icon(toggleState? Icons.catching_pokemon :Icons.account_tree, color: toggleState? Colors.white :Colors.grey.shade700,)),
-                  )
-                ],
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2),
+                  borderRadius: BorderRadius.circular(24.0),
+                  color: toggleState? Colors.white :Colors.black,
+                ),
+                child: Center(child: toggleState? Icon(Icons.toggle_on, size: 60,color: Colors.black,) :Icon(Icons.toggle_off, size: 60,color: Colors.white,),),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18, color:!toggleState? Colors.white :Colors.black, )),
+              ),
+            ],
+
           ),
-        ),
+        )
       );}
     else{
       return const LoadingSpaceWidget();

@@ -1,6 +1,7 @@
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:xterm/xterm.dart';
 
 import '../components/LoadingWidget.dart';
@@ -69,10 +70,10 @@ class _LedToggleState extends State<LedToggle> {
             print(toggleState.toString());
           });
           if (toggleState == true){
-            widget.terminal.write('LED ${widget.pin} on \r\n');
+            widget.terminal.write('\r\nLED ${widget.pin} on ');
           }
           else{
-            widget.terminal.write('LED ${widget.pin} off \r\n');
+            widget.terminal.write('\r\nLED ${widget.pin} off ');
           }
           //HapticFeedback.vibrate();
           SystemSound.play(SystemSoundType.click);
@@ -80,40 +81,26 @@ class _LedToggleState extends State<LedToggle> {
           print(toggleState);
         },
         child: Padding(
-          padding: EdgeInsets.all(buttonPadding),
-          child: Container(
-            color: toggleState? Colors.black :Colors.white,
-            child: Padding(
-              padding: EdgeInsets.all(buttonPadding),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: double.infinity, alignment: AlignmentDirectional.center,
-                    color: toggleState? Colors.white: Colors.black,
-                    child: Text(
-                      widget.name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: toggleState? Colors.black :Colors.white,
-                      ),
-                    ),
-                  ),
-                  Container(height: 2.0,
-                    color: toggleState? Colors.black: Colors.white,
-                  ),
-                  Expanded(
-                    child: Container(
-                        width: double.infinity,
-                        color: toggleState? Colors.white: Colors.black,
-                        child: Icon(toggleState? Icons.lightbulb:Icons.emoji_objects, color: toggleState? Colors.grey.shade700 :Colors.white,)),
-                  )
-                ],
+          padding: const EdgeInsets.all(buttonPadding),
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2),
+                  borderRadius: BorderRadius.circular(24.0),
+                  color: toggleState? Colors.white :Colors.black,
+                ),
+                child: Center(child: toggleState? Icon(Icons.toggle_on, size: 60,color: Colors.black,) :Icon(Icons.toggle_off, size: 60,color: Colors.white,),),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18, color:!toggleState? Colors.white :Colors.black, )),
+              ),
+            ],
+
           ),
-        ),
+        )
       );}
     else{
       return const LoadingSpaceWidget();

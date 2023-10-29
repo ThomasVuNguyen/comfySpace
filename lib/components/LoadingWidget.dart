@@ -34,7 +34,7 @@ class LoadingSpaceWidget extends StatelessWidget {
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(24.0),
         ),
-        child: const LoadingHalfTriangle(),
+        child: LoadingHalfTriangle(),
       ),
     );
   }

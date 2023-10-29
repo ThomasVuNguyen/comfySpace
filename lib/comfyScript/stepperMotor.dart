@@ -97,13 +97,6 @@ class _StepperMotorState extends State<StepperMotor> {
                     child: Stack(
                         alignment: AlignmentDirectional.topCenter,
                         children: <Widget>[
-
-                            Column(
-                                children: [
-                                    const SizedBox(height: 4),
-                                    Text(widget.name,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.w400, fontSize: 18),),
-                                ],
-                            ),
                             Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(color: Colors.black, width: 2),
@@ -112,6 +105,16 @@ class _StepperMotorState extends State<StepperMotor> {
                                     color: motorColor[index],
                                 ),
                                 child: Center(child: motorIcon[index]),
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.only(top:8.0),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                        Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18),),
+                                        direction == "pause"? Icon(Icons.arrow_right): SizedBox(height: 0, width: 0,),
+                                    ],
+                                ),
                             ),
                         ]
                     )

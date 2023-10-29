@@ -79,10 +79,9 @@ class _CustomInputButtonState extends State<CustomInputButton> {
                           alignment: AlignmentDirectional.topCenter,
                           children:[
                             const SizedBox(height: 4),
-                            Text(widget.name,style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 18),),
-                            Center(child: Text(snapshot.data!, style: TextStyle(color: Colors.orange, fontSize: 18))),
+                            Text(widget.name,style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 18),),
+                            Center(child: Text(snapshot.data!, style: const TextStyle(color: Colors.orange, fontSize: 18))),
                           ]
-
                       ),
                     ),
                   )
