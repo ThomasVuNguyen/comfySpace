@@ -3,6 +3,9 @@ import 'package:comfyssh_flutter/components/custom_widgets.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
+import '../states/CounterModel.dart';
 
 class ComfyHorizontalButton extends StatefulWidget {
   const ComfyHorizontalButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.left, required this.right, required this.middle});
@@ -30,6 +33,8 @@ class _ComfyHorizontalButtonState extends State<ComfyHorizontalButton> {
     closeClient();
     client.close();
     super.dispose();
+    final counter = context.read<CounterModel>();
+    counter.decrement();
   }
   Future<void> initClient() async{
     client = SSHClient(
@@ -60,6 +65,8 @@ class _ComfyHorizontalButtonState extends State<ComfyHorizontalButton> {
   @override
   Widget build(BuildContext context) {
     if(SSHLoadingFinished ==true){
+      final counter = context.read<CounterModel>();
+      counter.increment();
       return Padding(
         padding: const EdgeInsets.all(buttonPadding),
         child: GestureDetector(

@@ -42,7 +42,7 @@ class _ComfyVerticalButtonState extends State<ComfyVerticalButton> {
       username: widget.username,
       onPasswordRequest: () => widget.password,
     );
-    print("initClient username: ${client.username}");
+    print("initClient username: ${client.username} for ${widget.name}");
     setState(() {
       SSHLoadingFinished = true;
     });
@@ -67,11 +67,11 @@ class _ComfyVerticalButtonState extends State<ComfyVerticalButton> {
   }
   @override
   Widget build(BuildContext context) {
-    if(SSHLoadingFinished ==true){
       final counter = context.read<CounterModel>();
       counter.increment();
       return Consumer<CounterModel>(
           builder: (context, value, child) =>
+          (SSHLoadingFinished == false) ?LoadingSpaceWidget():
               Padding(
                 padding: const EdgeInsets.all(buttonPadding),
                 child: GestureDetector(
@@ -135,9 +135,6 @@ class _ComfyVerticalButtonState extends State<ComfyVerticalButton> {
                 ),
               )
       );
-    }
-    else{
-      return const LoadingSpaceWidget();
-    }
+
   }
 }

@@ -38,6 +38,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "back_button_interceptor",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/back_button_interceptor-6.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "binary",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/binary-3.0.1",
       "packageUri": "lib/",
@@ -278,6 +284,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "flutter_overlay_loader",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_overlay_loader-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_plugin_android_lifecycle",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.17",
       "packageUri": "lib/",
@@ -428,6 +440,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "loader_overlay",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/loader_overlay-2.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "loading_animation_widget",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/loading_animation_widget-1.2.0+4",
       "packageUri": "lib/",
@@ -480,6 +498,12 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/open_url-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "overlay_support",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/overlay_support-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
     },
     {
       "name": "path",
@@ -884,7 +908,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-10-27T02:18:09.870786Z",
+  "generated": "2023-10-29T00:34:37.048446Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

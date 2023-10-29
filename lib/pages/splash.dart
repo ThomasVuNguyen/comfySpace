@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:comfyssh_flutter/pages/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 import '../states/CounterModel.dart';
@@ -34,7 +36,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'ComfySSH',
-        home: const WireDashComfySpacePage(),
+        home: WireDashComfySpacePage(),
         theme: lightMode,
         darkTheme: darkMode,
         //home: Welcome(),
