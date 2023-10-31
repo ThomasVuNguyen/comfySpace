@@ -188,12 +188,7 @@ class _SinglePressButtonState extends State<SinglePressButton> {
         setState(() {
           toggleState = !toggleState;
         });
-
       });
-
-
-
-
 
   }
   @override
