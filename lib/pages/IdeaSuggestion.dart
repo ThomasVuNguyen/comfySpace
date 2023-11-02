@@ -10,10 +10,21 @@ class IdeaSuggestionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Feel free to ',style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.w500, fontSize: 18),),
+          Image.asset('assets/duck.gif', height: 40, gaplessPlayback: true,),
+          Text(
+            '\r\nThank you for using Comfy Space\r\n',
+            style: GoogleFonts.poppins( fontWeight: FontWeight.w500, fontSize: 18)
+          ),
+          Center(
+            child: Text(
+                'If you have a bug to report or an idea suggestion, let us know!\r\n',
+                style: GoogleFonts.poppins( fontWeight: FontWeight.w500, fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+          ),
           MaterialButton(
             onPressed: (){
               Wiredash.of(context).show(inheritMaterialTheme: true);

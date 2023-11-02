@@ -15,31 +15,27 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ToggleButtons(
-              children: [
-                Icon(Icons.light_mode),
-                Icon(Icons.dark_mode)
-              ],
-              isSelected: [false, true],
-            onPressed: (int index){
-                if(index==0){
-                }
-            },
+          Image.asset('assets/DuckHop.gif', height: 40, gaplessPlayback: true,),
+          Text(
+              '\r\nSuch an empty space...\r\n',
+              style: GoogleFonts.poppins( fontWeight: FontWeight.w500, fontSize: 18)
           ),
-          Row(
-                mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('Feel free to ',style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.w500, fontSize: 18),),
-                  MaterialButton(
-                    onPressed: (){
-                      Wiredash.of(context).show(inheritMaterialTheme: true);
-                    },
-                    color: Colors.blue,
-                    child: Text("Suggest a setting!", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
-                  ),
-                ],
-              ),
+          Center(
+            child: Text(
+              'If you want, suggest a SETTING below!\r\n',
+              style: GoogleFonts.poppins( fontWeight: FontWeight.w500, fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          MaterialButton(
+            onPressed: (){
+              Wiredash.of(context).show(inheritMaterialTheme: true);
+            },
+            color: Colors.blue,
+            child: Text("Suggest a setting!", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
+          ),
         ],
       ),
     );

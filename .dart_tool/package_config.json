@@ -75,7 +75,7 @@
     },
     {
       "name": "camera_avfoundation",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_avfoundation-0.9.13+6",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/camera_avfoundation-0.9.13+7",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -908,7 +908,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-10-29T00:34:37.048446Z",
+  "generated": "2023-11-02T01:31:55.520889Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

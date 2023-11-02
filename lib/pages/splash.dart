@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'ComfySSH',
         home: WireDashComfySpacePage(),
-        theme: lightMode,
+        theme: darkMode,
         darkTheme: darkMode,
         //home: Welcome(),
       ),

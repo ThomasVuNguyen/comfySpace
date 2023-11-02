@@ -91,7 +91,7 @@ class _LedToggleState extends State<LedToggle> {
                   borderRadius: BorderRadius.circular(24.0),
                   color: toggleState? Colors.white :Colors.black,
                 ),
-                child: Center(child: toggleState? Icon(Icons.toggle_on, size: 60,color: Colors.black,) :Icon(Icons.toggle_off, size: 60,color: Colors.white,),),
+                child: Center(child: toggleState? Icon(Icons.brightness_7, size: 60,color: Colors.black,) :Icon(Icons.dark_mode, size: 60,color: Colors.white,),),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),

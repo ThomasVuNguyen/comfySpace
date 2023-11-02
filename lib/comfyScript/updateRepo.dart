@@ -108,11 +108,21 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
                         );
                   }
                   else{
-                    return const Text("Loading Space, please wait ...");
+                    return Row(mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Loading Space, please wait ..."),
+                        Image.asset('assets/DuckHopRun.gif', height: 40, gaplessPlayback: true,),
+                      ],
+                    );
                   }
                 }
                 )
-            : const Text('Updating your Raspberry Pi, dont touch anything'),
+            : Row(mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Updating your Raspberry Pi, dont touch anything'),
+                Image.asset('assets/DuckHopRun.gif', height: 40, gaplessPlayback: true,),
+              ],
+            ),
       );
     }
     else{
