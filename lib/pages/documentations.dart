@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DocumentationPage extends StatefulWidget {
@@ -42,6 +43,25 @@ class _DocumentationPageState extends State<DocumentationPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return WebViewWidget(controller: controller);
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset('assets/DuckHop.gif', height: 40, gaplessPlayback: true,),
+          Text(
+              '\r\nSuch an empty space...\r\n',
+              style: GoogleFonts.poppins( fontWeight: FontWeight.w500, fontSize: 18)
+          ),
+          Center(
+            child: Text(
+              'If you want, suggest a SETTING below!\r\n',
+              style: GoogleFonts.poppins( fontWeight: FontWeight.w500, fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        WebViewWidget(controller: controller)
+        ],
+      ),
+    );
   }
 }

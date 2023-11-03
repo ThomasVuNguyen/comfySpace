@@ -11,26 +11,28 @@ import '../function.dart';
 class Credit extends StatelessWidget {
   const Credit({super.key});
   Future<void> comfySpaceDocumentation() async{
-    final Uri docUrl = Uri.parse('https://comfystudio.tech/');
-    if (!await launchUrl(docUrl)){
+    final Uri docUrl = Uri.parse('https://tungnguyen.me/');
+    if (!await launchUrl(docUrl,mode: LaunchMode.externalApplication)){
       throw Exception('cannot launch documentation');
     }
   }
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Credits'),
+      title: const Text('Credits', textAlign: TextAlign.center,),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Thank you for using comfySpace'),
+            Text('Thank you for using comfySpace\r\n', textAlign: TextAlign.center,),
+            Image.asset('assets/DuckHop.gif', height: 40, gaplessPlayback: true,),
+            Text('\r\nProudly made by', textAlign: TextAlign.center,),
             TextButton(
                 onPressed: (){
                   comfySpaceDocumentation();
                 },
-                child: Text("Documentation")),
-            Text('Give feedback, report bug, and suggest a feature'),
-            Text('Icon free space dog icon by Rafiico Creative'),
+                child: Text('\r\nThomas Nguyen', textAlign: TextAlign.center, style: GoogleFonts.poppins(fontWeight: FontWeight.w400,fontSize: 18.0, color: Colors.white,decoration: TextDecoration.underline,),),),
+            Text('\r\n*more features coming* ', textAlign: TextAlign.center,style: GoogleFonts.poppins(fontWeight: FontWeight.w400,fontSize: 14.0, color: Colors.grey)),
+            Text('\r\n*more features coming* ', textAlign: TextAlign.center,style: GoogleFonts.poppins(fontWeight: FontWeight.w400,fontSize: 14.0, color: Colors.grey)),
 
           ],
         ),

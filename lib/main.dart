@@ -38,6 +38,7 @@ import 'comfyScript/ComfyHorizontalSwipeButton.dart';
 import 'comfyScript/DCmotor.dart';
 import 'comfyScript/customInput.dart';
 import 'comfyScript/stepperMotor.dart';
+import 'components/UniversalVariable.dart';
 
 
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
@@ -893,10 +894,10 @@ class _spacePageState extends State<spacePage> {
                     onOpen: (){},onClose: (){},
                     children: [
                       SpeedDialChild(
-                          child: Image.asset('assets/speedDialIcons/Tap.png', width: 40),
-                          backgroundColor: Colors.transparent,
+                          child: Image.asset('assets/speedDialIcons/Tap.png', width: SpeedDialChildSize),
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
                           foregroundColor: Colors.white,
-                          label: "Tap button", labelStyle: TextStyle(fontSize: 18),
+                          label: "Tap button",
                           onTap: (){
                             showDialog(context: context, builder: (BuildContext context){
                               String buttonType = 'customOutput';
@@ -915,7 +916,7 @@ class _spacePageState extends State<spacePage> {
                                         const SizedBox(height: 32, width: double.infinity,),
                                         comfyTextField(onChanged: (btnCommand){
                                           buttonCommand = btnCommand;
-                                        }, text: 'command'),
+                                        }, text: 'command', keyboardType: TextInputType.multiline,),
                                       ],
                                     ),
                                   ),
@@ -933,10 +934,10 @@ class _spacePageState extends State<spacePage> {
                           }
                       ),
                       SpeedDialChild(
-                          child: Image.asset('assets/speedDialIcons/toggle.png', width: 40),
-                          backgroundColor: Colors.transparent,
+                          child: Image.asset('assets/speedDialIcons/toggle.png', width: SpeedDialChildSize),
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
                           foregroundColor: Colors.white,
-                          label: "Toggle button", labelStyle: TextStyle(fontSize: 18),
+                          label: "Toggle button",
                           onTap: (){
                             String CommandOn = 'htop'; String CommandOff = 'htop';
                             showDialog(context: context, builder: (BuildContext context){
@@ -956,11 +957,13 @@ class _spacePageState extends State<spacePage> {
                                         const SizedBox(height: 32, width: double.infinity,),
                                         comfyTextField(onChanged: (btnCommand){
                                           CommandOn = btnCommand;
-                                        }, text: 'command #1'),
+                                        }, text: 'command #1',
+                                          keyboardType: TextInputType.multiline,),
                                         const SizedBox(height: 32, width: double.infinity,),
                                         comfyTextField(onChanged: (btnCommand){
                                           CommandOff = btnCommand;
-                                        }, text: 'command #2'),
+                                        }, text: 'command #2',
+                                          keyboardType: TextInputType.multiline,),
 
                                       ],
                                     ),
@@ -979,9 +982,9 @@ class _spacePageState extends State<spacePage> {
                           }
                       ),
                       SpeedDialChild(
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
                           label: 'Vertical Gesture',
-                          child: Image.asset('assets/speedDialIcons/VerticalGesture.png', width: 40,),
+                          child: Image.asset('assets/speedDialIcons/VerticalGesture.png', width: SpeedDialChildSize,),
                           onTap: (){
                             late String up; late String middle; late String down;
                             showDialog(context: context, builder: (BuildContext context){
@@ -995,17 +998,23 @@ class _spacePageState extends State<spacePage> {
                                         buttonName = btnName;
                                       }),
                                       const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'Up Function', onChanged: (txt){
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Up Function', onChanged: (txt){
                                         up = txt;
                                       },
                                       ),
                                       const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'Middle Func', onChanged: (txt){
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Middle Func', onChanged: (txt){
                                         middle = txt;
                                       },
                                       ),
                                       const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'Down Func', onChanged: (txt){
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Down Func', onChanged: (txt){
                                         down = txt;
                                       },
                                       ),
@@ -1028,9 +1037,9 @@ class _spacePageState extends State<spacePage> {
                           }
                       ),
                       SpeedDialChild(
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
                           label: 'Horizontal Gesture',
-                          child: Image.asset('assets/speedDialIcons/HorizontalGesture.png', width: 40,),
+                          child: Image.asset('assets/speedDialIcons/HorizontalGesture.png', width: SpeedDialChildSize,),
                           onTap: (){
                             late String left; late String middle; late String right;
                             showDialog(context: context, builder: (BuildContext context){
@@ -1044,17 +1053,23 @@ class _spacePageState extends State<spacePage> {
                                         buttonName = btnName;
                                       }),
                                       const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'Left Function', onChanged: (txt){
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Left Function', onChanged: (txt){
                                         left = txt;
                                       },
                                       ),
                                       const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'Middle Func', onChanged: (txt){
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Middle Func', onChanged: (txt){
                                         middle = txt;
                                       },
                                       ),
                                       const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'Right Func', onChanged: (txt){
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Right Func', onChanged: (txt){
                                         right = txt;
                                       },
                                       ),
@@ -1077,10 +1092,10 @@ class _spacePageState extends State<spacePage> {
                           }
                       ),
                       SpeedDialChild(
-                          child: Image.asset('assets/speedDialIcons/DataButton.png',width: 40,),
+                          child: Image.asset('assets/speedDialIcons/DataButton.png',width: SpeedDialChildSize,),
                           backgroundColor: Colors.transparent,
-                          foregroundColor: Colors.white,
-                          label: "Data button", labelStyle: TextStyle(fontSize: 18),
+                          foregroundColor: Colors.white,labelStyle: SpeedDialLabelStyle,
+                          label: "Data button",
                           onTap: (){
                             showDialog(context: context, builder: (BuildContext context){
                               String buttonType = 'ComfyData';
@@ -1099,7 +1114,9 @@ class _spacePageState extends State<spacePage> {
                                         const SizedBox(height: 32, width: double.infinity,),
                                         comfyTextField(onChanged: (btnCommand){
                                           buttonCommand = btnCommand;
-                                        }, text: 'command'),
+                                        }, text: 'command',
+                                          keyboardType: TextInputType.multiline,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -1117,10 +1134,10 @@ class _spacePageState extends State<spacePage> {
                           }
                       ),
                       SpeedDialChild(
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          child: Image.asset('assets/speedDialIcons/led.png', width: 40,),
+                          child: Image.asset('assets/speedDialIcons/led.png', width: SpeedDialChildSize,),
                           label: 'LED',
                           onTap: (){
                             late String pinOut;
@@ -1156,8 +1173,8 @@ class _spacePageState extends State<spacePage> {
                       ),
                       SpeedDialChild(
                           backgroundColor: Colors.transparent,
-                          label: 'Stepper Motor',
-                          child: Image.asset('assets/speedDialIcons/stepperMotor.png', width: 35,),
+                          label: 'Stepper Motor',labelStyle: SpeedDialLabelStyle,
+                          child: Image.asset('assets/speedDialIcons/stepperMotor.png', width: SpeedDialChildSize,),
                           onTap: (){
                             late String pin1; late String pin2; late String pin3; late String pin4;
                             showDialog(context: context, builder: (BuildContext context){
@@ -1215,8 +1232,8 @@ class _spacePageState extends State<spacePage> {
                       ),
                       SpeedDialChild(
                           backgroundColor: Colors.transparent,
-                          label: 'DC Motor',
-                          child: Image.asset('assets/speedDialIcons/dc-motor.png', width: 40,),
+                          label: 'DC Motor',labelStyle: SpeedDialLabelStyle,
+                          child: Image.asset('assets/speedDialIcons/dc-motor.png', width: SpeedDialChildSize,),
                           onTap: (){
                             late String pin1; late String pin2; late String pin3; late String pin4;
                             showDialog(context: context, builder: (BuildContext context){
@@ -1262,7 +1279,9 @@ class _spacePageState extends State<spacePage> {
                       ),
                       SpeedDialChild(
                           backgroundColor: Colors.transparent,
-                          child: Image.asset('assets/speedDialIcons/ultrasonic_distance_sensor.png'), label: 'Ultrasonic sensor',
+                          child: Image.asset('assets/speedDialIcons/ultrasonic_distance_sensor.png', width:
+                          SpeedDialChildSize,), label: 'Ultrasonic sensor',
+                          labelStyle: SpeedDialLabelStyle,
                           onTap: (){
                             late String trig; late String echo;
                             showDialog(context: context, builder: (BuildContext context){
@@ -1534,7 +1553,7 @@ class _spacePageState extends State<spacePage> {
                                       child: DCMotorSingle(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], hostname: widget.hostname, username: widget.username, password: widget.password),
                                     );
                                   }
-                                  else if (snapshot.data![index]["buttonType"] == "customInput"){
+                                  else if (snapshot.data![index]["buttonType"] == "ComfyData"){
                                     return GestureDetector(
                                       onLongPress: (){
                                         showDialog(context: context, builder: (BuildContext context){

@@ -259,6 +259,7 @@ class comfyTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLines: null,
       onChanged: onChanged,
       keyboardType: keyboardType, inputFormatters: inputFormatters,
       decoration: InputDecoration(
