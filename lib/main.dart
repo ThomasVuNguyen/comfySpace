@@ -826,6 +826,7 @@ class spacePage extends StatefulWidget {
 }
 
 class _spacePageState extends State<spacePage> {
+
   late final terminal = Terminal(
     maxLines: 6,
   );
@@ -856,6 +857,10 @@ class _spacePageState extends State<spacePage> {
     );
     print("${clientControl.username} is ready");
   }
+  reloadFunc(){
+    setState(() {});
+    print("reloadfun");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -866,10 +871,61 @@ class _spacePageState extends State<spacePage> {
           return false;
         },
         child: Scaffold(//uncomment mediaquery for windows build
+          endDrawer: Drawer(
+            child: SafeArea(
+              child: Column(
+                children: [
+                  SizedBox(height: 10,),
+                  ExpansionTile(
+                      title: Text('Component Button'),
+                    children: [
+                      ListTile(
+                        title: Text('LED'),
+                          onTap: (){
+                            Navigator.pop(context);
+                            late String pinOut;
+                            showDialog(context: context, builder: (BuildContext context){
+                              return ButtonAlertDialog(
+                                title: 'LED toggle',
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      comfyTextField(text: 'button name', onChanged: (btnName){
+                                        buttonName = btnName;
+                                      }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(text: 'pin number',
+                                        onChanged: (pinNum){pinOut = pinNum;},
+                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                      ),
+                                      IconDuckCredit(iconLink: 'https://iconduck.com/icons/190075/led-unit', iconName: 'LED' )
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  comfyActionButton(onPressed: (){
+                                    addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, pinOut,'LED');
+                                    Navigator.pop(context);
+                                    setState(() {});
+                                  },)
+                                ],
+                              );
+                            });
+                          }
+                      ),
+                    ],
+                  ),
+                  ExpansionTile(title: Text('Gesture Button'),)
+                ],
+              ),
+            )
+          ),
           appBar: //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux )? null :
           PreferredSize(
               preferredSize: const Size.fromHeight(64),
               child: comfyAppBar(
+                endDrawer: true,
                 IsSpacePage: true,
                   //automaticallyImplyLeading: true,
                   title: widget.spaceName

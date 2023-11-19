@@ -5,7 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:xterm/xterm.dart';
 
 import '../components/LoadingWidget.dart';
+import '../components/custom_ui_components.dart';
 import '../components/custom_widgets.dart';
+import '../components/pop_up.dart';
+import '../function.dart';
+import '../main.dart';
 
 String toggleLED(String pinOut, bool isToggled){
   if(isToggled == true){
@@ -105,5 +109,55 @@ class _LedToggleState extends State<LedToggle> {
     else{
       return const LoadingSpaceWidget();
     }
+  }
+}
+
+class AddLEDButton extends StatefulWidget {
+  const AddLEDButton({super.key, required this.spaceName, required this.hostname, required this.username, required this.password, required this.reloadFunc});
+  final String spaceName; final String hostname; final String username; final String password; final void Function() reloadFunc;
+  @override
+  State<AddLEDButton> createState() => _AddLEDButtonState();
+}
+
+class _AddLEDButtonState extends State<AddLEDButton> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+        title: Text('LED'),
+        onTap: (){
+          Scaffold.of(context).closeEndDrawer();
+          late String pinOut;
+          showDialog(context: context, builder: (BuildContext context){
+            return ButtonAlertDialog(
+              title: 'LED toggle',
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    comfyTextField(text: 'button name', onChanged: (btnName){
+                      buttonName = btnName;
+                    }),
+                    const SizedBox(height: 32, width: double.infinity,),
+                    comfyTextField(text: 'pin number',
+                      onChanged: (pinNum){pinOut = pinNum;},
+                      keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    ),
+                    IconDuckCredit(iconLink: 'https://iconduck.com/icons/190075/led-unit', iconName: 'LED' )
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                comfyActionButton(onPressed: (){
+                  addButton('comfySpace.db', widget.spaceName, buttonName, 1, 1, 1, pinOut,'LED');
+                  widget.reloadFunc;
+                  Navigator.pop(context);
+                  print("beach");
+
+                },)
+              ],
+            );
+          });
+        }
+    );
   }
 }

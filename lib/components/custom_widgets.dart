@@ -27,8 +27,8 @@ import '../state.dart';
 const double buttonPadding = 8.0;
 
 class comfyAppBar extends StatefulWidget {
-  const comfyAppBar({super.key, required this.title, this.WiredashWidget, this.automaticallyImplyLeading = false, this.IsSpacePage = false});
-  final String title; final Widget? WiredashWidget; final bool automaticallyImplyLeading; final bool IsSpacePage;
+  const comfyAppBar({super.key, required this.title, this.WiredashWidget, this.automaticallyImplyLeading = false, this.IsSpacePage = false, this.endDrawer = false});
+  final String title; final Widget? WiredashWidget; final bool automaticallyImplyLeading; final bool IsSpacePage; final bool endDrawer;
   @override
   State<comfyAppBar> createState() => _comfyAppBarState();
 }
@@ -48,6 +48,9 @@ class _comfyAppBarState extends State<comfyAppBar> {
         Row(
           children: [
             (widget.WiredashWidget != null)? widget.WiredashWidget! :SizedBox(width: 0,),
+            (widget.endDrawer != null)? IconButton(onPressed: (){
+              Scaffold.of(context).openEndDrawer();
+            }, icon: Icon(Icons.add)) :SizedBox(width: 0,),
             SizedBox(width: 10,),
           ],
         )
