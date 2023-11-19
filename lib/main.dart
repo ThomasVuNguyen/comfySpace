@@ -36,6 +36,7 @@ import 'dart:io' show Platform;
 
 import 'comfyScript/ComfyHorizontalSwipeButton.dart';
 import 'comfyScript/DCmotor.dart';
+import 'comfyScript/FullGestureButton.dart';
 import 'comfyScript/customInput.dart';
 import 'comfyScript/stepperMotor.dart';
 import 'components/UniversalVariable.dart';
@@ -611,7 +612,7 @@ class _comfySpaceState extends State<comfySpace> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Such emptiness... ", style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.w400, fontSize: 24),),
+                  Text("Such emptiness... ", style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 24),),
                   /*FloatingActionButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
@@ -662,136 +663,133 @@ class _comfySpaceState extends State<comfySpace> {
   }
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => CounterModel(),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-          bottomNavigationBar: Container(
-            child: Container(
-              color: Color(0xff211F26),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, top:20.0, bottom: 20.0, right: 20.0),
-                child: SafeArea(
-                  child: GNav(
-                    color: Theme.of(context).colorScheme.secondaryContainer, activeColor: Theme.of(context).colorScheme.secondary,
-                    curve: Curves.linear,
-                    tabBackgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                    backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-                    tabActiveBorder: Border.all(color: Theme.of(context).colorScheme.onSecondaryContainer, width: 1), tabBorderRadius: 40.0, iconSize: 30.0,
-                    padding: const EdgeInsets.all(12),
-                    tabs: const [
-                      GButton(icon: Icons.home),
-                      GButton(icon: Icons.settings, ),
-                      GButton(icon: Icons.lightbulb ),
-                      GButton(icon: Icons.public, ),
-                    ],
-                    selectedIndex: bottomBarIndex,
-                    onTabChange: (index){
-                      //print(index);
-                      setState(() {
-                        bottomBarIndex = index;
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ),
-          appBar: AppBar(
-            titleSpacing: 20,
-            automaticallyImplyLeading: false,
-            title: GestureDetector(
-              onTap: (){
-                showDialog(context: context, builder: (BuildContext context){
-                  return const Credit();
-                });
-              },
-                child: Text('ComfySpace', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 24),)),
-            elevation: 0,
-            //actionsIconTheme: const IconThemeData(size: 30, opacity: 10.0),
-            actions: <Widget>[
-              //Text(context.watch<CounterModel>().count.toString()),
-              Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  child: Icon(Icons.feedback_outlined),
-                  onTap: (){ Wiredash.of(context).show(); },
-                ),
-              ),
-
-            ],
-          ),
-          //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-          floatingActionButton: (bottomBarIndex != 0 )? null:
-          FloatingActionButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
-            ),
-            tooltip: 'Add New Space',
-            child: const Icon(Icons.add),
-            onPressed: () {
-              //final counter = context.read<CounterModel>();
-              //counter.increment();
-              print("creating");
-              //String spaceName = 'space1'; late String hostInfo; late String userInfo; late String passwordInfo;
-              showDialog(context: context, builder: (BuildContext context){
-                return const NewSpaceDialog();
-                /*return AlertDialog(
-                  title: const Text("Create a new space"),
-                  content: Column(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          onChanged: (name){
-                            spaceName = name;
-                          },
-                          decoration: InputDecoration(hintText: "space name"), textInputAction: TextInputAction.next,
-                        ),
-                      ),
-                      Expanded(
-                        child: TextField(
-                          onChanged: (text2){
-                            hostInfo = text2;
-                          }, decoration: InputDecoration(hintText: "host"), textInputAction: TextInputAction.next,
-                        ),
-                      ),
-                      Expanded(
-                        child: TextField(
-                          onChanged: (text3){
-                            userInfo = text3;
-                          }, decoration: InputDecoration(hintText: "user"), textInputAction: TextInputAction.next,
-                        ),
-                      ),
-                      Expanded(
-                        child: TextField(
-                            onChanged: (text4){
-                              passwordInfo = text4;
-                            }, decoration: InputDecoration(hintText: "password")
-                        ),
-                      ),
-                    ],
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                        onPressed: () {
-                          createSpace(spaceName, hostInfo, userInfo, passwordInfo );
-                          //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-                          Future.delayed(const Duration(milliseconds: 100), (){
-                            setState(() {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-                            });
-                          });
-                        },
-                        child: const Text("save")
-                    )
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+        bottomNavigationBar: Container(
+          child: Container(
+            color: Color(0xff211F26),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0, top:20.0, bottom: 20.0, right: 20.0),
+              child: SafeArea(
+                child: GNav(
+                  color: Theme.of(context).colorScheme.secondaryContainer, activeColor: Theme.of(context).colorScheme.secondary,
+                  curve: Curves.linear,
+                  tabBackgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                  backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                  tabActiveBorder: Border.all(color: Theme.of(context).colorScheme.onSecondaryContainer, width: 1), tabBorderRadius: 40.0, iconSize: 30.0,
+                  padding: const EdgeInsets.all(12),
+                  tabs: const [
+                    GButton(icon: Icons.home),
+                    GButton(icon: Icons.settings, ),
+                    GButton(icon: Icons.lightbulb ),
+                    GButton(icon: Icons.public, ),
                   ],
-                );*/
-              }
-              ); },
-
+                  selectedIndex: bottomBarIndex,
+                  onTabChange: (index){
+                    //print(index);
+                    setState(() {
+                      bottomBarIndex = index;
+                    });
+                  },
+                ),
+              ),
+            ),
           ),
-          body: pageLists[bottomBarIndex],
-      ),
+        ),
+        appBar: AppBar(
+          titleSpacing: 20,
+          automaticallyImplyLeading: false,
+          title: GestureDetector(
+            onTap: (){
+              showDialog(context: context, builder: (BuildContext context){
+                return const Credit();
+              });
+            },
+              child: Text('ComfySpace', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 24),)),
+          elevation: 0,
+          //actionsIconTheme: const IconThemeData(size: 30, opacity: 10.0),
+          actions: <Widget>[
+            //Text(context.watch<CounterModel>().count.toString()),
+            Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                child: Icon(Icons.feedback_outlined),
+                onTap: (){ Wiredash.of(context).show(); },
+              ),
+            ),
+
+          ],
+        ),
+        //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        floatingActionButton: (bottomBarIndex != 0 )? null:
+        FloatingActionButton(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+          ),
+          tooltip: 'Add New Space',
+          child: const Icon(Icons.add),
+          onPressed: () {
+            //final counter = context.read<CounterModel>();
+            //counter.increment();
+            print("creating");
+            //String spaceName = 'space1'; late String hostInfo; late String userInfo; late String passwordInfo;
+            showDialog(context: context, builder: (BuildContext context){
+              return const NewSpaceDialog();
+              /*return AlertDialog(
+                title: const Text("Create a new space"),
+                content: Column(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        onChanged: (name){
+                          spaceName = name;
+                        },
+                        decoration: InputDecoration(hintText: "space name"), textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        onChanged: (text2){
+                          hostInfo = text2;
+                        }, decoration: InputDecoration(hintText: "host"), textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        onChanged: (text3){
+                          userInfo = text3;
+                        }, decoration: InputDecoration(hintText: "user"), textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                          onChanged: (text4){
+                            passwordInfo = text4;
+                          }, decoration: InputDecoration(hintText: "password")
+                      ),
+                    ),
+                  ],
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () {
+                        createSpace(spaceName, hostInfo, userInfo, passwordInfo );
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
+                        Future.delayed(const Duration(milliseconds: 100), (){
+                          setState(() {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
+                          });
+                        });
+                      },
+                      child: const Text("save")
+                  )
+                ],
+              );*/
+            }
+            ); },
+
+        ),
+        body: pageLists[bottomBarIndex],
     );
   }
 }
@@ -1027,6 +1025,77 @@ class _spacePageState extends State<spacePage> {
                                   comfyActionButton(
                                     onPressed: (){
                                       addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,up + ConnectionCharacter + middle + ConnectionCharacter + down,'ComfyVerticalButton');
+                                      Navigator.pop(context);
+                                      setState(() {});
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                          }
+                      ),
+                      SpeedDialChild(
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
+                          label: 'Full Gesture',
+                          child: Image.asset('assets/speedDialIcons/VerticalGesture.png', width: SpeedDialChildSize,),
+                          onTap: (){
+                            late String up; late String middle; late String down; late String left; late String right;
+                            showDialog(context: context, builder: (BuildContext context){
+                              return ButtonAlertDialog(
+                                title: 'Full Gesture Button',
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      comfyTextField(text: 'button name', onChanged: (btnName){
+                                        buttonName = btnName;
+                                      }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Middle Func', onChanged: (txt){
+                                        middle = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Left Func', onChanged: (txt){
+                                        left = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Right Func', onChanged: (txt){
+                                        right = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Up Function', onChanged: (txt){
+                                        up = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Down Func', onChanged: (txt){
+                                        down = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+
+
+                                      //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  comfyActionButton(
+                                    onPressed: (){
+                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,middle + ConnectionCharacter + left + ConnectionCharacter + right + ConnectionCharacter + up +ConnectionCharacter + down,'ComfyFullGestureButton');
                                       Navigator.pop(context);
                                       setState(() {});
                                     },
@@ -1667,6 +1736,35 @@ class _spacePageState extends State<spacePage> {
                                         });
                                       },
                                       child: ComfyHorizontalButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, left: CommandExtract(snapshot.data![index]["command"])[0], middle: CommandExtract(snapshot.data![index]["command"])[1], right: CommandExtract(snapshot.data![index]["command"])[2] ),
+                                    );
+                                  }
+                                  else if (snapshot.data![index]["buttonType"] == "ComfyFullGestureButton"){
+                                    return GestureDetector(
+                                      onLongPress: (){
+                                        showDialog(context: context, builder: (BuildContext context){
+                                          return AlertDialog(
+                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                            contentPadding: const EdgeInsets.all(20.0),
+                                            title: Text('Delete Button'),
+                                            actions: [
+                                              CancelButtonPrompt(
+                                                onPressed: (){
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              deleteButtonPrompt(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                  });
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          );
+                                        });
+                                      },
+                                      child: ComfyFullGestureButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, middle: CommandExtract(snapshot.data![index]["command"])[0], left: CommandExtract(snapshot.data![index]["command"])[1], right: CommandExtract(snapshot.data![index]["command"])[2], up: CommandExtract(snapshot.data![index]["command"])[3], down: CommandExtract(snapshot.data![index]["command"])[4] ),
                                     );
                                   }
                                   else if (snapshot.data![index]["buttonType"] == "ComfyTapButton"){
