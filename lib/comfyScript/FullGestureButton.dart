@@ -1,11 +1,15 @@
+import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:comfyssh_flutter/components/custom_widgets.dart';
-import 'package:comfyssh_flutter/states/CounterModel.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import '../components/pop_up.dart';
+import '../function.dart';
+import '../main.dart';
 
 class ComfyFullGestureButton extends StatefulWidget {
   const ComfyFullGestureButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.up, required this.down, required this.middle,required this.left, required this.right});
@@ -76,8 +80,6 @@ class _ComfyFullGestureButtonState extends State<ComfyFullGestureButton> {
   }
   @override
   Widget build(BuildContext context) {
-    final counter = context.read<CounterModel>();
-    counter.increment();
     return (SSHLoadingFinished == false) ?LoadingSpaceWidget():
     Padding(
       padding: const EdgeInsets.all(buttonPadding),
@@ -163,5 +165,94 @@ class _ComfyFullGestureButtonState extends State<ComfyFullGestureButton> {
       ),
     );
 
+  }
+}
+
+class AddComfyFullGestureButton extends StatefulWidget {
+  const AddComfyFullGestureButton({super.key, required this.spaceName});
+  final String spaceName;
+  @override
+  State<AddComfyFullGestureButton> createState() => _AddComfyFullGestureButtonState();
+}
+
+class _AddComfyFullGestureButtonState extends State<AddComfyFullGestureButton> {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+      ],
+      child: ListTile(
+          title: Text('Full'),
+          onTap: (){
+            Scaffold.of(context).closeEndDrawer();
+            late String pinOut; late String buttonName; late String middle; late String left; late String right; late String up; late String down;
+            int buttonSizeX = 1; int buttonSizeY = 1; int buttonPosition = 1;
+            showDialog(context: context, builder: (BuildContext context){
+              return ButtonAlertDialog(
+                title: 'Full Gesture Button',
+                content: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      comfyTextField(text: 'button name', onChanged: (btnName){
+                        buttonName = btnName;
+                      }),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(
+                        keyboardType: TextInputType.multiline,
+                        text: 'Middle Func', onChanged: (txt){
+                        middle = txt;
+                      },
+                      ),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(
+                        keyboardType: TextInputType.multiline,
+                        text: 'Left Func', onChanged: (txt){
+                        left = txt;
+                      },
+                      ),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(
+                        keyboardType: TextInputType.multiline,
+                        text: 'Right Func', onChanged: (txt){
+                        right = txt;
+                      },
+                      ),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(
+                        keyboardType: TextInputType.multiline,
+                        text: 'Up Function', onChanged: (txt){
+                        up = txt;
+                      },
+                      ),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(
+                        keyboardType: TextInputType.multiline,
+                        text: 'Down Func', onChanged: (txt){
+                        down = txt;
+                      },
+                      ),
+                      const SizedBox(height: 32, width: double.infinity,),
+
+
+                      //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  comfyActionButton(
+                    onPressed: (){
+                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,middle + ConnectionCharacter + left + ConnectionCharacter + right + ConnectionCharacter + up +ConnectionCharacter + down,'ComfyFullGestureButton');
+                      Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            });
+          }
+      ),
+    );
   }
 }

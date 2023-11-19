@@ -1,3 +1,4 @@
+import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:comfyssh_flutter/components/custom_widgets.dart';
 import 'package:dartssh2/dartssh2.dart';
@@ -6,7 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../states/CounterModel.dart';
+import '../components/pop_up.dart';
+import '../function.dart';
+import '../main.dart';
+
 
 class ComfyHorizontalButton extends StatefulWidget {
   const ComfyHorizontalButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.left, required this.right, required this.middle});
@@ -34,8 +38,7 @@ class _ComfyHorizontalButtonState extends State<ComfyHorizontalButton> {
     closeClient();
     client.close();
     super.dispose();
-    final counter = context.read<CounterModel>();
-    counter.decrement();
+
   }
   Future<void> initClient() async{
     client = SSHClient(
@@ -66,8 +69,6 @@ class _ComfyHorizontalButtonState extends State<ComfyHorizontalButton> {
   @override
   Widget build(BuildContext context) {
     if(SSHLoadingFinished ==true){
-      final counter = context.read<CounterModel>();
-      counter.increment();
       return Padding(
         padding: const EdgeInsets.all(buttonPadding),
         child: GestureDetector(
@@ -132,5 +133,78 @@ class _ComfyHorizontalButtonState extends State<ComfyHorizontalButton> {
     else{
       return const LoadingSpaceWidget();
     }
+  }
+}
+
+class AddComfyHorizontalSwipeButton extends StatefulWidget {
+  const AddComfyHorizontalSwipeButton({super.key, required this.spaceName});
+  final String spaceName;
+  @override
+  State<AddComfyHorizontalSwipeButton> createState() => _AddComfyHorizontalSwipeButtonState();
+}
+
+class _AddComfyHorizontalSwipeButtonState extends State<AddComfyHorizontalSwipeButton> {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+      ],
+      child: ListTile(
+          title: Text('Horizontal'),
+          onTap: (){
+            Scaffold.of(context).closeEndDrawer();
+            late String pinOut; late String buttonName; late String left; late String right; late String middle;
+            int buttonSizeX = 1 ; int buttonSizeY = 1; int buttonPosition =1;
+            showDialog(context: context, builder: (BuildContext context){
+              return ButtonAlertDialog(
+                title: 'Horizontal Gesture Button',
+                content: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      comfyTextField(text: 'button name', onChanged: (btnName){
+                        buttonName = btnName;
+                      }),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(
+                        keyboardType: TextInputType.multiline,
+                        text: 'Left Function', onChanged: (txt){
+                        left = txt;
+                      },
+                      ),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(
+                        keyboardType: TextInputType.multiline,
+                        text: 'Middle Func', onChanged: (txt){
+                        middle = txt;
+                      },
+                      ),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(
+                        keyboardType: TextInputType.multiline,
+                        text: 'Right Func', onChanged: (txt){
+                        right = txt;
+                      },
+                      ),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  comfyActionButton(
+                    onPressed: (){
+                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,left + ConnectionCharacter + middle + ConnectionCharacter + right,'ComfyHorizontalButton');
+                      Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            });
+          }
+      ),
+    );
   }
 }

@@ -1,7 +1,9 @@
+import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:xterm/xterm.dart';
 
 import '../components/LoadingWidget.dart';
@@ -113,8 +115,8 @@ class _LedToggleState extends State<LedToggle> {
 }
 
 class AddLEDButton extends StatefulWidget {
-  const AddLEDButton({super.key, required this.spaceName, required this.hostname, required this.username, required this.password, required this.reloadFunc});
-  final String spaceName; final String hostname; final String username; final String password; final void Function() reloadFunc;
+  const AddLEDButton({super.key, required this.spaceName});
+  final String spaceName;
   @override
   State<AddLEDButton> createState() => _AddLEDButtonState();
 }
@@ -122,42 +124,46 @@ class AddLEDButton extends StatefulWidget {
 class _AddLEDButtonState extends State<AddLEDButton> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-        title: Text('LED'),
-        onTap: (){
-          Scaffold.of(context).closeEndDrawer();
-          late String pinOut;
-          showDialog(context: context, builder: (BuildContext context){
-            return ButtonAlertDialog(
-              title: 'LED toggle',
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    comfyTextField(text: 'button name', onChanged: (btnName){
-                      buttonName = btnName;
-                    }),
-                    const SizedBox(height: 32, width: double.infinity,),
-                    comfyTextField(text: 'pin number',
-                      onChanged: (pinNum){pinOut = pinNum;},
-                      keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    ),
-                    IconDuckCredit(iconLink: 'https://iconduck.com/icons/190075/led-unit', iconName: 'LED' )
-                  ],
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+      ],
+      child: ListTile(
+          title: Text('LED'),
+          onTap: (){
+            Scaffold.of(context).closeEndDrawer();
+            late String pinOut;
+            showDialog(context: context, builder: (BuildContext context){
+              return ButtonAlertDialog(
+                title: 'LED toggle',
+                content: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      comfyTextField(text: 'button name', onChanged: (btnName){
+                        buttonName = btnName;
+                      }),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(text: 'pin number',
+                        onChanged: (pinNum){pinOut = pinNum;},
+                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      ),
+                      IconDuckCredit(iconLink: 'https://iconduck.com/icons/190075/led-unit', iconName: 'LED' )
+                    ],
+                  ),
                 ),
-              ),
-              actions: <Widget>[
-                comfyActionButton(onPressed: (){
-                  addButton('comfySpace.db', widget.spaceName, buttonName, 1, 1, 1, pinOut,'LED');
-                  widget.reloadFunc;
-                  Navigator.pop(context);
-                  print("beach");
+                actions: <Widget>[
+                  comfyActionButton(onPressed: (){
+                    addButton('comfySpace.db', widget.spaceName, buttonName, 1, 1, 1, pinOut,'LED');
+                    Navigator.pop(context);
+                    Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
 
-                },)
-              ],
-            );
-          });
-        }
+                  },)
+                ],
+              );
+            });
+          }
+      ),
     );
   }
 }

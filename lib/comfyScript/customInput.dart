@@ -1,12 +1,18 @@
 import 'dart:convert';
 
+import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:xterm/core.dart';
 
 import '../components/LoadingWidget.dart';
+import '../components/custom_ui_components.dart';
 import '../components/custom_widgets.dart';
+import '../components/pop_up.dart';
+import '../function.dart';
 
 Future<String> readInput(SSHClient client, String command) async {
   await Future.delayed(const Duration(seconds: 1));
@@ -95,5 +101,138 @@ class _CustomInputButtonState extends State<CustomInputButton> {
     else{
       return LoadingSpaceWidget();
     }
+  }
+}
+
+class AddComfyDataButton extends StatefulWidget {
+  const AddComfyDataButton({super.key, required this.spaceName});
+  final String spaceName;
+
+  @override
+  State<AddComfyDataButton> createState() => _AddComfyDataButtonState();
+}
+
+class _AddComfyDataButtonState extends State<AddComfyDataButton> {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+      ],
+      child: ListTile(
+          title: Text('Data'),
+          onTap: (){
+            Scaffold.of(context).closeEndDrawer();
+            late String pinOut; late String buttonName; late String middle; late String left; late String right; late String up; late String down;
+            int buttonSizeX = 1; int buttonSizeY = 1; int buttonPosition = 1;
+            showDialog(context: context, builder: (BuildContext context){
+              String buttonType = 'ComfyData';
+              int buttonSizeY = 1;
+              int buttonSizeX=1;
+              int buttonPosition=1;
+              late String buttonCommand;
+              return ButtonAlertDialog(
+                  title: 'Data Button',
+                  content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        comfyTextField(onChanged: (btnName){
+                          buttonName = btnName;
+                        }, text: 'button name'),
+                        const SizedBox(height: 32, width: double.infinity,),
+                        comfyTextField(onChanged: (btnCommand){
+                          buttonCommand = btnCommand;
+                        }, text: 'command',
+                          keyboardType: TextInputType.multiline,
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    comfyActionButton(
+                      onPressed: (){
+                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'ComfyData');
+                        Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ]);
+            });
+          }
+      ),
+    );
+  }
+}
+
+class AddComfyDistanceSensor extends StatefulWidget {
+  const AddComfyDistanceSensor({super.key, required this.spaceName});
+  final String spaceName;
+
+  @override
+  State<AddComfyDistanceSensor> createState() => _AddComfyDistanceSensorState();
+}
+
+class _AddComfyDistanceSensorState extends State<AddComfyDistanceSensor> {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+      ],
+      child: ListTile(
+          title: Text('Distance Sensor'),
+          onTap: (){
+            Scaffold.of(context).closeEndDrawer();
+            late String pinOut; late String buttonName; late String middle; late String left; late String right; late String up; late String down;
+            showDialog(context: context, builder: (BuildContext context){
+              int buttonSizeX = 1; int buttonSizeY = 1; int buttonPosition = 1;
+              late String trig; late String echo;
+              return ButtonAlertDialog(
+                title: "Distance sensor",
+                content: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      comfyTextField(text: 'button name', onChanged: (btnName){
+                        buttonName = btnName;
+                      }),
+                      const SizedBox(height: 32, width: double.infinity,),
+
+                      comfyTextField(text: 'trigger pin',
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (pin){
+                            trig = pin;
+                          }),
+                      const SizedBox(height: 32, width: double.infinity,),
+
+                      comfyTextField(text: 'echo pin',
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (pin){
+                            echo = pin;
+                          }),
+                      const SizedBox(height: 32, width: double.infinity,),
+
+                      const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190115/ultrasonic-distance-sensor', iconName: 'Sensor'),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  comfyActionButton(
+                    onPressed: (){
+                      String HCSR04PinList = '$trig $echo';
+                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, HCSR04PinList, 'HCSR04');
+                      Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            });
+          }
+      ),
+    );
   }
 }

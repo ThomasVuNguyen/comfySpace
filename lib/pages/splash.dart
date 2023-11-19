@@ -1,3 +1,4 @@
+import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/main.dart';
 import 'package:comfyssh_flutter/theme/light_theme.dart';
@@ -30,7 +31,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (context)=> CounterModel(),
+            create: (context)=> ButtonAdditionModel(),
         ),
       ],
       child: MaterialApp(

@@ -1,10 +1,15 @@
+import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../components/LoadingWidget.dart';
+import '../components/custom_ui_components.dart';
 import '../components/custom_widgets.dart';
+import '../components/pop_up.dart';
+import '../function.dart';
 import '../main.dart';
 
 String DCMotorSingleRun(String pin1, String pin2, String state1, String state2){
@@ -127,5 +132,72 @@ class _DCMotorSingleState extends State<DCMotorSingle> {
     else{
       return const LoadingSpaceWidget();
     }
+  }
+}
+
+class AddComfyDCMotor extends StatefulWidget {
+  const AddComfyDCMotor({super.key, required this.spaceName});
+  final String spaceName;
+  @override
+  State<AddComfyDCMotor> createState() => _AddComfyDCMotorState();
+}
+
+class _AddComfyDCMotorState extends State<AddComfyDCMotor> {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+      ],
+      child: ListTile(
+          title: Text('DC Motor'),
+          onTap: (){
+            Scaffold.of(context).closeEndDrawer();
+            late String pinOut; late String buttonName; late String middle; late String left; late String right; late String up; late String down;
+
+            showDialog(context: context, builder: (BuildContext context){
+              int buttonSizeX = 1; int buttonSizeY = 1; int buttonPosition = 1;
+              late String pin1; late String pin2;
+              return ButtonAlertDialog(
+                title: 'DC Motor',
+                content: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      comfyTextField(text: 'button name', onChanged: (btnName){
+                        buttonName = btnName;
+                      }),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(text: 'pin1', onChanged: (pin){
+                        pin1 = pin;
+                      },
+                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      ),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      comfyTextField(text: 'pin2', onChanged: (pin){
+                        pin2 = pin;
+                      },
+                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      ),
+                      const SizedBox(height: 32, width: double.infinity,),
+                      const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  comfyActionButton(
+                    onPressed: (){
+                      String stepperPinList = "$pin1 $pin2";
+                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, stepperPinList,'DCMotor');
+                      Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            });
+          }
+      ),
+    );
   }
 }

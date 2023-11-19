@@ -1,0 +1,541 @@
+In case things go wrong, here is where legacy codes are put:
+
+1. Adding button in a space: Put this in the floating button inside spacePage
+          floatingActionButton:
+          //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
+          FutureBuilder(
+              future: Future.delayed(const Duration(seconds: 2)),
+              builder: (c,s){
+                if (s.connectionState == ConnectionState.done){
+                  return SpeedDial(
+                    //animatedIcon: AnimatedIcons.event_add,
+                    tooltip: context.watch<ButtonAdditionModel>().AddFinished.toString(),
+                    //"Add Button",
+                    icon: Icons.add,
+                    activeIcon: Icons.close,
+                    visible: true,
+                    closeManually: false,
+                    curve: Curves.bounceIn,
+                    overlayColor: Colors.black, backgroundColor: textcolor,
+                    onOpen: (){},onClose: (){},
+                    children: [
+                      SpeedDialChild(
+                          child: Image.asset('assets/speedDialIcons/Tap.png', width: SpeedDialChildSize),
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
+                          foregroundColor: Colors.white,
+                          label: "Tap button",
+                          onTap: (){
+                            showDialog(context: context, builder: (BuildContext context){
+                              String buttonType = 'customOutput';
+                              buttonSizeY = 1;
+                              buttonSizeX=1;
+                              buttonPosition=1;
+                              return ButtonAlertDialog(
+                                  title: 'Tap Button',
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        comfyTextField(onChanged: (btnName){
+                                          buttonName = btnName;
+                                        }, text: 'button name'),
+                                        const SizedBox(height: 32, width: double.infinity,),
+                                        comfyTextField(onChanged: (btnCommand){
+                                          buttonCommand = btnCommand;
+                                        }, text: 'command', keyboardType: TextInputType.multiline,),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    comfyActionButton(
+                                      onPressed: (){
+                                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'ComfyTapButton');
+                                        print("$buttonName has been added to ${widget.spaceName}");
+                                        Navigator.pop(context);
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ]);
+                            });
+                          }
+                      ),
+                      SpeedDialChild(
+                          child: Image.asset('assets/speedDialIcons/toggle.png', width: SpeedDialChildSize),
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
+                          foregroundColor: Colors.white,
+                          label: "Toggle button",
+                          onTap: (){
+                            String CommandOn = 'htop'; String CommandOff = 'htop';
+                            showDialog(context: context, builder: (BuildContext context){
+                              String buttonType = 'ComfyToggleButton';
+                              buttonSizeY = 1;
+                              buttonSizeX=1;
+                              buttonPosition=1;
+                              return ButtonAlertDialog(
+                                  title: 'Toggle Button',
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        comfyTextField(onChanged: (btnName){
+                                          buttonName = btnName;
+                                        }, text: 'button name'),
+                                        const SizedBox(height: 32, width: double.infinity,),
+                                        comfyTextField(onChanged: (btnCommand){
+                                          CommandOn = btnCommand;
+                                        }, text: 'command #1',
+                                          keyboardType: TextInputType.multiline,),
+                                        const SizedBox(height: 32, width: double.infinity,),
+                                        comfyTextField(onChanged: (btnCommand){
+                                          CommandOff = btnCommand;
+                                        }, text: 'command #2',
+                                          keyboardType: TextInputType.multiline,),
+
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    comfyActionButton(
+                                      onPressed: (){
+                                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, CommandOn + ConnectionCharacter + CommandOff, buttonType);
+                                        print("$buttonName has been added to ${widget.spaceName}");
+                                        Navigator.pop(context);
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ]);
+                            });
+                          }
+                      ),
+                      SpeedDialChild(
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
+                          label: 'Vertical Gesture',
+                          child: Image.asset('assets/speedDialIcons/VerticalGesture.png', width: SpeedDialChildSize,),
+                          onTap: (){
+                            late String up; late String middle; late String down;
+                            showDialog(context: context, builder: (BuildContext context){
+                              return ButtonAlertDialog(
+                                title: 'Vertical Gesture Button',
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      comfyTextField(text: 'button name', onChanged: (btnName){
+                                        buttonName = btnName;
+                                      }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Up Function', onChanged: (txt){
+                                        up = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Middle Func', onChanged: (txt){
+                                        middle = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Down Func', onChanged: (txt){
+                                        down = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  comfyActionButton(
+                                    onPressed: (){
+                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,up + ConnectionCharacter + middle + ConnectionCharacter + down,'ComfyVerticalButton');
+                                      Navigator.pop(context);
+                                      setState(() {});
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                          }
+                      ),
+                      SpeedDialChild(
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
+                          label: 'Full Gesture',
+                          child: Image.asset('assets/speedDialIcons/VerticalGesture.png', width: SpeedDialChildSize,),
+                          onTap: (){
+                            late String up; late String middle; late String down; late String left; late String right;
+                            showDialog(context: context, builder: (BuildContext context){
+                              return ButtonAlertDialog(
+                                title: 'Full Gesture Button',
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      comfyTextField(text: 'button name', onChanged: (btnName){
+                                        buttonName = btnName;
+                                      }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Middle Func', onChanged: (txt){
+                                        middle = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Left Func', onChanged: (txt){
+                                        left = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Right Func', onChanged: (txt){
+                                        right = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Up Function', onChanged: (txt){
+                                        up = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Down Func', onChanged: (txt){
+                                        down = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+
+
+                                      //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  comfyActionButton(
+                                    onPressed: (){
+                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,middle + ConnectionCharacter + left + ConnectionCharacter + right + ConnectionCharacter + up +ConnectionCharacter + down,'ComfyFullGestureButton');
+                                      Navigator.pop(context);
+                                      setState(() {});
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                          }
+                      ),
+                      SpeedDialChild(
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
+                          label: 'Horizontal Gesture',
+                          child: Image.asset('assets/speedDialIcons/HorizontalGesture.png', width: SpeedDialChildSize,),
+                          onTap: (){
+                            late String left; late String middle; late String right;
+                            showDialog(context: context, builder: (BuildContext context){
+                              return ButtonAlertDialog(
+                                title: 'Horizontal Gesture Button',
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      comfyTextField(text: 'button name', onChanged: (btnName){
+                                        buttonName = btnName;
+                                      }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Left Function', onChanged: (txt){
+                                        left = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Middle Func', onChanged: (txt){
+                                        middle = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(
+                                        keyboardType: TextInputType.multiline,
+                                        text: 'Right Func', onChanged: (txt){
+                                        right = txt;
+                                      },
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  comfyActionButton(
+                                    onPressed: (){
+                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,left + ConnectionCharacter + middle + ConnectionCharacter + right,'ComfyHorizontalButton');
+                                      Navigator.pop(context);
+                                      setState(() {});
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                          }
+                      ),
+                      SpeedDialChild(
+                          child: Image.asset('assets/speedDialIcons/DataButton.png',width: SpeedDialChildSize,),
+                          backgroundColor: Colors.transparent,
+                          foregroundColor: Colors.white,labelStyle: SpeedDialLabelStyle,
+                          label: "Data button",
+                          onTap: (){
+                            showDialog(context: context, builder: (BuildContext context){
+                              String buttonType = 'ComfyData';
+                              buttonSizeY = 1;
+                              buttonSizeX=1;
+                              buttonPosition=1;
+                              return ButtonAlertDialog(
+                                  title: 'Data Button',
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        comfyTextField(onChanged: (btnName){
+                                          buttonName = btnName;
+                                        }, text: 'button name'),
+                                        const SizedBox(height: 32, width: double.infinity,),
+                                        comfyTextField(onChanged: (btnCommand){
+                                          buttonCommand = btnCommand;
+                                        }, text: 'command',
+                                          keyboardType: TextInputType.multiline,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    comfyActionButton(
+                                      onPressed: (){
+                                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'ComfyData');
+                                        print("$buttonName has been added to ${widget.spaceName}");
+                                        Navigator.pop(context);
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ]);
+                            });
+                          }
+                      ),
+                      SpeedDialChild(
+                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Image.asset('assets/speedDialIcons/led.png', width: SpeedDialChildSize,),
+                          label: 'LED',
+                          onTap: (){
+                            late String pinOut;
+                            showDialog(context: context, builder: (BuildContext context){
+                              return ButtonAlertDialog(
+                                title: 'LED toggle',
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      comfyTextField(text: 'button name', onChanged: (btnName){
+                                        buttonName = btnName;
+                                      }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(text: 'pin number',
+                                        onChanged: (pinNum){pinOut = pinNum;},
+                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                      ),
+                                      IconDuckCredit(iconLink: 'https://iconduck.com/icons/190075/led-unit', iconName: 'LED' )
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  comfyActionButton(onPressed: (){
+                                    addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, pinOut,'LED');
+                                    Navigator.pop(context);
+                                    setState(() {});
+                                  },)
+                                ],
+                              );
+                            });
+                          }
+                      ),
+                      SpeedDialChild(
+                          backgroundColor: Colors.transparent,
+                          label: 'Stepper Motor',labelStyle: SpeedDialLabelStyle,
+                          child: Image.asset('assets/speedDialIcons/stepperMotor.png', width: SpeedDialChildSize,),
+                          onTap: (){
+                            late String pin1; late String pin2; late String pin3; late String pin4;
+                            showDialog(context: context, builder: (BuildContext context){
+                              return ButtonAlertDialog(
+                                title: 'Stepper Motor',
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      comfyTextField(text: 'button name', onChanged: (btnName){
+                                        buttonName = btnName;
+                                      }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(text: 'pin1', onChanged: (pin){
+                                        pin1 = pin;
+                                      },
+                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(text: 'pin2', onChanged: (pin){
+                                        pin2 = pin;
+                                      },
+                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(text: 'pin3', onChanged: (pin){
+                                        pin3 = pin;
+                                      },
+                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(text: 'pin4', onChanged: (pin){
+                                        pin4 = pin;
+                                      },
+                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190110/stepper-motor', iconName: 'Stepper Motor')
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  comfyActionButton(
+                                    onPressed: (){
+                                      String stepperPinList = "$pin1 $pin2 $pin3 $pin4";
+                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, stepperPinList,'stepperMotor');
+                                      Navigator.pop(context);
+                                      setState(() {});
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                          }
+                      ),
+                      SpeedDialChild(
+                          backgroundColor: Colors.transparent,
+                          label: 'DC Motor',labelStyle: SpeedDialLabelStyle,
+                          child: Image.asset('assets/speedDialIcons/dc-motor.png', width: SpeedDialChildSize,),
+                          onTap: (){
+                            late String pin1; late String pin2; late String pin3; late String pin4;
+                            showDialog(context: context, builder: (BuildContext context){
+                              return ButtonAlertDialog(
+                                title: 'DC Motor',
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      comfyTextField(text: 'button name', onChanged: (btnName){
+                                        buttonName = btnName;
+                                      }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(text: 'pin1', onChanged: (pin){
+                                        pin1 = pin;
+                                      },
+                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      comfyTextField(text: 'pin2', onChanged: (pin){
+                                        pin2 = pin;
+                                      },
+                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                      ),
+                                      const SizedBox(height: 32, width: double.infinity,),
+                                      const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  comfyActionButton(
+                                    onPressed: (){
+                                      String stepperPinList = "$pin1 $pin2";
+                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, stepperPinList,'DCMotor');
+                                      Navigator.pop(context);
+                                      setState(() {});
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                          }
+                      ),
+                      SpeedDialChild(
+                          backgroundColor: Colors.transparent,
+                          child: Image.asset('assets/speedDialIcons/ultrasonic_distance_sensor.png', width:
+                          SpeedDialChildSize,), label: 'Ultrasonic sensor',
+                          labelStyle: SpeedDialLabelStyle,
+                          onTap: (){
+                            late String trig; late String echo;
+                            showDialog(context: context, builder: (BuildContext context){
+                              return ButtonAlertDialog(
+                                title: "Distance sensor",
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      comfyTextField(text: 'button name', onChanged: (btnName){
+                                        buttonName = btnName;
+                                      }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+
+                                      comfyTextField(text: 'trigger pin',
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                          onChanged: (pin){
+                                            trig = pin;
+                                          }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+
+                                      comfyTextField(text: 'echo pin',
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                          onChanged: (pin){
+                                            echo = pin;
+                                          }),
+                                      const SizedBox(height: 32, width: double.infinity,),
+
+                                      const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190115/ultrasonic-distance-sensor', iconName: 'Sensor'),
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  comfyActionButton(
+                                    onPressed: (){
+                                      String HCSR04PinList = '$trig $echo';
+                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, HCSR04PinList, 'HCSR04');
+                                      Navigator.pop(context);
+                                      setState(() {});
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                          }
+                      ),
+
+                    ],
+                  );
+                }
+                else{
+                  return SizedBox(
+                    height: 0, width: 0,
+                  );
+                }
+              }
+
+          ),

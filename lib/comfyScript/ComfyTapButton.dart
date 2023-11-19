@@ -1,45 +1,38 @@
+import 'dart:convert';
+
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
-import 'package:comfyssh_flutter/main.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:xterm/xterm.dart';
+import 'package:xterm/core.dart';
 
 import '../components/LoadingWidget.dart';
+import '../components/custom_ui_components.dart';
 import '../components/custom_widgets.dart';
 import '../components/pop_up.dart';
 import '../function.dart';
+import '../main.dart';
 
-List<String> CommandExtract(String command) {
-  List<String> CommandList = command.split(ConnectionCharacter);
-  return CommandList;
-}
-
-class ComfyToggleButton extends StatefulWidget {
-  const ComfyToggleButton({super.key, required this.commandOn, required this.commandOff, required this.name, required this.hostname, required this.username, required this.password, required this.terminal});
-  final String name;
-  final String commandOn; final String commandOff;
-  final String hostname; final String username; final String password;
-  final Terminal terminal;
+class SinglePressButton extends StatefulWidget {
+  const SinglePressButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.command, required this.terminal});
+  final String name; final String hostname; final String username; final String password; final String command; final Terminal terminal;
   @override
-  State<ComfyToggleButton> createState() => _ComfyToggleButtonState();
+  State<SinglePressButton> createState() => _SinglePressButtonState();
 }
 
-class _ComfyToggleButtonState extends State<ComfyToggleButton> {
-  bool toggleState=false; bool SSHLoadingFinished = false;
-  late SSHClient client;
+class _SinglePressButtonState extends State<SinglePressButton> {
+  bool SSHLoaded = false; bool toggleState = false; late SSHClient client;
   @override
   void initState(){
+    print(widget.command);
     super.initState();
     initClient();
   }
-  @override
   void dispose(){
     super.dispose();
     closeClient();
-    print("closed");
   }
   Future<void> initClient() async{
     client = SSHClient(
@@ -48,8 +41,7 @@ class _ComfyToggleButtonState extends State<ComfyToggleButton> {
       onPasswordRequest: () => widget.password,
     );
     print("initClient username: ${client.username}");
-    setState(() {SSHLoadingFinished = true;});
-
+    setState(() {SSHLoaded = true;});
   }
   Future<void> closeClient() async{
     final shell = await client.shell();
@@ -57,29 +49,30 @@ class _ComfyToggleButtonState extends State<ComfyToggleButton> {
     client.close();
 
   }
+  Future<void> sendCommand() async{
+    HapticFeedback.vibrate();
+    var command = await client.run(widget.command);
+    String commandString = utf8.decode(command);
+    widget.terminal.write('\r\n${widget.command}');
+    setState(() {
+      toggleState = !toggleState;
+    });
+    Future.delayed(Duration(milliseconds: 100), (){
+      setState(() {
+        toggleState = !toggleState;
+      });
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
-    if(SSHLoadingFinished == true){
-      return GestureDetector(
-        onTap: () async {
-          setState((){
-            toggleState = !toggleState;
-            print(toggleState.toString());
-          });
-          if (toggleState == true){
-            widget.terminal.write('\r\n${widget.commandOff} ');
-            var command = await client.run(widget.commandOff);
-          }
-          else{
-            widget.terminal.write('\r\n${widget.commandOn} ');
-            var command = await client.run(widget.commandOn);
-          }
-
-          SystemSound.play(SystemSoundType.click);
-
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(buttonPadding),
+    if (SSHLoaded == true){
+      return Padding(
+        padding: EdgeInsets.all(buttonPadding),
+        child: GestureDetector(
+          onTap: (){
+            sendCommand();
+          },
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
@@ -89,7 +82,7 @@ class _ComfyToggleButtonState extends State<ComfyToggleButton> {
                   borderRadius: BorderRadius.circular(24.0),
                   color: toggleState? Colors.white :Colors.black,
                 ),
-                child: Center(child: toggleState? Icon(Icons.toggle_on, size: 60,color: Colors.black,) :Icon(Icons.toggle_off, size: 60,color: Colors.white,),),
+                child: Center(child: toggleState? Icon(Icons.radio_button_checked, size: 60,color: Colors.black,) :Icon(Icons.radio_button_unchecked, size: 60,color: Colors.white,),),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
@@ -98,22 +91,25 @@ class _ComfyToggleButtonState extends State<ComfyToggleButton> {
             ],
 
           ),
-        )
-      );}
+
+        ),
+
+      );
+    }
     else{
-      return const LoadingSpaceWidget();
+      return LoadingSpaceWidget();
     }
   }
 }
 
-class AddComfyToggleButton extends StatefulWidget {
-  const AddComfyToggleButton({super.key, required this.spaceName});
+class AddComfyTapButton extends StatefulWidget {
+  const AddComfyTapButton({super.key, required this.spaceName});
   final String spaceName;
   @override
-  State<AddComfyToggleButton> createState() => _AddComfyToggleButtonState();
+  State<AddComfyTapButton> createState() => _AddComfyTapButtonState();
 }
 
-class _AddComfyToggleButtonState extends State<AddComfyToggleButton> {
+class _AddComfyTapButtonState extends State<AddComfyTapButton> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -121,18 +117,17 @@ class _AddComfyToggleButtonState extends State<AddComfyToggleButton> {
         ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
       ],
       child: ListTile(
-          title: Text('Toggle'),
+          title: Text('Tap'),
           onTap: (){
             Scaffold.of(context).closeEndDrawer();
             late String pinOut; late String buttonName;
             showDialog(context: context, builder: (BuildContext context){
-              String buttonType = 'ComfyToggleButton';
+              String buttonType = 'customOutput';
               buttonSizeY = 1;
               buttonSizeX=1;
               buttonPosition=1;
-              late String CommandOn; late String CommandOff;
               return ButtonAlertDialog(
-                  title: 'Toggle Button',
+                  title: 'Tap Button',
                   content: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -142,25 +137,17 @@ class _AddComfyToggleButtonState extends State<AddComfyToggleButton> {
                         }, text: 'button name'),
                         const SizedBox(height: 32, width: double.infinity,),
                         comfyTextField(onChanged: (btnCommand){
-                          CommandOn = btnCommand;
-                        }, text: 'command #1',
-                          keyboardType: TextInputType.multiline,),
-                        const SizedBox(height: 32, width: double.infinity,),
-                        comfyTextField(onChanged: (btnCommand){
-                          CommandOff = btnCommand;
-                        }, text: 'command #2',
-                          keyboardType: TextInputType.multiline,),
-
+                          buttonCommand = btnCommand;
+                        }, text: 'command', keyboardType: TextInputType.multiline,),
                       ],
                     ),
                   ),
                   actions: [
                     comfyActionButton(
                       onPressed: (){
-                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, CommandOn + ConnectionCharacter + CommandOff, buttonType);
+                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'ComfyTapButton');
                         Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
                         Navigator.pop(context);
-
                       },
                     ),
                   ]);

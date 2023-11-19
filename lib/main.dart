@@ -4,6 +4,7 @@ import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyVerticalSwipeButton.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/servo.dart';
+import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
 import 'package:comfyssh_flutter/components/custom_ui_components.dart';
 import 'package:comfyssh_flutter/components/custom_widgets.dart';
@@ -35,6 +36,7 @@ import 'package:xterm/xterm.dart';
 import 'dart:io' show Platform;
 
 import 'comfyScript/ComfyHorizontalSwipeButton.dart';
+import 'comfyScript/ComfyTapButton.dart';
 import 'comfyScript/DCmotor.dart';
 import 'comfyScript/FullGestureButton.dart';
 import 'comfyScript/customInput.dart';
@@ -845,9 +847,6 @@ class _spacePageState extends State<spacePage> {
   void dispose(){
     super.dispose();
     clientControl.close();
-    final counter = context.read<CounterModel>();
-    counter.reset();
-    print(counter);
   }
   Future<void> initControl() async{
     clientControl = SSHClient(
@@ -857,15 +856,9 @@ class _spacePageState extends State<spacePage> {
     );
     print("${clientControl.username} is ready");
   }
-  reloadFunc(){
-    setState(() {});
-    print("reloadfun");
-  }
 
   @override
   Widget build(BuildContext context) {
-    final counter = context.read<CounterModel>();
-    counter.reset();
     return WillPopScope(
         onWillPop: () async {
           return false;
@@ -879,48 +872,27 @@ class _spacePageState extends State<spacePage> {
                   ExpansionTile(
                       title: Text('Component Button'),
                     children: [
-                      ListTile(
-                        title: Text('LED'),
-                          onTap: (){
-                            Navigator.pop(context);
-                            late String pinOut;
-                            showDialog(context: context, builder: (BuildContext context){
-                              return ButtonAlertDialog(
-                                title: 'LED toggle',
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      comfyTextField(text: 'button name', onChanged: (btnName){
-                                        buttonName = btnName;
-                                      }),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'pin number',
-                                        onChanged: (pinNum){pinOut = pinNum;},
-                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                      ),
-                                      IconDuckCredit(iconLink: 'https://iconduck.com/icons/190075/led-unit', iconName: 'LED' )
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  comfyActionButton(onPressed: (){
-                                    addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, pinOut,'LED');
-                                    Navigator.pop(context);
-                                    setState(() {});
-                                  },)
-                                ],
-                              );
-                            });
-                          }
-                      ),
+                      AddLEDButton(spaceName: widget.spaceName),
+                      AddComfyStepperMotor(spaceName: widget.spaceName),
+                      AddComfyDCMotor(spaceName: widget.spaceName),
+                      AddComfyDistanceSensor(spaceName: widget.spaceName),
                     ],
                   ),
-                  ExpansionTile(title: Text('Gesture Button'),)
+                  ExpansionTile(
+                    title: Text('Gesture Button'),
+                    children: [
+                      AddComfyTapButton(spaceName: widget.spaceName),
+                      AddComfyHorizontalSwipeButton(spaceName: widget.spaceName),
+                      AddComfyVerticalSwipeButton(spaceName: widget.spaceName),
+                      AddComfyToggleButton(spaceName: widget.spaceName),
+                      AddComfyFullGestureButton(spaceName: widget.spaceName),
+                      AddComfyDataButton(spaceName: widget.spaceName),
+                  ],)
                 ],
               ),
             )
           ),
+
           appBar: //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux )? null :
           PreferredSize(
               preferredSize: const Size.fromHeight(64),
@@ -928,698 +900,135 @@ class _spacePageState extends State<spacePage> {
                 endDrawer: true,
                 IsSpacePage: true,
                   //automaticallyImplyLeading: true,
-                  title: widget.spaceName
+                  title: widget.spaceName + context.watch<ButtonAdditionModel>().AddFinished.toString()
               )),
-          floatingActionButton:
-          //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
-          FutureBuilder(
-              future: Future.delayed(const Duration(seconds: 2)),
-              builder: (c,s){
-                if (s.connectionState == ConnectionState.done){
-                  return SpeedDial(
-                    //animatedIcon: AnimatedIcons.event_add,
-                    tooltip: "Add Button",
-                    icon: Icons.add,
-                    activeIcon: Icons.close,
-                    visible: true,
-                    closeManually: false,
-                    curve: Curves.bounceIn,
-                    overlayColor: Colors.black, backgroundColor: textcolor,
-                    onOpen: (){},onClose: (){},
-                    children: [
-                      SpeedDialChild(
-                          child: Image.asset('assets/speedDialIcons/Tap.png', width: SpeedDialChildSize),
-                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
-                          foregroundColor: Colors.white,
-                          label: "Tap button",
-                          onTap: (){
-                            showDialog(context: context, builder: (BuildContext context){
-                              String buttonType = 'customOutput';
-                              buttonSizeY = 1;
-                              buttonSizeX=1;
-                              buttonPosition=1;
-                              return ButtonAlertDialog(
-                                  title: 'Tap Button',
-                                  content: SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        comfyTextField(onChanged: (btnName){
-                                          buttonName = btnName;
-                                        }, text: 'button name'),
-                                        const SizedBox(height: 32, width: double.infinity,),
-                                        comfyTextField(onChanged: (btnCommand){
-                                          buttonCommand = btnCommand;
-                                        }, text: 'command', keyboardType: TextInputType.multiline,),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    comfyActionButton(
-                                      onPressed: (){
-                                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'ComfyTapButton');
-                                        print("$buttonName has been added to ${widget.spaceName}");
-                                        Navigator.pop(context);
-                                        setState(() {});
-                                      },
-                                    ),
-                                  ]);
-                            });
-                          }
-                      ),
-                      SpeedDialChild(
-                          child: Image.asset('assets/speedDialIcons/toggle.png', width: SpeedDialChildSize),
-                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
-                          foregroundColor: Colors.white,
-                          label: "Toggle button",
-                          onTap: (){
-                            String CommandOn = 'htop'; String CommandOff = 'htop';
-                            showDialog(context: context, builder: (BuildContext context){
-                              String buttonType = 'ComfyToggleButton';
-                              buttonSizeY = 1;
-                              buttonSizeX=1;
-                              buttonPosition=1;
-                              return ButtonAlertDialog(
-                                  title: 'Toggle Button',
-                                  content: SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        comfyTextField(onChanged: (btnName){
-                                          buttonName = btnName;
-                                        }, text: 'button name'),
-                                        const SizedBox(height: 32, width: double.infinity,),
-                                        comfyTextField(onChanged: (btnCommand){
-                                          CommandOn = btnCommand;
-                                        }, text: 'command #1',
-                                          keyboardType: TextInputType.multiline,),
-                                        const SizedBox(height: 32, width: double.infinity,),
-                                        comfyTextField(onChanged: (btnCommand){
-                                          CommandOff = btnCommand;
-                                        }, text: 'command #2',
-                                          keyboardType: TextInputType.multiline,),
-
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    comfyActionButton(
-                                      onPressed: (){
-                                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, CommandOn + ConnectionCharacter + CommandOff, buttonType);
-                                        print("$buttonName has been added to ${widget.spaceName}");
-                                        Navigator.pop(context);
-                                        setState(() {});
-                                      },
-                                    ),
-                                  ]);
-                            });
-                          }
-                      ),
-                      SpeedDialChild(
-                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
-                          label: 'Vertical Gesture',
-                          child: Image.asset('assets/speedDialIcons/VerticalGesture.png', width: SpeedDialChildSize,),
-                          onTap: (){
-                            late String up; late String middle; late String down;
-                            showDialog(context: context, builder: (BuildContext context){
-                              return ButtonAlertDialog(
-                                title: 'Vertical Gesture Button',
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      comfyTextField(text: 'button name', onChanged: (btnName){
-                                        buttonName = btnName;
-                                      }),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Up Function', onChanged: (txt){
-                                        up = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Middle Func', onChanged: (txt){
-                                        middle = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Down Func', onChanged: (txt){
-                                        down = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  comfyActionButton(
-                                    onPressed: (){
-                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,up + ConnectionCharacter + middle + ConnectionCharacter + down,'ComfyVerticalButton');
-                                      Navigator.pop(context);
-                                      setState(() {});
-                                    },
-                                  )
-                                ],
-                              );
-                            });
-                          }
-                      ),
-                      SpeedDialChild(
-                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
-                          label: 'Full Gesture',
-                          child: Image.asset('assets/speedDialIcons/VerticalGesture.png', width: SpeedDialChildSize,),
-                          onTap: (){
-                            late String up; late String middle; late String down; late String left; late String right;
-                            showDialog(context: context, builder: (BuildContext context){
-                              return ButtonAlertDialog(
-                                title: 'Full Gesture Button',
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      comfyTextField(text: 'button name', onChanged: (btnName){
-                                        buttonName = btnName;
-                                      }),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Middle Func', onChanged: (txt){
-                                        middle = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Left Func', onChanged: (txt){
-                                        left = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Right Func', onChanged: (txt){
-                                        right = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Up Function', onChanged: (txt){
-                                        up = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Down Func', onChanged: (txt){
-                                        down = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-
-
-                                      //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  comfyActionButton(
-                                    onPressed: (){
-                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,middle + ConnectionCharacter + left + ConnectionCharacter + right + ConnectionCharacter + up +ConnectionCharacter + down,'ComfyFullGestureButton');
-                                      Navigator.pop(context);
-                                      setState(() {});
-                                    },
-                                  )
-                                ],
-                              );
-                            });
-                          }
-                      ),
-                      SpeedDialChild(
-                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
-                          label: 'Horizontal Gesture',
-                          child: Image.asset('assets/speedDialIcons/HorizontalGesture.png', width: SpeedDialChildSize,),
-                          onTap: (){
-                            late String left; late String middle; late String right;
-                            showDialog(context: context, builder: (BuildContext context){
-                              return ButtonAlertDialog(
-                                title: 'Horizontal Gesture Button',
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      comfyTextField(text: 'button name', onChanged: (btnName){
-                                        buttonName = btnName;
-                                      }),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Left Function', onChanged: (txt){
-                                        left = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Middle Func', onChanged: (txt){
-                                        middle = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(
-                                        keyboardType: TextInputType.multiline,
-                                        text: 'Right Func', onChanged: (txt){
-                                        right = txt;
-                                      },
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      //const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  comfyActionButton(
-                                    onPressed: (){
-                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,left + ConnectionCharacter + middle + ConnectionCharacter + right,'ComfyHorizontalButton');
-                                      Navigator.pop(context);
-                                      setState(() {});
-                                    },
-                                  )
-                                ],
-                              );
-                            });
-                          }
-                      ),
-                      SpeedDialChild(
-                          child: Image.asset('assets/speedDialIcons/DataButton.png',width: SpeedDialChildSize,),
-                          backgroundColor: Colors.transparent,
-                          foregroundColor: Colors.white,labelStyle: SpeedDialLabelStyle,
-                          label: "Data button",
-                          onTap: (){
-                            showDialog(context: context, builder: (BuildContext context){
-                              String buttonType = 'ComfyData';
-                              buttonSizeY = 1;
-                              buttonSizeX=1;
-                              buttonPosition=1;
-                              return ButtonAlertDialog(
-                                  title: 'Data Button',
-                                  content: SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        comfyTextField(onChanged: (btnName){
-                                          buttonName = btnName;
-                                        }, text: 'button name'),
-                                        const SizedBox(height: 32, width: double.infinity,),
-                                        comfyTextField(onChanged: (btnCommand){
-                                          buttonCommand = btnCommand;
-                                        }, text: 'command',
-                                          keyboardType: TextInputType.multiline,
+          body: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+            ],
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal),
+                  //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
+                  //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      child: Container(
+                        color:  Theme.of(context).colorScheme.onSecondaryContainer,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Theme(
+                            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                            child: ExpansionTile(
+                              //collapsedBackgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                              //backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                              initiallyExpanded: true,
+                              title: const Text("Terminal"),
+                              onExpansionChanged: (bool expanded){
+                                  TerminalShow = expanded;
+                                  print(TerminalShow);
+                              },
+                              children: [
+                                SizedBox(
+                                    height: 120,
+                                    child: TerminalView(
+                                        terminal, readOnly: true, padding: const EdgeInsets.all(16.0),
+                                        textStyle: const TerminalStyle(
+                                          fontSize: 16.0,
+                                          fontFamily: 'poppins',
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    comfyActionButton(
-                                      onPressed: (){
-                                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'ComfyData');
-                                        print("$buttonName has been added to ${widget.spaceName}");
-                                        Navigator.pop(context);
-                                        setState(() {});
-                                      },
-                                    ),
-                                  ]);
-                            });
-                          }
-                      ),
-                      SpeedDialChild(
-                          backgroundColor: Colors.transparent,labelStyle: SpeedDialLabelStyle,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Image.asset('assets/speedDialIcons/led.png', width: SpeedDialChildSize,),
-                          label: 'LED',
-                          onTap: (){
-                            late String pinOut;
-                            showDialog(context: context, builder: (BuildContext context){
-                              return ButtonAlertDialog(
-                                title: 'LED toggle',
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      comfyTextField(text: 'button name', onChanged: (btnName){
-                                        buttonName = btnName;
-                                      }),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'pin number',
-                                        onChanged: (pinNum){pinOut = pinNum;},
-                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                      ),
-                                      IconDuckCredit(iconLink: 'https://iconduck.com/icons/190075/led-unit', iconName: 'LED' )
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  comfyActionButton(onPressed: (){
-                                    addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, pinOut,'LED');
-                                    Navigator.pop(context);
-                                    setState(() {});
-                                  },)
-                                ],
-                              );
-                            });
-                          }
-                      ),
-                      SpeedDialChild(
-                          backgroundColor: Colors.transparent,
-                          label: 'Stepper Motor',labelStyle: SpeedDialLabelStyle,
-                          child: Image.asset('assets/speedDialIcons/stepperMotor.png', width: SpeedDialChildSize,),
-                          onTap: (){
-                            late String pin1; late String pin2; late String pin3; late String pin4;
-                            showDialog(context: context, builder: (BuildContext context){
-                              return ButtonAlertDialog(
-                                title: 'Stepper Motor',
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      comfyTextField(text: 'button name', onChanged: (btnName){
-                                        buttonName = btnName;
-                                      }),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'pin1', onChanged: (pin){
-                                        pin1 = pin;
-                                      },
-                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'pin2', onChanged: (pin){
-                                        pin2 = pin;
-                                      },
-                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'pin3', onChanged: (pin){
-                                        pin3 = pin;
-                                      },
-                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'pin4', onChanged: (pin){
-                                        pin4 = pin;
-                                      },
-                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190110/stepper-motor', iconName: 'Stepper Motor')
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  comfyActionButton(
-                                    onPressed: (){
-                                      String stepperPinList = "$pin1 $pin2 $pin3 $pin4";
-                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, stepperPinList,'stepperMotor');
-                                      Navigator.pop(context);
-                                      setState(() {});
-                                    },
-                                  )
-                                ],
-                              );
-                            });
-                          }
-                      ),
-                      SpeedDialChild(
-                          backgroundColor: Colors.transparent,
-                          label: 'DC Motor',labelStyle: SpeedDialLabelStyle,
-                          child: Image.asset('assets/speedDialIcons/dc-motor.png', width: SpeedDialChildSize,),
-                          onTap: (){
-                            late String pin1; late String pin2; late String pin3; late String pin4;
-                            showDialog(context: context, builder: (BuildContext context){
-                              return ButtonAlertDialog(
-                                title: 'DC Motor',
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      comfyTextField(text: 'button name', onChanged: (btnName){
-                                        buttonName = btnName;
-                                      }),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'pin1', onChanged: (pin){
-                                        pin1 = pin;
-                                      },
-                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      comfyTextField(text: 'pin2', onChanged: (pin){
-                                        pin2 = pin;
-                                      },
-                                        keyboardType: TextInputType.number, inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                      ),
-                                      const SizedBox(height: 32, width: double.infinity,),
-                                      const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190062/dc-motor', iconName: 'DC Motor')
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  comfyActionButton(
-                                    onPressed: (){
-                                      String stepperPinList = "$pin1 $pin2";
-                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, stepperPinList,'DCMotor');
-                                      Navigator.pop(context);
-                                      setState(() {});
-                                    },
-                                  )
-                                ],
-                              );
-                            });
-                          }
-                      ),
-                      SpeedDialChild(
-                          backgroundColor: Colors.transparent,
-                          child: Image.asset('assets/speedDialIcons/ultrasonic_distance_sensor.png', width:
-                          SpeedDialChildSize,), label: 'Ultrasonic sensor',
-                          labelStyle: SpeedDialLabelStyle,
-                          onTap: (){
-                            late String trig; late String echo;
-                            showDialog(context: context, builder: (BuildContext context){
-                              return ButtonAlertDialog(
-                                title: "Distance sensor",
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      comfyTextField(text: 'button name', onChanged: (btnName){
-                                        buttonName = btnName;
-                                      }),
-                                      const SizedBox(height: 32, width: double.infinity,),
-
-                                      comfyTextField(text: 'trigger pin',
-                                          keyboardType: TextInputType.number,
-                                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                          onChanged: (pin){
-                                            trig = pin;
-                                          }),
-                                      const SizedBox(height: 32, width: double.infinity,),
-
-                                      comfyTextField(text: 'echo pin',
-                                          keyboardType: TextInputType.number,
-                                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                          onChanged: (pin){
-                                            echo = pin;
-                                          }),
-                                      const SizedBox(height: 32, width: double.infinity,),
-
-                                      const IconDuckCredit(iconLink: 'https://iconduck.com/icons/190115/ultrasonic-distance-sensor', iconName: 'Sensor'),
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  comfyActionButton(
-                                    onPressed: (){
-                                      String HCSR04PinList = '$trig $echo';
-                                      addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, HCSR04PinList, 'HCSR04');
-                                      Navigator.pop(context);
-                                      setState(() {});
-                                    },
-                                  )
-                                ],
-                              );
-                            });
-                          }
-                      ),
-
-                    ],
-                  );
-                }
-                else{
-                  return SizedBox(
-                    height: 0, width: 0,
-                  );
-                }
-              }
-
-          ),
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal),
-                //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
-                //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    child: Container(
-                      color:  Theme.of(context).colorScheme.onSecondaryContainer,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Theme(
-                          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                          child: ExpansionTile(
-                            //collapsedBackgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                            //backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                            initiallyExpanded: true,
-                            title: Text("Terminal"),
-                            onExpansionChanged: (bool expanded){
-                                TerminalShow = expanded;
-                                print(TerminalShow);
-                            },
-                            children: [
-                              SizedBox(
-                                  height: 120,
-                                  child: TerminalView(
-                                      terminal, readOnly: true, padding: const EdgeInsets.all(16.0),
-                                      textStyle: const TerminalStyle(
-                                        fontSize: 16.0,
-                                        fontFamily: 'poppins',
-                                      ),
-                                      theme: TerminalTheme(
-                                        cursor: Theme.of(context).colorScheme.onSecondaryContainer,
-                                        selection: Colors.black,
-                                        foreground: Colors.black,
-                                        background: Theme.of(context).colorScheme.onSecondaryContainer,
-                                        white: Colors.white, red: Colors.red, green: Colors.green, yellow: Colors.yellow, blue: Colors.blue,
-                                        magenta: Colors.white, cyan: Colors.cyan, brightBlack: Colors.black38, brightBlue: Colors.blue, brightRed: Colors.redAccent,
-                                        brightGreen: Colors.greenAccent, brightCyan: Colors.cyanAccent, brightMagenta: Colors.purpleAccent, brightWhite: Colors.white30,
-                                        brightYellow: Colors.yellowAccent, searchHitBackground: Colors.white30, searchHitBackgroundCurrent: Colors.white30, searchHitForeground: Colors.black, black: Colors.black38,
-                                      )
-                                  ))
-                            ],
+                                        theme: TerminalTheme(
+                                          cursor: Theme.of(context).colorScheme.onSecondaryContainer,
+                                          selection: Colors.black,
+                                          foreground: Colors.black,
+                                          background: Theme.of(context).colorScheme.onSecondaryContainer,
+                                          white: Colors.white, red: Colors.red, green: Colors.green, yellow: Colors.yellow, blue: Colors.blue,
+                                          magenta: Colors.white, cyan: Colors.cyan, brightBlack: Colors.black38, brightBlue: Colors.blue, brightRed: Colors.redAccent,
+                                          brightGreen: Colors.greenAccent, brightCyan: Colors.cyanAccent, brightMagenta: Colors.purpleAccent, brightWhite: Colors.white30,
+                                          brightYellow: Colors.yellowAccent, searchHitBackground: Colors.white30, searchHitBackgroundCurrent: Colors.white30, searchHitForeground: Colors.black, black: Colors.black38,
+                                        )
+                                    ))
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
-                Expanded(
-                  child: FutureBuilder(
-                      future: buttonRenderer('comfySpace.db', widget.spaceName),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done){
-                          return Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: GridView.builder(
-                                shrinkWrap: true,
-                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: PopulateButton(context),
-                                ),
-                                itemCount: snapshot.data?.length,
-                                itemBuilder: (BuildContext context, index){
-                                  if (snapshot.data![index]["buttonType"] == "LED"){
-                                    return GestureDetector(
-                                        onLongPress: (){
-                                          showDialog(context: context, builder: (BuildContext context){
-                                            return AlertDialog(
-                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                              contentPadding: const EdgeInsets.all(8.0),
-                                              title: Text('Delete Button'),
-                                              actions: [
-                                                CancelButtonPrompt(
-                                                  onPressed: (){
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
-                                                deleteButtonPrompt(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                                    });
-                                                    Navigator.pop(context);
-                                                  },
-                                                )
-                                              ],
-                                            );
-                                          });
-                                        },
-                                        child: LedToggle(spaceName: widget.spaceName, name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,terminal: terminal));
+                  //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
+                  Expanded(
+                    child: FutureBuilder(
+                        future: buttonRenderer('comfySpace.db', widget.spaceName),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done){
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: GridView.builder(
+                                  shrinkWrap: true,
+                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: PopulateButton(context),
+                                  ),
+                                  itemCount: snapshot.data?.length,
+                                  itemBuilder: (BuildContext context, index){
+                                    if (snapshot.data![index]["buttonType"] == "LED"){
+                                      return GestureDetector(
+                                          onLongPress: (){
+                                            showDialog(context: context, builder: (BuildContext context){
+                                              return AlertDialog(
+                                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                                contentPadding: const EdgeInsets.all(8.0),
+                                                title: Text('Delete Button'),
+                                                actions: [
+                                                  CancelButtonPrompt(
+                                                    onPressed: (){
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  deleteButtonPrompt(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  )
+                                                ],
+                                              );
+                                            });
+                                          },
+                                          child: LedToggle(spaceName: widget.spaceName, name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,terminal: terminal));
 
-                                  }
-                                  else if (snapshot.data![index]["buttonType"] == "servo"){
-                                    return StatefulBuilder(
-                                      builder: (context, setState) {
-                                        return GestureDetector(
-                                            onLongPress: (){
-                                              deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                              servoState.remove(index);
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (BuildContext context) => super.widget));
-                                            },
-                                            child: Slider(
-                                              onChanged: (newAngle) async {
-                                                setState(() {servoState[index] = newAngle.toInt();});
-                                                var command = await clientControl.run(servoAngle(snapshot.data![index]["command"], servoState[index]!));
-                                              }, value: servoState[index]!.toDouble(),
-                                              min: 0.0, max: 180.0, divisions: 4,
-                                            )
-                                        );
-                                      },
-                                    );
-                                  }
-                                  else if (snapshot.data![index]["buttonType"] == "stepperMotor"){
-                                    List<String> pinList = snapshot.data![index]["command"].split(" ");
-                                    return GestureDetector(
-                                      onLongPress: (){
-                                        showDialog(context: context, builder: (BuildContext context){
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                            contentPadding: const EdgeInsets.all(20.0),
-                                            title: Text('Delete Button'),
-                                            actions: [
-                                              CancelButtonPrompt(
-                                                onPressed: (){
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              deleteButtonPrompt(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
+                                    }
+                                    else if (snapshot.data![index]["buttonType"] == "servo"){
+                                      return StatefulBuilder(
+                                        builder: (context, setState) {
+                                          return GestureDetector(
+                                              onLongPress: (){
+                                                deleteButton('comfySpace.db', spaceLaunch, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                servoState.remove(index);
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (BuildContext context) => super.widget));
+                                              },
+                                              child: Slider(
+                                                onChanged: (newAngle) async {
+                                                  setState(() {servoState[index] = newAngle.toInt();});
+                                                  var command = await clientControl.run(servoAngle(snapshot.data![index]["command"], servoState[index]!));
+                                                }, value: servoState[index]!.toDouble(),
+                                                min: 0.0, max: 180.0, divisions: 4,
                                               )
-                                            ],
                                           );
-                                        });
-                                      },
-                                      child: StepperMotor(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], pin3: pinList[2], pin4: pinList[3], hostname: widget.hostname, username: widget.username, password: widget.password),
-                                    );
-                                  }
-                                  else if (snapshot.data![index]["buttonType"] == "HCSR04"){
-                                    List<String> pinList = snapshot.data![index]["command"].split(" ");
-                                    return GestureDetector(
+                                        },
+                                      );
+                                    }
+                                    else if (snapshot.data![index]["buttonType"] == "stepperMotor"){
+                                      List<String> pinList = snapshot.data![index]["command"].split(" ");
+                                      return GestureDetector(
                                         onLongPress: (){
                                           showDialog(context: context, builder: (BuildContext context){
                                             return AlertDialog(
@@ -1644,287 +1053,292 @@ class _spacePageState extends State<spacePage> {
                                             );
                                           });
                                         },
-                                        child: CustomInputButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandIn: 'python3 comfyScript/distance_sensor/HC-SR04.py ${pinList[0]} ${pinList[1]} 1', terminal: terminal,)
-                                      //child: DistanceSensor(spaceName: widget.spaceName, name: snapshot.data![index]["name"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password, trig: pinList[0], echo: pinList[1]),
-                                    );
-                                  }
-                                  else if (snapshot.data![index]["buttonType"] == "DCMotor"){
-                                    List<String> pinList = snapshot.data![index]["command"].split(" ");
-                                    return GestureDetector(
-                                      onLongPress: (){
-                                        showDialog(context: context, builder: (BuildContext context){
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                            contentPadding: const EdgeInsets.all(20.0),
-                                            title: Text('Delete Button'),
-                                            actions: [
-                                              CancelButtonPrompt(
-                                                onPressed: (){
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              deleteButtonPrompt(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                      },
-                                      child: DCMotorSingle(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], hostname: widget.hostname, username: widget.username, password: widget.password),
-                                    );
-                                  }
-                                  else if (snapshot.data![index]["buttonType"] == "ComfyData"){
-                                    return GestureDetector(
-                                      onLongPress: (){
-                                        showDialog(context: context, builder: (BuildContext context){
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                            contentPadding: const EdgeInsets.all(20.0),
-                                            title: Text('Delete Button'),
-                                            actions: [
-                                              CancelButtonPrompt(
-                                                onPressed: (){
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              deleteButtonPrompt(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                      },
-                                      child: CustomInputButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandIn: snapshot.data![index]["command"], terminal: terminal),
-                                    );
-                                  }
-                                  else if (snapshot.data![index]["buttonType"] == "ComfyToggleButton"){
-                                    return GestureDetector(
-                                      onLongPress: (){
-                                        showDialog(context: context, builder: (BuildContext context){
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                            contentPadding: const EdgeInsets.all(20.0),
-                                            title: Text('Delete Button'),
-                                            actions: [
-                                              CancelButtonPrompt(
-                                                onPressed: (){
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              deleteButtonPrompt(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                      },
-                                      child: ComfyToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: CommandExtract(snapshot.data![index]["command"])[0],commandOff: CommandExtract(snapshot.data![index]["command"])[1], terminal: terminal),
-                                    );
-                                  }
-                                  else if (snapshot.data![index]["buttonType"] == "ComfyVerticalButton"){
-                                    return GestureDetector(
-                                      onLongPress: (){
-                                        showDialog(context: context, builder: (BuildContext context){
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                            contentPadding: const EdgeInsets.all(20.0),
-                                            title: Text('Delete Button'),
-                                            actions: [
-                                              CancelButtonPrompt(
-                                                onPressed: (){
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              deleteButtonPrompt(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                      },
-                                      child: ComfyVerticalButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, up: CommandExtract(snapshot.data![index]["command"])[0], middle: CommandExtract(snapshot.data![index]["command"])[1], down: CommandExtract(snapshot.data![index]["command"])[2] ),
-                                    );
-                                  }
-                                  else if (snapshot.data![index]["buttonType"] == "ComfyHorizontalButton"){
-                                    return GestureDetector(
-                                      onLongPress: (){
-                                        showDialog(context: context, builder: (BuildContext context){
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                            contentPadding: const EdgeInsets.all(20.0),
-                                            title: Text('Delete Button'),
-                                            actions: [
-                                              CancelButtonPrompt(
-                                                onPressed: (){
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              deleteButtonPrompt(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                      },
-                                      child: ComfyHorizontalButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, left: CommandExtract(snapshot.data![index]["command"])[0], middle: CommandExtract(snapshot.data![index]["command"])[1], right: CommandExtract(snapshot.data![index]["command"])[2] ),
-                                    );
-                                  }
-                                  else if (snapshot.data![index]["buttonType"] == "ComfyFullGestureButton"){
-                                    return GestureDetector(
-                                      onLongPress: (){
-                                        showDialog(context: context, builder: (BuildContext context){
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                            contentPadding: const EdgeInsets.all(20.0),
-                                            title: Text('Delete Button'),
-                                            actions: [
-                                              CancelButtonPrompt(
-                                                onPressed: (){
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              deleteButtonPrompt(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                      },
-                                      child: ComfyFullGestureButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, middle: CommandExtract(snapshot.data![index]["command"])[0], left: CommandExtract(snapshot.data![index]["command"])[1], right: CommandExtract(snapshot.data![index]["command"])[2], up: CommandExtract(snapshot.data![index]["command"])[3], down: CommandExtract(snapshot.data![index]["command"])[4] ),
-                                    );
-                                  }
-                                  else if (snapshot.data![index]["buttonType"] == "ComfyTapButton"){
-                                    //return CustomToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: snapshot.data![index]["command"], commandOff: snapshot.data![index]["command"], terminal: terminal);
-                                    return GestureDetector(
-                                      onLongPress: (){
-                                        showDialog(context: context, builder: (BuildContext context){
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                            contentPadding: const EdgeInsets.all(20.0),
-                                            title: Text('Delete Button'),
-                                            actions: [
-                                              CancelButtonPrompt(
-                                                onPressed: (){
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              deleteButtonPrompt(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                      },
-                                      child: SinglePressButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, command: snapshot.data![index]["command"], terminal: terminal),
-                                    );
-                                  }
-                                  else{
-                                    return GestureDetector(
-                                      onLongPress: (){
-                                        showDialog(context: context, builder: (BuildContext context){
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                            contentPadding: const EdgeInsets.all(20.0),
-                                            title: Text('Delete Button'),
-                                            actions: [
-                                              CancelButtonPrompt(
-                                                onPressed: (){
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              deleteButtonPrompt(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                      },
-                                      child: ListTile(
-                                        title: Text(snapshot.data![index]["name"]),
-                                        subtitle: Text('Unknown button type'),
-                                      )
-                                    );
-                                  }
+                                        child: StepperMotor(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], pin3: pinList[2], pin4: pinList[3], hostname: widget.hostname, username: widget.username, password: widget.password),
+                                      );
+                                    }
+                                    else if (snapshot.data![index]["buttonType"] == "HCSR04"){
+                                      List<String> pinList = snapshot.data![index]["command"].split(" ");
+                                      return GestureDetector(
+                                          onLongPress: (){
+                                            showDialog(context: context, builder: (BuildContext context){
+                                              return AlertDialog(
+                                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                                contentPadding: const EdgeInsets.all(20.0),
+                                                title: Text('Delete Button'),
+                                                actions: [
+                                                  CancelButtonPrompt(
+                                                    onPressed: (){
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  deleteButtonPrompt(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  )
+                                                ],
+                                              );
+                                            });
+                                          },
+                                          child: CustomInputButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandIn: 'python3 comfyScript/distance_sensor/HC-SR04.py ${pinList[0]} ${pinList[1]} 1', terminal: terminal,)
+                                        //child: DistanceSensor(spaceName: widget.spaceName, name: snapshot.data![index]["name"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password, trig: pinList[0], echo: pinList[1]),
+                                      );
+                                    }
+                                    else if (snapshot.data![index]["buttonType"] == "DCMotor"){
+                                      List<String> pinList = snapshot.data![index]["command"].split(" ");
+                                      return GestureDetector(
+                                        onLongPress: (){
+                                          showDialog(context: context, builder: (BuildContext context){
+                                            return AlertDialog(
+                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                              contentPadding: const EdgeInsets.all(20.0),
+                                              title: Text('Delete Button'),
+                                              actions: [
+                                                CancelButtonPrompt(
+                                                  onPressed: (){
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                deleteButtonPrompt(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
+                                        },
+                                        child: DCMotorSingle(name: snapshot.data![index]["name"], id: snapshot.data![index]["id"] ,pin1: pinList[0], pin2: pinList[1], hostname: widget.hostname, username: widget.username, password: widget.password),
+                                      );
+                                    }
+                                    else if (snapshot.data![index]["buttonType"] == "ComfyData"){
+                                      return GestureDetector(
+                                        onLongPress: (){
+                                          showDialog(context: context, builder: (BuildContext context){
+                                            return AlertDialog(
+                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                              contentPadding: const EdgeInsets.all(20.0),
+                                              title: Text('Delete Button'),
+                                              actions: [
+                                                CancelButtonPrompt(
+                                                  onPressed: (){
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                deleteButtonPrompt(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
+                                        },
+                                        child: CustomInputButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandIn: snapshot.data![index]["command"], terminal: terminal),
+                                      );
+                                    }
+                                    else if (snapshot.data![index]["buttonType"] == "ComfyToggleButton"){
+                                      return GestureDetector(
+                                        onLongPress: (){
+                                          showDialog(context: context, builder: (BuildContext context){
+                                            return AlertDialog(
+                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                              contentPadding: const EdgeInsets.all(20.0),
+                                              title: Text('Delete Button'),
+                                              actions: [
+                                                CancelButtonPrompt(
+                                                  onPressed: (){
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                deleteButtonPrompt(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
+                                        },
+                                        child: ComfyToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: CommandExtract(snapshot.data![index]["command"])[0],commandOff: CommandExtract(snapshot.data![index]["command"])[1], terminal: terminal),
+                                      );
+                                    }
+                                    else if (snapshot.data![index]["buttonType"] == "ComfyVerticalButton"){
+                                      return GestureDetector(
+                                        onLongPress: (){
+                                          showDialog(context: context, builder: (BuildContext context){
+                                            return AlertDialog(
+                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                              contentPadding: const EdgeInsets.all(20.0),
+                                              title: Text('Delete Button'),
+                                              actions: [
+                                                CancelButtonPrompt(
+                                                  onPressed: (){
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                deleteButtonPrompt(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
+                                        },
+                                        child: ComfyVerticalButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, up: CommandExtract(snapshot.data![index]["command"])[0], middle: CommandExtract(snapshot.data![index]["command"])[1], down: CommandExtract(snapshot.data![index]["command"])[2] ),
+                                      );
+                                    }
+                                    else if (snapshot.data![index]["buttonType"] == "ComfyHorizontalButton"){
+                                      return GestureDetector(
+                                        onLongPress: (){
+                                          showDialog(context: context, builder: (BuildContext context){
+                                            return AlertDialog(
+                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                              contentPadding: const EdgeInsets.all(20.0),
+                                              title: Text('Delete Button'),
+                                              actions: [
+                                                CancelButtonPrompt(
+                                                  onPressed: (){
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                deleteButtonPrompt(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
+                                        },
+                                        child: ComfyHorizontalButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, left: CommandExtract(snapshot.data![index]["command"])[0], middle: CommandExtract(snapshot.data![index]["command"])[1], right: CommandExtract(snapshot.data![index]["command"])[2] ),
+                                      );
+                                    }
+                                    else if (snapshot.data![index]["buttonType"] == "ComfyFullGestureButton"){
+                                      return GestureDetector(
+                                        onLongPress: (){
+                                          showDialog(context: context, builder: (BuildContext context){
+                                            return AlertDialog(
+                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                              contentPadding: const EdgeInsets.all(20.0),
+                                              title: Text('Delete Button'),
+                                              actions: [
+                                                CancelButtonPrompt(
+                                                  onPressed: (){
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                deleteButtonPrompt(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
+                                        },
+                                        child: ComfyFullGestureButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, middle: CommandExtract(snapshot.data![index]["command"])[0], left: CommandExtract(snapshot.data![index]["command"])[1], right: CommandExtract(snapshot.data![index]["command"])[2], up: CommandExtract(snapshot.data![index]["command"])[3], down: CommandExtract(snapshot.data![index]["command"])[4] ),
+                                      );
+                                    }
+                                    else if (snapshot.data![index]["buttonType"] == "ComfyTapButton"){
+                                      //return CustomToggleButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, commandOn: snapshot.data![index]["command"], commandOff: snapshot.data![index]["command"], terminal: terminal);
+                                      return GestureDetector(
+                                        onLongPress: (){
+                                          showDialog(context: context, builder: (BuildContext context){
+                                            return AlertDialog(
+                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                              contentPadding: const EdgeInsets.all(20.0),
+                                              title: Text('Delete Button'),
+                                              actions: [
+                                                CancelButtonPrompt(
+                                                  onPressed: (){
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                deleteButtonPrompt(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
+                                        },
+                                        child: SinglePressButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, command: snapshot.data![index]["command"], terminal: terminal),
+                                      );
+                                    }
+                                    else{
+                                      return GestureDetector(
+                                        onLongPress: (){
+                                          showDialog(context: context, builder: (BuildContext context){
+                                            return AlertDialog(
+                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                              contentPadding: const EdgeInsets.all(20.0),
+                                              title: Text('Delete Button'),
+                                              actions: [
+                                                CancelButtonPrompt(
+                                                  onPressed: (){
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                deleteButtonPrompt(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
+                                        },
+                                        child: ListTile(
+                                          title: Text(snapshot.data![index]["name"]),
+                                          subtitle: Text('Unknown button type'),
+                                        )
+                                      );
+                                    }
 
-                                }),
-                          );
+                                  }),
+                            );
+                          }
+                          else{
+                            return const CircularProgressIndicator();
+                          }
                         }
-                        else{
-                          return const CircularProgressIndicator();
-                        }
-                      }
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
       ),
     );
   }
 }
-
-/*
-class WireDashSpacePage extends StatelessWidget {
-  const WireDashSpacePage({super.key, required this.spaceName, required this.hostname, required this.username, required this.password});
-  final String spaceName; final String hostname; final String username; final String password;
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: WireDashInfo(),
-        builder: (context, AsyncSnapshot<List<String>> snapshot){
-      if(snapshot.hasData){
-        return Wiredash(projectId: snapshot.data![0], secret: snapshot.data![1],
-            feedbackOptions: const WiredashFeedbackOptions(email: EmailPrompt.hidden),
-            child: spacePage(spaceName: spaceName, hostname: hostname, username: username, password: password,)
-        );
-      }
-      else{
-        return Wiredash(projectId: 'feedbacktest-s5yadlk', secret: 'lful0I9yhcgriPKd-MTEY2LBGv1pM3C_',
-            feedbackOptions: const WiredashFeedbackOptions(email: EmailPrompt.hidden),
-            child: spacePage(spaceName: spaceName, hostname: hostname, username: username, password: password,)
-        );
-      }
-    });
-  }
-} */
-
