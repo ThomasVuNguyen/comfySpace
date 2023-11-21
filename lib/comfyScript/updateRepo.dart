@@ -27,7 +27,7 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
 
   }
 
-  Future<void> updateRepo(String hostname, String username, String password, Terminal terminal) async{
+  /*Future<void> updateRepo(String hostname, String username, String password, Terminal terminal) async{
     SSHClient client = SSHClient(
       await SSHSocket.connect(hostname, 22),
       username: username,
@@ -52,27 +52,24 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
       StrangeError = true;
     }
     setState(() {Finished = true;});
-  }
+  }*/
   Future<void> updateRepoRoot(String hostname, String username, String password, Terminal terminal) async{
     SSHClient client = SSHClient(
       await SSHSocket.connect(hostname, 22),
       username: username,
       onPasswordRequest: () => password,
     );
+    var assignExecutableAlias = await client.run('htop');
+    print("what's going on ${utf8.decode(assignExecutableAlias)}");
     var FolderCheck = await client.run('echo $password | sudo [ -d comfyScript ] && echo "1" || echo "0"');
     int FolderCheckString = int.parse(utf8.decode(FolderCheck));
     print(FolderCheckString==0);
+    print('poopp');
     if (FolderCheckString==0){
-      var DownloadRepo = await client.run('echo $password | sudo git clone https://github.com/ThomasVuNguyen/comfyScript.git');
-      //terminal.write("comfyScript not found, downloading\r\n");
-      //terminal.write('${String.fromCharCodes(DownloadRepo)}\r\n');
-      //terminal.write("Repo downloaded\r\n");
+      var DownloadRepo = await client.run('git clone https://github.com/ThomasVuNguyen/comfyScript.git');
     }
     else if(FolderCheckString != 0){
-      var UpdateRepo = await client.run('cd comfyScript && echo $password | sudo git pull');
-      //terminal.write("comfyScript found, updating\r\n");
-      //terminal.write('${String.fromCharCodes(UpdateRepo)}\r\n');
-      //terminal.write("Repo updated\r\n");
+      var assignExecutableAlias = await client.run('alias comfy="python3 comfyScript/comfy.py"');
     }
     else{
       StrangeError = true;
