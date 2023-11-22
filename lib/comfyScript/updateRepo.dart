@@ -59,20 +59,25 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
       username: username,
       onPasswordRequest: () => password,
     );
-    var assignExecutableAlias = await client.run('htop');
+    var assignExecutableAlias = await client.run('kum led 26 1');
     print("what's going on ${utf8.decode(assignExecutableAlias)}");
+    var comfyExeCheck = await client.run('echo $password | sudo [ -f comfy ] && echo "1" || echo "0"');
+    int comfyExeCheckString = int.parse(utf8.decode(comfyExeCheck));
     var FolderCheck = await client.run('echo $password | sudo [ -d comfyScript ] && echo "1" || echo "0"');
     int FolderCheckString = int.parse(utf8.decode(FolderCheck));
     print(FolderCheckString==0);
-    print('poopp');
     if (FolderCheckString==0){
       var DownloadRepo = await client.run('git clone https://github.com/ThomasVuNguyen/comfyScript.git');
     }
     else if(FolderCheckString != 0){
-      var assignExecutableAlias = await client.run('alias comfy="python3 comfyScript/comfy.py"');
+      var updateRepo = await client.run('cd comfyScript && git pull');
     }
     else{
       StrangeError = true;
+    }
+    if (comfyExeCheckString==0){
+      var makeExecutable = await client.run('echo $password | sudo cp comfyScript/bash/comfy /usr/bin/comfy');
+      var assignchmod = await client.run('echo $password | sudo chmod +x /usr/bin/comfy');
     }
     client.close();
     setState(() {Finished = true;});
