@@ -12,6 +12,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 //import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:xterm/xterm.dart';
+
+import 'comfyScript/LED.dart';
 
 Future<List<String>>updateSpaceRender() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -535,6 +538,11 @@ Future<List<String>> WireDashInfo() async {
   }
 }
 
-Future<void> launchDoc() async{
-
+Widget ButtonSorting(int id, String name, String buttonType, String spaceName, String hostname, String username, String password, String command, Terminal terminal){
+  switch(buttonType){
+    case 'LED':
+      return LedToggle(spaceName: spaceName, name: name, pin: command, id: id, hostname: hostname, username: username, password: password,terminal: terminal);
+    default:
+      return TextButton(onPressed: (){}, child: Text(name));
+  }
 }

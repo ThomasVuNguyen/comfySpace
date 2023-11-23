@@ -6,6 +6,7 @@ import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/servo.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
+import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:comfyssh_flutter/components/custom_ui_components.dart';
 import 'package:comfyssh_flutter/components/custom_widgets.dart';
 import 'package:comfyssh_flutter/components/pop_up.dart';
@@ -22,6 +23,7 @@ import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_draggable_gridview/flutter_draggable_gridview.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -838,6 +840,7 @@ class _spacePageState extends State<spacePage> {
   final double horizontalPadding = 40;
   final double verticalPadding = 25;
   late String projectID; late String secretCode; bool TerminalShow = true;
+  List<DraggableGridItem> ButtonList =[];
   @override
   void initState(){
     super.initState();
@@ -855,6 +858,41 @@ class _spacePageState extends State<spacePage> {
       onPasswordRequest: () => widget.password,
     );
     print("${clientControl.username} is ready");
+  }
+  void CreateButtonList(List<Map<dynamic, dynamic>> buttonList){
+    ButtonList.clear();
+    for (final button in buttonList){
+      DraggableGridItem buttonPlacement = DraggableGridItem(
+        dragCallback: (context, bool){print("dragged");},
+          isDraggable: true,
+        child: GestureDetector(
+            child: ButtonSorting(button["id"], button["name"], button["buttonType"], widget.spaceName, widget.hostname, widget.username, widget.password, button["command"], terminal),
+            /*onLongPress: (){
+              showDialog(context: context, builder: (BuildContext context){
+                return AlertDialog(
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                  contentPadding: const EdgeInsets.all(20.0),
+                  title: Text('Delete Button'),
+                  actions: [
+                    CancelButtonPrompt(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                    ),
+                    deleteButtonPrompt(
+                      onPressed: (){
+                        setState(() {
+                          deleteButton('comfySpace.db', widget.spaceName, button["name"], button["id"]);
+                        });
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                );});
+            }*/ ),
+      );
+      ButtonList.add(buttonPlacement);
+  }
   }
 
   @override
@@ -965,7 +1003,28 @@ class _spacePageState extends State<spacePage> {
                         future: buttonRenderer('comfySpace.db', widget.spaceName),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.done){
+                            CreateButtonList(snapshot.data!);
                             return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: DraggableGridViewBuilder(
+
+                                dragChildWhenDragging: (ButtonList, int index){
+                                  return PlaceHolderWidget(child: Container(width: 50, color: Colors.red,));
+                                },
+                                dragPlaceHolder: (ButtonList, int index){
+                                  return PlaceHolderWidget(child: Container(width: 50, color: Colors.yellow,));
+                                },
+                                dragCompletion: (ButtonList, int beforeIndex, int afterIndex){
+                                  print("before $beforeIndex after $afterIndex");
+                                },
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 3),
+                                ),
+                                children: ButtonList,
+                              )
+                            );
+                            /*return Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: GridView.builder(
                                   shrinkWrap: true,
@@ -978,6 +1037,7 @@ class _spacePageState extends State<spacePage> {
                                       return GestureDetector(
                                           onLongPress: (){
                                             showDialog(context: context, builder: (BuildContext context){
+                                              print(snapshot.data![index]["id"]);
                                               return AlertDialog(
                                                 shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
                                                 contentPadding: const EdgeInsets.all(8.0),
@@ -1326,7 +1386,7 @@ class _spacePageState extends State<spacePage> {
                                     }
 
                                   }),
-                            );
+                            );*/
                           }
                           else{
                             return const CircularProgressIndicator();

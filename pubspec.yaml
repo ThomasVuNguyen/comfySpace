@@ -54,6 +54,7 @@ dependencies:
   loader_overlay: ^2.3.2
   overlay_support: ^2.1.0
   flutter_overlay_loader: ^2.0.0
+  flutter_draggable_gridview: ^0.0.8
 dev_dependencies:
   flutter_test:
     sdk: flutter

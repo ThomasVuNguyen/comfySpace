@@ -218,6 +218,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_draggable_gridview",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_draggable_gridview-0.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_inappwebview",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_inappwebview-5.8.0",
       "packageUri": "lib/",
@@ -908,7 +914,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-11-03T00:59:25.761736Z",
+  "generated": "2023-11-23T01:15:40.511385Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }
