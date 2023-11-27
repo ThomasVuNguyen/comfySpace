@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:comfyssh_flutter/comfyScript/Buzzer.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyVerticalSwipeButton.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
@@ -914,6 +915,7 @@ class _spacePageState extends State<spacePage> {
                       AddComfyStepperMotor(spaceName: widget.spaceName),
                       AddComfyDCMotor(spaceName: widget.spaceName),
                       AddComfyDistanceSensor(spaceName: widget.spaceName),
+                      AddBuzzerButton(spaceName: widget.spaceName),
                     ],
                   ),
                   ExpansionTile(
@@ -1002,7 +1004,7 @@ class _spacePageState extends State<spacePage> {
                     child: FutureBuilder(
                         future: buttonRenderer('comfySpace.db', widget.spaceName),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done){
+                          /*if (snapshot.connectionState == ConnectionState.done){
                             CreateButtonList(snapshot.data!);
                             return Padding(
                               padding: const EdgeInsets.all(4.0),
@@ -1024,7 +1026,12 @@ class _spacePageState extends State<spacePage> {
                                 children: ButtonList,
                               )
                             );
-                            /*return Padding(
+
+                          }
+                          else{
+                            return const CircularProgressIndicator();
+                          }*/
+                          return Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: GridView.builder(
                                   shrinkWrap: true,
@@ -1352,6 +1359,36 @@ class _spacePageState extends State<spacePage> {
                                         child: SinglePressButton(name: snapshot.data![index]["name"], hostname: widget.hostname, username: widget.username, password: widget.password, command: snapshot.data![index]["command"], terminal: terminal),
                                       );
                                     }
+                                    else if (snapshot.data![index]["buttonType"] == "Buzzer"){
+                                      return GestureDetector(
+                                          onLongPress: (){
+                                            showDialog(context: context, builder: (BuildContext context){
+                                              print(snapshot.data![index]["id"]);
+                                              return AlertDialog(
+                                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                                contentPadding: const EdgeInsets.all(8.0),
+                                                title: Text('Delete Button'),
+                                                actions: [
+                                                  CancelButtonPrompt(
+                                                    onPressed: (){
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  deleteButtonPrompt(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        deleteButton('comfySpace.db', widget.spaceName, snapshot.data![index]["name"], snapshot.data![index]["id"]);
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  )
+                                                ],
+                                              );
+                                            });
+                                          },
+                                          child: BuzzerToggle(spaceName: widget.spaceName, name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,terminal: terminal));
+
+                                    }
                                     else{
                                       return GestureDetector(
                                         onLongPress: (){
@@ -1386,11 +1423,8 @@ class _spacePageState extends State<spacePage> {
                                     }
 
                                   }),
-                            );*/
-                          }
-                          else{
-                            return const CircularProgressIndicator();
-                          }
+                            );
+
                         }
                     ),
                   ),
