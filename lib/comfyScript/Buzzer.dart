@@ -126,7 +126,7 @@ class _AddBuzzerButtonState extends State<AddBuzzerButton> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+        ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
           title: Text('Buzzer'),
@@ -155,7 +155,7 @@ class _AddBuzzerButtonState extends State<AddBuzzerButton> {
                   comfyActionButton(onPressed: (){
                     addButton('comfySpace.db', widget.spaceName, buttonName, 1, 1, 1, pinOut,'Buzzer');
                     Navigator.pop(context);
-                    Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                    Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
                   },)
                 ],
               );

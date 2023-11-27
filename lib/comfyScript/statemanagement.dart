@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ButtonAdditionModel extends ChangeNotifier{
-  String AddFinished;
-  ButtonAdditionModel({
-    this.AddFinished = "",
+class SpaceEdit extends ChangeNotifier{
+  String EditSpaceState;
+  SpaceEdit({
+    this.EditSpaceState = "",
 });
-  void ChangeAdditionState() {
-    AddFinished = "";
+
+  void ChangeSpaceEditState() {
+    EditSpaceState = "";
     notifyListeners();
   }
 }
-//Normally, addFinished is false. After button is added, it becomes True and notifies spacePage to reload
 
 
-//Well at least that WAS the plan

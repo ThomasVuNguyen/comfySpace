@@ -180,7 +180,7 @@ class _AddComfyFullGestureButtonState extends State<AddComfyFullGestureButton> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+        ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
           title: Text('Full'),
@@ -244,7 +244,7 @@ class _AddComfyFullGestureButtonState extends State<AddComfyFullGestureButton> {
                   comfyActionButton(
                     onPressed: (){
                       addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,middle + ConnectionCharacter + left + ConnectionCharacter + right + ConnectionCharacter + up +ConnectionCharacter + down,'ComfyFullGestureButton');
-                      Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                      Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
                       Navigator.pop(context);
                     },
                   )

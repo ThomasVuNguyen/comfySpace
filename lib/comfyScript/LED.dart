@@ -126,7 +126,7 @@ class _AddLEDButtonState extends State<AddLEDButton> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+        ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
           title: Text('LED'),
@@ -156,7 +156,7 @@ class _AddLEDButtonState extends State<AddLEDButton> {
                   comfyActionButton(onPressed: (){
                     addButton('comfySpace.db', widget.spaceName, buttonName, 1, 1, 1, pinOut,'LED');
                     Navigator.pop(context);
-                    Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                    Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
 
                   },)
                 ],

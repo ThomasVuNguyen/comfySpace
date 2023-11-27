@@ -114,7 +114,7 @@ class _AddComfyTapButtonState extends State<AddComfyTapButton> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+        ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
           title: Text('Tap'),
@@ -146,7 +146,7 @@ class _AddComfyTapButtonState extends State<AddComfyTapButton> {
                     comfyActionButton(
                       onPressed: (){
                         addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'ComfyTapButton');
-                        Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                        Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
                         Navigator.pop(context);
                       },
                     ),

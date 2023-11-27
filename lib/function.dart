@@ -14,7 +14,16 @@ import 'package:path/path.dart' as p;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:xterm/xterm.dart';
 
+import 'comfyScript/Buzzer.dart';
+import 'comfyScript/ComfyHorizontalSwipeButton.dart';
+import 'comfyScript/ComfyTapButton.dart';
+import 'comfyScript/ComfyToggleButton.dart';
+import 'comfyScript/ComfyVerticalSwipeButton.dart';
+import 'comfyScript/DCmotor.dart';
+import 'comfyScript/FullGestureButton.dart';
 import 'comfyScript/LED.dart';
+import 'comfyScript/customInput.dart';
+import 'comfyScript/stepperMotor.dart';
 
 Future<List<String>>updateSpaceRender() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -542,7 +551,33 @@ Widget ButtonSorting(int id, String name, String buttonType, String spaceName, S
   switch(buttonType){
     case 'LED':
       return LedToggle(spaceName: spaceName, name: name, pin: command, id: id, hostname: hostname, username: username, password: password,terminal: terminal);
-    default:
-      return TextButton(onPressed: (){}, child: Text(name));
+    case 'stepperMotor':
+      List<String> pinList = command.split(" ");
+      return StepperMotor(name: name, id: id ,pin1: pinList[0], pin2: pinList[1], pin3: pinList[2], pin4: pinList[3], hostname: hostname, username: username, password: password);
+    case 'HCSR04':
+      List<String> pinList = command.split(" ");
+      return CustomInputButton(name: name, hostname: hostname, username: username, password: password, commandIn: 'python3 comfyScript/distance_sensor/HC-SR04.py ${pinList[0]} ${pinList[1]} 1', terminal: terminal,);
+    case 'DCMotor':
+      List<String> pinList = command.split(" ");
+      return DCMotorSingle(name: name, id: id ,pin1: pinList[0], pin2: pinList[1], hostname: hostname, username: username, password: password);
+    case 'ComfyData':
+      return CustomInputButton(name: name, hostname: hostname, username: username, password: password, commandIn: command, terminal: terminal,);
+    case 'ComfyTapButton':
+      return SinglePressButton(name: name, hostname: hostname, username: username, password: password, command: command, terminal: terminal);
+      case 'ComfyToggleButton':
+      return ComfyToggleButton(name: name, hostname: hostname, username: username, password: password, commandOn: CommandExtract(command)[0],commandOff: CommandExtract(command)[1], terminal: terminal);
+    case 'ComfyVerticalButton':
+      return ComfyVerticalButton(name: name, hostname: hostname, username: username, password: password, up: CommandExtract(command)[0], middle: CommandExtract(command)[1], down: CommandExtract(command)[2] );
+    case 'ComfyHorizontalButton':
+      return ComfyHorizontalButton(name: name, hostname: hostname, username: username, password: password, left: CommandExtract(command)[0], middle: CommandExtract(command)[1], right: CommandExtract(command)[2] );
+    case 'ComfyFullGestureButton':
+      return ComfyFullGestureButton(name: name, hostname: hostname, username: username, password: password, middle: CommandExtract(command)[0], left: CommandExtract(command)[1], right: CommandExtract(command)[2], up: CommandExtract(command)[3], down: CommandExtract(command)[4]) ;
+    case 'Buzzer':
+      return BuzzerToggle(spaceName: spaceName, name: name, pin: command, id: id, hostname: hostname, username: username, password: password,terminal: terminal);
+      default:
+      return ListTile(
+        title: Text(name),
+        subtitle: Text('Unknown button type'),
+      );
   }
 }

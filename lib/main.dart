@@ -38,6 +38,7 @@ import 'package:wiredash/wiredash.dart';
 import 'package:xterm/xterm.dart';
 import 'dart:io' show Platform;
 
+import 'comfyScript/ComfyButton.dart';
 import 'comfyScript/ComfyHorizontalSwipeButton.dart';
 import 'comfyScript/ComfyTapButton.dart';
 import 'comfyScript/DCmotor.dart';
@@ -940,11 +941,11 @@ class _spacePageState extends State<spacePage> {
                 endDrawer: true,
                 IsSpacePage: true,
                   //automaticallyImplyLeading: true,
-                  title: widget.spaceName + context.watch<ButtonAdditionModel>().AddFinished.toString()
+                  title: widget.spaceName + context.watch<SpaceEdit>().EditSpaceState.toString()
               )),
           body: MultiProvider(
             providers: [
-              ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+              ChangeNotifierProvider(create: (context) => SpaceEdit())
             ],
             child: SafeArea(
               child: Column(
@@ -1040,8 +1041,10 @@ class _spacePageState extends State<spacePage> {
                                   ),
                                   itemCount: snapshot.data?.length,
                                   itemBuilder: (BuildContext context, index){
+                                    return ComfyButton(buttonName: snapshot.data![index]["name"], id: snapshot.data![index]["id"], spaceName: widget.spaceName, command: snapshot.data![index]["command"], buttonType: snapshot.data![index]["buttonType"], hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal);
+                                    /*
                                     if (snapshot.data![index]["buttonType"] == "LED"){
-                                      return GestureDetector(
+                                      /*return GestureDetector(
                                           onLongPress: (){
                                             showDialog(context: context, builder: (BuildContext context){
                                               print(snapshot.data![index]["id"]);
@@ -1067,7 +1070,8 @@ class _spacePageState extends State<spacePage> {
                                               );
                                             });
                                           },
-                                          child: LedToggle(spaceName: widget.spaceName, name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,terminal: terminal));
+                                          child: LedToggle(spaceName: widget.spaceName, name: snapshot.data![index]["name"], pin: snapshot.data![index]["command"], id: snapshot.data![index]["id"], hostname: widget.hostname, username: widget.username, password: widget.password,terminal: terminal));*/
+                                      return ComfyButton(buttonName: snapshot.data![index]["name"], id: snapshot.data![index]["id"], spaceName: widget.spaceName, command: snapshot.data![index]["command"], buttonType: snapshot.data![index]["buttonType"], hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal);
 
                                     }
                                     else if (snapshot.data![index]["buttonType"] == "servo"){
@@ -1421,7 +1425,7 @@ class _spacePageState extends State<spacePage> {
                                         )
                                       );
                                     }
-
+                                    */
                                   }),
                             );
 

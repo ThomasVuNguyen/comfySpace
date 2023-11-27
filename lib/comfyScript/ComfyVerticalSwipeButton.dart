@@ -147,7 +147,7 @@ class _AddComfyVerticalSwipeButtonState extends State<AddComfyVerticalSwipeButto
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+        ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
           title: Text('Vertical'),
@@ -196,7 +196,7 @@ class _AddComfyVerticalSwipeButtonState extends State<AddComfyVerticalSwipeButto
                   comfyActionButton(
                     onPressed: (){
                       addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,up + ConnectionCharacter + middle + ConnectionCharacter + down,'ComfyVerticalButton');
-                      Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                      Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
                       Navigator.pop(context);
 
                     },

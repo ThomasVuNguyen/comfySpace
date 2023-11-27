@@ -148,7 +148,7 @@ class _AddComfyHorizontalSwipeButtonState extends State<AddComfyHorizontalSwipeB
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+        ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
           title: Text('Horizontal'),
@@ -196,7 +196,7 @@ class _AddComfyHorizontalSwipeButtonState extends State<AddComfyHorizontalSwipeB
                   comfyActionButton(
                     onPressed: (){
                       addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition,left + ConnectionCharacter + middle + ConnectionCharacter + right,'ComfyHorizontalButton');
-                      Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                      Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
                       Navigator.pop(context);
                     },
                   )

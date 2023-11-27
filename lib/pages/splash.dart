@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (context)=> ButtonAdditionModel(),
+            create: (context)=> SpaceEdit(),
         ),
       ],
       child: MaterialApp(

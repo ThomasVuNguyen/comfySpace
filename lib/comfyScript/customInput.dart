@@ -117,7 +117,7 @@ class _AddComfyDataButtonState extends State<AddComfyDataButton> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+        ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
           title: Text('Data'),
@@ -153,7 +153,7 @@ class _AddComfyDataButtonState extends State<AddComfyDataButton> {
                     comfyActionButton(
                       onPressed: (){
                         addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, buttonCommand, 'ComfyData');
-                        Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                        Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
                         Navigator.pop(context);
                       },
                     ),
@@ -178,7 +178,7 @@ class _AddComfyDistanceSensorState extends State<AddComfyDistanceSensor> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+        ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
           title: Text('Distance Sensor'),
@@ -224,7 +224,7 @@ class _AddComfyDistanceSensorState extends State<AddComfyDistanceSensor> {
                     onPressed: (){
                       String HCSR04PinList = '$trig $echo';
                       addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, HCSR04PinList, 'HCSR04');
-                      Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                      Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
                       Navigator.pop(context);
                     },
                   )

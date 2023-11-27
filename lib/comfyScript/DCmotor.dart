@@ -147,7 +147,7 @@ class _AddComfyDCMotorState extends State<AddComfyDCMotor> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ButtonAdditionModel())
+        ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
           title: Text('DC Motor'),
@@ -189,7 +189,7 @@ class _AddComfyDCMotorState extends State<AddComfyDCMotor> {
                     onPressed: (){
                       String stepperPinList = "$pin1 $pin2";
                       addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, stepperPinList,'DCMotor');
-                      Provider.of<ButtonAdditionModel>(context, listen: false).ChangeAdditionState();
+                      Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
                       Navigator.pop(context);
                     },
                   )
