@@ -129,7 +129,8 @@ class _AddBuzzerButtonState extends State<AddBuzzerButton> {
         ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
-          title: Text('Buzzer'),
+        //leading: Image.asset('assets/speedDialIcons/buzzer.png'),
+          title: Text('Buzzer', style: Theme.of(context).textTheme.titleMedium,),
           onTap: (){
             Scaffold.of(context).closeEndDrawer();
             late String pinOut;

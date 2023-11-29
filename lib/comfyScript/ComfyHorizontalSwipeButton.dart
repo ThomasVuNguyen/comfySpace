@@ -151,7 +151,7 @@ class _AddComfyHorizontalSwipeButtonState extends State<AddComfyHorizontalSwipeB
         ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
-          title: Text('Horizontal'),
+          title: Text('Horizontal', style: Theme.of(context).textTheme.titleMedium,),
           onTap: (){
             Scaffold.of(context).closeEndDrawer();
             late String pinOut; late String buttonName; late String left; late String right; late String middle;

@@ -150,7 +150,7 @@ class _AddComfyVerticalSwipeButtonState extends State<AddComfyVerticalSwipeButto
         ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
-          title: Text('Vertical'),
+          title: Text('Vertical', style: Theme.of(context).textTheme.titleMedium,),
           onTap: (){
             Scaffold.of(context).closeEndDrawer();
             late String pinOut; late String buttonName;

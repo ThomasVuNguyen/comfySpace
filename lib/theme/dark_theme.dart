@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 ThemeData darkMode = ThemeData(
+  textTheme: TextTheme(
+    titleMedium: GoogleFonts.poppins(fontSize: 14),
+  ),
   buttonTheme: ButtonThemeData(
     buttonColor: Colors.red,
 
@@ -12,10 +15,10 @@ ThemeData darkMode = ThemeData(
     contentTextStyle: GoogleFonts.poppins(fontSize: 18.0),
     iconColor: Colors.red,
   ),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.red,
   ),
-  listTileTheme: ListTileThemeData(
+  listTileTheme: const ListTileThemeData(
     tileColor: Color(0xff36343B),
     textColor: Color(0xffE6E0E9),
   ),

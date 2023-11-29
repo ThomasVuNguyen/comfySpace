@@ -183,7 +183,7 @@ class _AddComfyFullGestureButtonState extends State<AddComfyFullGestureButton> {
         ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
-          title: Text('Full'),
+          title: Text('Full', style: Theme.of(context).textTheme.titleMedium,),
           onTap: (){
             Scaffold.of(context).closeEndDrawer();
             late String pinOut; late String buttonName; late String middle; late String left; late String right; late String up; late String down;

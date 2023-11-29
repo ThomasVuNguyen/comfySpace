@@ -121,7 +121,7 @@ class _AddComfyToggleButtonState extends State<AddComfyToggleButton> {
         ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
-          title: Text('Toggle'),
+          title: Text('Toggle', style: Theme.of(context).textTheme.titleMedium,),
           onTap: (){
             Scaffold.of(context).closeEndDrawer();
             late String pinOut; late String buttonName;

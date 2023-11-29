@@ -129,7 +129,7 @@ class _AddLEDButtonState extends State<AddLEDButton> {
         ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
-          title: Text('LED'),
+          title: Text('LED', style: Theme.of(context).textTheme.titleMedium,),
           onTap: (){
             Scaffold.of(context).closeEndDrawer();
             late String pinOut;

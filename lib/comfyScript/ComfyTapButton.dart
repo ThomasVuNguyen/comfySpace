@@ -117,7 +117,7 @@ class _AddComfyTapButtonState extends State<AddComfyTapButton> {
         ChangeNotifierProvider(create: (context) => SpaceEdit())
       ],
       child: ListTile(
-          title: Text('Tap'),
+          title: Text('Tap', style: Theme.of(context).textTheme.titleMedium,),
           onTap: (){
             Scaffold.of(context).closeEndDrawer();
             late String pinOut; late String buttonName;
