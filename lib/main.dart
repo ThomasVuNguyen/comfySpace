@@ -908,58 +908,54 @@ class _spacePageState extends State<spacePage> {
         child: Scaffold(//uncomment mediaquery for windows build
           endDrawer: Drawer(
             backgroundColor: Theme.of(context).colorScheme.secondary,
-            child: SafeArea(
-              child: Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 14.0, top:14.0),
-                        child: Text('Add Buttons', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),),
-                      ),
-                      SizedBox(height: 10,),
-                      SingleChildScrollView(
-                        child: ExpansionTile(
-                          iconColor: Theme.of(context).colorScheme.onPrimary,
-                          backgroundColor: Theme.of(context).colorScheme.secondary,
-                          collapsedBackgroundColor: Theme.of(context).colorScheme.secondary,
-                          textColor: Theme.of(context).colorScheme.onPrimary,
-                            title: Text('Component Button', style: GoogleFonts.poppins(fontSize: 20),),
-                          children: [
-                            AddLEDButton(spaceName: widget.spaceName),
-                            AddComfyStepperMotor(spaceName: widget.spaceName),
-                            AddComfyDCMotor(spaceName: widget.spaceName),
-                            AddComfyDistanceSensor(spaceName: widget.spaceName),
-                            AddBuzzerButton(spaceName: widget.spaceName),
-                          ],
-                        ),
-                      ),
-                      ExpansionTile(
-                        iconColor: Theme.of(context).colorScheme.onPrimary,
-                        backgroundColor: Theme.of(context).colorScheme.secondary,
-                        collapsedBackgroundColor: Theme.of(context).colorScheme.secondary,
-                        textColor: Theme.of(context).colorScheme.onPrimary,
-                        title: Text('Gesture Button', style: GoogleFonts.poppins(fontSize: 20),),
-                        children: [
-                          AddComfyTapButton(spaceName: widget.spaceName),
-                          AddComfyHorizontalSwipeButton(spaceName: widget.spaceName),
-                          AddComfyVerticalSwipeButton(spaceName: widget.spaceName),
-                          AddComfyToggleButton(spaceName: widget.spaceName),
-                          AddComfyFullGestureButton(spaceName: widget.spaceName),
-                          AddComfyDataButton(spaceName: widget.spaceName),
+            child: SingleChildScrollView(
+              child: SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 14.0, top:14.0),
+                      child: Text('Add Buttons', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),),
+                    ),
+                    SizedBox(height: 10,),
+                    ExpansionTile(
+                      iconColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      collapsedBackgroundColor: Theme.of(context).colorScheme.secondary,
+                      textColor: Theme.of(context).colorScheme.onPrimary,
+                        title: Text('Component Button', style: GoogleFonts.poppins(fontSize: 20),),
+                      children: [
+                        AddLEDButton(spaceName: widget.spaceName),
+                        AddComfyStepperMotor(spaceName: widget.spaceName),
+                        AddComfyDCMotor(spaceName: widget.spaceName),
+                        AddComfyDistanceSensor(spaceName: widget.spaceName),
+                        AddBuzzerButton(spaceName: widget.spaceName),
+                      ],
+                    ),
+                    ExpansionTile(
+                      iconColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      collapsedBackgroundColor: Theme.of(context).colorScheme.secondary,
+                      textColor: Theme.of(context).colorScheme.onPrimary,
+                      title: Text('Gesture Button', style: GoogleFonts.poppins(fontSize: 20),),
+                      children: [
+                        AddComfyTapButton(spaceName: widget.spaceName),
+                        AddComfyHorizontalSwipeButton(spaceName: widget.spaceName),
+                        AddComfyVerticalSwipeButton(spaceName: widget.spaceName),
+                        AddComfyToggleButton(spaceName: widget.spaceName),
+                        AddComfyFullGestureButton(spaceName: widget.spaceName),
+                        AddComfyDataButton(spaceName: widget.spaceName),
 
-                      ],),
-                      Align(
-                        alignment: FractionalOffset.bottomRight,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: ButtonDocumentation()
-                        ),
-                      )
-                    ],
-                  ),
+                    ],),
+                    Align(
+                      alignment: FractionalOffset.bottomRight,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: ButtonDocumentation()
+                      ),
+                    )
+                  ],
                 ),
               ),
             )
