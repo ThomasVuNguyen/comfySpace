@@ -80,7 +80,7 @@ class _ComfyFullGestureButtonState extends State<ComfyFullGestureButton> {
   }
   @override
   Widget build(BuildContext context) {
-    return (SSHLoadingFinished == false) ?LoadingSpaceWidget():
+    return (SSHLoadingFinished == false) ?const LoadingSpaceWidget():
     Padding(
       padding: const EdgeInsets.all(buttonPadding),
       child: GestureDetector(
@@ -156,7 +156,7 @@ class _ComfyFullGestureButtonState extends State<ComfyFullGestureButton> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18)),
-                    direction == "middle"? Icon(Icons.arrow_upward) : SizedBox(height: 0, width: 0,),
+                    direction == "middle"? const Icon(Icons.arrow_upward) : const SizedBox(height: 0, width: 0,),
                   ],
                 ),
               ),

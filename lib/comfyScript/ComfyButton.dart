@@ -28,7 +28,7 @@ class _ComfyButtonState extends State<ComfyButton> {
               return AlertDialog(
                 shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
                 contentPadding: const EdgeInsets.all(8.0),
-                title: Text('Delete Button'),
+                title: const Text('Delete Button'),
                 actions: [
                   CancelButtonPrompt(
                     onPressed: (){

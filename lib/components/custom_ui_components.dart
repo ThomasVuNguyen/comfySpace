@@ -23,9 +23,9 @@ class Credit extends StatelessWidget {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Thank you for using comfySpace\r\n', textAlign: TextAlign.center,),
+            const Text('Thank you for using comfySpace\r\n', textAlign: TextAlign.center,),
             Image.asset('assets/DuckHop.gif', height: 40, gaplessPlayback: true,),
-            Text('\r\nProudly made by', textAlign: TextAlign.center,),
+            const Text('\r\nProudly made by', textAlign: TextAlign.center,),
             TextButton(
                 onPressed: (){
                   comfySpaceDocumentation();
@@ -104,7 +104,7 @@ class _AddingButtonDialState extends State<AddingButtonDial> {
                       });
                       Navigator.pop(context);
 
-                    }, child: Text("Add button"))
+                    }, child: const Text("Add button"))
                   ],
                 );
               });
@@ -182,7 +182,7 @@ class _AddingButtonDialState extends State<AddingButtonDial> {
 
             ),*/
         SpeedDialChild(
-            child: Icon(Icons.stairs),
+            child: const Icon(Icons.stairs),
             onTap: (){
               late String pin1; late String pin2; late String pin3; late String pin4;
               showDialog(context: context, builder: (BuildContext context){
@@ -248,7 +248,7 @@ class _AddingButtonDialState extends State<AddingButtonDial> {
             }
         ),
         SpeedDialChild(
-            child: Icon(Icons.sensors),
+            child: const Icon(Icons.sensors),
             onTap: (){
               late String trig; late String echo;
               showDialog(context: context, builder: (BuildContext context){
@@ -288,7 +288,7 @@ class _AddingButtonDialState extends State<AddingButtonDial> {
                         addButton(widget.databaseName, widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, HCSR04PinList, 'HCSR04');
                         Navigator.pop(context);
                         setState(() {});
-                      }, child: Text("Add distance sensor"),
+                      }, child: const Text("Add distance sensor"),
                     )
                   ],
                 );
@@ -319,15 +319,15 @@ class Icon8Credit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 20,),
+        const SizedBox(height: 20,),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
-              child: Text(iconName, style: TextStyle(decoration: TextDecoration.underline,),),
+              child: Text(iconName, style: const TextStyle(decoration: TextDecoration.underline,),),
               onTap: () => launchIcon(),
             ),
-            Text(" icon by "),
+            const Text(" icon by "),
             InkWell(
               child: const Text("Icon8", style: TextStyle(decoration: TextDecoration.underline,),),
               onTap: () => launchIcon8(),
@@ -358,15 +358,15 @@ class IconDuckCredit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 20,),
+        const SizedBox(height: 20,),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
-              child: Text(iconName, style: TextStyle(decoration: TextDecoration.underline,),),
+              child: Text(iconName, style: const TextStyle(decoration: TextDecoration.underline,),),
               onTap: () => launchIcon(),
             ),
-            Text(" icon by "),
+            const Text(" icon by "),
             InkWell(
               child: const Text("IconDuck", style: TextStyle(decoration: TextDecoration.underline,),),
               onTap: () => launchIcon8(),

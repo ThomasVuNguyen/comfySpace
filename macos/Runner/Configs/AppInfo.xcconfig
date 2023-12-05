@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = Comfy Space;
+PRODUCT_NAME = comfyspace
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = tech.comfystudio.comfyssh;
+PRODUCT_BUNDLE_IDENTIFIER = tech.comfyStudio.comfyspace
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 tech.comfyStudio. All rights reserved.

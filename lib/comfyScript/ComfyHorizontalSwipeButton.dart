@@ -115,12 +115,12 @@ class _ComfyHorizontalButtonState extends State<ComfyHorizontalButton> {
                 child: Center(child: buttonIcon[index],),
               ),
               Padding(
-                padding: EdgeInsets.only(top:8.0),
+                padding: const EdgeInsets.only(top:8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18),),
-                    direction == "middle"? Icon(Icons.arrow_right): SizedBox(height: 0, width: 0,),
+                    direction == "middle"? const Icon(Icons.arrow_right): const SizedBox(height: 0, width: 0,),
                   ],
                 ),
               ),

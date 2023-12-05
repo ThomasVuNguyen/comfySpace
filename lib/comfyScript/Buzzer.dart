@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:xterm/xterm.dart';
 
 import '../components/LoadingWidget.dart';
-import '../components/custom_ui_components.dart';
 import '../components/custom_widgets.dart';
 import '../components/pop_up.dart';
 import '../function.dart';
@@ -97,7 +96,7 @@ class _BuzzerToggleState extends State<BuzzerToggle> {
                     borderRadius: BorderRadius.circular(24.0),
                     color: toggleState? Colors.white :Colors.black,
                   ),
-                  child: Center(child: toggleState? Icon(Icons.campaign, size: 60,color: Colors.black,) :Icon(Icons.volume_off, size: 60,color: Colors.white,),),
+                  child: Center(child: toggleState? const Icon(Icons.campaign, size: 60,color: Colors.black,) :const Icon(Icons.volume_off, size: 60,color: Colors.white,),),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),

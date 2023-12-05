@@ -1,7 +1,6 @@
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:comfyssh_flutter/components/custom_widgets.dart';
-import 'package:comfyssh_flutter/states/CounterModel.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -71,7 +70,7 @@ class _ComfyVerticalButtonState extends State<ComfyVerticalButton> {
   }
   @override
   Widget build(BuildContext context) {
-      return (SSHLoadingFinished == false) ?LoadingSpaceWidget():
+      return (SSHLoadingFinished == false) ?const LoadingSpaceWidget():
           Padding(
             padding: const EdgeInsets.all(buttonPadding),
             child: GestureDetector(
@@ -123,7 +122,7 @@ class _ComfyVerticalButtonState extends State<ComfyVerticalButton> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18)),
-                        direction == "middle"? Icon(Icons.arrow_upward) : SizedBox(height: 0, width: 0,),
+                        direction == "middle"? const Icon(Icons.arrow_upward) : const SizedBox(height: 0, width: 0,),
                       ],
                     ),
                   ),

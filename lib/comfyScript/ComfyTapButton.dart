@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:xterm/core.dart';
 
 import '../components/LoadingWidget.dart';
-import '../components/custom_ui_components.dart';
 import '../components/custom_widgets.dart';
 import '../components/pop_up.dart';
 import '../function.dart';
@@ -30,6 +29,7 @@ class _SinglePressButtonState extends State<SinglePressButton> {
     super.initState();
     initClient();
   }
+  @override
   void dispose(){
     super.dispose();
     closeClient();
@@ -57,7 +57,7 @@ class _SinglePressButtonState extends State<SinglePressButton> {
     setState(() {
       toggleState = !toggleState;
     });
-    Future.delayed(Duration(milliseconds: 100), (){
+    Future.delayed(const Duration(milliseconds: 100), (){
       setState(() {
         toggleState = !toggleState;
       });
@@ -68,7 +68,7 @@ class _SinglePressButtonState extends State<SinglePressButton> {
   Widget build(BuildContext context) {
     if (SSHLoaded == true){
       return Padding(
-        padding: EdgeInsets.all(buttonPadding),
+        padding: const EdgeInsets.all(buttonPadding),
         child: GestureDetector(
           onTap: (){
             sendCommand();
@@ -82,7 +82,7 @@ class _SinglePressButtonState extends State<SinglePressButton> {
                   borderRadius: BorderRadius.circular(24.0),
                   color: toggleState? Colors.white :Colors.black,
                 ),
-                child: Center(child: toggleState? Icon(Icons.radio_button_checked, size: 60,color: Colors.black,) :Icon(Icons.radio_button_unchecked, size: 60,color: Colors.white,),),
+                child: Center(child: toggleState? const Icon(Icons.radio_button_checked, size: 60,color: Colors.black,) :const Icon(Icons.radio_button_unchecked, size: 60,color: Colors.white,),),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
@@ -97,7 +97,7 @@ class _SinglePressButtonState extends State<SinglePressButton> {
       );
     }
     else{
-      return LoadingSpaceWidget();
+      return const LoadingSpaceWidget();
     }
   }
 }

@@ -1,8 +1,6 @@
-import 'package:comfyssh_flutter/components/custom_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-import '../main.dart';
 
 class LoadingWaveDots extends StatelessWidget {
   const LoadingWaveDots({super.key});
@@ -34,7 +32,7 @@ class LoadingSpaceWidget extends StatelessWidget {
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(24.0),
         ),
-        child: LoadingHalfTriangle(),
+        child: const LoadingHalfTriangle(),
       ),
     );
   }

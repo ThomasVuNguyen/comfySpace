@@ -1,9 +1,5 @@
-import 'package:comfyssh_flutter/components/pop_up.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:wiredash/wiredash.dart';
 
 import '../main.dart';
@@ -47,7 +43,7 @@ class WiredashSettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wiredash(
+    return const Wiredash(
       projectId: 'comfy-space-suggestion-bo04w4e',
       secret: 'tFVPfkMoISZKN9cF8dl2_RGM4Trtmh-9',
       feedbackOptions: WiredashFeedbackOptions(

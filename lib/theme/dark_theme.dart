@@ -5,13 +5,13 @@ ThemeData darkMode = ThemeData(
   textTheme: TextTheme(
     titleMedium: GoogleFonts.poppins(fontSize: 14),
   ),
-  buttonTheme: ButtonThemeData(
+  buttonTheme: const ButtonThemeData(
     buttonColor: Colors.red,
 
   ),
   dialogTheme: DialogTheme(
-    backgroundColor: Color(0xff2B2930),
-    titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Color(0xffE6E0E9), fontSize: 22),
+    backgroundColor: const Color(0xff2B2930),
+    titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: const Color(0xffE6E0E9), fontSize: 22),
     contentTextStyle: GoogleFonts.poppins(fontSize: 18.0),
     iconColor: Colors.red,
   ),
@@ -25,8 +25,8 @@ ThemeData darkMode = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,
   appBarTheme: AppBarTheme(
-    color: Color(0xff141218),
-    titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 22, color: Color(0xffCAC4D0)),
+    color: const Color(0xff141218),
+    titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 22, color: const Color(0xffCAC4D0)),
 
   ),
 

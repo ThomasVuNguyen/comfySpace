@@ -22,7 +22,7 @@ class _NewSpaceDialogState extends State<NewSpaceDialog> {
     return AlertDialog(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
       contentPadding: const EdgeInsets.all(20.0),
-      title: showTitle? Center(child: Text("New Space"),) :null,
+      title: showTitle? const Center(child: Text("New Space"),) :null,
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -319,7 +319,7 @@ class DeleteButtonDialog extends StatelessWidget {
     return AlertDialog(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
       contentPadding: const EdgeInsets.all(20.0),
-      title: Text('Delete Button'),
+      title: const Text('Delete Button'),
       actions: [
         comfyActionButton(
           onPressed: () async{

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:comfyssh_flutter/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,10 +17,6 @@ class _VirtualKeyboardViewState extends State<VirtualKeyboardView> {
       animation: widget.keyboard,
       builder: (context, child) => ToggleButtons(
         borderWidth: 2,
-        children: [
-          Container(height:45, width:(MediaQuery.of(context).size.width-10)/3, child: Center(child: Text('Ctrl', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 21)))),
-          Container(width:(MediaQuery.of(context).size.width-10)/3, child: Center(child: Text('Alt', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 21)))),
-          Container(width:(MediaQuery.of(context).size.width-10)/3, child: Center(child: Text('Shift', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 21)))),],
         isSelected: [widget.keyboard.ctrl, widget.keyboard.alt, widget.keyboard.shift],
         color: keycolor, //unselected color
         borderColor: bgcolor,
@@ -41,6 +36,10 @@ class _VirtualKeyboardViewState extends State<VirtualKeyboardView> {
               break;
           }
         },
+        children: [
+          SizedBox(height:45, width:(MediaQuery.of(context).size.width-10)/3, child: Center(child: Text('Ctrl', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 21)))),
+          SizedBox(width:(MediaQuery.of(context).size.width-10)/3, child: Center(child: Text('Alt', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 21)))),
+          SizedBox(width:(MediaQuery.of(context).size.width-10)/3, child: Center(child: Text('Shift', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 21)))),],
       ),
     );
   }

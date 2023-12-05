@@ -43,7 +43,7 @@ class WiredashIdeaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wiredash(
+    return const Wiredash(
       projectId: 'comfy-space-suggestion-bo04w4e',
       secret: 'tFVPfkMoISZKN9cF8dl2_RGM4Trtmh-9',
       feedbackOptions: WiredashFeedbackOptions(

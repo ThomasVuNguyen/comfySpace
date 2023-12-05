@@ -4,36 +4,25 @@ import 'package:comfyssh_flutter/comfyScript/Buzzer.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyVerticalSwipeButton.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
-import 'package:comfyssh_flutter/comfyScript/servo.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
 import 'package:comfyssh_flutter/components/DocumentationButton.dart';
-import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:comfyssh_flutter/components/custom_ui_components.dart';
 import 'package:comfyssh_flutter/components/custom_widgets.dart';
 import 'package:comfyssh_flutter/components/pop_up.dart';
 import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/pages/AboutUs.dart';
-import 'package:comfyssh_flutter/pages/Experimental.dart';
 import 'package:comfyssh_flutter/pages/IdeaSuggestion.dart';
 import 'package:comfyssh_flutter/pages/settings.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
-import 'package:comfyssh_flutter/state.dart';
-import 'package:comfyssh_flutter/states/CounterModel.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_draggable_gridview/flutter_draggable_gridview.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:loader_overlay/loader_overlay.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:wiredash/wiredash.dart';
 import 'package:xterm/xterm.dart';
@@ -46,7 +35,6 @@ import 'comfyScript/DCmotor.dart';
 import 'comfyScript/FullGestureButton.dart';
 import 'comfyScript/customInput.dart';
 import 'comfyScript/stepperMotor.dart';
-import 'components/UniversalVariable.dart';
 
 
 String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
@@ -267,7 +255,7 @@ class _WelcomePage extends State<Welcome>{
                                 child: const Text("Save"),
                                 onPressed: (){
                                   newName(nickname);
-                                  newHost(hostname!);
+                                  newHost(hostname);
                                   newUser(username);
                                   newPass(password);
                                   newDistro(currentDistro);
@@ -340,7 +328,7 @@ class _WelcomePage extends State<Welcome>{
                   const SizedBox(height: 43),
                   Expanded(
                     child: ListView(
-                      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
                       children: List.generate(snapshot.data[0].length, (index) => Padding(
                         padding: const EdgeInsets.only(bottom: 20.0), //distance between cards
@@ -366,10 +354,10 @@ class _WelcomePage extends State<Welcome>{
                             ),
                             SizedBox(width: MediaQuery.of(context).size.width-40-106, height: 128,
                               child: ListTile(contentPadding: const EdgeInsets.only(top:0.0, bottom: 0.0),
-                                  trailing: Container( width: 40,
+                                  trailing: const SizedBox( width: 40,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
-                                      children: const [
+                                      children: [
                                         Icon(Icons.arrow_forward_ios, color: textcolor,size: 25,),
                                       ],
                                     ),
@@ -380,15 +368,15 @@ class _WelcomePage extends State<Welcome>{
                                     title: Text('Delete host?', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold ),),
                                     content: Text('This will permanently remove host information.', style: GoogleFonts.poppins(fontSize: 16 )),
                                     actions: <Widget>[
-                                      RawMaterialButton(onPressed: () => Navigator.pop(context, 'Cancel'), child: const Text('Cancel'),
+                                      RawMaterialButton(onPressed: () => Navigator.pop(context, 'Cancel'),
                                         shape: const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(Radius.circular(8.0))
-                                        ),
+                                        ), child: const Text('Cancel'),
                                       ),
-                                      RawMaterialButton(onPressed: () {removeItem(index); Navigator.pop(context, 'Delete'); setState(() {});}, child: const Text('Delete'),
+                                      RawMaterialButton(onPressed: () {removeItem(index); Navigator.pop(context, 'Delete'); setState(() {});},
                                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), ),
                                         fillColor: warningcolor,
-                                        textStyle: GoogleFonts.poppins(color: bgcolor, fontWeight: FontWeight.w600, fontSize: 16),
+                                        textStyle: GoogleFonts.poppins(color: bgcolor, fontWeight: FontWeight.w600, fontSize: 16), child: const Text('Delete'),
                                       ),],),),
                                   onTap: (){
                                     nickname = snapshot.data[0][index];hostname = snapshot.data[1][index]; username = snapshot.data[2][index]; password = snapshot.data[3][index]; distro = snapshot.data[4][index];
@@ -417,7 +405,7 @@ class _WelcomePage extends State<Welcome>{
                 ],
               );
             }
-            return Text("loading");
+            return const Text("loading");
           },
         )
     );
@@ -435,7 +423,7 @@ class Term extends StatefulWidget {
 class _TerminalPage extends State<Term> {
   late final terminal = Terminal(inputHandler: keyboard);
   final keyboard = VirtualKeyboard(defaultInputHandler);
-  var title = hostname! + username! + password!;
+  var title = hostname + username + password;
   int buttonState = 1;
   @override
   void initState() {
@@ -447,9 +435,9 @@ class _TerminalPage extends State<Term> {
   Future<void> initTerminal() async {
     terminal.write('Connecting...\r\n');
     final client = SSHClient(
-      await SSHSocket.connect(hostname!, port),
-      username: username!,
-      onPasswordRequest: () => password!,
+      await SSHSocket.connect(hostname, port),
+      username: username,
+      onPasswordRequest: () => password,
     );
     print(client.username);
 
@@ -473,17 +461,17 @@ class _TerminalPage extends State<Term> {
     };
 
     terminal.onOutput = (data) {
-      session.write(utf8.encode(data) as Uint8List);
+      session.write(utf8.encode(data));
     };
 
     session.stdout
         .cast<List<int>>()
-        .transform(Utf8Decoder())
+        .transform(const Utf8Decoder())
         .listen(terminal.write);
 
     session.stderr
         .cast<List<int>>()
-        .transform(Utf8Decoder())
+        .transform(const Utf8Decoder())
         .listen(terminal.write);
   }
   @override
@@ -501,8 +489,8 @@ class _TerminalPage extends State<Term> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start, //left alignment for texts
           children: [
-            Text(nickname!,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 21)),
-            Text(distro!,style: GoogleFonts.poppins(color: textcolor, fontSize: 12)),
+            Text(nickname,style: GoogleFonts.poppins(color: textcolor, fontWeight: FontWeight.bold, fontSize: 21)),
+            Text(distro,style: GoogleFonts.poppins(color: textcolor, fontSize: 12)),
           ],
         ),
         backgroundColor: bgcolor,
@@ -555,7 +543,7 @@ class _ControlState extends State<Control> {
         title: Text(message),
       ),
       floatingActionButton: IconButton(
-        icon: Icon(Icons.connected_tv_sharp), onPressed : () async {
+        icon: const Icon(Icons.connected_tv_sharp), onPressed : () async {
         var listTotal = await renderer('space1'); buttonList = listTotal[0]; sizeXList = listTotal[1]; sizeYList = listTotal[2]; positionList = listTotal[3]; commandList = listTotal[4];
         //createSpace('space1');
 
@@ -638,15 +626,15 @@ class _comfySpaceState extends State<comfySpace> {
 
           }
           else{
-            return Center(child: Text("loading database"));
+            return const Center(child: Text("loading database"));
           }
 
         },
       ),
     ),
-    WiredashSettingPage(),
-    WiredashIdeaPage(),
-    AboutUs(),
+    const WiredashSettingPage(),
+    const WiredashIdeaPage(),
+    const AboutUs(),
   ];
   @override
   void initState(){
@@ -674,7 +662,7 @@ class _comfySpaceState extends State<comfySpace> {
       backgroundColor: Theme.of(context).colorScheme.background,
         bottomNavigationBar: Container(
           child: Container(
-            color: Color(0xff211F26),
+            color: const Color(0xff211F26),
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0, top:20.0, bottom: 20.0, right: 20.0),
               child: SafeArea(
@@ -718,9 +706,9 @@ class _comfySpaceState extends State<comfySpace> {
           actions: <Widget>[
             //Text(context.watch<CounterModel>().count.toString()),
             Padding(
-              padding: EdgeInsets.only(right: 20.0),
+              padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                child: Icon(Icons.feedback_outlined),
+                child: const Icon(Icons.feedback_outlined),
                 onTap: (){ Wiredash.of(context).show(); },
               ),
             ),
@@ -812,12 +800,12 @@ class WireDashComfySpacePage extends StatelessWidget {
         print(snapshot.data);
         return Wiredash(
             projectId: snapshot.data![0], secret: snapshot.data![1],
-            child: comfySpace()
+            child: const comfySpace()
         );
       }
       else{
         print("no data");
-        return Wiredash(projectId: 'feedbacktest-s5yadlk', secret: 'lful0I9yhcgriPKd-MTEY2LBGv1pM3C_',
+        return const Wiredash(projectId: 'feedbacktest-s5yadlk', secret: 'lful0I9yhcgriPKd-MTEY2LBGv1pM3C_',
             child: comfySpace()
         );
       }
@@ -918,7 +906,7 @@ class _spacePageState extends State<spacePage> {
                       padding: const EdgeInsets.only(left: 14.0, top:14.0),
                       child: Text('Add Buttons', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),),
                     ),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     ExpansionTile(
                       iconColor: Theme.of(context).colorScheme.onPrimary,
                       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -948,7 +936,7 @@ class _spacePageState extends State<spacePage> {
                         AddComfyDataButton(spaceName: widget.spaceName),
 
                     ],),
-                    Align(
+                    const Align(
                       alignment: FractionalOffset.bottomRight,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
@@ -984,7 +972,7 @@ class _spacePageState extends State<spacePage> {
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderRadius: const BorderRadius.all(Radius.circular(20)),
                       child: Container(
                         color:  Theme.of(context).colorScheme.onSecondaryContainer,
                         child: Padding(

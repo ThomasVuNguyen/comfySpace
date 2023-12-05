@@ -1,14 +1,9 @@
 
-import 'dart:convert';
-import 'package:dartssh2/dartssh2.dart';
-import 'package:file/local.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:comfyssh_flutter/main.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 //import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -152,11 +147,11 @@ removeItem(int index) async{
   tempDistro?.removeAt(index);
   nameList = tempName!; hostList = tempHost!; userList = tempUser!; passList = tempPass!; distroList = tempDistro!;
 
-  prefs.setStringList("listName", tempName!);
-  prefs.setStringList("listHost", tempHost!);
-  prefs.setStringList("listUser", tempUser!);
-  prefs.setStringList("listPass", tempPass!);
-  prefs.setStringList("listDistro", tempDistro!);
+  prefs.setStringList("listName", tempName);
+  prefs.setStringList("listHost", tempHost);
+  prefs.setStringList("listUser", tempUser);
+  prefs.setStringList("listPass", tempPass);
+  prefs.setStringList("listDistro", tempDistro);
   print("new list");
   print(tempName);
 }
@@ -166,7 +161,7 @@ infoBox(int count, BuildContext context) async{
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Add a new host"),
+          title: const Text("Add a new host"),
           content: Column(
             children: [
               TextField( onChanged: (name1){
@@ -186,8 +181,8 @@ infoBox(int count, BuildContext context) async{
                 decoration: const InputDecoration(hintText: "password"), textInputAction: TextInputAction.next,
               ),
               DropdownButtonFormField<String> (
-                value: colorMap.keys.toList()![0],
-                items: colorMap.keys.toList()!.map<DropdownMenuItem<String>>((String value) {
+                value: colorMap.keys.toList()[0],
+                items: colorMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
@@ -209,10 +204,10 @@ infoBox(int count, BuildContext context) async{
                 textColor: Colors.white,
                 child: const Text("Save"),
                 onPressed: (){
-                  newName(nickname!);
-                  newHost(hostname!);
-                  newUser(username!);
-                  newPass(password!);
+                  newName(nickname);
+                  newHost(hostname);
+                  newUser(username);
+                  newPass(password);
                   newDistro(currentDistro);
                   print("saved");
                   print("popped 1");
@@ -369,7 +364,7 @@ Future<List<List<String>>> renderer(String spaceName) async{
   return listTotal;
 }
 
-Future<void> addButton(String dbName, String spaceName, String name, int size_x, int size_y, int position, String command, String buttonType) async{
+Future<void> addButton(String dbName, String spaceName, String name, int sizeX, int sizeY, int position, String command, String buttonType) async{
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
   Database database = await openDatabase(path,
@@ -377,7 +372,7 @@ Future<void> addButton(String dbName, String spaceName, String name, int size_x,
       onCreate: (Database db, version) async =>
       await db.execute('CREATE TABLE `$spaceName`(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
   );
-  var addedButton = database.rawInsert('INSERT INTO `$spaceName`(name, size_x, size_y, position, command, buttonType) VALUES("'"$name"'", $size_x, $size_y, $position, "'"$command"'","'"$buttonType"'")');
+  var addedButton = database.rawInsert('INSERT INTO `$spaceName`(name, size_x, size_y, position, command, buttonType) VALUES("'"$name"'", $sizeX, $sizeY, $position, "'"$command"'","'"$buttonType"'")');
   print("button added to `$spaceName` space");
 }
 
@@ -577,7 +572,7 @@ Widget ButtonSorting(int id, String name, String buttonType, String spaceName, S
       default:
       return ListTile(
         title: Text(name),
-        subtitle: Text('Unknown button type'),
+        subtitle: const Text('Unknown button type'),
       );
   }
 }

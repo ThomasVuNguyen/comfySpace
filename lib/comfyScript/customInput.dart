@@ -22,7 +22,7 @@ Future<String> readInput(SSHClient client, String command) async {
 
 Stream<String> readInputStream(SSHClient client, String command) async* {
   while(true){
-    await Future<void>.delayed(Duration(milliseconds: 400));
+    await Future<void>.delayed(const Duration(milliseconds: 400));
     final distance = await client.run(command);
     yield utf8.decode(distance);
   }
@@ -46,6 +46,7 @@ class _CustomInputButtonState extends State<CustomInputButton> {
     super.initState();
     initClient();
   }
+  @override
   void dispose(){
     super.dispose();
     closeClient();
@@ -94,12 +95,12 @@ class _CustomInputButtonState extends State<CustomInputButton> {
               );
             }
             else{
-              return LoadingSpaceWidget();
+              return const LoadingSpaceWidget();
             }
           });
     }
     else{
-      return LoadingSpaceWidget();
+      return const LoadingSpaceWidget();
     }
   }
 }

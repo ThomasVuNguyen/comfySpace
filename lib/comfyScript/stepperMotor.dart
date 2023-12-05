@@ -10,7 +10,6 @@ import '../components/custom_ui_components.dart';
 import '../components/custom_widgets.dart';
 import '../components/pop_up.dart';
 import '../function.dart';
-import '../main.dart';
 
 String stepperMotor(String pin1, String pin2, String pin3, String pin4, String stepperState){
     return "python3 comfyScript/stepper/stepper.py $pin1 $pin2 $pin3 $pin4 $stepperState ";
@@ -31,7 +30,7 @@ class _StepperMotorState extends State<StepperMotor> {
     String direction = 'pause';
     late SSHClient client;
     int index = 0;
-    List<Widget> motorIcon = [Icon(Icons.pause_circle_filled, size: 60,), Icon(Icons.arrow_right, size: 60), Icon(Icons.arrow_left, size:60)];
+    List<Widget> motorIcon = [const Icon(Icons.pause_circle_filled, size: 60,), const Icon(Icons.arrow_right, size: 60), const Icon(Icons.arrow_left, size:60)];
     List<Color> motorColor = [const Color.fromARGB(44, 164, 167, 189),Colors.red,Colors.red];
     @override
     void initState(){
@@ -117,7 +116,7 @@ class _StepperMotorState extends State<StepperMotor> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                         Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18),),
-                                        direction == "pause"? Icon(Icons.arrow_right): SizedBox(height: 0, width: 0,),
+                                        direction == "pause"? const Icon(Icons.arrow_right): const SizedBox(height: 0, width: 0,),
                                     ],
                                 ),
                             ),

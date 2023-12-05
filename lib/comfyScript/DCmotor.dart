@@ -10,7 +10,6 @@ import '../components/custom_ui_components.dart';
 import '../components/custom_widgets.dart';
 import '../components/pop_up.dart';
 import '../function.dart';
-import '../main.dart';
 
 String DCMotorSingleRun(String pin1, String pin2, String state1, String state2){
   return "python3 comfyScript/motor/DCmotor_single.py $pin1 $pin2 $state1 $state2 ";
@@ -30,7 +29,7 @@ class _DCMotorSingleState extends State<DCMotorSingle> {
   late SSHClient client;
   int index = 0;
   String direction = 'pause'; //either pause, forward or backward
-  List<Widget> motorIcon = [Icon(Icons.pause_circle_filled, size: 60,), Icon(Icons.arrow_upward, size: 60), Icon(Icons.arrow_downward, size:60)];
+  List<Widget> motorIcon = [const Icon(Icons.pause_circle_filled, size: 60,), const Icon(Icons.arrow_upward, size: 60), const Icon(Icons.arrow_downward, size:60)];
   List<Color> motorColor = [const Color.fromARGB(44, 164, 167, 189),Colors.red,Colors.red];
   @override
   void initState(){
@@ -121,7 +120,7 @@ class _DCMotorSingleState extends State<DCMotorSingle> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18),),
-                      direction == "pause"? Icon(Icons.arrow_upward): SizedBox(height: 0, width: 0,),
+                      direction == "pause"? const Icon(Icons.arrow_upward): const SizedBox(height: 0, width: 0,),
                     ],
                   ),
                 ),

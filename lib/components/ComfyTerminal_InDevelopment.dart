@@ -20,7 +20,7 @@ class _ComfyTerminalState extends State<ComfyTerminal> {
         height: 120,
         child: TerminalView(
             widget.terminal, readOnly: true, padding: const EdgeInsets.all(10.0),
-            textStyle: TerminalStyle(
+            textStyle: const TerminalStyle(
               fontSize: 18.0,
               fontFamily: 'poppins',
             ),
