@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:camera/camera.dart';
 import 'package:comfyssh_flutter/comfyScript/Buzzer.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyVerticalSwipeButton.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
+import 'package:comfyssh_flutter/components/CameraView.dart';
 import 'package:comfyssh_flutter/components/DocumentationButton.dart';
 import 'package:comfyssh_flutter/components/custom_ui_components.dart';
 import 'package:comfyssh_flutter/components/custom_widgets.dart';
@@ -17,6 +19,7 @@ import 'package:comfyssh_flutter/pages/IdeaSuggestion.dart';
 import 'package:comfyssh_flutter/pages/NetworkScan.dart';
 import 'package:comfyssh_flutter/pages/settings.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
+import 'package:comfyssh_flutter/states/ExperimentalToggleModel.dart';
 import 'package:dart_ping_ios/dart_ping_ios.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
@@ -58,8 +61,11 @@ List<String> componentTypeList = ['LED', 'RGBLED', 'Servo'];
 List<String> buttonTypeList = ['toggleButton', 'slider', 'slider'];
 const bgcolor = Color(0xffFFFFFF);const textcolor = Color(0xff000000);const subcolor = Color(0xff000000);const keycolor = Color(0xff656366);const accentcolor = Color(0xff1C3D93);const warningcolor = Color(0xffCE031B);
 const keyGreen = Color(0xff3DDB87);
-void main(){
+late List<CameraDescription> _cameras;
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  _cameras = await availableCameras();
+
   memoryCheck();
   //final appDocDirectory = await getApplicationDocumentsDirectory();
   //await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
@@ -639,10 +645,85 @@ class _comfySpaceState extends State<comfySpace> {
         },
       ),
     ),
+    const WiredashSettingPage(),
+    const WiredashIdeaPage(),
+    const AboutUs(),
+  ];
+  final List<GButton> BottomBarButtonList = [
+    GButton(icon: Icons.home),
+    GButton(icon: Icons.settings, ),
+    GButton(icon: Icons.lightbulb ),
+    GButton(icon: Icons.public, ),
+  ];
+
+  final List<Widget> ExperimentalPageLists = [
+    Padding(
+      padding: const EdgeInsets.only(top:43),
+      child: FutureBuilder(
+        future: updateSpaceList('comfySpace.db'),
+        initialData: const [],
+        builder: (context, AsyncSnapshot snapshot){
+          /*if(snapshot.connectionState != ConnectionState.done){
+          print("state issue");
+          return const ColoredBox(color: Colors.red);
+        }
+        else if(!snapshot.hasData){
+          return const CircularProgressIndicator();
+        }*/
+          if(snapshot.hasData){
+            if(snapshot.data.length !=0){
+              return ListView.builder(
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 0.0, top: 0.0), //card wall padding
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: spaceTile(spaceName: snapshot.data[index]),
+                    );
+                  });
+            }
+            else{
+              return Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Such emptiness... ", style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 24),),
+                    /*FloatingActionButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    tooltip: 'Add New Space',
+                    child: const Icon(Icons.add),
+                    onPressed: (){
+                      showDialog(context: context, builder: (BuildContext context){
+                        return const NewSpaceDialog();
+                      });
+                    },
+                  )*/
+                  ],
+                ),);
+            }
+
+          }
+          else{
+            return const Center(child: Text("loading database"));
+          }
+
+        },
+      ),
+    ),
     const NetworkScanPage(),
     const WiredashSettingPage(),
     const WiredashIdeaPage(),
     const AboutUs(),
+  ];
+  final List<GButton> ExperimentalBottomBarButtonList = [
+    GButton(icon: Icons.home),
+    GButton(icon: Icons.network_ping),
+    GButton(icon: Icons.settings, ),
+    GButton(icon: Icons.lightbulb ),
+    GButton(icon: Icons.public, ),
   ];
   @override
   void initState(){
@@ -666,10 +747,15 @@ class _comfySpaceState extends State<comfySpace> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-        bottomNavigationBar: Container(
-          child: Container(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context)=> ExperimentalToggleModel(),
+        ),
+      ],
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+          bottomNavigationBar: Container(
             color: const Color(0xff211F26),
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0, top:20.0, bottom: 20.0, right: 20.0),
@@ -681,13 +767,10 @@ class _comfySpaceState extends State<comfySpace> {
                   backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
                   tabActiveBorder: Border.all(color: Theme.of(context).colorScheme.onSecondaryContainer, width: 1), tabBorderRadius: 40.0, iconSize: 30.0,
                   padding: const EdgeInsets.all(12),
-                  tabs: const [
-                    GButton(icon: Icons.home),
-                    GButton(icon: Icons.network_ping),
-                    GButton(icon: Icons.settings, ),
-                    GButton(icon: Icons.lightbulb ),
-                    GButton(icon: Icons.public, ),
-                  ],
+                  tabs:
+                  //(context.watch<ExperimentalToggleModel>().Experimental == true)?
+                  ExperimentalBottomBarButtonList,
+                      //:BottomBarButtonList,
                   selectedIndex: bottomBarIndex,
                   onTabChange: (index){
                     //print(index);
@@ -699,101 +782,53 @@ class _comfySpaceState extends State<comfySpace> {
               ),
             ),
           ),
-        ),
-        appBar: AppBar(
-          titleSpacing: 20,
-          automaticallyImplyLeading: false,
-          title: GestureDetector(
-            onTap: (){
-              showDialog(context: context, builder: (BuildContext context){
-                return const Credit();
-              });
-            },
-              child: Text('ComfySpace', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 24),)),
-          elevation: 0,
-          //actionsIconTheme: const IconThemeData(size: 30, opacity: 10.0),
-          actions: <Widget>[
-            //Text(context.watch<CounterModel>().count.toString()),
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                child: const Icon(Icons.feedback_outlined),
-                onTap: (){ Wiredash.of(context).show(); },
-              ),
-            ),
-
-          ],
-        ),
-        //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        floatingActionButton: (bottomBarIndex != 0 )? null:
-        FloatingActionButton(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-          ),
-          tooltip: 'Add New Space',
-          child: const Icon(Icons.add),
-          onPressed: () {
-            //final counter = context.read<CounterModel>();
-            //counter.increment();
-            print("creating");
-            //String spaceName = 'space1'; late String hostInfo; late String userInfo; late String passwordInfo;
-            showDialog(context: context, builder: (BuildContext context){
-              return const NewSpaceDialog();
-              /*return AlertDialog(
-                title: const Text("Create a new space"),
-                content: Column(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        onChanged: (name){
-                          spaceName = name;
-                        },
-                        decoration: InputDecoration(hintText: "space name"), textInputAction: TextInputAction.next,
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        onChanged: (text2){
-                          hostInfo = text2;
-                        }, decoration: InputDecoration(hintText: "host"), textInputAction: TextInputAction.next,
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        onChanged: (text3){
-                          userInfo = text3;
-                        }, decoration: InputDecoration(hintText: "user"), textInputAction: TextInputAction.next,
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
-                          onChanged: (text4){
-                            passwordInfo = text4;
-                          }, decoration: InputDecoration(hintText: "password")
-                      ),
-                    ),
-                  ],
+          appBar: AppBar(
+            titleSpacing: 20,
+            automaticallyImplyLeading: false,
+            title: GestureDetector(
+              onTap: (){
+                showDialog(context: context, builder: (BuildContext context){
+                  return const Credit();
+                });
+              },
+                child: Text('ComfySpace', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 24),)),
+            elevation: 0,
+            //actionsIconTheme: const IconThemeData(size: 30, opacity: 10.0),
+            actions: <Widget>[
+              //Text(context.watch<CounterModel>().count.toString()),
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  child: const Icon(Icons.feedback_outlined),
+                  onTap: (){ Wiredash.of(context).show(); },
                 ),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () {
-                        createSpace(spaceName, hostInfo, userInfo, passwordInfo );
-                        //Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-                        Future.delayed(const Duration(milliseconds: 100), (){
-                          setState(() {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) =>  const comfySpace()),);
-                          });
-                        });
-                      },
-                      child: const Text("save")
-                  )
-                ],
-              );*/
-            }
-            ); },
+              ),
 
-        ),
-        body: pageLists[bottomBarIndex],
+            ],
+          ),
+          //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          floatingActionButton: (bottomBarIndex != 0 )? null:
+          FloatingActionButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+            ),
+            tooltip: 'Add New Space',
+            child: const Icon(Icons.add),
+            onPressed: () {
+              //final counter = context.read<CounterModel>();
+              //counter.increment();
+              print("creating");
+              //String spaceName = 'space1'; late String hostInfo; late String userInfo; late String passwordInfo;
+              showDialog(context: context, builder: (BuildContext context){
+                return const NewSpaceDialog();
+              }
+              ); },
+
+          ),
+          body:
+          //(context.watch<ExperimentalToggleModel>().Experimental == true)? ExperimentalPageLists[bottomBarIndex] :
+          ExperimentalPageLists[bottomBarIndex],
+      ),
     );
   }
 }
@@ -957,7 +992,6 @@ class _spacePageState extends State<spacePage> {
               ),
             )
           ),
-
           appBar: //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux )? null :
           PreferredSize(
               preferredSize: const Size.fromHeight(64),
@@ -978,6 +1012,7 @@ class _spacePageState extends State<spacePage> {
                   updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal),
                   //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                   //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
+                  CameraView(camera: _cameras[0]),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: ClipRRect(

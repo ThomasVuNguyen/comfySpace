@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wiredash/wiredash.dart';
 
 import '../main.dart';
@@ -65,5 +66,12 @@ class WiredashSettingPage extends StatelessWidget {
       ) ,
       child: SettingPage(),
     );
+  }
+}
+
+Future<void> SetupExperimentalToggleVariable() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.getBool('Experimental') == null){
+    await prefs.setBool('Experimental', false);
   }
 }

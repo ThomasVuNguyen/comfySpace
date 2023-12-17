@@ -63,9 +63,9 @@
     },
     {
       "name": "camera",
-      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/camera-0.10.5+5",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/camera-0.10.5+7",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "camera_android",
@@ -1022,7 +1022,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-12-17T01:05:30.460499Z",
+  "generated": "2023-12-17T20:30:40.246062Z",
   "generator": "pub",
   "generatorVersion": "3.2.2"
 }
