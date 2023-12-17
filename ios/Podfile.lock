@@ -2,6 +2,8 @@ PODS:
   - camera_avfoundation (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - flutter_icmp_ping (0.0.1):
+    - Flutter
   - flutter_inappwebview (0.0.1):
     - Flutter
     - flutter_inappwebview/Core (= 0.0.1)
@@ -17,6 +19,8 @@ PODS:
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - in_app_review (0.2.0):
+    - Flutter
+  - network_info_plus (0.0.1):
     - Flutter
   - OrderedSet (5.0.0)
   - path_provider_foundation (0.0.1):
@@ -38,10 +42,12 @@ PODS:
 DEPENDENCIES:
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - Flutter (from `Flutter`)
+  - flutter_icmp_ping (from `.symlinks/plugins/flutter_icmp_ping/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_web_browser (from `.symlinks/plugins/flutter_web_browser/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
+  - network_info_plus (from `.symlinks/plugins/network_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -59,6 +65,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
   Flutter:
     :path: Flutter
+  flutter_icmp_ping:
+    :path: ".symlinks/plugins/flutter_icmp_ping/ios"
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_keyboard_visibility:
@@ -67,6 +75,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_web_browser/ios"
   in_app_review:
     :path: ".symlinks/plugins/in_app_review/ios"
+  network_info_plus:
+    :path: ".symlinks/plugins/network_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   shared_preferences_foundation:
@@ -83,11 +93,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_icmp_ping: 2b159955eee0c487c766ad83fec224ae35e7c935
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_web_browser: 7bccaafbb0c5b8862afe7bcd158f15557109f61f
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
+  network_info_plus: 6d0c3eb8367b8164fa3fb0c19875e3f59d49697f
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126

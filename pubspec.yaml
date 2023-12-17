@@ -55,6 +55,10 @@ dependencies:
   overlay_support: ^2.1.0
   flutter_overlay_loader: ^2.0.0
   flutter_draggable_gridview: ^0.0.8
+  network_tools: ^4.0.2
+  network_info_plus: ^4.1.0
+  lan_scanner: ^4.0.0+1
+  dart_ping_ios: ^4.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

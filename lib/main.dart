@@ -14,14 +14,18 @@ import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/pages/AboutUs.dart';
 import 'package:comfyssh_flutter/pages/IdeaSuggestion.dart';
+import 'package:comfyssh_flutter/pages/NetworkScan.dart';
 import 'package:comfyssh_flutter/pages/settings.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
+import 'package:dart_ping_ios/dart_ping_ios.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_draggable_gridview/flutter_draggable_gridview.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:network_tools/network_tools.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:wiredash/wiredash.dart';
@@ -54,9 +58,11 @@ List<String> componentTypeList = ['LED', 'RGBLED', 'Servo'];
 List<String> buttonTypeList = ['toggleButton', 'slider', 'slider'];
 const bgcolor = Color(0xffFFFFFF);const textcolor = Color(0xff000000);const subcolor = Color(0xff000000);const keycolor = Color(0xff656366);const accentcolor = Color(0xff1C3D93);const warningcolor = Color(0xffCE031B);
 const keyGreen = Color(0xff3DDB87);
-void main() {
+void main(){
   WidgetsFlutterBinding.ensureInitialized();
   memoryCheck();
+  //final appDocDirectory = await getApplicationDocumentsDirectory();
+  //await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
   //sqfliteFfiInit();
   //databaseFactory = databaseFactoryFfi;
 
@@ -65,6 +71,7 @@ void main() {
     databaseFactory = databaseFactoryFfi;
   }
   reAssign();
+  DartPingIOS.register();
   runApp(
     const MyApp());
   createHostInfo();
@@ -632,6 +639,7 @@ class _comfySpaceState extends State<comfySpace> {
         },
       ),
     ),
+    const NetworkScanPage(),
     const WiredashSettingPage(),
     const WiredashIdeaPage(),
     const AboutUs(),
@@ -675,6 +683,7 @@ class _comfySpaceState extends State<comfySpace> {
                   padding: const EdgeInsets.all(12),
                   tabs: const [
                     GButton(icon: Icons.home),
+                    GButton(icon: Icons.network_ping),
                     GButton(icon: Icons.settings, ),
                     GButton(icon: Icons.lightbulb ),
                     GButton(icon: Icons.public, ),

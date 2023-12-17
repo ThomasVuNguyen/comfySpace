@@ -1,11 +1,19 @@
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wiredash/wiredash.dart';
 
 import '../main.dart';
 
-class SettingPage extends StatelessWidget {
-  const SettingPage({super.key});
+class SettingPage extends StatefulWidget {
+  SettingPage({super.key});
+
+  @override
+  State<SettingPage> createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
+  List<bool> ExperimentalState = [true, false];
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +21,16 @@ class SettingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/DuckHop.gif', height: 40, gaplessPlayback: true,),
-          Text(
-              '\r\nSuch an empty space...\r\n',
-              style: GoogleFonts.poppins( fontWeight: FontWeight.w500, fontSize: 18)
+          ToggleButtons(children: [
+            Text('Stable'),
+            Text('Experimental'),
+          ], isSelected: ExperimentalState,
+            onPressed: (int index){
+            setState(() {
+              ExperimentalState[index] = true;
+              ExperimentalState[1-index] = false;
+            });
+            },
           ),
           Center(
             child: Text(
@@ -43,7 +57,7 @@ class WiredashSettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Wiredash(
+    return Wiredash(
       projectId: 'comfy-space-suggestion-bo04w4e',
       secret: 'tFVPfkMoISZKN9cF8dl2_RGM4Trtmh-9',
       feedbackOptions: WiredashFeedbackOptions(
