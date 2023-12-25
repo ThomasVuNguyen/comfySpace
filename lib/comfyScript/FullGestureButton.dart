@@ -112,6 +112,7 @@ class _ComfyFullGestureButtonState extends State<ComfyFullGestureButton> {
               });
             }
           },
+
           onVerticalDragEnd: (dragDetail){
             if(direction =='up'){
               UpFunction();
@@ -122,6 +123,7 @@ class _ComfyFullGestureButtonState extends State<ComfyFullGestureButton> {
               print(direction);
             }
           },
+
           onHorizontalDragEnd: (dragDetail){
             if(direction =='right'){
               RightFunction();

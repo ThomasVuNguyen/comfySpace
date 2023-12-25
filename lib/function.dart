@@ -1,4 +1,5 @@
 
+import 'package:comfyssh_flutter/comfyScript/CustomButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:comfyssh_flutter/main.dart';
@@ -569,6 +570,8 @@ Widget ButtonSorting(int id, String name, String buttonType, String spaceName, S
       return ComfyFullGestureButton(name: name, hostname: hostname, username: username, password: password, middle: CommandExtract(command)[0], left: CommandExtract(command)[1], right: CommandExtract(command)[2], up: CommandExtract(command)[3], down: CommandExtract(command)[4]) ;
     case 'Buzzer':
       return BuzzerToggle(spaceName: spaceName, name: name, pin: command, id: id, hostname: hostname, username: username, password: password,terminal: terminal);
+    case 'ComfyCustomGestureButton':
+      return CustomComfyGestureButton(name: name, hostname: hostname, username: username, password: password, OverallCommand: command);
       default:
       return ListTile(
         title: Text(name),

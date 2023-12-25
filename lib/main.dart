@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:comfyssh_flutter/comfyScript/Buzzer.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyVerticalSwipeButton.dart';
+import 'package:comfyssh_flutter/comfyScript/CustomButton.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
@@ -937,10 +938,8 @@ class _spacePageState extends State<spacePage> {
     return ScreenRecorder(
       width: double.infinity, height: double.infinity,
       controller: _screenrecordctrl,
-      child: WillPopScope(
-          onWillPop: () async {
-            return false;
-          },
+      child: PopScope(
+          canPop: false,
           child: Scaffold(//uncomment mediaquery for windows build
             floatingActionButton: Container(height: 0, width: 0,
               child: Row(
@@ -1000,6 +999,7 @@ class _spacePageState extends State<spacePage> {
                           AddComfyToggleButton(spaceName: widget.spaceName),
                           AddComfyFullGestureButton(spaceName: widget.spaceName),
                           AddComfyDataButton(spaceName: widget.spaceName),
+                          AddCustomComfyGestureButton(spaceName: widget.spaceName),
       
                       ],),
                       const Align(
@@ -1034,7 +1034,7 @@ class _spacePageState extends State<spacePage> {
                     updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal),
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
-                    CameraView(camera: _cameras[0]),
+                    //CameraView(camera: _cameras[0]),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: ClipRRect(
