@@ -18,17 +18,22 @@ List<String> CommandExtract(String command) {
 }
 
 class ComfyToggleButton extends StatefulWidget {
-  const ComfyToggleButton({super.key, required this.commandOn, required this.commandOff, required this.name, required this.hostname, required this.username, required this.password, required this.terminal});
+  const ComfyToggleButton({super.key, required this.commandOn, required this.commandOff, required this.name,
+    required this.hostname, required this.username, required this.password, required this.terminal, this.isCustom = false,
+    this.CustomWidgetOn = Icons.abc, this.CustomWidgetOff = Icons.abc_outlined});
   final String name;
   final String commandOn; final String commandOff;
   final String hostname; final String username; final String password;
-  final Terminal terminal;
+  final Terminal terminal;  final bool isCustom;
+  final IconData CustomWidgetOn; final IconData CustomWidgetOff;
   @override
   State<ComfyToggleButton> createState() => _ComfyToggleButtonState();
 }
 
 class _ComfyToggleButtonState extends State<ComfyToggleButton> {
   bool toggleState=false; bool SSHLoadingFinished = false;
+  Color ToggleColorOn = Color(0xffD1FFD9); Color ToggleColorOff = Color(0xffA0ABC0);
+  Color AccentColorOn = Color(0xff2EDB4B); Color AcccentColorOff = Color(0xffEDF0F7);
   late SSHClient client;
   @override
   void initState(){
@@ -87,13 +92,18 @@ class _ComfyToggleButtonState extends State<ComfyToggleButton> {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black, width: 2),
                   borderRadius: BorderRadius.circular(24.0),
-                  color: toggleState? Colors.white :Colors.black,
+                  color: toggleState? ToggleColorOn :ToggleColorOff,
                 ),
-                child: Center(child: toggleState? const Icon(Icons.toggle_on, size: 60,color: Colors.black,) :const Icon(Icons.toggle_off, size: 60,color: Colors.white,),),
+                child: Center(child: toggleState? Icon(
+                    (widget.isCustom == true)? Icons.light :Icons.toggle_on,
+                    size: 60,color: AccentColorOn)
+                    :Icon(
+                    (widget.isCustom == true)? widget.CustomWidgetOff :Icons.toggle_off,
+                    size: 60,color: AcccentColorOff),),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18, color:!toggleState? Colors.white :Colors.black, )),
+                child: Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18, color:!toggleState? Colors.black :Colors.black, )),
               ),
             ],
 

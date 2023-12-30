@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:xterm/core.dart';
 
 class updateRepoWidget extends StatefulWidget {
-  const updateRepoWidget({super.key, required this.hostname, required this.username, required this.password, required this.terminal});
-  final String hostname; final String username; final String password; final Terminal terminal;
+  const updateRepoWidget({super.key, required this.hostname, required this.username, required this.password, required this.terminal, required this.spacename});
+  final String hostname; final String username; final String password; final Terminal terminal;final String spacename;
   @override
   State<updateRepoWidget> createState() => _updateRepoWidgetState();
 }
@@ -99,10 +100,10 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
                         builder: (c,s){
                         if(s.connectionState == ConnectionState.done){
                           widget.terminal.write('Hi, I am a collapsible terminal\r\n');
-                          return const SizedBox(width: 0, height: 0,);
+                          return Text(widget.spacename);
                         }
                         else{
-                          return const Text("Enjoy");
+                          return Text("Enjoy", style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18, color: Colors.black));
                         }
                         }
                         );
@@ -110,8 +111,8 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
                   else{
                     return Row(mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Loading Space, please wait ..."),
-                        Image.asset('assets/DuckHopRun.gif', height: 40, gaplessPlayback: true,),
+                        Text("Loading Space, ...",style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 18, color: Colors.black)),
+                        Image.asset('assets/DuckHopRun.gif', height: 20, gaplessPlayback: true,),
                       ],
                     );
                   }
@@ -119,8 +120,8 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
                 )
             : Row(mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Updating your Raspberry Pi, dont touch anything'),
-                Image.asset('assets/DuckHopRun.gif', height: 40, gaplessPlayback: true,),
+                Text('Updating RPi  ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18, color: Colors.black)),
+                Image.asset('assets/DuckHopRun.gif', height: 20, gaplessPlayback: true,),
               ],
             ),
       );

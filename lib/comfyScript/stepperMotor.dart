@@ -1,3 +1,4 @@
+import 'package:comfyssh_flutter/comfyScript/ComfyHorizontalSwipeButton.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
@@ -65,68 +66,12 @@ class _StepperMotorState extends State<StepperMotor> {
     }
     @override
     Widget build(BuildContext context) {
-        if(SSHLoadingFinished == true){
-            return Padding(
-                padding: const EdgeInsets.all(buttonPadding),
-                child: GestureDetector(
-                    onHorizontalDragStart: (dragDetail){
-                    },
-                    onHorizontalDragUpdate: (dragDetail){
-                        if(dragDetail.primaryDelta!>0){
-                            //clockwise
-                            setState(() {index = 1;direction = 'down';});
-
-                        }
-                        else if(dragDetail.primaryDelta!<0){
-                            //counter-clockwise
-                            setState(() {index = 2;direction = 'up';});
-                        }
-                    },
-                    onHorizontalDragEnd: (dragDetail){
-                        if(direction == 'up'){
-                            motorRun(-1);
-                            print(direction);
-                        }
-                        if(direction =='down'){
-                            motorRun(1);
-                            print(direction);
-                        }
-                    },
-                    onTap: (){
-                        direction = 'pause';
-                        motorRun(0);
-                        setState(() {index = 0;});
-                        print(direction);
-                    },
-                    child: Stack(
-                        alignment: AlignmentDirectional.topCenter,
-                        children: <Widget>[
-                            Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black, width: 2),
-                                    borderRadius: BorderRadius.circular(24.0),
-                                    //color: Colors.grey[900],
-                                    color: motorColor[index],
-                                ),
-                                child: Center(child: motorIcon[index]),
-                            ),
-                            Padding(
-                                padding: const EdgeInsets.only(top:8.0),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                        Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18),),
-                                        direction == "pause"? const Icon(Icons.arrow_right): const SizedBox(height: 0, width: 0,),
-                                    ],
-                                ),
-                            ),
-                        ]
-                    )
-                ),
-            );}
-        else{
-            return const LoadingSpaceWidget();
-        }
+        return ComfyHorizontalButton(
+            name: widget.name,
+            hostname: widget.hostname, username: widget.username, password: widget.password,
+            left: stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, '1'),
+            right: stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, '-1'),
+            middle: stepperMotor(widget.pin1, widget.pin2, widget.pin3, widget.pin4, '0'),);
     }
 }
 

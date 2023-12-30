@@ -26,8 +26,8 @@ class _ComfyHorizontalButtonState extends State<ComfyHorizontalButton> {
   String direction = 'middle';
   late SSHClient client;
   int index = 1;
-  List<Widget> buttonIcon = [const Icon(Icons.arrow_left, size: 60), const Icon(Icons.pause_circle_filled, size: 60), const Icon(Icons.arrow_right, size:60)];
-  List<Color> buttonColor = [Colors.red,const Color.fromARGB(44, 164, 167, 189),Colors.red];
+  List<Widget> buttonIcon = [const Icon(Icons.arrow_left, size: 60, color: Color(0xffFE9D35),), const Icon(Icons.pause_circle_filled, size: 60), const Icon(Icons.arrow_right, size:60, color: Color(0xffFE9D35),)];
+  List<Color> buttonColor = [Color(0xffFED7AD),Color(0xffA0ABC0),Color(0xffFED7AD)];
   @override
   void initState(){
     super.initState();
@@ -119,8 +119,8 @@ class _ComfyHorizontalButtonState extends State<ComfyHorizontalButton> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18),),
-                    direction == "middle"? const Icon(Icons.arrow_right): const SizedBox(height: 0, width: 0,),
+                    Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18, color: Colors.black),),
+                    direction == "middle"? const Icon(Icons.arrow_right, color: Colors.black): const SizedBox(height: 0, width: 0,),
                   ],
                 ),
               ),

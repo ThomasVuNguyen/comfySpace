@@ -11,6 +11,7 @@ import '../components/custom_widgets.dart';
 import '../components/pop_up.dart';
 import '../function.dart';
 import '../main.dart';
+import 'ComfyToggleButton.dart';
 
 String toggleBuzzer(String pinOut, bool isToggled){
   if(isToggled == true){
@@ -67,6 +68,19 @@ class _BuzzerToggleState extends State<BuzzerToggle> {
   }
   @override
   Widget build(BuildContext context) {
+    return ComfyToggleButton(
+      commandOn: toggleBuzzer(widget.pin.toString(), false),
+      commandOff: toggleBuzzer(widget.pin.toString(), true),
+      name: widget.spaceName,
+      hostname: widget.hostname,
+      username: widget.username,
+      password: widget.password,
+      terminal: widget.terminal,
+      isCustom: true,
+      CustomWidgetOff: Icons.volume_off,
+      CustomWidgetOn: Icons.campaign,
+    );
+    /*
     if(SSHLoadingFinished == true){
       return GestureDetector(
           onTap: () async {
@@ -109,7 +123,7 @@ class _BuzzerToggleState extends State<BuzzerToggle> {
       );}
     else{
       return const LoadingSpaceWidget();
-    }
+    }*/
   }
 }
 

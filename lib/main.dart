@@ -941,6 +941,7 @@ class _spacePageState extends State<spacePage> {
       child: PopScope(
           canPop: false,
           child: Scaffold(//uncomment mediaquery for windows build
+            backgroundColor: Color(0xff717D96),
             floatingActionButton: Container(height: 0, width: 0,
               child: Row(
                 children: [
@@ -999,8 +1000,7 @@ class _spacePageState extends State<spacePage> {
                           AddComfyToggleButton(spaceName: widget.spaceName),
                           AddComfyFullGestureButton(spaceName: widget.spaceName),
                           AddComfyDataButton(spaceName: widget.spaceName),
-                          AddCustomComfyGestureButton(spaceName: widget.spaceName),
-      
+                          //AddCustomComfyGestureButton(spaceName: widget.spaceName),
                       ],),
                       const Align(
                         alignment: FractionalOffset.bottomRight,
@@ -1020,6 +1020,7 @@ class _spacePageState extends State<spacePage> {
                 child: comfyAppBar(
                   endDrawer: true,
                   IsSpacePage: true,
+                    titleWidget: updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal, spacename: widget.spaceName,),
                     //automaticallyImplyLeading: true,
                     title: widget.spaceName + context.watch<SpaceEdit>().EditSpaceState.toString()
                 )),
@@ -1030,8 +1031,8 @@ class _spacePageState extends State<spacePage> {
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal),
+                  children: [//uncomment updaterepowidget after  testing
+                    //updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal),
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     //CameraView(camera: _cameras[0]),

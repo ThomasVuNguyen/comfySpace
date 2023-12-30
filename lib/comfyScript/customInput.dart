@@ -72,6 +72,9 @@ class _CustomInputButtonState extends State<CustomInputButton> {
   }
   @override
   Widget build(BuildContext context) {
+
+    Color textColor = Colors.black;
+    Color DataBGColor = Color(0xff34AFF7);
     if (SSHLoaded == true){
       return StreamBuilder(
           stream: readInputStream(client, widget.commandIn),
@@ -79,15 +82,17 @@ class _CustomInputButtonState extends State<CustomInputButton> {
             if(snapshot.hasData){
               return Padding(padding: const EdgeInsets.all(buttonPadding),
                   child: Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(24.0), color: Colors.grey[900]),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: 2),
+                        borderRadius: BorderRadius.circular(24.0), color: DataBGColor),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 25.0),
                       child: Stack(
                           alignment: AlignmentDirectional.topCenter,
                           children:[
                             const SizedBox(height: 4),
-                            Text(widget.name,style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 18),),
-                            Center(child: Text(snapshot.data!, style: const TextStyle(color: Colors.orange, fontSize: 18))),
+                            Text(widget.name,style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 18, color: textColor),),
+                            Center(child: Text(snapshot.data!, style: TextStyle(color: textColor, fontSize: 18))),
                           ]
                       ),
                     ),

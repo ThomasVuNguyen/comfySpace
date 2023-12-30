@@ -1,15 +1,20 @@
 import 'dart:async';
+import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
 import 'package:comfyssh_flutter/components/pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:xterm/xterm.dart';
 import '../function.dart';
 import '../main.dart';
 
 const double buttonPadding = 8.0;
 
 class comfyAppBar extends StatefulWidget {
-  const comfyAppBar({super.key, required this.title, this.WiredashWidget, this.automaticallyImplyLeading = false, this.IsSpacePage = false, this.endDrawer = false});
+  const comfyAppBar({
+    super.key, required this.title, this.WiredashWidget, this.automaticallyImplyLeading = false, this.IsSpacePage = false,
+    this.endDrawer = false,this.titleWidget});
   final String title; final Widget? WiredashWidget; final bool automaticallyImplyLeading; final bool IsSpacePage; final bool endDrawer;
+  final Widget? titleWidget;
   @override
   State<comfyAppBar> createState() => _comfyAppBarState();
 }
@@ -18,6 +23,7 @@ class _comfyAppBarState extends State<comfyAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+        backgroundColor: Color(0xff717D96),
       leading: (widget.IsSpacePage == true)? IconButton(onPressed: (){
         Navigator.push(
           context,
@@ -43,7 +49,7 @@ class _comfyAppBarState extends State<comfyAppBar> {
       titleSpacing: 20,
       title: Row(
         children: <Widget>[
-          Text(widget.title,),
+          (widget.IsSpacePage == true)? Container(child: widget.titleWidget,) :Text(widget.title,),
         ],
       ),
       elevation: 0,
