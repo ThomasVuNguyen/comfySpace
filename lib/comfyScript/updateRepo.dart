@@ -100,7 +100,7 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
                         builder: (c,s){
                         if(s.connectionState == ConnectionState.done){
                           widget.terminal.write('Hi, I am a collapsible terminal\r\n');
-                          return Text(widget.spacename);
+                          return Text(widget.spacename, style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white),);
                         }
                         else{
                           return Text("Enjoy", style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18, color: Colors.black));
@@ -111,7 +111,7 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
                   else{
                     return Row(mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Loading Space, ...",style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 18, color: Colors.black)),
+                        Text("Loading Space",style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 18, color: Colors.black)),
                         Image.asset('assets/DuckHopRun.gif', height: 20, gaplessPlayback: true,),
                       ],
                     );

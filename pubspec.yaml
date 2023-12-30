@@ -60,6 +60,7 @@ dependencies:
   lan_scanner: ^4.0.0+1
   dart_ping_ios: ^4.0.2
   screen_recorder: ^0.2.0
+  knob_widget: ^1.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

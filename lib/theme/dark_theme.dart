@@ -19,19 +19,27 @@ ThemeData darkMode = ThemeData(
     backgroundColor: Colors.red,
   ),
   listTileTheme: const ListTileThemeData(
-    tileColor: Color(0xff36343B),
-    textColor: Color(0xffE6E0E9),
+    tileColor:Color(0xffEDF0F7),
+    //Color(0xff36343B),
+    textColor: Colors.black
+    //Color(0xffE6E0E9),
   ),
   useMaterial3: true,
   brightness: Brightness.dark,
   appBarTheme: AppBarTheme(
     color: const Color(0xff141218),
-    titleTextStyle: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 22, color: const Color(0xffCAC4D0)),
+    titleTextStyle: GoogleFonts.poppins(
+        fontWeight: FontWeight.bold,
+        fontSize: 22,
+        color: Colors.white
+      //const Color(0xffCAC4D0)
+    ),
 
   ),
 
     colorScheme: const ColorScheme.dark(
-      background: Color(0xff141218),
+      background: Color(0xff4A5468),
+      //Color(0xff141218),
       primary: Color(0xff4F378B),
       onPrimary: Color(0xffEADDFF),
       primaryContainer: Color(0xff4F378B),

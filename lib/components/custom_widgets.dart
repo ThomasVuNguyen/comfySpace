@@ -22,37 +22,40 @@ class comfyAppBar extends StatefulWidget {
 class _comfyAppBarState extends State<comfyAppBar> {
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-        backgroundColor: Color(0xff717D96),
-      leading: (widget.IsSpacePage == true)? IconButton(onPressed: (){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) =>  const WireDashComfySpacePage()),
-        );
-      }, icon: const Icon(Icons.arrow_back_ios)) : const SizedBox(height: 0, width: 0,),
-      automaticallyImplyLeading: widget.automaticallyImplyLeading,
-      actions: [
-        Row(
-          children: [
-            (widget.WiredashWidget != null)? widget.WiredashWidget! :const SizedBox(width: 0,),
-            (widget.endDrawer != null)? IconButton(onPressed: (){
-              Scaffold.of(context).openEndDrawer();
-            }, icon: const Icon(Icons.add)) :const SizedBox(width: 0,),
-            const SizedBox(width: 10,),
-          ],
-        )
-      ],
-      iconTheme: const IconThemeData(
-        //color: textcolor,
-      ),
-      toolbarHeight: 64,
-      titleSpacing: 20,
-      title: Row(
-        children: <Widget>[
-          (widget.IsSpacePage == true)? Container(child: widget.titleWidget,) :Text(widget.title,),
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(64.0),
+      child: AppBar(
+          backgroundColor: Color(0xff717D96),
+        leading: (widget.IsSpacePage == true)? IconButton(onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>  const WireDashComfySpacePage()),
+          );
+        }, icon: const Icon(Icons.arrow_back_ios)) : const SizedBox(height: 0, width: 0,),
+        automaticallyImplyLeading: widget.automaticallyImplyLeading,
+        actions: [
+          Row(
+            children: [
+              (widget.WiredashWidget != null)? widget.WiredashWidget! :const SizedBox(width: 0,),
+              (widget.endDrawer != null)? IconButton(onPressed: (){
+                Scaffold.of(context).openEndDrawer();
+              }, icon: const Icon(Icons.add)) :const SizedBox(width: 0,),
+              const SizedBox(width: 10,),
+            ],
+          )
         ],
+        iconTheme: const IconThemeData(
+          //color: textcolor,
+        ),
+        toolbarHeight: 64,
+        titleSpacing: 20,
+        title: Row(
+          children: <Widget>[
+            (widget.IsSpacePage == true)? Container(child: widget.titleWidget,) :Text(widget.title,),
+          ],
+        ),
+        elevation: 0,
       ),
-      elevation: 0,
     );
   }
 }
@@ -122,7 +125,12 @@ class _spaceTileState extends State<spaceTile> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => spacePage(spaceName: widget.spaceName, hostname: hostNameHolder, username: userNameHolder, password: passwordHolder)),);
                   print("$userNameHolder@$hostNameHolder");
                 },
-                shape: RoundedRectangleBorder(side: BorderSide(width: 2, color: Theme.of(context).colorScheme.tertiary), borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0), bottomLeft: Radius.circular(8.0), topRight: Radius.circular(8.0), bottomRight: Radius.circular(8.0)), ),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(width: 2,
+                      color: Colors.black
+                    //Theme.of(context).colorScheme.tertiary
+                  ),
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0), bottomLeft: Radius.circular(8.0), topRight: Radius.circular(8.0), bottomRight: Radius.circular(8.0)), ),
                   title: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(widget.spaceName, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 18),),

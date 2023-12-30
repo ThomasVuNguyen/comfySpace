@@ -80,50 +80,6 @@ class _BuzzerToggleState extends State<BuzzerToggle> {
       CustomWidgetOff: Icons.volume_off,
       CustomWidgetOn: Icons.campaign,
     );
-    /*
-    if(SSHLoadingFinished == true){
-      return GestureDetector(
-          onTap: () async {
-            setState((){
-              toggleState = !toggleState;
-              print(toggleState.toString());
-            });
-            if (toggleState == true){
-              widget.terminal.write('\r\nBuzzer ${widget.pin} on ');
-            }
-            else{
-              widget.terminal.write('\r\nBuzzer ${widget.pin} off ');
-            }
-            //HapticFeedback.vibrate();
-            SystemSound.play(SystemSoundType.click);
-            var command = await client.run(toggleBuzzer(widget.pin.toString(), toggleState));
-            print(toggleState);
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(buttonPadding),
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2),
-                    borderRadius: BorderRadius.circular(24.0),
-                    color: toggleState? Colors.white :Colors.black,
-                  ),
-                  child: Center(child: toggleState? const Icon(Icons.campaign, size: 60,color: Colors.black,) :const Icon(Icons.volume_off, size: 60,color: Colors.white,),),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text('${widget.name} ',style: GoogleFonts.poppins( fontWeight: FontWeight.w400, fontSize: 18, color:!toggleState? Colors.white :Colors.black, )),
-                ),
-              ],
-
-            ),
-          )
-      );}
-    else{
-      return const LoadingSpaceWidget();
-    }*/
   }
 }
 

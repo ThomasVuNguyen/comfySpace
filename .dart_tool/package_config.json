@@ -470,6 +470,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "knob_widget",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/knob_widget-1.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "lan_scanner",
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/lan_scanner-4.0.0+1",
       "packageUri": "lib/",
@@ -1016,7 +1022,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-12-30T14:28:24.300915Z",
+  "generated": "2023-12-30T20:49:54.384571Z",
   "generator": "pub",
   "generatorVersion": "3.2.3"
 }

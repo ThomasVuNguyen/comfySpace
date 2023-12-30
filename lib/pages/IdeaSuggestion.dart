@@ -1,3 +1,4 @@
+import 'package:comfyssh_flutter/comfyScript/ComfyRotatingKnob.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wiredash/wiredash.dart';
@@ -11,7 +12,7 @@ class IdeaSuggestionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset('assets/duck.gif', height: 40, gaplessPlayback: true,),
           Text(
@@ -32,6 +33,7 @@ class IdeaSuggestionPage extends StatelessWidget {
             color: Colors.blue,
             child: Text("Suggest an idea!", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
           ),
+          ExperimentalWidgets()
         ],
       ),
     );
@@ -50,6 +52,31 @@ class WiredashIdeaPage extends StatelessWidget {
         email: EmailPrompt.hidden,
       ) ,
       child: IdeaSuggestionPage(),
+    );
+  }
+}
+
+class ExperimentalWidgets extends StatefulWidget {
+  const ExperimentalWidgets({super.key});
+
+  @override
+  State<ExperimentalWidgets> createState() => _ExperimentalWidgetsState();
+}
+
+class _ExperimentalWidgetsState extends State<ExperimentalWidgets> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Center(
+          child: Text(
+            'Here are some experimental widgets!\r\n',
+            style: GoogleFonts.poppins( fontWeight: FontWeight.w500, fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        ComfyRotatingKnob(),
+      ],
     );
   }
 }

@@ -613,6 +613,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.1"
+  knob_widget:
+    dependency: "direct main"
+    description:
+      name: knob_widget
+      sha256: a2c807e8d4e0bad25f5ece870e5379e6ce047ba7be3bf711bfb44ab1cd6a9e78
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   lan_scanner:
     dependency: "direct main"
     description:

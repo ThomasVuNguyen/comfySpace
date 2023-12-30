@@ -2,6 +2,8 @@ import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/main.dart';
 import 'package:flutter/material.dart';
 
+import '../comfyssh/comfyssh.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
   @override

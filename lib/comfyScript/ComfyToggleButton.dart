@@ -95,7 +95,7 @@ class _ComfyToggleButtonState extends State<ComfyToggleButton> {
                   color: toggleState? ToggleColorOn :ToggleColorOff,
                 ),
                 child: Center(child: toggleState? Icon(
-                    (widget.isCustom == true)? Icons.light :Icons.toggle_on,
+                    (widget.isCustom == true)? widget.CustomWidgetOn :Icons.toggle_on,
                     size: 60,color: AccentColorOn)
                     :Icon(
                     (widget.isCustom == true)? widget.CustomWidgetOff :Icons.toggle_off,
