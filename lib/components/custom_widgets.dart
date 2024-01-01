@@ -109,15 +109,10 @@ class _spaceTileState extends State<spaceTile> {
                   child: ClipRRect( borderRadius: BorderRadius.circular(12),
                     child: Container(
                       color: Theme.of(context).colorScheme.primary,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                              onPressed: (){
-                                editPrompt();
-                          }, icon: const Icon(Icons.edit_outlined, color: Color(0xffEADDFF),))
-                        ],
-                      ),
+                      child: IconButton(
+                          onPressed: (){
+                            editPrompt();
+                          }, icon: const Icon(Icons.edit_outlined, color: Color(0xffEADDFF),)),
                     ),
                   ),
                 ),

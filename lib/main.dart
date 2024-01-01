@@ -67,7 +67,7 @@ const keyGreen = Color(0xff3DDB87);
 late List<CameraDescription> _cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  _cameras = await availableCameras();
+  //_cameras = await availableCameras();
 
   memoryCheck();
   //final appDocDirectory = await getApplicationDocumentsDirectory();
