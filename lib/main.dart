@@ -16,6 +16,7 @@ import 'package:comfyssh_flutter/components/pop_up.dart';
 import 'package:comfyssh_flutter/components/virtual_keyboard.dart';
 import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/pages/AboutUs.dart';
+import 'package:comfyssh_flutter/pages/IDE.dart';
 import 'package:comfyssh_flutter/pages/IdeaSuggestion.dart';
 import 'package:comfyssh_flutter/pages/NetworkScan.dart';
 import 'package:comfyssh_flutter/pages/settings.dart';
@@ -153,12 +154,14 @@ class _comfySpaceState extends State<comfySpace> {
     ),
     //const WiredashSettingPage(),
     const WiredashIdeaPage(),
+    ComfyIDE(),
     const AboutUs(),
   ];
   final List<GButton> BottomBarButtonList = [
     GButton(icon: Icons.home, text: 'Home'),
     //GButton(icon: Icons.settings, ),
     GButton(icon: Icons.lightbulb, text: 'Experimental'),
+    GButton(icon: Icons.text_fields, text: 'Snippet'),
     GButton(icon: Icons.public, text: 'Documentation'),
   ];
 
