@@ -15,7 +15,10 @@ import '../function.dart';
 import '../main.dart';
 
 class SinglePressButton extends StatefulWidget {
-  const SinglePressButton({super.key, required this.name, required this.hostname, required this.username, required this.password, required this.command, required this.terminal});
+  const SinglePressButton({super.key,
+    required this.name,
+    required this.hostname, required this.username, required this.password,
+    required this.command, required this.terminal});
   final String name; final String hostname; final String username; final String password; final String command; final Terminal terminal;
   @override
   State<SinglePressButton> createState() => _SinglePressButtonState();

@@ -13,6 +13,8 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<key>NSMicrophoneUsageDescription</key>
 	<string>comfyspace</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>

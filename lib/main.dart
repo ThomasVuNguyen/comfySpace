@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:comfyssh_flutter/comfyScript/Buzzer.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyVerticalSwipeButton.dart';
+import 'package:comfyssh_flutter/comfyScript/ComfyVoice.dart';
 import 'package:comfyssh_flutter/comfyScript/CustomButton.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
@@ -505,6 +506,10 @@ class _spacePageState extends State<spacePage> {
                           AddComfyDataButton(spaceName: widget.spaceName),
                           //AddCustomComfyGestureButton(spaceName: widget.spaceName),
                       ],),
+                      TextButton(onPressed: (){
+                       addVoiceButton('comfySpace.db', widget.spaceName, '', 1, 1, 1, '', 'ComfyVoice');
+                      }, child: Text('vvoice')),
+                      //AddComfyVoiceButton(spaceName: widget.spaceName),
                       const Align(
                         alignment: FractionalOffset.bottomRight,
                         child: Padding(
