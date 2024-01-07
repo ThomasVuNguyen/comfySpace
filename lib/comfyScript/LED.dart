@@ -72,7 +72,7 @@ class _LedToggleState extends State<LedToggle> {
     return ComfyToggleButton(
         commandOn: toggleLED(widget.pin.toString(), false),
         commandOff: toggleLED(widget.pin.toString(), true),
-        name: widget.spaceName,
+        name: widget.name,
         hostname: widget.hostname,
         username: widget.username,
         password: widget.password,

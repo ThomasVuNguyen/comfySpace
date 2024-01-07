@@ -239,16 +239,21 @@ class _EditSpaceDialogState extends State<EditSpaceDialog> {
   }
 }
 
-class ButtonAlertDialog extends StatelessWidget {
+class ButtonAlertDialog extends StatefulWidget {
   const ButtonAlertDialog({super.key, required this.title, required this.content, required this.actions});
   final String title; final Widget content; final List <Widget> actions;
+  @override
+  State<ButtonAlertDialog> createState() => _ButtonAlertDialogState();
+}
 
+class _ButtonAlertDialogState extends State<ButtonAlertDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      scrollable: true,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
         contentPadding: const EdgeInsets.all(20.0),
-      title: Text(title), content: content, actions: actions
+      title: Text(widget.title), content: widget.content, actions: widget.actions
     );
   }
 }

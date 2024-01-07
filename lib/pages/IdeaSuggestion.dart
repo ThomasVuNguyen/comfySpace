@@ -1,5 +1,5 @@
 import 'package:comfyssh_flutter/comfyScript/ComfyRotatingKnob.dart';
-import 'package:comfyssh_flutter/comfyScript/ComfyVoice.dart';
+import 'package:comfyssh_flutter/comfyVoice/ComfyVoice.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wiredash/wiredash.dart';

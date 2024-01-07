@@ -328,7 +328,7 @@ Future<List<Map<String, Object?>>> checkHostInfo(String dbName) async{
 }
 
 Future<List<List<String>>> renderer(String spaceName) async{
-  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace','android_metadata'];
+  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace','android_metadata', 'comfyVoice','sqlite_autoindex_comfyVoice_1'];
   var dbName = 'comfySpace.db';
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
@@ -377,32 +377,10 @@ Future<void> addButton(String dbName, String spaceName, String name, int sizeX, 
   print("button added to `$spaceName` space");
 }
 
-Future<void> addVoiceButton(String dbName, String spaceName, int sizeX, int sizeY, int position, String command, String buttonType) async{
-  var dbPath = await getDatabasesPath();
-  String path = p.join(dbPath,dbName);
-  Database database = await openDatabase(path,
-      version:1,
-      onCreate: (Database db, version) async =>
-      await db.execute('CREATE TABLE `$spaceName`(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)')
-  );
-  /*var CheckIfVoiceExists = await database.rawQuery(''
-      'SELECT CASE WHEN EXISTS( SELECT * FROM `$spaceName` WHERE name = "'"ComfyVoce"'") THEN CAST (1 AS BIT) ELSE CAST (0 AS BIT) END'
-      '');*/
-  var CheckIfVoiceExists = await database.rawQuery('SELECT EXISTS(SELECT 1 FROM `$spaceName` WHERE name="''ComfyVoicce''");');
-  print('exists voice');
-  print(CheckIfVoiceExists[0][CheckIfVoiceExists[0].keys.toList()[0]].toString());
-  if(CheckIfVoiceExists[0][CheckIfVoiceExists[0].keys.toList()[0]].toString() == '1'){
 
-  }
-  else if(CheckIfVoiceExists[0][CheckIfVoiceExists[0].keys.toList()[0]].toString()=='0'){
-    var addedButton = database.rawInsert('INSERT INTO `$spaceName`(name, size_x, size_y, position, command, buttonType) VALUES("'"ComfyVoice"'", $sizeX, $sizeY, $position, "'"$command"'","'"$buttonType"'")');
-  }
-  //var addedButton = database.rawInsert('INSERT INTO `$spaceName`(name, size_x, size_y, position, command, buttonType) VALUES("'"$name"'", $sizeX, $sizeY, $position, "'"$command"'","'"$buttonType"'")');
-  //print("button added to `$spaceName` space");
-}
 
 Future<List<String>> updateSpaceList(String dbName) async{
-  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace','android_metadata'];
+  List<String> prohibitedTable = ['hostInfo', 'sqlite_sequence','defaultSpace','android_metadata','comfyVoice','sqlite_autoindex_comfyVoice_1'];
   var dbName = 'comfySpace.db';
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
@@ -594,8 +572,6 @@ Widget? ButtonSorting(int id, String name, String buttonType, String spaceName, 
       return ComfyFullGestureButton(name: name, hostname: hostname, username: username, password: password, middle: CommandExtract(command)[0], left: CommandExtract(command)[1], right: CommandExtract(command)[2], up: CommandExtract(command)[3], down: CommandExtract(command)[4]) ;
     case 'Buzzer':
       return BuzzerToggle(spaceName: spaceName, name: name, pin: command, id: id, hostname: hostname, username: username, password: password,terminal: terminal);
-    case 'ComfyVoice':
-      return null;
     case 'ComfyCustomGestureButton':
       return CustomComfyGestureButton(name: name, hostname: hostname, username: username, password: password, OverallCommand: command);
       default:
