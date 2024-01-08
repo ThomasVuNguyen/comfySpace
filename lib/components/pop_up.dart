@@ -240,8 +240,8 @@ class _EditSpaceDialogState extends State<EditSpaceDialog> {
 }
 
 class ButtonAlertDialog extends StatefulWidget {
-  const ButtonAlertDialog({super.key, required this.title, required this.content, required this.actions});
-  final String title; final Widget content; final List <Widget> actions;
+  const ButtonAlertDialog({super.key, required this.title, required this.content, required this.actions, this.padding, this.width});
+  final String title; final Widget content; final List <Widget> actions; final double? padding; final double? width;
   @override
   State<ButtonAlertDialog> createState() => _ButtonAlertDialogState();
 }
@@ -250,10 +250,14 @@ class _ButtonAlertDialogState extends State<ButtonAlertDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      insetPadding: EdgeInsets.all(10.0),
       scrollable: true,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-        contentPadding: const EdgeInsets.all(20.0),
-      title: Text(widget.title), content: widget.content, actions: widget.actions
+        contentPadding: (widget.padding==null)? const EdgeInsets.all(20.0): EdgeInsets.all(widget.padding!),
+      title: Text(widget.title), content: SizedBox(
+      child: widget.content,
+      width: widget.width,
+    ), actions: widget.actions
     );
   }
 }

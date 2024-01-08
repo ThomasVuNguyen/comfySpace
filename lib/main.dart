@@ -496,12 +496,17 @@ class _spacePageState extends State<spacePage> {
                           //AddCustomComfyGestureButton(spaceName: widget.spaceName),
                       ],),
                       //AddComfyVoiceButton(spaceName: widget.spaceName),
-                      const Align(
-                        alignment: FractionalOffset.bottomRight,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: ButtonDocumentation()
-                        ),
+                      Row(
+                        children: [
+                          AddComfyVoiceButton(spaceName: widget.spaceName),
+                          const Align(
+                            alignment: FractionalOffset.bottomRight,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: ButtonDocumentation()
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ),

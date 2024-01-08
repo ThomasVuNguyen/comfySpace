@@ -115,77 +115,171 @@ class AddComfyVoiceButton extends StatefulWidget {
 class _AddComfyVoiceButtonState extends State<AddComfyVoiceButton> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-        title: Text('Voice', style: Theme.of(context).textTheme.titleMedium,),
-        onTap: () {
-          //var VoiceTable = await VoiceCommandExtracted('comfySpace.db', widget.spaceName);
-          //var VoiceTable = await CheckVoiceTable('comfySpace.db');
-          //print(VoiceTable);
-          Scaffold.of(context).closeEndDrawer();
-          showDialog(context: context, builder: (BuildContext context){
-            String buttonCommand = '';
-            String buttonPrompt = '';
-            return ButtonAlertDialog(
-                title: 'Voice',
-                content: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      FutureBuilder(
-                          future: VoiceCommandExtractedList('comfySpace.db', widget.spaceName),
-                          builder: (context, snapshot){
-                            if(snapshot.connectionState == ConnectionState.done){
-                              return SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Container(
-                                    height: 100,
-                                    width: double.infinity,
-                                    child: ListView.builder(
-                                        padding: EdgeInsets.all(8.0),
-                                        itemCount: snapshot.data?.length,
-                                        itemBuilder: (context, index){
-                                          return Row(
-                                            children: [
-                                              Text(snapshot.data?[index]['prompt']),
-                                              Text(snapshot.data?[index]['command']),
-                                            ],
-                                          );
-                                        }),
-                                  ),
-                                ),
-                              );
+    bool Expanded  = false;
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SpaceEdit())
+      ],
+      child: IconButton(
+          icon: Icon(Icons.mic),
+          onPressed: () {
+            //var VoiceTable = await VoiceCommandExtracted('comfySpace.db', widget.spaceName);
+            //var VoiceTable = await CheckVoiceTable('comfySpace.db');
+            //print(VoiceTable);
+            Scaffold.of(context).closeEndDrawer();
+            showDialog(context: context, builder: (BuildContext context){
+              String buttonCommand = '';
+              String buttonPrompt = '';
+              return ButtonAlertDialog(
+                width: MediaQuery.of(context).size.width,
+                padding: 8.0,
+                  title: 'Voice',
+                  content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FutureBuilder(
+                            future: VoiceCommandExtractedList('comfySpace.db', widget.spaceName),
+                            builder: (context, snapshot){
+                              if(snapshot.connectionState == ConnectionState.done){
+                                return ExpansionTile(
+                                  initiallyExpanded: true,
+                                  title: Text('Voice prompt list'),
+                                  children: [SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                          maxHeight: double.infinity,
+                                          minHeight: 100,
+                                        ),
+                                        height: 300,
+                                        //height: 500,
+                                        width: MediaQuery.of(context).size.width - 40,
+                                        child:
+                                        ListView.builder(
+                                            padding: EdgeInsets.all(12.0),
+                                            itemCount: snapshot.data?.length,
+                                            itemBuilder: (context, index){
+                                              return Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Flexible(
+                                                    child: Text(
+                                                      snapshot.data?[index]['prompt'],
+                                                      overflow: TextOverflow.ellipsis,
+                                                      softWrap: true,),
+                                                  ),
+                                                  Icon(Icons.arrow_right),
+                                                  Flexible(
+                                                    child: Text(
+                                                        snapshot.data?[index]['command'],
+                                                      overflow: TextOverflow.ellipsis,
+                                                      softWrap: true,
+                                                    ),
+                                                  ),
+                                                  Spacer(),
+                                                  IconButton(onPressed: (){
+                                                    showDialog(context: context, builder: (BuildContext context){
+                                                      String NewPrompt = snapshot.data?[index]['prompt'];
+                                                      String NewCommand = snapshot.data?[index]['command'];
+                                                      return ButtonAlertDialog(
+                                                          title: 'Edit voice prompt'+context.watch<SpaceEdit>().EditSpaceState.toString(),
+                                                          content:
+                                                            Column(
+                                                              children: [
+                                                                TextFormField(
+                                                                  keyboardType: TextInputType.multiline,
+                                                                  initialValue: snapshot.data?[index]['prompt'],
+                                                                  onChanged: (text){
+                                                                    NewPrompt = text;
+                                                                  },
+                                                                ),
+                                                                SizedBox(height: 10,),
+                                                                TextFormField(
+                                                                  keyboardType: TextInputType.multiline,
+                                                                  initialValue: snapshot.data?[index]['command'],
+                                                                  onChanged: (text){
+                                                                    NewCommand = text;
+                                                                  },
+                                                                )
+                                                              ],
+                                                            ),
 
+                                                          actions: [
+                                                            TextButton(
+                                                                onPressed: (){
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                child: Text('Cancel')),
+                                                            TextButton(
+                                                                onPressed: () async {
+                                                                  await EditVoicePrompt('comfySpace.db', widget.spaceName, snapshot.data?[index]['prompt'], snapshot.data?[index]['command'], NewPrompt, NewCommand, context);
+                                                                  Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                child: Text('Save')),
+                                                            TextButton(
+                                                                onPressed: () async {
+                                                                  await DeleteVoicePrompt('comfySpace.db', widget.spaceName, snapshot.data?[index]['prompt'], snapshot.data?[index]['command']);
+                                                                  Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                child: Text('Delete')),
+                                                          ]
+                                                      );
+                                                    });
+                                                  }, icon: Icon(Icons.edit))
+                                                ],
+                                              );
+                                            }),
+                                      ),
+                                    ),
+                                  ),]
+                                );
+                              }
+                              else{
+                                return Text('loading');
+                              }
 
-                            }
-                            else{
-                              return Text('loading');
-                            }
+                            }),
+                        ExpansionTile(
+                          childrenPadding: EdgeInsets.all(8.0),
+                          onExpansionChanged: (expanded){
+                            setState(() {
+                              Expanded = expanded;
+                              print(Expanded.toString());
+                            });
+                          },
+                            title: Text('Add a voice prompt'),
+                          children: [
+                            comfyTextField(onChanged: (prompt){
+                              buttonPrompt =prompt;
+                            }, text: 'prompt'),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(onChanged: (btnCommand){
+                              buttonCommand = btnCommand;
+                            }, text: 'command', keyboardType: TextInputType.multiline,),
+                            comfyActionButton(
+                              onPressed: () async {
+                                await addVoicePrompt('comfySpace.db', widget.spaceName, buttonPrompt, buttonCommand, context);
+                                Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
+                                //Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        )
 
-                          }),
-                      comfyTextField(onChanged: (prompt){
-                        buttonPrompt =prompt;
-                      }, text: 'prompt'),
-                      const SizedBox(height: 32, width: double.infinity,),
-                      comfyTextField(onChanged: (btnCommand){
-                        buttonCommand = btnCommand;
-                      }, text: 'command', keyboardType: TextInputType.multiline,),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                actions: [
-                  comfyActionButton(
-                    onPressed: () async {
-                      await addVoicePrompt('comfySpace.db', widget.spaceName, buttonPrompt, buttonCommand, context);
-                      Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
-                      Navigator.pop(context);
-
-                    },
-                  ),
-                ]);
-          });
-        }
+                  actions: [
+                  ]);
+            });
+          }
+      ),
     );
   }
 }
+

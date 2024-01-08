@@ -25,6 +25,53 @@ Future<void> addVoicePrompt(String dbName, String spaceName, String prompt, Stri
   );
   print('inserted');
 }
+
+Future<void> DeleteVoicePrompt(String dbName, String spaceName, String prompt, String command) async{
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE comfyVoice(id INTEGER PRIMARY KEY AUTOINCREMENT, SpaceName TEXT, prompt TEXT UNIQUE, command TEXT)')
+  );
+
+  //var CreateDB =await database.execute('CREATE TABLE comfyVoice(id INTEGER PRIMARY KEY AUTOINCREMENT, SpaceName TEXT, prompt TEXT, command TEXT)');
+  var VoicePrompt = {
+    'SpaceName': spaceName,
+    'prompt': prompt,
+    'command':  command
+  };
+  var addedButton = await database.delete(
+    'comfyVoice',
+    where:  'Command = ?',
+    whereArgs: [command]
+  );
+  print('deleted');
+}
+
+Future<void> EditVoicePrompt(String dbName, String spaceName, String prompt, String command, String NewPrompt, String NewCommand, BuildContext context) async{
+  var dbPath = await getDatabasesPath();
+  String path = p.join(dbPath,dbName);
+  Database database = await openDatabase(path,
+      version:1,
+      onCreate: (Database db, version) async =>
+      await db.execute('CREATE TABLE comfyVoice(id INTEGER PRIMARY KEY AUTOINCREMENT, SpaceName TEXT, prompt TEXT UNIQUE, command TEXT)')
+  );
+
+  //var CreateDB =await database.execute('CREATE TABLE comfyVoice(id INTEGER PRIMARY KEY AUTOINCREMENT, SpaceName TEXT, prompt TEXT, command TEXT)');
+  var VoicePrompt = {
+    'SpaceName': spaceName,
+    'prompt': NewPrompt,
+    'command':  NewCommand
+  };
+  var addedButton = await database.update(
+      'comfyVoice',
+      VoicePrompt,
+      where:  'Command = ?',
+      whereArgs: [command]
+  );
+}
+
 Future<void> CreateVoicePromptDB(String dbName) async{
   var dbPath = await getDatabasesPath();
   String path = p.join(dbPath,dbName);
