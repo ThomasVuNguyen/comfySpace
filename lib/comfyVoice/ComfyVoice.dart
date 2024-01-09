@@ -118,7 +118,7 @@ class _AddComfyVoiceButtonState extends State<AddComfyVoiceButton> {
     bool Expanded  = false;
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => SpaceEdit())
+        ChangeNotifierProvider(create: (context) => SpaceEdit()),
       ],
       child: IconButton(
           icon: Icon(Icons.mic),
@@ -131,20 +131,51 @@ class _AddComfyVoiceButtonState extends State<AddComfyVoiceButton> {
               String buttonCommand = '';
               String buttonPrompt = '';
               return ButtonAlertDialog(
+                color: Color(0xff2D3648),
                 width: MediaQuery.of(context).size.width,
                 padding: 8.0,
-                  title: 'Voice',
+                  title: 'Voice' + context.watch<SpaceEdit>().EditSpaceState.toString(),
                   content: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        ExpansionTile(
+                          childrenPadding: EdgeInsets.only(left: 8.0, right: 8.0, top: 14.0, bottom: 14.0),
+                          collapsedIconColor: Colors.black,
+                          onExpansionChanged: (expanded){
+                            setState(() {
+                              Expanded = expanded;
+                              print(Expanded.toString());
+                            });
+                          },
+                          title: Text('Add a voice prompt' , style: TextStyle(color: Colors.black),),
+                          children: [
+                            comfyTextField(onChanged: (prompt){
+                              buttonPrompt =prompt;
+                            }, text: 'prompt'),
+                            const SizedBox(height: 32, width: double.infinity,),
+                            comfyTextField(onChanged: (btnCommand){
+                              buttonCommand = btnCommand;
+                            }, text: 'command', keyboardType: TextInputType.multiline,),
+                            comfyActionButton(
+                              onPressed: () async {
+                                await addVoicePrompt('comfySpace.db', widget.spaceName, buttonPrompt, buttonCommand, context);
+                                Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
+                                //Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
                         FutureBuilder(
                             future: VoiceCommandExtractedList('comfySpace.db', widget.spaceName),
                             builder: (context, snapshot){
                               if(snapshot.connectionState == ConnectionState.done){
                                 return ExpansionTile(
-                                  initiallyExpanded: true,
-                                  title: Text('Voice prompt list'),
+                                  collapsedIconColor: Colors.black,
+                                  title: Text(
+                                      'Voice prompt list' + context.watch<SpaceEdit>().EditSpaceState.toString(),
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                   children: [SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
                                     child: SingleChildScrollView(
@@ -169,7 +200,9 @@ class _AddComfyVoiceButtonState extends State<AddComfyVoiceButton> {
                                                     child: Text(
                                                       snapshot.data?[index]['prompt'],
                                                       overflow: TextOverflow.ellipsis,
-                                                      softWrap: true,),
+                                                      softWrap: true,
+                                                      style: TextStyle(color: Colors.white),
+                                                    ),
                                                   ),
                                                   Icon(Icons.arrow_right),
                                                   Flexible(
@@ -177,6 +210,7 @@ class _AddComfyVoiceButtonState extends State<AddComfyVoiceButton> {
                                                         snapshot.data?[index]['command'],
                                                       overflow: TextOverflow.ellipsis,
                                                       softWrap: true,
+                                                      style: TextStyle(color: Colors.white),
                                                     ),
                                                   ),
                                                   Spacer(),
@@ -192,6 +226,7 @@ class _AddComfyVoiceButtonState extends State<AddComfyVoiceButton> {
                                                                 TextFormField(
                                                                   keyboardType: TextInputType.multiline,
                                                                   initialValue: snapshot.data?[index]['prompt'],
+                                                                  textInputAction: TextInputAction.next,
                                                                   onChanged: (text){
                                                                     NewPrompt = text;
                                                                   },
@@ -200,6 +235,7 @@ class _AddComfyVoiceButtonState extends State<AddComfyVoiceButton> {
                                                                 TextFormField(
                                                                   keyboardType: TextInputType.multiline,
                                                                   initialValue: snapshot.data?[index]['command'],
+                                                                  textInputAction: TextInputAction.next,
                                                                   onChanged: (text){
                                                                     NewCommand = text;
                                                                   },
@@ -208,29 +244,38 @@ class _AddComfyVoiceButtonState extends State<AddComfyVoiceButton> {
                                                             ),
 
                                                           actions: [
-                                                            TextButton(
-                                                                onPressed: (){
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Text('Cancel')),
-                                                            TextButton(
-                                                                onPressed: () async {
-                                                                  await EditVoicePrompt('comfySpace.db', widget.spaceName, snapshot.data?[index]['prompt'], snapshot.data?[index]['command'], NewPrompt, NewCommand, context);
-                                                                  Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Text('Save')),
-                                                            TextButton(
-                                                                onPressed: () async {
-                                                                  await DeleteVoicePrompt('comfySpace.db', widget.spaceName, snapshot.data?[index]['prompt'], snapshot.data?[index]['command']);
-                                                                  Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Text('Delete')),
+                                                            comfyActionButton(
+                                                              text: 'Cancel',
+                                                              color: Color(0xffFFD43A),
+                                                              textColor: Colors.black,
+                                                              onPressed: (){
+                                                                Navigator.pop(context);
+                                                              },
+                                                            ),
+                                                            comfyActionButton(
+                                                              text: 'Delete',
+                                                              color: Colors.red,
+                                                              textColor: Colors.black,
+                                                              onPressed: () async {
+                                                                await DeleteVoicePrompt('comfySpace.db', widget.spaceName, snapshot.data?[index]['prompt'], snapshot.data?[index]['command']);
+                                                                Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
+                                                                Navigator.pop(context);
+                                                              },
+                                                            ),
+                                                            comfyActionButton(
+                                                              text: 'Save',
+                                                              color: Colors.blue,
+                                                              textColor: Colors.black,
+                                                              onPressed: () async {
+                                                                await EditVoicePrompt('comfySpace.db', widget.spaceName, snapshot.data?[index]['prompt'], snapshot.data?[index]['command'], NewPrompt, NewCommand, context);
+                                                                Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
+                                                                Navigator.pop(context);
+                                                              },
+                                                            ),
                                                           ]
                                                       );
                                                     });
-                                                  }, icon: Icon(Icons.edit))
+                                                  }, icon: Icon(Icons.edit, color: Colors.white,))
                                                 ],
                                               );
                                             }),
@@ -244,33 +289,12 @@ class _AddComfyVoiceButtonState extends State<AddComfyVoiceButton> {
                               }
 
                             }),
-                        ExpansionTile(
-                          childrenPadding: EdgeInsets.all(8.0),
-                          onExpansionChanged: (expanded){
-                            setState(() {
-                              Expanded = expanded;
-                              print(Expanded.toString());
-                            });
+                        comfyActionButton(
+                          text: 'Cancel',
+                          onPressed: (){
+                            Navigator.pop(context);
                           },
-                            title: Text('Add a voice prompt'),
-                          children: [
-                            comfyTextField(onChanged: (prompt){
-                              buttonPrompt =prompt;
-                            }, text: 'prompt'),
-                            const SizedBox(height: 32, width: double.infinity,),
-                            comfyTextField(onChanged: (btnCommand){
-                              buttonCommand = btnCommand;
-                            }, text: 'command', keyboardType: TextInputType.multiline,),
-                            comfyActionButton(
-                              onPressed: () async {
-                                await addVoicePrompt('comfySpace.db', widget.spaceName, buttonPrompt, buttonCommand, context);
-                                Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
-                                //Navigator.pop(context);
-                              },
-                            ),
-                          ],
                         )
-
                       ],
                     ),
                   ),

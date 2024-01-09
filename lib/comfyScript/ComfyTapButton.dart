@@ -119,7 +119,8 @@ class _AddComfyTapButtonState extends State<AddComfyTapButton> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => SpaceEdit())
+        ChangeNotifierProvider(create: (context) => SpaceEdit()),
+
       ],
       child: ListTile(
           title: Text('Tap', style: Theme.of(context).textTheme.titleMedium,),

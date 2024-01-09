@@ -492,7 +492,6 @@ class _spacePageState extends State<spacePage> {
                           AddComfyToggleButton(spaceName: widget.spaceName),
                           AddComfyFullGestureButton(spaceName: widget.spaceName),
                           AddComfyDataButton(spaceName: widget.spaceName),
-                          AddComfyVoiceButton(spaceName: widget.spaceName)
                           //AddCustomComfyGestureButton(spaceName: widget.spaceName),
                       ],),
                       //AddComfyVoiceButton(spaceName: widget.spaceName),

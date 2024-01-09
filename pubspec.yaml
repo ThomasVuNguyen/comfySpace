@@ -3,7 +3,7 @@ description: A more comfortable SSH experience
 
 publish_to: 'none'
 
-version: 1.6.0+6
+version: 1.7.0+7
 
 environment:
   sdk: '>=2.19.6 <3.0.0'

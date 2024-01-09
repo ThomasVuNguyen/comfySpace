@@ -240,8 +240,8 @@ class _EditSpaceDialogState extends State<EditSpaceDialog> {
 }
 
 class ButtonAlertDialog extends StatefulWidget {
-  const ButtonAlertDialog({super.key, required this.title, required this.content, required this.actions, this.padding, this.width});
-  final String title; final Widget content; final List <Widget> actions; final double? padding; final double? width;
+  const ButtonAlertDialog({super.key, required this.title, required this.content, required this.actions, this.padding, this.width, this.color});
+  final String title; final Widget content; final List <Widget> actions; final double? padding; final double? width; final Color? color;
   @override
   State<ButtonAlertDialog> createState() => _ButtonAlertDialogState();
 }
@@ -250,6 +250,7 @@ class _ButtonAlertDialogState extends State<ButtonAlertDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: widget.color,
       insetPadding: EdgeInsets.all(10.0),
       scrollable: true,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
@@ -281,14 +282,14 @@ class comfyTextField extends StatelessWidget {
 }
 
 class comfyActionButton extends StatelessWidget {
-  const comfyActionButton({super.key, this.onPressed});
-  final void Function()? onPressed;
+  const comfyActionButton({super.key, this.onPressed, this.text = 'Done', this.color = Colors.teal, this.textColor = bgcolor});
+  final void Function()? onPressed; final String text; final Color color; final Color textColor;
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: onPressed,
-      color: Colors.teal,
-      child: Text("Done", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
+      color: color,
+      child: Text(text, style: GoogleFonts.poppins(fontSize: 18, color: textColor)),
     );
   }
 }
