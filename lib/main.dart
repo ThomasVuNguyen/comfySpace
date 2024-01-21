@@ -71,7 +71,6 @@ late List<CameraDescription> _cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //_cameras = await availableCameras();
-
   memoryCheck();
   //final appDocDirectory = await getApplicationDocumentsDirectory();
   //await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
@@ -84,10 +83,11 @@ Future<void> main() async {
   }
   reAssign();
   DartPingIOS.register();
+  createHostInfo();
   runApp(
     const MyApp());
-  createHostInfo();
-  CreateVoicePromptDB('comfySpace.db');
+
+  await CreateVoicePromptDB('comfySpace.db');
 }  //main function, execute MyApp
 
 class comfySpace extends StatefulWidget {

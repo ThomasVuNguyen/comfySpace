@@ -270,6 +270,7 @@ Future<void> createHostInfo() async{
   final List<FileSystemEntity> entities = await dbDirect.list().toList();
   //print(entities.toString());
   var path = p.join(dbPath, dbName);
+  print('creating hostinfo');
   var comfySpacedb = await openDatabase(path,
       version: version,
       onCreate: (Database db, version) async {
@@ -293,7 +294,7 @@ Future<void> createSpace(String spaceName, String host, String user, String pass
       await db.execute('CREATE TABLE `$spaceName`(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT)');
       await db.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');}
   );
-
+  //var createhostInfo = await comfySpacedb.execute('CREATE TABLE hostInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, spaceName TEXT, host Text, user TEXT, password TEXT)');
   var createTable = await comfySpacedb.execute('CREATE TABLE `$spaceName`(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, size_x INTEGER, size_y INTEGER, position INTEGER, command TEXT, buttonType TEXT)');
   List<Map> list = await comfySpacedb.rawQuery('SELECT * FROM `$spaceName`');
   var addHostInfo = await comfySpacedb.execute('INSERT INTO hostInfo(spaceName, host, user, password) VALUES($spaceNameAdd, $hostAdd, $userAdd, $passwordAdd)');

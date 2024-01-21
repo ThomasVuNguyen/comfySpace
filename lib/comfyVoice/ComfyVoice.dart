@@ -9,7 +9,6 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:xterm/xterm.dart';
-
 import '../function.dart';
 import 'ComfyVoiceDB.dart';
 
@@ -37,12 +36,21 @@ class _ComfyVoiceState extends State<ComfyVoice> {
   void initState(){
     super.initState();
     initClient();
+    /*if (Theme.of(context).platform!= TargetPlatform.windows && Theme.of(context).platform!=TerminalTargetPlatform.macos && Theme.of(context).platform!= TargetPlatform.linux){
+      ExtractVoiceCommand();
+      _initSpeech();
+    }*/
     ExtractVoiceCommand();
     _initSpeech();
+
   }
   @override
   void dispose(){
     super.dispose();
+    /*if (Theme.of(context).platform!= TargetPlatform.windows && Theme.of(context).platform!=TerminalTargetPlatform.macos && Theme.of(context).platform!= TargetPlatform.linux){
+      closeClient();
+      _stopListening();
+    }*/
     closeClient();
     _stopListening();
     print("closed");
@@ -90,17 +98,25 @@ class _ComfyVoiceState extends State<ComfyVoice> {
   }
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => SpaceEdit())
-      ],
-      child: FloatingActionButton(onPressed: (){
-        _speechToText.isNotListening?
-        _startListening()
-            : _stopListening();
-      },
+    if (Theme.of(context).platform!= TargetPlatform.windows && Theme.of(context).platform!=TerminalTargetPlatform.macos && Theme.of(context).platform!= TargetPlatform.linux){
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => SpaceEdit())
+        ],
+        child: FloatingActionButton(onPressed: (){
+          _speechToText.isNotListening?
+          _startListening()
+              : _stopListening();
+        },
           child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),),
-    );
+      );
+    }
+    else{
+      return Container(
+        height: 0, width: 0,
+      );
+    }
+
   }
 }
 
