@@ -11,4 +11,4 @@ PRODUCT_NAME = comfyspace
 PRODUCT_BUNDLE_IDENTIFIER = tech.comfyStudio.comfyspace
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 tech.comfyStudio. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 tech.comfyStudio. All rights reserved.
