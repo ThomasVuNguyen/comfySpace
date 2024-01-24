@@ -3,7 +3,7 @@ description: A more comfortable Raspberry Pi experience
 
 publish_to: 'none'
 
-version: 1.7.0+7
+version: 1.7.0+11
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
