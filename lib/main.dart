@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:camera/camera.dart';
 import 'package:comfyssh_flutter/comfyScript/Buzzer.dart';
+import 'package:comfyssh_flutter/comfyScript/ComfyCameraView.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyVerticalSwipeButton.dart';
 import 'package:comfyssh_flutter/comfyVoice/ComfyVoice.dart';
@@ -157,7 +158,8 @@ class _comfySpaceState extends State<comfySpace> {
     ),
     //const WiredashSettingPage(),
     const WiredashIdeaPage(),
-    ComfyIDE(),
+    ComfyCameraView(),
+    //ComfyIDE(),
     const AboutUs(),
   ];
   final List<GButton> BottomBarButtonList = [

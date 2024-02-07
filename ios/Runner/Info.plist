@@ -12,6 +12,10 @@
     <false/>
 	<key>NSCameraUsageDescription</key>
 	<string>Recording Raspberry Pi projects</string>
+	<key>NSAppTransportSecurity</key>
+    <dict>
+      <key>NSAllowsArbitraryLoads</key><true/>
+    </dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Collect optional user feedback</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

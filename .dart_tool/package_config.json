@@ -261,9 +261,45 @@
     },
     {
       "name": "flutter_inappwebview",
-      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_inappwebview-5.8.0",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_inappwebview-6.0.0",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_inappwebview_android",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_inappwebview_android-1.0.13",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_inappwebview_internal_annotations",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_inappwebview_internal_annotations-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "flutter_inappwebview_ios",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_inappwebview_ios-1.0.13",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_inappwebview_macos",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_inappwebview_macos-1.0.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_inappwebview_platform_interface",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_inappwebview_platform_interface-1.0.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_inappwebview_web",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_inappwebview_web-1.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_keyboard_visibility",
@@ -752,6 +788,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "screenshot",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/screenshot-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sembast",
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/sembast-3.5.0+1",
       "packageUri": "lib/",
@@ -1046,8 +1088,20 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "webview_flutter_web",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/webview_flutter_web-0.2.2+4",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "webview_flutter_wkwebview",
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.9.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "webview_universal",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/webview_universal-0.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -1094,7 +1148,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2024-01-24T04:32:06.606839Z",
+  "generated": "2024-02-07T03:54:22.267496Z",
   "generator": "pub",
   "generatorVersion": "3.2.5"
 }

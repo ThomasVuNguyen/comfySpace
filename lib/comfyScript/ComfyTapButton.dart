@@ -50,7 +50,6 @@ class _SinglePressButtonState extends State<SinglePressButton> {
     final shell = await client.shell();
     await shell.done;
     client.close();
-
   }
   Future<void> sendCommand() async{
     HapticFeedback.vibrate();

@@ -46,7 +46,7 @@ dependencies:
   salomon_bottom_bar: ^3.3.2
   google_nav_bar: ^5.0.6
   webview_flutter: ^4.2.4
-  flutter_inappwebview: ^5.7.2+3
+  flutter_inappwebview: ^6.0.0
   loading_animation_widget: ^1.2.0+4
   flutter_markdown: ^0.6.15
   wiredash: ^1.7.4
@@ -63,6 +63,8 @@ dependencies:
   knob_widget: ^1.0.3
   speech_to_text: ^6.5.1
   icons_launcher: ^2.0.7
+  webview_universal: ^0.0.5
+  screenshot: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

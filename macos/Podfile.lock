@@ -20,6 +20,8 @@ PODS:
     - FMDB (>= 2.7.5)
   - url_launcher_macos (0.0.1):
     - FlutterMacOS
+  - webview_universal (0.0.1):
+    - FlutterMacOS
 
 DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
@@ -30,6 +32,7 @@ DEPENDENCIES:
   - speech_to_text_macos (from `Flutter/ephemeral/.symlinks/plugins/speech_to_text_macos/macos`)
   - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
+  - webview_universal (from `Flutter/ephemeral/.symlinks/plugins/webview_universal/macos`)
 
 SPEC REPOS:
   trunk:
@@ -52,6 +55,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/sqflite/macos
   url_launcher_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
+  webview_universal:
+    :path: Flutter/ephemeral/.symlinks/plugins/webview_universal/macos
 
 SPEC CHECKSUMS:
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
@@ -63,6 +68,7 @@ SPEC CHECKSUMS:
   speech_to_text_macos: ae04291713998dede24b85d3b50bd8fedcbfb565
   sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
   url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
+  webview_universal: 3a173051d546df80bdb9d2f12861423cda2a16a1
 
 PODFILE CHECKSUM: c460c6404f9476610dd4b16528464769fd13b47f
 
