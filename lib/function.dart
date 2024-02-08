@@ -1,4 +1,5 @@
 
+import 'package:comfyssh_flutter/comfyScript/ComfyCameraView.dart';
 import 'package:comfyssh_flutter/comfyScript/CustomButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -575,6 +576,8 @@ Widget? ButtonSorting(int id, String name, String buttonType, String spaceName, 
       return BuzzerToggle(spaceName: spaceName, name: name, pin: command, id: id, hostname: hostname, username: username, password: password,terminal: terminal);
     case 'ComfyCustomGestureButton':
       return CustomComfyGestureButton(name: name, hostname: hostname, username: username, password: password, OverallCommand: command);
+    case 'ComfyCameraButton':
+      return ComfyCameraButton(name: name, hostname: hostname, terminal: terminal);
       default:
       return ListTile(
         title: Text(name),

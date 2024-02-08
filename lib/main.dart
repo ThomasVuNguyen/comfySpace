@@ -158,8 +158,8 @@ class _comfySpaceState extends State<comfySpace> {
     ),
     //const WiredashSettingPage(),
     const WiredashIdeaPage(),
-    ComfyCameraView(),
-    //ComfyIDE(),
+
+    ComfyIDE(),
     const AboutUs(),
   ];
   final List<GButton> BottomBarButtonList = [
@@ -479,6 +479,7 @@ class _spacePageState extends State<spacePage> {
                           AddComfyDCMotor(spaceName: widget.spaceName),
                           AddComfyDistanceSensor(spaceName: widget.spaceName),
                           AddBuzzerButton(spaceName: widget.spaceName),
+                          AddComfyCameraButton(spaceName: widget.spaceName),
                         ],
                       ),
                       ExpansionTile(

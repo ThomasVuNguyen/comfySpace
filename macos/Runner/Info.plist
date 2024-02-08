@@ -32,5 +32,9 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Application requires access to photo album</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Application requires access to photo album</string>
 </dict>
 </plist>

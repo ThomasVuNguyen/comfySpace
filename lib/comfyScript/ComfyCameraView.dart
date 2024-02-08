@@ -1,25 +1,35 @@
 import 'dart:io';
 
+import 'package:comfyssh_flutter/FileFunction.dart';
+import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import "package:webview_universal/webview_universal.dart";
+import 'package:xterm/xterm.dart';
+
+import '../components/pop_up.dart';
+import '../function.dart';
+import '../main.dart';
+import 'package:intl/intl.dart';
 
 
-
-class ComfyCameraView extends StatefulWidget {
-  const ComfyCameraView({super.key});
-
+class ComfyCameraButton extends StatefulWidget {
+  const ComfyCameraButton({super.key,
+    required this.name,
+    required this.hostname, required this.terminal
+  });
+  final String hostname; final Terminal terminal; final String name;
   @override
-  State<ComfyCameraView> createState() => _ComfyCameraViewState();
+  State<ComfyCameraButton> createState() => _ComfyCameraButtonState();
 }
 
-class _ComfyCameraViewState extends State<ComfyCameraView> {
-  bool SSHLoaded = true;
+class _ComfyCameraButtonState extends State<ComfyCameraButton> {
   late SSHClient client;
   ScreenshotController screenshotController = ScreenshotController();
   InAppWebViewController? webViewController;
@@ -42,7 +52,6 @@ class _ComfyCameraViewState extends State<ComfyCameraView> {
       onPasswordRequest: () => 'travel'
     );
     print("initClient username: ${client.username}");
-    setState(() {SSHLoaded = true;});
   }
   Future<void> closeClient() async{
     final shell = await client.shell();
@@ -61,7 +70,12 @@ class _ComfyCameraViewState extends State<ComfyCameraView> {
 
     print('cheese');
     var pic = await webViewController?.takeScreenshot(screenshotConfiguration: screenshotconfig);
-    ShowCapturedWidget(context, pic!);
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd-HH-mm-ss-SSS').format(now);
+    SaveImage(formattedDate, pic);
+    print('image saved');
+    //ShowCapturedWidget(context, pic!);
+    
     /*
     screenshotController.capture(delay: Duration(milliseconds: 10)).then((image) async {
       ShowCapturedWidget(context, image!);
@@ -90,14 +104,16 @@ class _ComfyCameraViewState extends State<ComfyCameraView> {
             TakePicture();
           },
           child: Container(
-            height: 400,
-            width: 400,
-            color: Colors.white,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 2),
+              borderRadius: BorderRadius.circular(24.0),
+              color: Colors.white,
+            ),
             child: Screenshot(
               controller: screenshotController,
                 child: InAppWebView(
                     initialUrlRequest:
-                    URLRequest(url: WebUri('http://10.0.0.81:8000/stream.mjpg')),
+                    URLRequest(url: WebUri('http://${widget.hostname}:8000/')),
                   onWebViewCreated: (InAppWebViewController controller) {
                     webViewController = controller;
                   },
@@ -126,8 +142,6 @@ class _ComfyCameraViewState extends State<ComfyCameraView> {
       else{
         return Text('not supported');
       }
-
-
   }
   Future<dynamic> ShowCapturedWidget(
       BuildContext context, Uint8List capturedImage) {
@@ -139,6 +153,58 @@ class _ComfyCameraViewState extends State<ComfyCameraView> {
           title: Text("Captured widget screenshot"),
         ),
         body: Center(child: (capturedImage==null)? Text('none') :Image.memory(capturedImage)),
+      ),
+    );
+  }
+}
+
+class AddComfyCameraButton extends StatefulWidget {
+  const AddComfyCameraButton({super.key, required this.spaceName});
+  final String spaceName;
+  @override
+  State<AddComfyCameraButton> createState() => _AddComfyCameraButtonState();
+}
+
+class _AddComfyCameraButtonState extends State<AddComfyCameraButton> {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SpaceEdit()),
+      ],
+      child: ListTile(
+          title: Text('Camera', style: Theme.of(context).textTheme.titleMedium,),
+          onTap: (){
+            Scaffold.of(context).closeEndDrawer();
+            late String pinOut; late String buttonName;
+            showDialog(context: context, builder: (BuildContext context){
+              buttonSizeY = 1;
+              buttonSizeX=1;
+              buttonPosition=1;
+              return ButtonAlertDialog(
+                  title: 'Camera Button',
+                  content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        comfyTextField(onChanged: (btnName){
+                          buttonName = btnName;
+                        }, text: 'button name'),
+                        const SizedBox(height: 32, width: double.infinity,),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    comfyActionButton(
+                      onPressed: (){
+                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, '', 'ComfyCameraButton');
+                        Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ]);
+            });
+          }
       ),
     );
   }

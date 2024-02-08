@@ -230,6 +230,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "file_saver",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/file_saver-0.2.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "flashy_tab_bar2",
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flashy_tab_bar2-0.0.6",
       "packageUri": "lib/",
@@ -440,6 +446,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "gal",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/gal-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "get_it",
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/get_it-7.6.4",
       "packageUri": "lib/",
@@ -486,6 +498,12 @@
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/image-3.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.15"
+    },
+    {
+      "name": "image_gallery_saver",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/image_gallery_saver-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "in_app_review",
@@ -706,6 +724,42 @@
     {
       "name": "pedantic",
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/pedantic-1.11.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "permission_handler",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/permission_handler-11.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_android",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/permission_handler_android-12.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_apple",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/permission_handler_apple-9.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_html",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/permission_handler_html-0.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "permission_handler_platform_interface",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/permission_handler_platform_interface-4.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "permission_handler_windows",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/permission_handler_windows-0.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -1148,7 +1202,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2024-02-07T03:54:22.267496Z",
+  "generated": "2024-02-08T03:18:18.838921Z",
   "generator": "pub",
   "generatorVersion": "3.2.5"
 }
