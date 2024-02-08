@@ -69,6 +69,7 @@ dependencies:
   image_gallery_saver: ^2.0.3
   permission_handler: ^11.2.0
   gal: ^2.3.0
+  flutter_screen_recording: ^2.0.10
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -342,6 +342,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.8"
+  flutter_foreground_task:
+    dependency: transitive
+    description:
+      name: flutter_foreground_task
+      sha256: e48d2d810a2d643362e64de41146ed8e95d4dd282bae6abbb32309d9f0bf5d67
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.2"
   flutter_icmp_ping:
     dependency: transitive
     description:
@@ -515,6 +523,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.7"
+  flutter_screen_recording:
+    dependency: "direct main"
+    description:
+      name: flutter_screen_recording
+      sha256: "65e5e2555494a5d4dd54bbbb0c2fa1b96210ed444950f07556aacee970799342"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.10"
+  flutter_screen_recording_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_screen_recording_platform_interface
+      sha256: e177557cbca61d8cf0f6ecc3f65ab5638dfa912f00ac8c31ac7f0f40c241ec81
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  flutter_screen_recording_web:
+    dependency: transitive
+    description:
+      name: flutter_screen_recording_web
+      sha256: "1dedf6e067b4c23b8c357200e6fa811ab9a894371721b31bac027bd7c06a4b6e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   flutter_slidable:
     dependency: "direct main"
     description:
@@ -1029,6 +1061,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.3"
+  platform_detect:
+    dependency: transitive
+    description:
+      name: platform_detect
+      sha256: "08f4ee79c0e1c4858d37e06b22352a3ebdef5466b613749a3adb03e703d4f5b0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.11"
   platform_info:
     dependency: transitive
     description:

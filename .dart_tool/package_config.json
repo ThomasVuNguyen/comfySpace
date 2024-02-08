@@ -260,6 +260,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_foreground_task",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_foreground_task-6.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "flutter_icmp_ping",
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_icmp_ping-3.1.3",
       "packageUri": "lib/",
@@ -390,6 +396,24 @@
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_riverpod-2.3.7",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_screen_recording",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_screen_recording-2.0.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_screen_recording_platform_interface",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_screen_recording_platform_interface-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_screen_recording_web",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/flutter_screen_recording_web-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_slidable",
@@ -780,6 +804,12 @@
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/platform-3.1.3",
       "packageUri": "lib/",
       "languageVersion": "2.19"
+    },
+    {
+      "name": "platform_detect",
+      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/platform_detect-2.0.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "platform_info",
@@ -1202,7 +1232,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2024-02-08T03:18:18.838921Z",
+  "generated": "2024-02-08T04:42:47.721823Z",
   "generator": "pub",
   "generatorVersion": "3.2.5"
 }

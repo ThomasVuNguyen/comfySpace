@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:comfyssh_flutter/FileFunction.dart';
@@ -7,8 +8,10 @@ import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_screen_recording/flutter_screen_recording.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:screen_recorder/screen_recorder.dart';
 import 'package:screenshot/screenshot.dart';
 import "package:webview_universal/webview_universal.dart";
 import 'package:xterm/xterm.dart';
@@ -30,8 +33,12 @@ class ComfyCameraButton extends StatefulWidget {
 }
 
 class _ComfyCameraButtonState extends State<ComfyCameraButton> {
+  bool Recording = false;
   late SSHClient client;
   ScreenshotController screenshotController = ScreenshotController();
+  ScreenRecorderController screenRecorderController = ScreenRecorderController(
+    pixelRatio: 0.5,
+    skipFramesBetweenCaptures: 2,);
   InAppWebViewController? webViewController;
   @override
   void initState(){
@@ -59,41 +66,38 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
     client.close();
   }
 
-  void RecordVideo(){
+  void RecordVideo() async{
+    Recording = true;
+    print('recording');
+    screenRecorderController.start();
+    /*
+    ScreenshotConfiguration screenshotconfig = ScreenshotConfiguration();
+
+    Timer.periodic(Duration(milliseconds: 100), (timer) async{
+      var pic = await webViewController?.takeScreenshot(screenshotConfiguration: screenshotconfig);
+      SaveImage(pic);
+      print('frame saved');
+      if (Recording == false){
+        timer.cancel();
+        print('timer ending');
+      }
+    });
+    */
 
   }
-  void EndRecording(){
-
+  void EndRecording() async{
+    Recording = false;
+    screenRecorderController.stop();
+    final gif = await screenRecorderController.exporter.exportGif();
+    ShowCapturedWidget(context, Uint8List.fromList(gif!));
   }
   Future<void> TakePicture() async{
     ScreenshotConfiguration screenshotconfig = ScreenshotConfiguration();
-
     print('cheese');
     var pic = await webViewController?.takeScreenshot(screenshotConfiguration: screenshotconfig);
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd-HH-mm-ss-SSS').format(now);
-    SaveImage(formattedDate, pic);
+    SaveImage(pic);
     print('image saved');
-    //ShowCapturedWidget(context, pic!);
-    
-    /*
-    screenshotController.capture(delay: Duration(milliseconds: 10)).then((image) async {
-      ShowCapturedWidget(context, image!);
-      print('cheeze2');
-      //final directory = (await getApplicationDocumentsDirectory ()).path; //from path_provide package
-      //String fileName = DateTime.now().microsecondsSinceEpoch.toString();
-      //String path = '$directory';
-/*
-      screenshotController.captureAndSave(
-      path, //set path where screenshot will be saved
-      fileName:fileName
-      );*/
 
-
-
-    }).catchError((onError) {
-      print(onError);
-    }); */
   }
 
   @override
@@ -101,24 +105,46 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
       if (Platform.isAndroid == true || Platform.isIOS == true){
         return GestureDetector(
           onDoubleTap: () async{
+            if (Recording == false){
+              RecordVideo();
+            }
+            else if (Recording == true){
+              EndRecording();
+            }
+          },
+          onTap: () async{
             TakePicture();
           },
+          onTapDown: (detail){
+            print('position');
+            print(detail.globalPosition);
+            print(detail.localPosition);
+          },
+
+
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black, width: 2),
               borderRadius: BorderRadius.circular(24.0),
               color: Colors.white,
             ),
-            child: Screenshot(
-              controller: screenshotController,
-                child: InAppWebView(
-                    initialUrlRequest:
-                    URLRequest(url: WebUri('http://${widget.hostname}:8000/')),
-                  onWebViewCreated: (InAppWebViewController controller) {
-                    webViewController = controller;
-                  },
-                ),
+            child: ScreenRecorder(
+              controller: screenRecorderController,
+              width: double.infinity,
+              height: double.infinity,
+              child: Screenshot(
+                controller: screenshotController,
+                  child: IgnorePointer(
+                    child: InAppWebView(
+                        initialUrlRequest:
+                        URLRequest(url: WebUri('http://${widget.hostname}:8000/')),
+                      onWebViewCreated: (InAppWebViewController controller) {
+                        webViewController = controller;
+                      },
+                    ),
+                  ),
 
+              ),
             ),
           ),
         );

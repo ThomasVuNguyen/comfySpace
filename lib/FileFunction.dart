@@ -8,17 +8,11 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:gal/gal.dart';
 
-Future<void> SaveImage(String name, Uint8List? bytes, ) async {
+Future<void> SaveImage(Uint8List? bytes) async {
 
   if(Platform.isAndroid == true || Platform.isIOS == true){
     saveToGallery(bytes!);
   }
-  await FileSaver.instance.saveFile(
-    name: name,
-    bytes: bytes,
-    ext :"jpeg",
-    mimeType: MimeType.jpeg,
-  );
 }
 
 saveToGallery(Uint8List bytes) async {
