@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:camera/camera.dart';
+import 'package:comfyssh_flutter/Experimental/CameraView.dart';
 import 'package:comfyssh_flutter/comfyScript/Buzzer.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyCameraView.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
@@ -11,6 +12,7 @@ import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
 import 'package:comfyssh_flutter/comfyVoice/ComfyVoiceDB.dart';
+import 'package:comfyssh_flutter/comfyssh/comfyssh.dart';
 import 'package:comfyssh_flutter/components/CameraView.dart';
 import 'package:comfyssh_flutter/components/DocumentationButton.dart';
 import 'package:comfyssh_flutter/components/custom_ui_components.dart';
@@ -98,6 +100,7 @@ class comfySpace extends StatefulWidget {
 }
 
 class _comfySpaceState extends State<comfySpace> {
+  Terminal terminal =  Terminal();
   int bottomBarIndex = 0; bool FloatingButtonTip = false;
   final List<Widget> pageLists = [
     Padding(
@@ -158,8 +161,9 @@ class _comfySpaceState extends State<comfySpace> {
     ),
     //const WiredashSettingPage(),
     const WiredashIdeaPage(),
-
-    ComfyIDE(),
+    Container(width: 200, height: 200, child: CameraAttempt2()),
+    //ComfyCameraButton(name: 'hey', hostname: '10.0.0.81', terminal: Terminal()),
+    //ComfyIDE(),
     const AboutUs(),
   ];
   final List<GButton> BottomBarButtonList = [

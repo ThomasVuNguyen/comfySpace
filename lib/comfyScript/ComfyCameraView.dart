@@ -5,10 +5,13 @@ import 'package:comfyssh_flutter/FileFunction.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:dartssh2/dartssh2.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screen_recording/flutter_screen_recording.dart';
+import 'package:gal/gal.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_recorder/screen_recorder.dart';
@@ -33,8 +36,9 @@ class ComfyCameraButton extends StatefulWidget {
 }
 
 class _ComfyCameraButtonState extends State<ComfyCameraButton> {
-  bool Recording = false;
+  late bool isRecording;
   late SSHClient client;
+  late String lastVideoPath;
   ScreenshotController screenshotController = ScreenshotController();
   ScreenRecorderController screenRecorderController = ScreenRecorderController(
     pixelRatio: 0.5,
@@ -43,6 +47,7 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
   @override
   void initState(){
     super.initState();
+    isRecording = false;
     //initClient();
   }
 
@@ -65,32 +70,27 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
     await shell.done;
     client.close();
   }
-
-  void RecordVideo() async{
-    Recording = true;
-    print('recording');
-    screenRecorderController.start();
-    /*
-    ScreenshotConfiguration screenshotconfig = ScreenshotConfiguration();
-
-    Timer.periodic(Duration(milliseconds: 100), (timer) async{
-      var pic = await webViewController?.takeScreenshot(screenshotConfiguration: screenshotconfig);
-      SaveImage(pic);
-      print('frame saved');
-      if (Recording == false){
-        timer.cancel();
-        print('timer ending');
-      }
-    });
-    */
-
+  Future<void> Record() async {
+    if(isRecording !=true){
+      print('recording');
+      isRecording = true;
+      //Directory appDocumentDir = await getApplicationDocumentsDirectory();
+      //String rawDocumentPath = appDocumentDir.path;
+      //String outputPath = rawDocumentPath + "/output.mp4";
+      final Directory appDir = await getTemporaryDirectory();
+      final String outputPath = '${appDir.path}/video.mp4';
+      lastVideoPath = outputPath;
+      print(outputPath);
+      FFmpegKit.execute('ffmpeg -i http://10.0.0.81:8000/stream.mjpg -c:v copy -c:a aac $outputPath');
+    }
+    else{
+      print('end recordong');
+      FFmpegKit.cancel();
+      await Gal.putVideo(lastVideoPath);
+      isRecording = false;
+    }
   }
-  void EndRecording() async{
-    Recording = false;
-    screenRecorderController.stop();
-    final gif = await screenRecorderController.exporter.exportGif();
-    ShowCapturedWidget(context, Uint8List.fromList(gif!));
-  }
+
   Future<void> TakePicture() async{
     ScreenshotConfiguration screenshotconfig = ScreenshotConfiguration();
     print('cheese');
@@ -104,23 +104,13 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
   Widget build(BuildContext context) {
       if (Platform.isAndroid == true || Platform.isIOS == true){
         return GestureDetector(
-          onDoubleTap: () async{
-            if (Recording == false){
-              RecordVideo();
-            }
-            else if (Recording == true){
-              EndRecording();
-            }
+          onDoubleTap: () async {
+          print('doubled');
+          await Record();
           },
           onTap: () async{
             TakePicture();
           },
-          onTapDown: (detail){
-            print('position');
-            print(detail.globalPosition);
-            print(detail.localPosition);
-          },
-
 
           child: Container(
             decoration: BoxDecoration(
@@ -170,6 +160,20 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
       }
   }
   Future<dynamic> ShowCapturedWidget(
+      BuildContext context, Uint8List capturedImage) {
+    return showDialog(
+      useSafeArea: false,
+      context: context,
+      builder: (context) => Scaffold(
+        appBar: AppBar(
+          title: Text("Captured widget screenshot"),
+        ),
+        body: Center(child: (capturedImage==null)? Text('none') :Image.memory(capturedImage)),
+      ),
+    );
+  }
+
+  Future<dynamic> ShowCapturedVideo(
       BuildContext context, Uint8List capturedImage) {
     return showDialog(
       useSafeArea: false,

@@ -16,20 +16,6 @@ Future<void> SaveImage(Uint8List? bytes) async {
 }
 
 saveToGallery(Uint8List bytes) async {
-  if (bytes != null) {
-    await Gal.putImageBytes(bytes);
-    /*await Permission.photos.onGrantedCallback(() async{
-      await Permission.mediaLibrary.onGrantedCallback(() async{
-        final result = await ImageGallerySaver.saveImage(name: 'img', bytes);
-        print(result);
-        print('img saved');
+  await Gal.putImageBytes(bytes);
 
-        //network
-      }).onDeniedCallback(() => print('denied'));
-    });*/
-
-  }
-  else{
-    print('EMPTY PIC');
-  }
 }
