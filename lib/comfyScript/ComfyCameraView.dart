@@ -1,97 +1,100 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:comfyssh_flutter/FileFunction.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
-import 'package:comfyssh_flutter/components/LoadingWidget.dart';
 import 'package:dartssh2/dartssh2.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_screen_recording/flutter_screen_recording.dart';
-import 'package:gal/gal.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:screen_recorder/screen_recorder.dart';
 import 'package:screenshot/screenshot.dart';
-import "package:webview_universal/webview_universal.dart";
 import 'package:xterm/xterm.dart';
-
+import '../components/custom_widgets.dart';
 import '../components/pop_up.dart';
 import '../function.dart';
 import '../main.dart';
-import 'package:intl/intl.dart';
-
 
 class ComfyCameraButton extends StatefulWidget {
   const ComfyCameraButton({super.key,
     required this.name,
-    required this.hostname, required this.terminal
+    required this.hostname, required this.username, required this.password,
+    required this.terminal
   });
-  final String hostname; final Terminal terminal; final String name;
+  final String hostname; final String username; final String password;
+  final Terminal terminal; final String name;
   @override
   State<ComfyCameraButton> createState() => _ComfyCameraButtonState();
 }
 
 class _ComfyCameraButtonState extends State<ComfyCameraButton> {
+  bool SSHLoaded = false;
   late bool isRecording;
   late SSHClient client;
-  late String lastVideoPath;
+  late String lastVideoName;
+  late SSHSession videoSession;
+  late SSHSession streamSession;
   ScreenshotController screenshotController = ScreenshotController();
-  ScreenRecorderController screenRecorderController = ScreenRecorderController(
-    pixelRatio: 0.5,
-    skipFramesBetweenCaptures: 2,);
-  InAppWebViewController? webViewController;
+  late InAppWebViewController webViewController;
+  bool _streamInitialized = false;
   @override
   void initState(){
+    //_streamViewInitialized = false;
     super.initState();
+    print('starting camera');
     isRecording = false;
-    //initClient();
-  }
+    initClient();
 
+  }
+  @override
+  void deactivate(){
+    super.deactivate();
+    //client.close();
+    print('closing camera');
+    //streamSession.kill(SSHSignal.QUIT);
+    //closeClient();
+  }
   @override
   void dispose(){
     super.dispose();
-    //closeClient();
+    print('closing camera');
+    //streamSession.kill(SSHSignal.QUIT);
+    closeClient();
   }
-
   Future<void> initClient() async{
     client = SSHClient(
-      await SSHSocket.connect('travel.local', 22),
-      username: 'travel',
-      onPasswordRequest: () => 'travel'
+      await SSHSocket.connect(widget.hostname, 22),
+      username: widget.username,
+      onPasswordRequest: () => widget.password
     );
-    print("initClient username: ${client.username}");
+    client.run('comfy camera stream');
+    setState(() {
+      SSHLoaded = true;
+    });
   }
   Future<void> closeClient() async{
     final shell = await client.shell();
     await shell.done;
     client.close();
+    await webViewController.closeAllMediaPresentations();
   }
   Future<void> Record() async {
     if(isRecording !=true){
       print('recording');
       isRecording = true;
-      //Directory appDocumentDir = await getApplicationDocumentsDirectory();
-      //String rawDocumentPath = appDocumentDir.path;
-      //String outputPath = rawDocumentPath + "/output.mp4";
-      final Directory appDir = await getTemporaryDirectory();
-      final String outputPath = '${appDir.path}/video.mp4';
-      lastVideoPath = outputPath;
-      print(outputPath);
-      FFmpegKit.execute('ffmpeg -i http://10.0.0.81:8000/stream.mjpg -c:v copy -c:a aac $outputPath');
+      String timestamp = DateTime.now().microsecondsSinceEpoch.toString();
+      lastVideoName = 'ComfyVideo$timestamp.mp4';
+      videoSession = await client.execute('ffmpeg -i http://0.0.0.0:8000/stream.mjpg -c:v copy -c:a aac $lastVideoName');
+      print('recoding 2');
     }
     else{
-      print('end recordong');
-      FFmpegKit.cancel();
-      await Gal.putVideo(lastVideoPath);
+      print('end recording');
       isRecording = false;
+      videoSession.kill(SSHSignal.QUIT);
     }
   }
-
   Future<void> TakePicture() async{
+    //await webViewController.reload();
     ScreenshotConfiguration screenshotconfig = ScreenshotConfiguration();
     print('cheese');
     var pic = await webViewController?.takeScreenshot(screenshotConfiguration: screenshotconfig);
@@ -102,38 +105,59 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
 
   @override
   Widget build(BuildContext context) {
+    if(SSHLoaded == true){
       if (Platform.isAndroid == true || Platform.isIOS == true){
         return GestureDetector(
           onDoubleTap: () async {
-          print('doubled');
-          await Record();
+            print('doubled');
+            await Record();
           },
           onTap: () async{
             TakePicture();
           },
+          child: Padding(
+            padding: const EdgeInsets.all(buttonPadding),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 2),
+                borderRadius: BorderRadius.circular(24.0),
+                color: Colors.white,
+              ),
+              child: FractionallySizedBox(
+                widthFactor: 0.8,
+                heightFactor: 0.8,
+                child: Screenshot(
+                  controller: screenshotController,
+                  child: InAppWebView(
+                    initialUrlRequest:
+                    URLRequest(url: WebUri(
+                        'http://${widget.hostname}:8000/stream.mjpg'
+                      //'https://www.raspberrypi.com/products/raspberry-pi-high-quality-camera/'
+                    )),
+                    onWebViewCreated: (InAppWebViewController controller) {
+                      webViewController = controller;
+                      //await client.run('comfy camera stream');
+                      print('streaming');
+                    },
+                    onLoadStop: (InAppWebViewController controller, uri) {
 
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 2),
-              borderRadius: BorderRadius.circular(24.0),
-              color: Colors.white,
-            ),
-            child: ScreenRecorder(
-              controller: screenRecorderController,
-              width: double.infinity,
-              height: double.infinity,
-              child: Screenshot(
-                controller: screenshotController,
-                  child: IgnorePointer(
-                    child: InAppWebView(
-                        initialUrlRequest:
-                        URLRequest(url: WebUri('http://${widget.hostname}:8000/')),
-                      onWebViewCreated: (InAppWebViewController controller) {
-                        webViewController = controller;
-                      },
-                    ),
+                      if (_streamInitialized == false){
+                        //Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
+                        //controller.reload();
+                      }
+                      /*
+                      else if(_streamInitialized == true && _streamViewInitialized == false) {
+                          controller.reload();
+                          controller.reload();
+                          _streamViewInitialized = true;
+
+                      }
+                      */
+
+                    },
                   ),
 
+                ),
               ),
             ),
           ),
@@ -158,6 +182,12 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
       else{
         return Text('not supported');
       }
+    }
+    else{
+      return Text('Loading SSH');
+    }
+
+
   }
   Future<dynamic> ShowCapturedWidget(
       BuildContext context, Uint8List capturedImage) {

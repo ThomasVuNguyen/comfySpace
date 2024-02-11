@@ -577,7 +577,7 @@ Widget? ButtonSorting(int id, String name, String buttonType, String spaceName, 
     case 'ComfyCustomGestureButton':
       return CustomComfyGestureButton(name: name, hostname: hostname, username: username, password: password, OverallCommand: command);
     case 'ComfyCameraButton':
-      return ComfyCameraButton(name: name, hostname: hostname, terminal: terminal);
+      return ComfyCameraButton(name: name, hostname: hostname, username: username, password: password, terminal: terminal);
       default:
       return ListTile(
         title: Text(name),

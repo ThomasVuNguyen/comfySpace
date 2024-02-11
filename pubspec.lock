@@ -137,6 +137,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  chewie:
+    dependency: "direct main"
+    description:
+      name: chewie
+      sha256: "8bc4ac4cf3f316e50a25958c0f5eb9bb12cf7e8308bb1d74a43b230da2cfc144"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.7.5"
   cli_util:
     dependency: transitive
     description:
@@ -201,14 +209,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  csv:
-    dependency: transitive
-    description:
-      name: csv
-      sha256: "63ed2871dd6471193dffc52c0e6c76fb86269c00244d244297abbb355c84a86e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -325,10 +325,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_saver
-      sha256: "8ffd91ae9f543c5ebbfec71a814ee5aa9e21176d31335133308abf63f4c42e8a"
+      sha256: "9efc615b43127952aa394e98b23d9e932715e8c008dc10710177008882b3d141"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.9"
+    version: "0.1.1"
   flashy_tab_bar2:
     dependency: "direct main"
     description:
@@ -366,6 +366,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.2"
+  flutter_hooks:
+    dependency: transitive
+    description:
+      name: flutter_hooks
+      sha256: cde36b12f7188c85286fba9b38cc5a902e7279f36dd676967106c041dc9dde70
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.20.5"
   flutter_icmp_ping:
     dependency: transitive
     description:
@@ -507,6 +515,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.15"
+  flutter_mjpeg:
+    dependency: "direct main"
+    description:
+      name: flutter_mjpeg
+      sha256: "46ea3f1a49838deb8e2b01a70b897313c7f985affecfaf3b3bae6f4e15405b6b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.4"
   flutter_overlay_loader:
     dependency: "direct main"
     description:
@@ -649,10 +665,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_fonts
-      sha256: "2776c66b3e97c6cdd58d1bd3281548b074b64f1fd5c8f82391f7456e38849567"
+      sha256: "6b6f10f0ce3c42f6552d1c70d2c28d764cf22bb487f50f66cca31dcd5194f4d6"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.5"
+    version: "4.0.4"
   google_nav_bar:
     dependency: "direct main"
     description:
@@ -673,10 +689,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: d4872660c46d929f6b8a9ef4e7a7eff7e49bbf0c4ec3f385ee32df5119175139
+      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "0.13.6"
   http_parser:
     dependency: transitive
     description:
@@ -725,14 +741,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
-  injectable:
-    dependency: transitive
-    description:
-      name: injectable
-      sha256: cd3c422e13270c81f64ab73c80406b2b2ed563fe59d0ff2093eb7eee63d0bbeb
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.2"
   innosetup:
     dependency: "direct dev"
     description:
@@ -905,10 +913,10 @@ packages:
     dependency: "direct main"
     description:
       name: network_tools
-      sha256: "8a9e730cc9716da972d98a125c8258985744c6f3fb69343825ebf3e55c8e98e6"
+      sha256: b7c71b880381f17ca707f0df1ca4be9d288b38c6817535ddbfd8fb24d1c6fc51
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.2"
+    version: "3.2.6"
   nm:
     dependency: transitive
     description:
@@ -941,6 +949,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  package_info_plus:
+    dependency: transitive
+    description:
+      name: package_info_plus
+      sha256: "88bc797f44a94814f2213db1c9bd5badebafdfb8290ca9f78d4b9ee2a3db4d79"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.1"
+  package_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: package_info_plus_platform_interface
+      sha256: "9bc8ba46813a4cc42c66ab781470711781940780fd8beddd0c3da62506d3a6c6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   path:
     dependency: transitive
     description:
@@ -1173,14 +1197,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  sembast:
-    dependency: transitive
-    description:
-      name: sembast
-      sha256: "85ff944434f7b566fdc388be4f85b23e954736b7d6e51f965f4f419d966c15b1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.5.0+1"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -1530,6 +1546,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.3"
+  visibility_detector:
+    dependency: transitive
+    description:
+      name: visibility_detector
+      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0+2"
+  wakelock_plus:
+    dependency: transitive
+    description:
+      name: wakelock_plus
+      sha256: f268ca2116db22e57577fb99d52515a24bdc1d570f12ac18bb762361d43b043d
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.4"
+  wakelock_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: wakelock_plus_platform_interface
+      sha256: "40fabed5da06caff0796dc638e1f07ee395fb18801fbff3255a2372db2d80385"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   web:
     dependency: transitive
     description:

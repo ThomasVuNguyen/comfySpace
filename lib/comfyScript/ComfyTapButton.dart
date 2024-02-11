@@ -37,13 +37,17 @@ class _SinglePressButtonState extends State<SinglePressButton> {
     super.dispose();
     closeClient();
   }
+  @override
+  void deactivate(){
+    super.deactivate();
+    closeClient();
+  }
   Future<void> initClient() async{
     client = SSHClient(
       await SSHSocket.connect(widget.hostname, 22),
       username: widget.username,
       onPasswordRequest: () => widget.password,
     );
-    print("initClient username: ${client.username}");
     setState(() {SSHLoaded = true;});
   }
   Future<void> closeClient() async{

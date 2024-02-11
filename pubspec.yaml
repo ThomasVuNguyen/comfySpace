@@ -55,7 +55,7 @@ dependencies:
   overlay_support: ^2.1.0
   flutter_overlay_loader: ^2.0.0
   flutter_draggable_gridview: ^0.0.8
-  network_tools: ^4.0.2
+  network_tools: any
   network_info_plus: ^4.1.0
   lan_scanner: ^4.0.0+1
   dart_ping_ios: ^4.0.2
@@ -65,13 +65,15 @@ dependencies:
   icons_launcher: ^2.0.7
   webview_universal: ^0.0.5
   screenshot: ^2.1.0
-  file_saver: ^0.2.9
   image_gallery_saver: ^2.0.3
   permission_handler: ^11.2.0
   gal: ^2.3.0
-  flutter_screen_recording: ^2.0.10
   web_socket_channel: ^2.4.0
   ffmpeg_kit_flutter: ^6.0.3
+  file_saver: any
+  flutter_screen_recording: ^2.0.10
+  flutter_mjpeg: ^2.0.4
+  chewie: ^1.7.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

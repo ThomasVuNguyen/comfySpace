@@ -104,6 +104,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "chewie",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/chewie-1.7.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "cli_util",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/cli_util-0.3.5",
       "packageUri": "lib/",
@@ -150,12 +156,6 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/csslib-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
-    },
-    {
-      "name": "csv",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/csv-5.1.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
     },
     {
       "name": "cupertino_icons",
@@ -243,9 +243,9 @@
     },
     {
       "name": "file_saver",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/file_saver-0.2.9",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/file_saver-0.1.1",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.12"
     },
     {
       "name": "flashy_tab_bar2",
@@ -276,6 +276,12 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_foreground_task-6.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.18"
+    },
+    {
+      "name": "flutter_hooks",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_hooks-0.20.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_icmp_ping",
@@ -384,6 +390,12 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_markdown-0.6.15",
       "packageUri": "lib/",
       "languageVersion": "2.18"
+    },
+    {
+      "name": "flutter_mjpeg",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_mjpeg-2.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_overlay_loader",
@@ -495,7 +507,7 @@
     },
     {
       "name": "google_fonts",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/google_fonts-4.0.5",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/google_fonts-4.0.4",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -513,9 +525,9 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.1.2",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/http-0.13.6",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "2.19"
     },
     {
       "name": "http_parser",
@@ -552,12 +564,6 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/in_app_review_platform_interface-2.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.12"
-    },
-    {
-      "name": "injectable",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/injectable-2.3.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
     },
     {
       "name": "innosetup",
@@ -687,7 +693,7 @@
     },
     {
       "name": "network_tools",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/network_tools-4.0.2",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/network_tools-3.2.6",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -712,6 +718,18 @@
     {
       "name": "package_config",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/package_config-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "package_info_plus",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus-5.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "package_info_plus_platform_interface",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus_platform_interface-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -888,12 +906,6 @@
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/screenshot-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
-    },
-    {
-      "name": "sembast",
-      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/sembast-3.5.0+1",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
     },
     {
       "name": "shared_preferences",
@@ -1160,6 +1172,24 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "visibility_detector",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/visibility_detector-0.4.0+2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "wakelock_plus",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/wakelock_plus-1.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "wakelock_plus_platform_interface",
+      "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/wakelock_plus_platform_interface-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "web",
       "rootUri": "file:///C:/Users/frost/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.3.0",
       "packageUri": "lib/",
@@ -1250,7 +1280,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2024-02-10T01:34:39.799654Z",
+  "generated": "2024-02-11T18:49:28.546761Z",
   "generator": "pub",
-  "generatorVersion": "3.2.5"
+  "generatorVersion": "3.2.6"
 }

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:camera/camera.dart';
 import 'package:comfyssh_flutter/Experimental/CameraView.dart';
+import 'package:comfyssh_flutter/Experimental/MJPEG.dart';
+import 'package:comfyssh_flutter/Experimental/StreamImage.dart';
 import 'package:comfyssh_flutter/comfyScript/Buzzer.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyCameraView.dart';
 import 'package:comfyssh_flutter/comfyScript/ComfyToggleButton.dart';
@@ -43,6 +45,8 @@ import 'package:wiredash/wiredash.dart';
 import 'package:xterm/xterm.dart';
 import 'dart:io' show Platform;
 
+import 'Experimental/chewieCamera.dart';
+import 'Startup/ComfyCameraStream.dart';
 import 'comfyScript/ComfyButton.dart';
 import 'comfyScript/ComfyHorizontalSwipeButton.dart';
 import 'comfyScript/ComfyTapButton.dart';
@@ -161,7 +165,7 @@ class _comfySpaceState extends State<comfySpace> {
     ),
     //const WiredashSettingPage(),
     const WiredashIdeaPage(),
-    Container(width: 200, height: 200, child: CameraAttempt2()),
+    Container(height:400, width:400, child: MjpegPlayerCF()),
     //ComfyCameraButton(name: 'hey', hostname: '10.0.0.81', terminal: Terminal()),
     //ComfyIDE(),
     const AboutUs(),
@@ -428,6 +432,7 @@ class _spacePageState extends State<spacePage> {
       username: widget.username,
       onPasswordRequest: () => widget.password,
     );
+    clientControl.run('comfy camera stream');
     print("${clientControl.username} is ready");
   }
   void CreateButtonList(List<Map<dynamic, dynamic>> buttonList){
@@ -542,7 +547,7 @@ class _spacePageState extends State<spacePage> {
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     //CameraView(camera: _cameras[0]),
-
+                    //ComfyCameraStream(hostname: widget.hostname, username: widget.username, password: widget.password),
                     ComfyTerminal(terminal: terminal),
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     Expanded(
