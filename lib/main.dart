@@ -45,8 +45,8 @@ import 'package:wiredash/wiredash.dart';
 import 'package:xterm/xterm.dart';
 import 'dart:io' show Platform;
 
+import 'ComfyDoctor/ComfyInitializer.dart';
 import 'Experimental/chewieCamera.dart';
-import 'Startup/ComfyCameraStream.dart';
 import 'comfyScript/ComfyButton.dart';
 import 'comfyScript/ComfyHorizontalSwipeButton.dart';
 import 'comfyScript/ComfyTapButton.dart';
@@ -547,7 +547,7 @@ class _spacePageState extends State<spacePage> {
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     //CameraView(camera: _cameras[0]),
-                    //ComfyCameraStream(hostname: widget.hostname, username: widget.username, password: widget.password),
+                    ComfyInitializer(hostname: widget.hostname, username: widget.username, password: widget.password),
                     ComfyTerminal(terminal: terminal),
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     Expanded(
