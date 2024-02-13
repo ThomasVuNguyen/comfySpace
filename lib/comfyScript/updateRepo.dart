@@ -19,7 +19,6 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
   void initState(){
     super.initState();
     updateRepoRoot(widget.hostname, widget.username, widget.password, widget.terminal);
-
   }
   @override
   void dispose(){

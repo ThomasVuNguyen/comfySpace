@@ -1,5 +1,5 @@
 import 'package:comfyssh_flutter/comfyScript/ComfyCameraView.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mjpeg/flutter_mjpeg.dart';
 import 'package:web_socket_channel/io.dart';
@@ -48,10 +48,9 @@ class _CameraAttempt2State extends State<CameraAttempt2> {
   void Record(){
     if(isRecording !=true){
       isRecording = true;
-      FFmpegKit.execute('ffmpeg -i http://10.0.0.81:8000/stream.mjpg -c:v copy -c:a aac output.mp4');
     }
     else{
-      FFmpegKit.cancel();
+
     }
   }
 

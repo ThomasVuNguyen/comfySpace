@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:camera/camera.dart';
+import 'package:comfyssh_flutter/ComfyDoctor/UpdateRepoPopUp.dart';
 import 'package:comfyssh_flutter/Experimental/CameraView.dart';
 import 'package:comfyssh_flutter/Experimental/MJPEG.dart';
 import 'package:comfyssh_flutter/Experimental/StreamImage.dart';
@@ -165,7 +166,7 @@ class _comfySpaceState extends State<comfySpace> {
     ),
     //const WiredashSettingPage(),
     const WiredashIdeaPage(),
-    Container(height:400, width:400, child: MjpegPlayerCF()),
+    //Container(height:400, width:400, child: MjpegPlayerCF()),
     //ComfyCameraButton(name: 'hey', hostname: '10.0.0.81', terminal: Terminal()),
     //ComfyIDE(),
     const AboutUs(),
@@ -174,7 +175,7 @@ class _comfySpaceState extends State<comfySpace> {
     GButton(icon: Icons.home, text: 'Home'),
     //GButton(icon: Icons.settings, ),
     GButton(icon: Icons.lightbulb, text: 'Experimental'),
-    GButton(icon: Icons.text_fields, text: 'Snippet'),
+    //GButton(icon: Icons.text_fields, text: 'Snippet'),
     GButton(icon: Icons.public, text: 'Documentation'),
   ];
 
@@ -420,10 +421,10 @@ class _spacePageState extends State<spacePage> {
   void initState(){
     super.initState();
     initControl();
-    /*
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      showAlertDialog(context);
-    });*/
+      showUpdateRepoDialog(context, widget.hostname, widget.username, widget.password);
+    });
 
   }
   @override
@@ -453,20 +454,7 @@ class _spacePageState extends State<spacePage> {
       ButtonList.add(buttonPlacement);
   }
   }
-  void showAlertDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Alert"),
-          content: Text("This is an alert dialog"),
-        );
-      },
-    );
-    Future.delayed(Duration(seconds: 10), () {
-      Navigator.of(context).pop();
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {

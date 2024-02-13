@@ -65,14 +65,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
-  background_downloader:
-    dependency: "direct main"
-    description:
-      name: background_downloader
-      sha256: "7d03f79310d090fb9029811a94ed111640a527080db7540e8b67baf9ccafef11"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.11.0"
   binary:
     dependency: transitive
     description:
@@ -321,22 +313,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
-  ffmpeg_kit_flutter:
-    dependency: "direct main"
-    description:
-      name: ffmpeg_kit_flutter
-      sha256: "843aae41823ca94a0988d975b4b6cdc6948744b9b7e2707d81a3a9cd237b0100"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.3"
-  ffmpeg_kit_flutter_platform_interface:
-    dependency: transitive
-    description:
-      name: ffmpeg_kit_flutter_platform_interface
-      sha256: addf046ae44e190ad0101b2fde2ad909a3cd08a2a109f6106d2f7048b7abedee
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.1"
   file:
     dependency: "direct main"
     description:
@@ -653,14 +629,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
-  gallery_saver:
-    dependency: "direct main"
-    description:
-      name: gallery_saver
-      sha256: df8b7e207ca12d64c71e0710a7ee3bc48aa7206d51cc720716fedb1543a66712
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.2"
   get_it:
     dependency: transitive
     description:
@@ -877,14 +845,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
-  mime:
-    dependency: transitive
-    description:
-      name: mime
-      sha256: "2e123074287cc9fd6c09de8336dae606d1ddb88d9ac47358826db698c176a1f2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.5"
   msix:
     dependency: "direct dev"
     description:

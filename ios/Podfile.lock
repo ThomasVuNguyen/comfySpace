@@ -30,6 +30,8 @@ PODS:
   - network_info_plus (0.0.1):
     - Flutter
   - OrderedSet (5.0.0)
+  - package_info_plus (0.4.5):
+    - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -49,6 +51,8 @@ PODS:
     - Flutter
   - video_player_avfoundation (0.0.1):
     - Flutter
+  - wakelock_plus (0.0.1):
+    - Flutter
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
@@ -64,6 +68,7 @@ DEPENDENCIES:
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - network_info_plus (from `.symlinks/plugins/network_info_plus/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -71,6 +76,7 @@ DEPENDENCIES:
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
+  - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
@@ -102,6 +108,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/in_app_review/ios"
   network_info_plus:
     :path: ".symlinks/plugins/network_info_plus/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
@@ -116,6 +124,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   video_player_avfoundation:
     :path: ".symlinks/plugins/video_player_avfoundation/ios"
+  wakelock_plus:
+    :path: ".symlinks/plugins/wakelock_plus/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
@@ -133,6 +143,7 @@ SPEC CHECKSUMS:
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   network_info_plus: 6d0c3eb8367b8164fa3fb0c19875e3f59d49697f
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
+  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
@@ -141,6 +152,7 @@ SPEC CHECKSUMS:
   Try: 5ef669ae832617b3cee58cb2c6f99fb767a4ff96
   url_launcher_ios: 68d46cc9766d0c41dbdc884310529557e3cd7a86
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
+  wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
   webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796

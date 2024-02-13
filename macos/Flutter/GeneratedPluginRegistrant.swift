@@ -5,7 +5,6 @@
 import FlutterMacOS
 import Foundation
 
-import ffmpeg_kit_flutter
 import file_saver
 import flutter_inappwebview_macos
 import gal
@@ -21,7 +20,6 @@ import wakelock_plus
 import webview_universal
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  FFmpegKitFlutterPlugin.register(with: registry.registrar(forPlugin: "FFmpegKitFlutterPlugin"))
   FileSaverPlugin.register(with: registry.registrar(forPlugin: "FileSaverPlugin"))
   InAppWebViewFlutterPlugin.register(with: registry.registrar(forPlugin: "InAppWebViewFlutterPlugin"))
   GalPlugin.register(with: registry.registrar(forPlugin: "GalPlugin"))

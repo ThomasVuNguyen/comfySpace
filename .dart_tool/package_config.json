@@ -50,12 +50,6 @@
       "languageVersion": "2.17"
     },
     {
-      "name": "background_downloader",
-      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/background_downloader-7.11.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
       "name": "binary",
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/binary-3.0.1",
       "packageUri": "lib/",
@@ -240,18 +234,6 @@
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/ffi-2.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
-    },
-    {
-      "name": "ffmpeg_kit_flutter",
-      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/ffmpeg_kit_flutter-6.0.3",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "ffmpeg_kit_flutter_platform_interface",
-      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/ffmpeg_kit_flutter_platform_interface-0.2.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
     },
     {
       "name": "file",
@@ -500,12 +482,6 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "gallery_saver",
-      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/gallery_saver-2.3.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "get_it",
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/get_it-7.6.4",
       "packageUri": "lib/",
@@ -666,12 +642,6 @@
       "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/meta-1.10.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
-    },
-    {
-      "name": "mime",
-      "rootUri": "file:///Users/tungnguyen/.pub-cache/hosted/pub.dev/mime-1.0.5",
-      "packageUri": "lib/",
-      "languageVersion": "3.2"
     },
     {
       "name": "msix",
@@ -1316,7 +1286,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2024-02-13T04:33:29.914985Z",
+  "generated": "2024-02-13T05:02:34.187716Z",
   "generator": "pub",
   "generatorVersion": "3.2.5"
 }
