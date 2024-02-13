@@ -1,5 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:background_downloader/background_downloader.dart';
+import 'package:comfyssh_flutter/components/LoadingWidget.dart';
+import 'package:dio/dio.dart';
+import 'package:gal/gal.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' as http;
 import 'package:comfyssh_flutter/FileFunction.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
@@ -9,6 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:xterm/xterm.dart';
 import '../components/custom_widgets.dart';
 import '../components/pop_up.dart';
@@ -29,7 +39,7 @@ class ComfyCameraButton extends StatefulWidget {
 
 class _ComfyCameraButtonState extends State<ComfyCameraButton> {
   bool SSHLoaded = false;
-  late bool isRecording;
+  late bool isRecording ;
   late SSHClient client;
   late String lastVideoName;
   late SSHSession videoSession;
@@ -67,7 +77,8 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
       username: widget.username,
       onPasswordRequest: () => widget.password
     );
-    client.run('comfy camera stream');
+    await client.run("tmux new -d -s CameraStream");
+    await client.run("tmux send-keys -t CameraStream.0 'comfy camera stream' ENTER");
     setState(() {
       SSHLoaded = true;
     });
@@ -78,26 +89,62 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
     client.close();
     await webViewController.closeAllMediaPresentations();
   }
-  Future<void> Record() async {
+  Future<void> Record(BuildContext context, SSHClient client) async {
     if(isRecording !=true){
+      showTopSnackBar(
+          Overlay.of(context),
+          CustomSnackBar.success(message: 'Recording...'),
+          animationDuration: Duration(milliseconds: 300),
+          reverseAnimationDuration: Duration(milliseconds: 300),
+          displayDuration: Duration(seconds: 1)
+      );
       print('recording');
-      isRecording = true;
+      setState(() {
+        isRecording = true;
+      });
       String timestamp = DateTime.now().microsecondsSinceEpoch.toString();
-      lastVideoName = 'ComfyVideo$timestamp.mp4';
+      lastVideoName = 'ComfyVideo$timestamp.avi';
       videoSession = await client.execute('ffmpeg -i http://0.0.0.0:8000/stream.mjpg -c:v copy -c:a aac $lastVideoName');
       print('recoding 2');
     }
     else{
+      showTopSnackBar(
+          Overlay.of(context),
+          CustomSnackBar.error(message: 'Recording saving... This could take some time'),
+          animationDuration: Duration(milliseconds: 500),
+          reverseAnimationDuration: Duration(milliseconds: 500),
+          displayDuration: Duration(seconds: 3)
+      );
       print('end recording');
-      isRecording = false;
+      setState(() {
+        isRecording = false;
+      });
       videoSession.kill(SSHSignal.QUIT);
+      await client.run("tmux new -d -s FileServerStream");
+      await client.run("tmux send-keys -t FileServerStream.0 'python3 -m http.server 2000' ENTER");
+      /*final videoPath = '${Directory.current.path}/$lastVideoName';
+      await Dio().download(url,videoPath);
+      print('dio downloaded');
+      await Gal.putVideo(videoPath);
+      print('gal video saved');*/
+      String url = 'http://${widget.hostname}:2000/$lastVideoName';
+      Future.delayed(Duration(seconds: 1));
+      await launchUrl(Uri.parse(url));
+
     }
   }
-  Future<void> TakePicture() async{
+  Future<void> TakePicture(BuildContext context) async{
     //await webViewController.reload();
+    showTopSnackBar(
+        Overlay.of(context),
+        CustomSnackBar.info(message: 'Image taken!'),
+        animationDuration: Duration(milliseconds: 300),
+        reverseAnimationDuration: Duration(milliseconds: 300),
+        displayDuration: Duration(seconds: 1)
+    );
     ScreenshotConfiguration screenshotconfig = ScreenshotConfiguration();
     print('cheese');
-    var pic = await webViewController?.takeScreenshot(screenshotConfiguration: screenshotconfig);
+    var pic = await webViewController.takeScreenshot(screenshotConfiguration: screenshotconfig);
     SaveImage(pic);
     print('image saved');
 
@@ -108,12 +155,14 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
     if(SSHLoaded == true){
       if (Platform.isAndroid == true || Platform.isIOS == true){
         return GestureDetector(
-          onDoubleTap: () async {
-            print('doubled');
-            await Record();
+          onVerticalDragEnd: (dragDetail) async{
+            await Record(context, client);
+          },
+          onHorizontalDragEnd: (dragDetail) async{
+            await Record(context, client);
           },
           onTap: () async{
-            TakePicture();
+            TakePicture(context);
           },
           child: Padding(
             padding: const EdgeInsets.all(buttonPadding),
@@ -121,40 +170,41 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 2),
                 borderRadius: BorderRadius.circular(24.0),
-                color: Colors.white,
+                color: isRecording? Colors.red :Colors.white,
               ),
               child: FractionallySizedBox(
                 widthFactor: 0.8,
                 heightFactor: 0.8,
                 child: Screenshot(
                   controller: screenshotController,
-                  child: InAppWebView(
-                    initialUrlRequest:
-                    URLRequest(url: WebUri(
-                        'http://${widget.hostname}:8000/stream.mjpg'
-                      //'https://www.raspberrypi.com/products/raspberry-pi-high-quality-camera/'
-                    )),
-                    onWebViewCreated: (InAppWebViewController controller) {
-                      webViewController = controller;
-                      //await client.run('comfy camera stream');
-                      print('streaming');
-                    },
-                    onLoadStop: (InAppWebViewController controller, uri) {
-
-                      if (_streamInitialized == false){
-                        //Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
-                        //controller.reload();
-                      }
-                      /*
-                      else if(_streamInitialized == true && _streamViewInitialized == false) {
-                          controller.reload();
-                          controller.reload();
-                          _streamViewInitialized = true;
-
-                      }
-                      */
-
-                    },
+                  child: IgnorePointer(
+                    child: InAppWebView(
+                      initialUrlRequest:
+                      URLRequest(url: WebUri(
+                          'http://${widget.hostname}:8000/stream.mjpg'
+                        //'https://www.raspberrypi.com/products/raspberry-pi-high-quality-camera/'
+                      )),
+                      onWebViewCreated: (InAppWebViewController controller) {
+                        webViewController = controller;
+                        print('streaming');
+                      },
+                      onLoadStop: (InAppWebViewController controller, uri) {
+                    
+                        if (_streamInitialized == false){
+                          //Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
+                          //controller.reload();
+                        }
+                        /*
+                        else if(_streamInitialized == true && _streamViewInitialized == false) {
+                            controller.reload();
+                            controller.reload();
+                            _streamViewInitialized = true;
+                    
+                        }
+                        */
+                    
+                      },
+                    ),
                   ),
 
                 ),
@@ -184,7 +234,7 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
       }
     }
     else{
-      return Text('Loading SSH');
+      return LoadingSpaceWidget();
     }
 
 
@@ -269,3 +319,14 @@ class _AddComfyCameraButtonState extends State<AddComfyCameraButton> {
     );
   }
 }
+
+final PictureTakenSnackBar = SnackBar(
+  elevation: 0,
+    behavior: SnackBarBehavior.floating,
+    content: AwesomeSnackbarContent(
+      title: 'Picture taken!',
+      message: 'Open your photo album to see!',
+      contentType: ContentType.success,
+        inMaterialBanner: true
+    )
+);

@@ -420,6 +420,11 @@ class _spacePageState extends State<spacePage> {
   void initState(){
     super.initState();
     initControl();
+    /*
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showAlertDialog(context);
+    });*/
+
   }
   @override
   void dispose(){
@@ -447,6 +452,20 @@ class _spacePageState extends State<spacePage> {
       );
       ButtonList.add(buttonPlacement);
   }
+  }
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Alert"),
+          content: Text("This is an alert dialog"),
+        );
+      },
+    );
+    Future.delayed(Duration(seconds: 10), () {
+      Navigator.of(context).pop();
+    });
   }
 
   @override
@@ -530,7 +549,9 @@ class _spacePageState extends State<spacePage> {
               child: comfyAppBar(
                 endDrawer: true,
                 IsSpacePage: true,
-                  titleWidget: updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal, spacename: widget.spaceName,),
+                  titleWidget:
+                      Text(widget.spaceName),
+                  //updateRepoWidget(hostname: widget.hostname, username: widget.username, password: widget.password, terminal: terminal, spacename: widget.spaceName,),
                   //automaticallyImplyLeading: true,
                   title: widget.spaceName + context.watch<SpaceEdit>().EditSpaceState.toString()
               ),
@@ -547,7 +568,7 @@ class _spacePageState extends State<spacePage> {
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     //CameraView(camera: _cameras[0]),
-                    ComfyInitializer(hostname: widget.hostname, username: widget.username, password: widget.password),
+                    //ComfyInitializer(hostname: widget.hostname, username: widget.username, password: widget.password),
                     ComfyTerminal(terminal: terminal),
                     //(MediaQuery.of(context).orientation == Orientation.landscape && Theme.of(context).platform != TargetPlatform.windows && Theme.of(context).platform != TargetPlatform.linux)? SizedBox(height: 0) :
                     Expanded(

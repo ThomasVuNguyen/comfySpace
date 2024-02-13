@@ -10,7 +10,6 @@ import 'package:camera_web/camera_web.dart';
 import 'package:file_saver/file_saver_web.dart';
 import 'package:flutter_inappwebview_web/web/main.dart';
 import 'package:flutter_keyboard_visibility_web/flutter_keyboard_visibility_web.dart';
-import 'package:flutter_screen_recording_web/flutter_screen_recording_web.dart';
 import 'package:network_info_plus/src/network_info_plus_web.dart';
 import 'package:package_info_plus/src/package_info_plus_web.dart';
 import 'package:permission_handler_html/permission_handler_html.dart';
@@ -28,7 +27,6 @@ void registerPlugins([final Registrar? pluginRegistrar]) {
   FileSaverWeb.registerWith(registrar);
   InAppWebViewFlutterPlugin.registerWith(registrar);
   FlutterKeyboardVisibilityPlugin.registerWith(registrar);
-  WebFlutterScreenRecording.registerWith(registrar);
   NetworkInfoPlusWebPlugin.registerWith(registrar);
   PackageInfoPlusWebPlugin.registerWith(registrar);
   WebPermissionHandler.registerWith(registrar);

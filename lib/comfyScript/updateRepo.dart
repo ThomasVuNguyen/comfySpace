@@ -19,11 +19,11 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
   void initState(){
     super.initState();
     updateRepoRoot(widget.hostname, widget.username, widget.password, widget.terminal);
+
   }
   @override
   void dispose(){
     super.dispose();
-
   }
 
   Future<void> updateRepoRoot(String hostname, String username, String password, Terminal terminal) async{
@@ -52,6 +52,8 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
       var assignchmod = await client.run('echo $password | sudo chmod +x /usr/bin/comfy');
       print('creating comfy command');
     }
+
+    var InstallTmux = await client.run('echo $password | sudo apt -y install tmux');
     client.close();
     print('closing client for update');
     setState(() {Finished = true;});
@@ -65,7 +67,7 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
   @override
   Widget build(BuildContext context) {
     return Text(widget.spacename);
-    /*Center(
+    /*return Center(
         child: Finished?
             FutureBuilder(
                 future: Future.delayed(const Duration(seconds: 1)),

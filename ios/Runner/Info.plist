@@ -56,6 +56,11 @@
 	<string>This app required read and write access to the photo library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app required read and write access to the photo library</string>
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>sms</string>
+      <string>tel</string>
+    </array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
