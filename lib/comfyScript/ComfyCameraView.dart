@@ -127,7 +127,9 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
       print('gal video saved');*/
       String url = 'http://${widget.hostname}:2000/$lastVideoName';
       Future.delayed(Duration(seconds: 1));
-      await launchUrl(Uri.parse(url));
+      if (!await launchUrl(Uri.parse(url))) {
+        throw Exception('Could not launch $url');
+      }
 
     }
   }
