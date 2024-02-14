@@ -53,6 +53,52 @@ class AboutUs extends StatelessWidget {
             color: Colors.blue,
             child: Text("Open Documentation", style: GoogleFonts.poppins(fontSize: 18)),
           ),
+          Center(
+            child: Text(
+              '\r\n',
+              style: GoogleFonts.poppins( fontWeight: FontWeight.w500, fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(onPressed: () async{
+                final Uri url = Uri.parse('https://www.youtube.com/channel/UC4bEbmW14EdoZ4rVvv_gR-w');
+                if (!await launchUrl(url,  mode: LaunchMode.externalApplication)) {
+                  throw Exception('Could not launch $url');
+                }
+              }, child: Image.asset('assets/youtube.png', width: 40,)),
+
+              TextButton(onPressed: () async{
+                final Uri url = Uri.parse('https://twitter.com/comfysp');
+                if (!await launchUrl(url,  mode: LaunchMode.externalApplication)) {
+                  throw Exception('Could not launch $url');
+                }
+              }, child: Image.asset('assets/twitter.png', width: 40,)),
+
+              TextButton(onPressed: () async{
+                final Uri url = Uri.parse('https://bsky.app/profile/cfsp.bsky.social');
+                if (!await launchUrl(url,  mode: LaunchMode.externalApplication)) {
+                  throw Exception('Could not launch $url');
+                }
+              }, child: Image.asset('assets/Bluesky.png', width: 40,)),
+
+              TextButton(onPressed: () async{
+                final Uri url = Uri.parse('https://www.instagram.com/comfy.rpi/');
+                if (!await launchUrl(url,  mode: LaunchMode.externalApplication)) {
+                  throw Exception('Could not launch $url');
+                }
+              }, child: Image.asset('assets/instagram.png', width: 40,)),
+
+              TextButton(onPressed: () async{
+                final Uri url = Uri.parse('https://discord.com/invite/R7TEXPCs');
+                if (!await launchUrl(url,  mode: LaunchMode.externalApplication)) {
+                  throw Exception('Could not launch $url');
+                }
+              }, child: Image.asset('assets/discord.png', width: 40,)),
+            ],
+          )
         ],
       ),
     );

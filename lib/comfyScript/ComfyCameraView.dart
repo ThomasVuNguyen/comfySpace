@@ -88,22 +88,22 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
     await webViewController.closeAllMediaPresentations();
   }
   Future<void> Record(BuildContext context, SSHClient client) async {
-    if(isRecording !=true){
-      showTopSnackBar(
-          Overlay.of(context),
-          CustomSnackBar.success(message: 'Recording...'),
-          animationDuration: Duration(milliseconds: 300),
-          reverseAnimationDuration: Duration(milliseconds: 300),
-          displayDuration: Duration(seconds: 1)
-      );
-      print('recording');
-      setState(() {
-        isRecording = true;
-      });
-      String timestamp = DateTime.now().microsecondsSinceEpoch.toString();
-      lastVideoName = 'ComfyVideo$timestamp.avi';
-      videoSession = await client.execute('ffmpeg -i http://0.0.0.0:8000/stream.mjpg -c:v copy -c:a aac $lastVideoName');
-      print('recoding 2');
+      if(isRecording !=true){
+        print('recording');
+        setState(() {
+          isRecording = true;
+        });
+        String timestamp = DateTime.now().microsecondsSinceEpoch.toString();
+        lastVideoName = 'ComfyVideo$timestamp.avi';
+        videoSession = await client.execute('ffmpeg -i http://0.0.0.0:8000/stream.mjpg -c:v copy -c:a aac $lastVideoName');
+        print('recoding 2');
+        showTopSnackBar(
+            Overlay.of(context),
+            CustomSnackBar.success(message: 'Recording... please record for at least 5s'),
+            animationDuration: Duration(milliseconds: 300),
+            reverseAnimationDuration: Duration(milliseconds: 300),
+            displayDuration: Duration(seconds: 1)
+        );
     }
     else{
       showTopSnackBar(
@@ -120,16 +120,24 @@ class _ComfyCameraButtonState extends State<ComfyCameraButton> {
       videoSession.kill(SSHSignal.QUIT);
       await client.run("tmux new -d -s FileServerStream");
       await client.run("tmux send-keys -t FileServerStream.0 'python3 -m http.server 2000' ENTER");
-      /*final videoPath = '${Directory.current.path}/$lastVideoName';
-      await Dio().download(url,videoPath);
-      print('dio downloaded');
-      await Gal.putVideo(videoPath);
-      print('gal video saved');*/
       String url = 'http://${widget.hostname}:2000/$lastVideoName';
       Future.delayed(Duration(seconds: 1));
-      if (!await launchUrl(Uri.parse(url))) {
-        throw Exception('Could not launch $url');
+      if(Platform.isIOS==true){
+        if (!await launchUrl(
+            Uri.parse(url),
+            mode: LaunchMode.externalApplication
+        )) {
+          throw Exception('Could not launch $url');
+        }
       }
+      else{
+        if (!await launchUrl(
+            Uri.parse(url),
+        )) {
+          throw Exception('Could not launch $url');
+        }
+      }
+
 
     }
   }
@@ -293,7 +301,9 @@ class _AddComfyCameraButtonState extends State<AddComfyCameraButton> {
               buttonPosition=1;
               return ButtonAlertDialog(
                   title: 'Camera Button',
-                  content: SingleChildScrollView(
+                  content:
+                      Text('Adding a camera button'),
+                  /*SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -303,11 +313,11 @@ class _AddComfyCameraButtonState extends State<AddComfyCameraButton> {
                         const SizedBox(height: 32, width: double.infinity,),
                       ],
                     ),
-                  ),
+                  ),*/
                   actions: [
                     comfyActionButton(
                       onPressed: (){
-                        addButton('comfySpace.db', widget.spaceName, buttonName, buttonSizeX, buttonSizeY, buttonPosition, '', 'ComfyCameraButton');
+                        addButton('comfySpace.db', widget.spaceName, 'camera', buttonSizeX, buttonSizeY, buttonPosition, '', 'ComfyCameraButton');
                         Provider.of<SpaceEdit>(context, listen: false).ChangeSpaceEditState();
                         Navigator.pop(context);
                       },

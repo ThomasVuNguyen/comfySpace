@@ -9,7 +9,7 @@ class ButtonDocumentation extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: () async {
-        final Uri url = Uri.parse('https://comfystudio.tech/docs/Add%20buttons');
+        final Uri url = Uri.parse('https://comfystudio.tech/doc/');
         if (!await launchUrl(url,  mode: LaunchMode.externalApplication)) {
           throw Exception('Could not launch $url');
         }
