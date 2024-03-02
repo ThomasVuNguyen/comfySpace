@@ -26,17 +26,23 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
   }
 
   Future<void> updateRepoRoot(String hostname, String username, String password, Terminal terminal) async{
+    var startSSHTime = DateTime.now().microsecondsSinceEpoch;
     SSHClient client = SSHClient(
       await SSHSocket.connect(hostname, 22),
       username: username,
       onPasswordRequest: () => password,
     );
+    var endSSHTime = DateTime.now().microsecondsSinceEpoch;
+
     var comfyExeCheck = await client.run('echo $password | sudo [ -f comfy ] && echo "1" || echo "0"');
     int comfyExeCheckString = int.parse(utf8.decode(comfyExeCheck));
     print('command check complete');
+    var comfyExeCheckTime = DateTime.now().microsecondsSinceEpoch;
+
     var FolderCheck = await client.run('echo $password | sudo [ -d comfyScript ] && echo "1" || echo "0"');
     int FolderCheckString = int.parse(utf8.decode(FolderCheck));
     print('folder check complete');
+    var comfyFolderCheckTime = DateTime.now().microsecondsSinceEpoch;
 
     if (FolderCheckString==0){
       var DownloadRepo = await client.run('git clone https://github.com/ThomasVuNguyen/comfyScript.git');
@@ -45,18 +51,31 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
     else{
       var updateRepo = await client.run('cd comfyScript && git pull');
       print('updating comfyscript');
+
     }
+    var downloadRepoTime = DateTime.now().microsecondsSinceEpoch;
+
     if (comfyExeCheckString==0){
       var makeExecutable = await client.run('echo $password | sudo cp comfyScript/bash/comfy /usr/bin/comfy');
       var assignchmod = await client.run('echo $password | sudo chmod +x /usr/bin/comfy');
       print('creating comfy command');
     }
+    var createExeTime = DateTime.now().microsecondsSinceEpoch;
 
     var InstallTmux = await client.run('echo $password | sudo apt -y install tmux');
+    var InstallTmuxTime = DateTime.now().microsecondsSinceEpoch;
+
     client.close();
     print('closing client for update');
+    print('SSHClient time: ${endSSHTime - startSSHTime}');
+    print('ComfyExeCheck time: ${comfyExeCheckTime - endSSHTime}');
+    print('comfyFolderCheck time: ${comfyFolderCheckTime- comfyExeCheckTime }');
+    print('comfyFolderCheck time: ${comfyFolderCheckTime- comfyExeCheckTime }');
+    print('downloadRepo time: ${downloadRepoTime - comfyFolderCheckTime}');
+    print('createExe time: ${createExeTime - downloadRepoTime }');
+    print('tmuxInstallation time: ${InstallTmuxTime - createExeTime}');
+    print('total time: ${InstallTmuxTime - startSSHTime}');
     setState(() {Finished = true;});
-    print('reloading update widget');
     //var result = await client.run('rm -r comfyScript');
     //terminal.write('${String.fromCharCodes(result)}\r\n');
     //var resultDownload = await client.run('git clone https://github.com/ThomasVuNguyen/comfyScript.git');
