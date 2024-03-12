@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:xterm/core.dart';
-
+/*
 class updateRepoWidget extends StatefulWidget {
   const updateRepoWidget({super.key, required this.hostname, required this.username, required this.password, required this.terminal, required this.spacename});
   final String hostname; final String username; final String password; final Terminal terminal;final String spacename;
@@ -126,4 +126,4 @@ class _updateRepoWidgetState extends State<updateRepoWidget> {
 
   }
 }
-
+*/
