@@ -13,9 +13,9 @@ import 'package:comfyssh_flutter/comfyVoice/ComfyVoice.dart';
 import 'package:comfyssh_flutter/comfyScript/CustomButton.dart';
 import 'package:comfyssh_flutter/comfyScript/LED.dart';
 import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
-import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
+import 'package:comfyssh_flutter/legacy/updateRepo.dart';
 import 'package:comfyssh_flutter/comfyVoice/ComfyVoiceDB.dart';
-import 'package:comfyssh_flutter/comfyssh/comfyssh.dart';
+import 'package:comfyssh_flutter/legacy/comfyssh/comfyssh.dart';
 import 'package:comfyssh_flutter/components/CameraView.dart';
 import 'package:comfyssh_flutter/components/DocumentationButton.dart';
 import 'package:comfyssh_flutter/components/custom_ui_components.dart';
@@ -30,8 +30,11 @@ import 'package:comfyssh_flutter/pages/NetworkScan.dart';
 import 'package:comfyssh_flutter/pages/settings.dart';
 import 'package:comfyssh_flutter/pages/splash.dart';
 import 'package:comfyssh_flutter/states/ExperimentalToggleModel.dart';
+import 'package:comfyssh_flutter/themes/color_schemes.dart';
+import 'package:comfyssh_flutter/themes/typography.dart';
 import 'package:dart_ping_ios/dart_ping_ios.dart';
 import 'package:dartssh2/dartssh2.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_draggable_gridview/flutter_draggable_gridview.dart';
@@ -42,7 +45,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_recorder/screen_recorder.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:wiredash/wiredash.dart';
 import 'package:xterm/xterm.dart';
 import 'dart:io' show Platform;
 
@@ -56,9 +58,11 @@ import 'comfyScript/FullGestureButton.dart';
 import 'comfyScript/customInput.dart';
 import 'comfyScript/stepperMotor.dart';
 import 'comfyScript/terminal.dart';
+import 'comfyauth/authentication/auth.dart';
+import 'comfyauth/authentication/components/signout.dart';
+import 'firebase_options.dart';
 
 
-String nickname = "nickname";String hostname = "hostname";int port = 22;String username = "username";String password = "password";String color = "color";int _selectedIndex = 0; String distro = "distro";
 ValueNotifier<int> reloadState = ValueNotifier(0);
 String spaceLaunch = '';
 Color? currentColor; String? currentColorString;
@@ -78,25 +82,94 @@ const keyGreen = Color(0xff3DDB87);
 late List<CameraDescription> _cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //_cameras = await availableCameras();
+  await Firebase.initializeApp(
+    options: (Platform.isWindows)? DefaultFirebaseOptions.web :DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Intitializing for legacy app
+  /*
   memoryCheck();
-  //final appDocDirectory = await getApplicationDocumentsDirectory();
-  //await configureNetworkTools(appDocDirectory.path, enableDebugging: true);
-  //sqfliteFfiInit();
-  //databaseFactory = databaseFactoryFfi;
 
   if (Platform.isWindows){
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
+
+
   reAssign();
   DartPingIOS.register();
   createHostInfo();
+  */
+
   runApp(
     const MyApp());
 
   await CreateVoicePromptDB('comfySpace.db');
 }  //main function, execute MyApp
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    memoryCheck();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'ComfySpace',
+      home: const auth_page(),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: lightColorScheme,
+        textTheme: ComfyTextTheme,
+      ),
+
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkColorScheme,
+        textTheme: ComfyTextTheme,
+      )
+      //home: Welcome(),
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          elevation: 2,
+          title: Text("Material Theme Builder"),
+        ),
+        body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('Logged in'),
+                signout_button(),
+              ],
+            )
+        ));
+  }
+}
 
 class comfySpace extends StatefulWidget {
   const comfySpace({super.key});
@@ -165,7 +238,7 @@ class _comfySpaceState extends State<comfySpace> {
       ),
     ),
     //const WiredashSettingPage(),
-    const WiredashIdeaPage(),
+    const IdeaSuggestionPage(),
     //Container(height:400, width:400, child: MjpegPlayerCF()),
     //ComfyCameraButton(name: 'hey', hostname: '10.0.0.81', terminal: Terminal()),
     //ComfyIDE(),
@@ -238,7 +311,7 @@ class _comfySpaceState extends State<comfySpace> {
     ),
     const NetworkScanPage(),
     //const WiredashSettingPage(),
-    const WiredashIdeaPage(),
+    const IdeaSuggestionPage(),
     const AboutUs(),
   ];
   final List<GButton> ExperimentalBottomBarButtonList = [
@@ -339,7 +412,7 @@ class _comfySpaceState extends State<comfySpace> {
                 padding: const EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
                   child: const Icon(Icons.feedback_outlined),
-                  onTap: (){ Wiredash.of(context).show(); },
+                  onTap: (){},
                 ),
               ),
 
@@ -371,30 +444,6 @@ class _comfySpaceState extends State<comfySpace> {
           pageLists[bottomBarIndex],
       ),
     );
-  }
-}
-
-class WireDashComfySpacePage extends StatelessWidget {
-  const WireDashComfySpacePage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: WireDashInfo(),
-        builder: (context, AsyncSnapshot<List<String>> snapshot){
-      if(snapshot.hasData){
-        print(snapshot.data);
-        return Wiredash(
-            projectId: snapshot.data![0], secret: snapshot.data![1],
-            child: const comfySpace()
-        );
-      }
-      else{
-        print("no data");
-        return const Wiredash(projectId: 'feedbacktest-s5yadlk', secret: 'lful0I9yhcgriPKd-MTEY2LBGv1pM3C_',
-            child: comfySpace()
-        );
-      }
-    });
   }
 }
 
@@ -434,7 +483,7 @@ class _spacePageState extends State<spacePage> {
   }
   Future<void> initControl() async{
     clientControl = SSHClient(
-      await SSHSocket.connect(widget.hostname, port),
+      await SSHSocket.connect(widget.hostname, 22),
       username: widget.username,
       onPasswordRequest: () => widget.password,
     );

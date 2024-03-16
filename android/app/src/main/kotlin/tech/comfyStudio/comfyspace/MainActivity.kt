@@ -1,6 +1,5 @@
-package tech.comfyStudio.comfyspace
+package tech.comfystudio.comfyspace
 
 import io.flutter.embedding.android.FlutterActivity
 
-class MainActivity: FlutterActivity() {
-}
+class MainActivity: FlutterActivity()

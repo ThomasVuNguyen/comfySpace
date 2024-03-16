@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "290068007404",
+    "project_id": "comfyspace-73966",
+    "storage_bucket": "comfyspace-73966.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290068007404:android:a0b62d01a1ddc18e3cd8c9",
+        "android_client_info": {
+          "package_name": "com.example.v2_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290068007404-u2i5usmrcfqdpl00b6lpjkeqs6b91946.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAG9NIi1CqHf04jS7ZsT97xJ6Z-xEKQC0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290068007404-u2i5usmrcfqdpl00b6lpjkeqs6b91946.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "290068007404-5lltfhcc97c05adqkvqg75etjeqbgh5a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.v21.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

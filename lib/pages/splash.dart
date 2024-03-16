@@ -2,44 +2,13 @@ import 'package:comfyssh_flutter/comfyScript/statemanagement.dart';
 import 'package:comfyssh_flutter/function.dart';
 import 'package:comfyssh_flutter/main.dart';
 import 'package:flutter/material.dart';
-import 'package:comfyssh_flutter/pages/home_page.dart';
+import 'package:comfyssh_flutter/legacy/comfyssh/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../theme/dark_theme.dart';
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+import '../legacy/theme/dark_theme.dart';
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    memoryCheck();
-  }
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-            create: (context)=> SpaceEdit(),
-        ),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'ComfySSH',
-        home: const WireDashComfySpacePage(),
-        theme: darkMode,
-        darkTheme: darkMode,
-        //home: Welcome(),
-      ),
-    );
-  }
-}
+/*
 class Splash extends StatelessWidget {
   const Splash({Key? key}) : super(key: key);
   @override
@@ -91,3 +60,4 @@ class Splash extends StatelessWidget {
     );
   }
 }
+*/

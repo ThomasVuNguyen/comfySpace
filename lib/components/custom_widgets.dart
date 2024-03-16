@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:comfyssh_flutter/comfyScript/updateRepo.dart';
+import 'package:comfyssh_flutter/legacy/updateRepo.dart';
 import 'package:comfyssh_flutter/components/pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,9 +11,9 @@ const double buttonPadding = 8.0;
 
 class comfyAppBar extends StatefulWidget {
   const comfyAppBar({
-    super.key, required this.title, this.WiredashWidget, this.automaticallyImplyLeading = false, this.IsSpacePage = false,
+    super.key, required this.title, this.automaticallyImplyLeading = false, this.IsSpacePage = false,
     this.endDrawer = false,this.titleWidget});
-  final String title; final Widget? WiredashWidget; final bool automaticallyImplyLeading; final bool IsSpacePage; final bool endDrawer;
+  final String title; final bool automaticallyImplyLeading; final bool IsSpacePage; final bool endDrawer;
   final Widget? titleWidget;
   @override
   State<comfyAppBar> createState() => _comfyAppBarState();
@@ -26,17 +26,10 @@ class _comfyAppBarState extends State<comfyAppBar> {
       preferredSize: const Size.fromHeight(64.0),
       child: AppBar(
           backgroundColor: Color(0xff717D96),
-        leading: (widget.IsSpacePage == true)? IconButton(onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  const WireDashComfySpacePage()),
-          );
-        }, icon: const Icon(Icons.arrow_back_ios)) : const SizedBox(height: 0, width: 0,),
         automaticallyImplyLeading: widget.automaticallyImplyLeading,
         actions: [
           Row(
             children: [
-              (widget.WiredashWidget != null)? widget.WiredashWidget! :const SizedBox(width: 0,),
               (widget.endDrawer != null)? IconButton(onPressed: (){
                 Scaffold.of(context).openEndDrawer();
               }, icon: const Icon(Icons.add)) :const SizedBox(width: 0,),

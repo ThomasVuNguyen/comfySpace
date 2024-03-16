@@ -2,7 +2,6 @@ import 'package:comfyssh_flutter/comfyScript/ComfyRotatingKnob.dart';
 import 'package:comfyssh_flutter/comfyVoice/ComfyVoice.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wiredash/wiredash.dart';
 
 import '../main.dart';
 
@@ -27,32 +26,9 @@ class IdeaSuggestionPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          MaterialButton(
-            onPressed: (){
-              Wiredash.of(context).show(inheritMaterialTheme: true);
-            },
-            color: Colors.blue,
-            child: Text("Suggest an idea!", style: GoogleFonts.poppins(fontSize: 18, color: bgcolor)),
-          ),
           ExperimentalWidgets()
         ],
       ),
-    );
-  }
-}
-
-class WiredashIdeaPage extends StatelessWidget {
-  const WiredashIdeaPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Wiredash(
-      projectId: 'comfy-space-suggestion-bo04w4e',
-      secret: 'tFVPfkMoISZKN9cF8dl2_RGM4Trtmh-9',
-      feedbackOptions: WiredashFeedbackOptions(
-        email: EmailPrompt.hidden,
-      ) ,
-      child: IdeaSuggestionPage(),
     );
   }
 }

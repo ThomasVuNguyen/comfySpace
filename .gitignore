@@ -51,3 +51,6 @@ app.*.map.json
 upload-keystore.jks
 /android/app/upload-keystore.jks
 /assets/
+lib/firebase_options.dart
+lib/firebase_options.dart
+v2_1/ios/firebase_app_id_file.json

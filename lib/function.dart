@@ -21,6 +21,7 @@ import 'comfyScript/FullGestureButton.dart';
 import 'comfyScript/LED.dart';
 import 'comfyScript/customInput.dart';
 import 'comfyScript/stepperMotor.dart';
+import 'legacy/comfyssh/comfyssh.dart';
 
 Future<List<String>>updateSpaceRender() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
