@@ -19,7 +19,9 @@ TextTheme ComfyTextTheme = TextTheme(
   bodySmall: GoogleFonts.montserrat(fontWeight: FontWeight.normal, fontSize: 12),
 
   labelLarge: GoogleFonts.montserrat(fontWeight: FontWeight.w700, fontSize: 16), //could be medium 500
-  labelMedium: GoogleFonts.montserrat(fontWeight: FontWeight.w700, fontSize: 12), //could be medium 500
+  labelMedium: GoogleFonts.montserrat(fontWeight: FontWeight.w500, fontSize: 12), //could be medium 500
   labelSmall: GoogleFonts.montserrat(fontWeight: FontWeight.w500, fontSize: 11),
 
 );
+
+TextStyle labelMediumProminent = GoogleFonts.montserrat(fontWeight: FontWeight.w700, fontSize: 12);
