@@ -2,15 +2,22 @@
 
 Comfy Space 2.1
 
-## Getting Started
+## Tips:
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. When using Futurebuilder + calling data from firestore, put the Future<> get_data function in the initState as a variable & pass that as the future for FutureBuilder. This prevents query whenever screen changes -> faster load/animation & lower bills (only reading once)
+    ```
+   class _HomeScreenState extends State<HomeScreen> {
+    var user_info;
+    @override
+    void initState() {
+        user_info = get_user_information();
+        super.initState();
+                        }
+    int _selectedPageIndex = 0;
+    @override
+    Widget build(BuildContext context) {
+        return FutureBuilder<user_information>(
+            future: user_info,
+            builder: (BuildContext context, snapshot){
+                if(snapshot.connectionState == ConnectionState.done){ ...
+```

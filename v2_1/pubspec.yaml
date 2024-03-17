@@ -18,6 +18,8 @@ dependencies:
   gap: ^3.0.1
   firebase_auth: ^4.17.9
   google_sign_in: ^6.2.1
+  dotted_border: ^2.1.0
+  cloud_firestore: ^4.15.9
 
 dev_dependencies:
   flutter_test:
