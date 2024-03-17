@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
@@ -36,6 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
               account_info(name: user?.name, tagline: user?.tagline,)
             ];
             return Scaffold(
+              floatingActionButton: TextButton(
+                onPressed: () async { get_project_information(); },
+                child: Text('List projects'),),
+
                 appBar: AppBar(
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   title: Text('Greetings, ${user?.name}'),
