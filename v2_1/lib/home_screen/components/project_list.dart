@@ -26,6 +26,7 @@ class project_card extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Container(
+        constraints: BoxConstraints(maxWidth: 500),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           border: Border.all(
