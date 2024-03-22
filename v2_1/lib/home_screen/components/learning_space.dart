@@ -73,8 +73,7 @@ class community_project_tab extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          project_card(),
-          project_card(),project_card(),
+          Text('community')
         ],
       ),
     );

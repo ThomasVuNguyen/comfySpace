@@ -36,14 +36,10 @@ class _HomeScreenState extends State<HomeScreen> {
               account_info(name: user?.name, tagline: user?.tagline,)
             ];
             return Scaffold(
-              floatingActionButton: TextButton(
-                onPressed: () async { get_project_information(); },
-                child: Text('List projects'),),
-
                 appBar: AppBar(
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   title: Text('Greetings, ${user?.name}'),
-                  actions: [
+                  actions: const [
                     avatar_icon()
                   ],
                 ),
