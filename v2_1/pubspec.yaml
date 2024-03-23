@@ -20,6 +20,7 @@ dependencies:
   google_sign_in: ^6.2.1
   dotted_border: ^2.1.0
   cloud_firestore: ^4.15.9
+  reorderable_grid: ^1.0.10
 
 dev_dependencies:
   flutter_test:

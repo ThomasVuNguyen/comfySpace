@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:reorderable_grid/reorderable_grid.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
+import 'package:v2_1/project_space_screen/button_list/button_global/button_sort.dart';
 
 import '../home_screen/comfy_user_information_function/project_information.dart';
 
@@ -23,8 +26,12 @@ class _project_spaceState extends State<project_space> {
   }
   @override
   Widget build(BuildContext context) {
-
+    var screen_width = MediaQuery.of(context).size.width~/5;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: Text('Welcome, ${widget.project_name}'),
+      ),
       body: Center(
         child: FutureBuilder(
           future: get_button_list_information(widget.project_name),
@@ -37,12 +44,35 @@ class _project_spaceState extends State<project_space> {
             }
             else{
               var button_list = snapshot.data;
-              return ListView.builder(
-                itemCount: button_list?.length,
-                  itemBuilder: (context, index){
-                  return Text(button_list![index].name!);
+
+              return Center(
+                child: SafeArea(
+                  child: ReorderableGridView.builder(
+                      itemCount: button_list!.length,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                    onReorder: (oldIndex, newIndex){print('old: $oldIndex new: $newIndex');},
+                      itemBuilder: (context, index){
+                        return Container(
+                          key: Key(button_list[index].order.toString()),
+                          child: button_sort(button: button_list[index],),
+                        );
                   }
+
+
+                  ),
+                ),
               );
+              /*
+              return ReorderableListView.builder(
+                itemCount: button_list!.length,
+                  itemBuilder: (context, index){
+                  return Text(
+                    key: Key(button_list[index].order.toString()),
+                      button_list[index].name!)
+                  ;
+                  },
+                onReorder: (int oldIndex, int newIndex) { print(oldIndex); },
+              );*/
             }
             }
 
