@@ -46,10 +46,10 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
                     )
                 ),
                 Padding(
-                  padding: _status?
-                  const EdgeInsets.only(
-                      top: 10, bottom: 30, left: 30, right: 10
-                  ): EdgeInsets.all(
+                  padding:
+                  //_status?
+                  //const EdgeInsets.only(top: 10, bottom: 30, left: 30, right: 10):
+                    EdgeInsets.all(
                       20
                   ),
                   child: Container(
@@ -73,18 +73,22 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
                                   topLeft: Radius.circular(6),
                                   topRight: Radius.circular(6)
                               )),
-                          child: Center(
+                          /*child: Center(
                             child: Text(
                               widget.button.name!,
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
-                          ),
+                          ),*/
                         ),
                         Container(height: 2, color: Colors.black,),
                         Expanded(
                           child: Container(
+                            width: double.infinity,height: double.infinity,
+                            child: _status?
+                            Image.asset('assets/flutter-webp-nomeno/characters/generated/eye_open.png')
+                                :Image.asset('assets/flutter-webp-nomeno/characters/generated/eye_closed.png'),
                             decoration: BoxDecoration(
-                                color: widget.button.color,
+                                color: widget.button.color,//widget.button.color,
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(6),
                                     bottomRight: Radius.circular(6)

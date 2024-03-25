@@ -49,6 +49,10 @@ flutter:
     - assets/comfy_icon.png
     - assets/google_icon.png
     - assets/apple_icon.png
+    - assets/4_enemies_sprite_sheet/SLIME/
+    - assets/YoMoji!/
+    - assets/flutter-webp-nomeno/characters/
+    - assets/flutter-webp-nomeno/characters/generated/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
