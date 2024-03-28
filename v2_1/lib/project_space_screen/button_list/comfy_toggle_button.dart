@@ -41,8 +41,6 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                         color: Theme.of(context).colorScheme.secondary,
                       ),
-
-
                     )
                 ),
                 Padding(

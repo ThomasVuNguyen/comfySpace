@@ -50,7 +50,12 @@ class _project_spaceState extends State<project_space> {
                   child: ReorderableGridView.builder(
                       itemCount: button_list!.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                    onReorder: (oldIndex, newIndex){print('old: $oldIndex new: $newIndex');},
+                    onReorder: (oldIndex, newIndex){
+                        print('old: $oldIndex new: $newIndex');
+                        print('old: ${button_list[oldIndex].name}');
+                        print('new: ${button_list[newIndex].name}');
+                        }
+                      ,
                       itemBuilder: (context, index){
                         return Container(
                           key: Key(button_list[index].order.toString()),
@@ -62,17 +67,6 @@ class _project_spaceState extends State<project_space> {
                   ),
                 ),
               );
-              /*
-              return ReorderableListView.builder(
-                itemCount: button_list!.length,
-                  itemBuilder: (context, index){
-                  return Text(
-                    key: Key(button_list[index].order.toString()),
-                      button_list[index].name!)
-                  ;
-                  },
-                onReorder: (int oldIndex, int newIndex) { print(oldIndex); },
-              );*/
             }
             }
 
