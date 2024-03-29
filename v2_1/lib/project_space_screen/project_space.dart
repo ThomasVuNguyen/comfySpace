@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/project_space_screen/button_list/button_global/button_sort.dart';
 
@@ -50,10 +51,11 @@ class _project_spaceState extends State<project_space> {
                   child: ReorderableGridView.builder(
                       itemCount: button_list!.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                    onReorder: (oldIndex, newIndex){
-                        print('old: $oldIndex new: $newIndex');
-                        print('old: ${button_list[oldIndex].name}');
-                        print('new: ${button_list[newIndex].name}');
+                    onReorder: (oldIndex, newIndex) async{
+                        print('$oldIndex swapped with $newIndex');
+
+                      await SwapButton(oldIndex, newIndex, button_list, widget.project_name);
+                        setState(() {});
                         }
                       ,
                       itemBuilder: (context, index){

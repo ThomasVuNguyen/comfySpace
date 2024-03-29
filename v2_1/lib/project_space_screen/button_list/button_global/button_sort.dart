@@ -9,20 +9,37 @@ class button_sort extends StatelessWidget {
   final comfy_button button;
   @override
   Widget build(BuildContext context) {
-    return Builder(
-    builder: (context){
-      switch (button.type){
-        case 'tap':
-          return comfy_tap_button(button: button);
-        case 'toggle':
-          return comfy_toggle_button(button: button);
-        case 'swipe':
-          return comfy_swipe_button(button: button);
-        default:
-          return Text('unidentified ${button.type}');
+    return Stack(
+      alignment: Alignment.topRight,
+      children: [
+        Builder(builder: (context){
+          switch (button.type){
+            case 'tap':
+              return comfy_tap_button(button: button);
+            case 'toggle':
+              return comfy_toggle_button(button: button);
+            case 'swipe':
+              return comfy_swipe_button(button: button);
+            default:
+              return Text('unidentified ${button.type}');
 
-      }
-      },
-      );
+          }
+        }),
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            height: 30, width: 30,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(8)
+            ),
+            padding: EdgeInsets.all(0),
+
+              child: IconButton(onPressed: (){}, icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.onPrimaryContainer,size: 12,))),
+        ),
+      ],
+    );
+
+
   }
 }

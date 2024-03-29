@@ -31,76 +31,47 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
           );
         },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 50),
           child: Stack(
-              children: [
-                Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    )
-                ),
-                Padding(
-                  padding:
-                  //_status?
-                  //const EdgeInsets.only(top: 10, bottom: 30, left: 30, right: 10):
-                    EdgeInsets.all(
-                      20
+            alignment: Alignment.bottomCenter,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xFFDAEED7),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Theme.of(context).colorScheme.onBackground, width: 2)
                   ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2,
-                          color:Theme.of(context).colorScheme.onBackground
-                      ),
-                      borderRadius: button_border,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.background,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(6),
-                                  topRight: Radius.circular(6)
-                              )),
-                          /*child: Center(
-                            child: Text(
-                              widget.button.name!,
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          ),*/
-                        ),
-                        Container(height: 2, color: Colors.black,),
-                        Expanded(
-                          child: Container(
-                            width: double.infinity,height: double.infinity,
-                            child: _status?
-                            Image.asset('assets/flutter-webp-nomeno/characters/generated/eye_open.png')
-                                :Image.asset('assets/flutter-webp-nomeno/characters/generated/eye_closed.png'),
-                            decoration: BoxDecoration(
-                                color: widget.button.color,//widget.button.color,
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6)
-                                )
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
 
-              ]
-          ),
+                ),
+              ),
+              Container(
+                child: Builder(
+                  builder: (context){
+                    if(_status==true) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
+                        child: Image.asset('assets/froggie/toggle-on.png',),
+                      );
+                    }
+                    else{
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 30, right: 30, bottom: 45, top: 20),
+                        child: Image.asset('assets/froggie/toggle-off.png', fit: BoxFit.fill,),
+                      );
+                    }}
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  widget.button.name!,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ),
+            ],
+          )
         )
     );
 
