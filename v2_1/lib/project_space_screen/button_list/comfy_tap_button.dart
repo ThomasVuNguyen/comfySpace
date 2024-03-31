@@ -55,7 +55,9 @@ class _comfy_tap_buttonState extends State<comfy_tap_button> {
                     decoration: BoxDecoration(
                         color: Color(0xFFDAEED7),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Theme.of(context).colorScheme.onBackground, width: 2)
+                        border: Border.all(color: widget.button.color!
+                        //Theme.of(context).colorScheme.onBackground
+                            , width: 2)
                     ),
 
                   ),

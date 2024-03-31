@@ -27,9 +27,9 @@ class _project_spaceState extends State<project_space> {
   }
   @override
   Widget build(BuildContext context) {
-    var screen_width = MediaQuery.of(context).size.width~/5;
+    var screen_width = MediaQuery.of(context).size.width~/200;
     return Scaffold(
-      appBar: AppBar(
+      appBar:AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text('Welcome, ${widget.project_name}'),
       ),
@@ -50,7 +50,7 @@ class _project_spaceState extends State<project_space> {
                 child: SafeArea(
                   child: ReorderableGridView.builder(
                       itemCount: button_list!.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: screen_width),
                     onReorder: (oldIndex, newIndex) async{
                         print('$oldIndex swapped with $newIndex');
 
