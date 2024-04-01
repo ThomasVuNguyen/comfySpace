@@ -21,6 +21,7 @@ dependencies:
   dotted_border: ^2.1.0
   cloud_firestore: ^4.15.9
   reorderable_grid: ^1.0.10
+  rive: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +55,7 @@ flutter:
     - assets/flutter-webp-nomeno/characters/
     - assets/flutter-webp-nomeno/characters/generated/
     - assets/froggie/
+    - assets/rive/arrow.riv
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

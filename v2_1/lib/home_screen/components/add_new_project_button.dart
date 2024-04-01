@@ -9,7 +9,7 @@ class add_new_project extends StatelessWidget {
     return FloatingActionButton(
       child: Icon(Icons.add),
         onPressed: (){
-          AddNewProject();
+          //AddNewProject();
         }
     );
   }

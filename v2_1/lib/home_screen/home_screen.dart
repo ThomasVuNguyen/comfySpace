@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
-                floatingActionButton: (_selectedPageIndex==0)? add_new_project(): null,
+                /*floatingActionButton: (_selectedPageIndex==0)? add_new_project(): null,*/
               );
 
           }
