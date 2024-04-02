@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:rive/rive.dart';
 import 'package:v2_1/comfyauth/authentication/components/signout.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/delete_project.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
+import 'package:v2_1/home_screen/home_screen.dart';
 
 import '../../project_space_screen/project_space.dart';
 import '../comfy_user_information_function/project_information.dart';
@@ -147,6 +149,39 @@ class _project_cardState extends State<project_card> {
                   Container(
                     height: 30, alignment: Alignment.center,
                       child: Text(widget.project_description!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary))),
+                  ExpansionTile(
+                      title: Center(child: Text('more')),
+                    children: [
+                      Center(
+                        child: Row(
+                          children: [
+                            Column(
+                              children: [
+                                Text('Hostname'), Text('username'), Text('password'),
+                              ],
+                            ),
+                            Gap(50),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(widget.hostname!),
+                                Text(widget.username!),
+                                Text(widget.password!),
+                              ],
+                            ),
+                            Gap(50),
+                            IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+                            Gap(20),
+                            IconButton(onPressed: () async{
+                                await delete_project(widget.project_name!, widget.project_description!, context);
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                            }, icon: Icon(Icons.delete))
+                          ],
+                        ),
+                      )
+
+                    ],
+                  )
                 ],
               ),
             ),

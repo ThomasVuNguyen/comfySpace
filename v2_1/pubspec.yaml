@@ -22,6 +22,7 @@ dependencies:
   cloud_firestore: ^4.15.9
   reorderable_grid: ^1.0.10
   rive: ^0.13.1
+  unsplash_client: ^2.2.0
 
 dev_dependencies:
   flutter_test:

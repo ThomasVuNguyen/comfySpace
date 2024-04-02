@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/unsplash/generate_image.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
+import 'package:v2_1/home_screen/home_screen.dart';
 
 class create_new_project extends StatefulWidget {
   const create_new_project({super.key});
@@ -18,7 +20,11 @@ class _create_new_projectState extends State<create_new_project> {
   final hostnameController = TextEditingController();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  bool _pageOneVisible = true; bool _pageTwoVisible = false;
+  bool _pageOneVisible = true;
+  bool _pageTwoVisible = false;
+  bool _pageThreeVisible = false;
+  bool _pageFourVisible = false;
+  bool _pageFiveVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,10 +51,14 @@ class _create_new_projectState extends State<create_new_project> {
                   obsureText: false,
                   titleText: 'Description'),
             ),
-
-            //Page 2: Host information
+            //Page 2: generate image
             Visibility(
               visible: _pageTwoVisible,
+                child: coverImageGenerator(query: projectNameController.text,),
+            ),
+            //Page 3: Host information
+            Visibility(
+              visible: _pageThreeVisible,
               child: in_app_textfield(
                   controller: hostnameController,
                   hintText: 'raspberrypi.local',
@@ -57,7 +67,7 @@ class _create_new_projectState extends State<create_new_project> {
             ),
             Gap(20),
             Visibility(
-              visible: _pageTwoVisible,
+              visible: _pageThreeVisible,
               child: in_app_textfield(
                   controller: usernameController,
                   hintText: '',
@@ -66,41 +76,126 @@ class _create_new_projectState extends State<create_new_project> {
             ),
             Gap(20),
             Visibility(
-              visible: _pageTwoVisible,
+              visible: _pageThreeVisible,
               child: in_app_textfield(
                   controller: passwordController,
                   hintText: '',
                   obsureText: true,
                   titleText: 'Password'),
             ),
+            //Page 4: Detecting your raspberry pi
+
+            Visibility(
+              visible: _pageFourVisible,
+                child: Text('loading animation here')),
+
+            //Page 5: Scanning result
+            Visibility(
+              visible: _pageFiveVisible,
+                child: Text('Scanning result here')),
+
             Gap(20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(onPressed:(){ Navigator.pop(context); }, icon: const Icon(Icons.back_hand)),
-                TextButton(
+                IconButton(
                     onPressed: (){
-                      if(_pageOneVisible == false && _pageTwoVisible == true){
-                        AddNewProject(
-                          context,
-                          projectNameController.text,
-                          projectDescriptionController.text,
-                          hostnameController.text,
-                          usernameController.text,
-                          passwordController.text
-                        );
-                      }
-                      else{
+                      if(_pageOneVisible == true){
                         setState(() {
-                          _pageOneVisible = !_pageOneVisible; _pageTwoVisible = !_pageOneVisible;
+                          _pageOneVisible = !_pageOneVisible;
+                          _pageTwoVisible = true;
+                          _pageThreeVisible = false;
+                          _pageFourVisible = false;
+                          _pageFiveVisible = false;
                         });
                       }
+                      else if(_pageTwoVisible == true){
+                        setState(() {
+                          _pageOneVisible = false;
+                          _pageTwoVisible = !_pageTwoVisible;
+                          _pageThreeVisible = true;
+                          _pageFourVisible = false;
+                          _pageFiveVisible = false;
+                        });
+                      }
+                      else if(_pageThreeVisible == true){
+                        setState(() {
+                          _pageOneVisible = false;
+                          _pageTwoVisible = false;
+                          _pageThreeVisible = !_pageThreeVisible;
+                          _pageFourVisible = true;
+                          _pageFiveVisible = false;
+                        });
+
+                      }
+                      else if(_pageFourVisible == true){
+                        setState(() {
+                          _pageOneVisible = false;
+                          _pageTwoVisible = false;
+                          _pageThreeVisible = false;
+                          _pageFourVisible = !_pageFourVisible;
+                          _pageFiveVisible = true;
+                        });
+
+                      }
+                      else if(_pageFiveVisible == true){
+                        AddNewProject(
+                            context,
+                            projectNameController.text,
+                            projectDescriptionController.text,
+                            hostnameController.text,
+                            usernameController.text,
+                            passwordController.text
+                        );
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                      }
                       },
-                    child: const Text('hey'))
+                    icon: Icon(Icons.forward),)
               ],
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class coverImageGenerator extends StatefulWidget {
+  const coverImageGenerator({super.key, required this.query});
+  final String query;
+  @override
+  State<coverImageGenerator> createState() => _coverImageGeneratorState();
+}
+
+class _coverImageGeneratorState extends State<coverImageGenerator> {
+  @override
+  void initState() {
+    print('unsplash reload');
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200, width: 200,
+      child: Column(
+        children: [
+          FutureBuilder(
+              future: search_image(widget.query), 
+              builder: (context, snapshot){
+                if(snapshot.connectionState == ConnectionState.done){
+                  return Image.network(snapshot.data![0].urls.full.toString());
+                }
+                else{
+                  return CircularProgressIndicator();
+                }
+              }
+
+          ),
+          IconButton(onPressed: (){
+            setState(() {
+          });}, icon:Icon(Icons.receipt_long))
+        ],
       ),
     );
   }
