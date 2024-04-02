@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
+import 'package:unsplash_client/unsplash_client.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/unsplash/generate_image.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/home_screen/home_screen.dart';
 
+String imgURLPlaceHolder = '';
 class create_new_project extends StatefulWidget {
   const create_new_project({super.key});
 
@@ -146,7 +148,9 @@ class _create_new_projectState extends State<create_new_project> {
                             projectDescriptionController.text,
                             hostnameController.text,
                             usernameController.text,
-                            passwordController.text
+                            passwordController.text,
+                          imgURLPlaceHolder
+
                         );
                         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
                       }
@@ -177,14 +181,22 @@ class _coverImageGeneratorState extends State<coverImageGenerator> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200, width: 200,
-      child: Column(
+      constraints: const BoxConstraints(
+        maxWidth: 500,
+      ),
+      child: Stack(
+        alignment: Alignment.topRight,
         children: [
           FutureBuilder(
               future: search_image(widget.query), 
               builder: (context, snapshot){
                 if(snapshot.connectionState == ConnectionState.done){
-                  return Image.network(snapshot.data![0].urls.full.toString());
+                  imgURLPlaceHolder = snapshot.data![0].urls.full.toString();
+                  return AspectRatio(
+                    aspectRatio: 2/1,
+                      child: Image.network(snapshot.data![0].urls.full.toString(),
+                        fit: BoxFit.cover,
+                      ));
                 }
                 else{
                   return CircularProgressIndicator();
@@ -192,9 +204,18 @@ class _coverImageGeneratorState extends State<coverImageGenerator> {
               }
 
           ),
-          IconButton(onPressed: (){
-            setState(() {
-          });}, icon:Icon(Icons.receipt_long))
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              //borderRadius: const BorderRadius.all(Radius.circular(8)),
+              color: Colors.transparent
+              //Theme.of(context).colorScheme.onBackground,
+              //border: Border.all(color: Theme.of(context).colorScheme.background, width: 1)
+            ),
+            child: IconButton(onPressed: (){
+              setState(() {
+              });}, icon:Icon(Icons.refresh, color: Theme.of(context).colorScheme.background,)))
+
         ],
       ),
     );

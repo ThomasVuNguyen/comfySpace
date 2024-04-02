@@ -84,6 +84,7 @@ class _project_listState extends State<project_list> {
                           hostname: project_list[index].hostname,
                           username: project_list[index].username,
                           password: project_list[index].password,
+                          imgURL: project_list[index].imgURL,
                         );
                       }
 
@@ -103,9 +104,10 @@ class _project_listState extends State<project_list> {
 
 class project_card extends StatefulWidget {
   const project_card({super.key, required this.project_name, required this.project_description,
-    required this.hostname, required this.username, required this.password});
+    required this.hostname, required this.username, required this.password, required this.imgURL});
   final String? project_name; final String? project_description;
   final String? hostname; final String? username; final String? password;
+  final String? imgURL;
   @override
   State<project_card> createState() => _project_cardState();
 }
@@ -142,7 +144,7 @@ class _project_cardState extends State<project_card> {
               ),
                       child: AspectRatio(
                         aspectRatio: 2/1,
-                          child: Image.network('https://images.unsplash.com/photo-1571769267292-e24dfadebbdc?q=80&w=1490&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                          child: Image.network(widget.imgURL!,
                           fit: BoxFit.cover,))),
                   Container(height: 60, alignment: Alignment.center,
                       child: Text(widget.project_name!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary),)),
