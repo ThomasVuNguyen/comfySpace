@@ -23,6 +23,11 @@ dependencies:
   reorderable_grid: ^1.0.10
   rive: ^0.13.1
   unsplash_client: ^2.2.0
+  typewritertext: ^3.0.2
+  flutter_floating_bottom_bar: ^1.2.0
+  dot_navigation_bar: ^1.0.2
+  salomon_bottom_bar: ^3.3.2
+  flutter_expandable_fab: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +62,7 @@ flutter:
     - assets/flutter-webp-nomeno/characters/generated/
     - assets/froggie/
     - assets/rive/arrow.riv
+    - assets/component_assets/floating_button/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

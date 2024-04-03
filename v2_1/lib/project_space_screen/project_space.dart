@@ -1,11 +1,17 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:typewritertext/typewritertext.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/project_space_screen/button_list/button_global/button_sort.dart';
+import 'package:v2_1/project_space_screen/components/floating_buttons.dart';
 
 import '../home_screen/comfy_user_information_function/project_information.dart';
 
@@ -41,7 +47,21 @@ class _project_spaceState extends State<project_space> {
               return CircularProgressIndicator();
             }
             else if(snapshot.hasError){
-              return Text(snapshot.error.toString());
+              if(snapshot.error.toString().contains('No element') == true){
+                return Container(
+                  color: Colors.red,
+                  height: 400, width: 200,
+                  child: const TypeWriterText(
+                    text: Text('Welcome to your project!'),
+                    duration: Duration(milliseconds: 100),
+                    alignment: Alignment.center,
+                  ),
+                );
+              }
+              else{
+                return Text(snapshot.error.toString());
+              }
+
             }
             else{
               var button_list = snapshot.data;
@@ -52,20 +72,19 @@ class _project_spaceState extends State<project_space> {
                       itemCount: button_list!.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: screen_width),
                     onReorder: (oldIndex, newIndex) async{
-                        print('$oldIndex swapped with $newIndex');
+                        if (kDebugMode) {
+                          print('$oldIndex swapped with $newIndex');
+                        }
 
                       await SwapButton(oldIndex, newIndex, button_list, widget.project_name);
                         setState(() {});
-                        }
-                      ,
+                        },
                       itemBuilder: (context, index){
                         return Container(
                           key: Key(button_list[index].order.toString()),
                           child: button_sort(button: button_list[index],),
                         );
                   }
-
-
                   ),
                 ),
               );
@@ -73,7 +92,38 @@ class _project_spaceState extends State<project_space> {
             }
 
         ),
-      )
+      ),
+      floatingActionButton: ExpandableFab(
+        openButtonBuilder: FloatingActionButtonBuilder(
+            size: 56,
+            builder: (BuildContext context, void Function()? onPressed, Animation<double> progress) { 
+              return FloatingButton(
+                  assetPath: 'assets/component_assets/floating_button/ComfyLogo.png',
+                  color: Theme.of(context).colorScheme.primaryContainer);
+            }
+        ),
+        children: [
+          IconButton(
+              onPressed: (){},
+              icon: FloatingButtonIcon(
+                icon: Icons.settings,
+                bgcolor: Theme.of(context).colorScheme.primaryContainer,
+                iconColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              )
+          ),
+          IconButton(
+              onPressed: (){},
+              icon: FloatingButtonIcon(
+                icon: Icons.add,
+                bgcolor: Theme.of(context).colorScheme.primaryContainer,
+                iconColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              )
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: ExpandableFab.location,
+
+
     );
   }
 }
