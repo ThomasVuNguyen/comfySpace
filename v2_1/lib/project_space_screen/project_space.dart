@@ -10,7 +10,9 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:typewritertext/typewritertext.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
+import 'package:v2_1/home_screen/home_screen.dart';
 import 'package:v2_1/project_space_screen/button_list/button_global/button_sort.dart';
+import 'package:v2_1/project_space_screen/components/add_new_button_screen.dart';
 import 'package:v2_1/project_space_screen/components/floating_buttons.dart';
 
 import '../home_screen/comfy_user_information_function/project_information.dart';
@@ -36,22 +38,28 @@ class _project_spaceState extends State<project_space> {
     var screen_width = MediaQuery.of(context).size.width~/200;
     return Scaffold(
       appBar:AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(Icons.subdirectory_arrow_left),
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          },
+        ),
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text('Welcome, ${widget.project_name}'),
       ),
       body: Center(
         child: FutureBuilder(
-          future: get_button_list_information(widget.project_name),
+          future: get_button_list_information(context, widget.project_name),
             builder: (context, snapshot){
             if(snapshot.connectionState != ConnectionState.done){
               return CircularProgressIndicator();
             }
             else if(snapshot.hasError){
               if(snapshot.error.toString().contains('No element') == true){
-                return Container(
-                  color: Colors.red,
+                return const SizedBox(
                   height: 400, width: 200,
-                  child: const TypeWriterText(
+                  child: TypeWriterText(
                     text: Text('Welcome to your project!'),
                     duration: Duration(milliseconds: 100),
                     alignment: Alignment.center,
@@ -104,7 +112,9 @@ class _project_spaceState extends State<project_space> {
         ),
         children: [
           IconButton(
-              onPressed: (){},
+              onPressed: (){
+
+              },
               icon: FloatingButtonIcon(
                 icon: Icons.settings,
                 bgcolor: Theme.of(context).colorScheme.primaryContainer,
@@ -112,7 +122,9 @@ class _project_spaceState extends State<project_space> {
               )
           ),
           IconButton(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewButtonScreen(projectName: widget.project_name)));
+              },
               icon: FloatingButtonIcon(
                 icon: Icons.add,
                 bgcolor: Theme.of(context).colorScheme.primaryContainer,
@@ -122,8 +134,6 @@ class _project_spaceState extends State<project_space> {
         ],
       ),
       floatingActionButtonLocation: ExpandableFab.location,
-
-
     );
   }
 }

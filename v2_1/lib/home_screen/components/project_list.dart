@@ -144,7 +144,16 @@ class _project_cardState extends State<project_card> {
               ),
                       child: AspectRatio(
                         aspectRatio: 2/1,
-                          child: Image.network(widget.imgURL!,
+                          child: Image.network(
+                            widget.imgURL!,
+                            loadingBuilder: (context, child, loadingProgess){
+                              if(loadingProgess == null){
+                                return child;
+                              }
+                              else{
+                                return Center(child: CircularProgressIndicator(),);
+                              }
+                            },
                           fit: BoxFit.cover,))),
                   Container(height: 60, alignment: Alignment.center,
                       child: Text(widget.project_name!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary),)),
