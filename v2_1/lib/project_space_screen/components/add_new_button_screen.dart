@@ -27,6 +27,20 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
   final buttonColorController = TextEditingController();
   final buttonThemeController = TextEditingController();
 
+  //controller for tap button
+  final tapCommandTextController = TextEditingController();
+
+  //controller for toggle buttons
+  final toggleOnCommandTextController = TextEditingController();
+  final toggleOffCommandTextController = TextEditingController();
+
+  //controller for swipe buttons
+  final swipeUpCommandTextController = TextEditingController();
+  final swipeDownCommandTextController = TextEditingController();
+  final swipeLeftCommandTextController = TextEditingController();
+  final swipeRightCommandTextController = TextEditingController();
+  final swipeTapCommandTextController = TextEditingController();
+
   Future<void> navigate() async {
     if(_confirmationPage == false){
       setState(() {
