@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/add_button.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
+import 'package:v2_1/project_space_screen/components/ButtonCommandCreatePage.dart';
 import 'package:v2_1/project_space_screen/project_space.dart';
 
 class AddNewButtonScreen extends StatefulWidget {
@@ -41,47 +42,85 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
   final swipeRightCommandTextController = TextEditingController();
   final swipeTapCommandTextController = TextEditingController();
 
+  //placeholder for button function map
+  Map<String, String> buttonFunction = {};
+
   Future<void> navigate() async {
     if(_confirmationPage == false){
-      setState(() {
         if(_showWelcomeScreen == true){
-          _showWelcomeScreen = false;
-          _pickButtonTypeAndName = true;
-          _pickCommands = false;
-          _pickTheme = false;
-          _confirmationPage = false;
+          setState(() {
+            _showWelcomeScreen = false;
+            _pickButtonTypeAndName = true;
+            _pickCommands = false;
+            _pickTheme = false;
+            _confirmationPage = false;
+          });
         }
         else if(_pickButtonTypeAndName == true){
-          _showWelcomeScreen = false;
-          _pickButtonTypeAndName = false;
-          _pickCommands = true;
-          _pickTheme = false;
-          _confirmationPage = false;
+          if(buttonNameController.text.isEmpty || buttonTypeController.text.isEmpty){
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Button name & type cannot be empty')));
+          }
+          else{
+            setState(() {
+              _showWelcomeScreen = false;
+              _pickButtonTypeAndName = false;
+              _pickCommands = true;
+              _pickTheme = false;
+              _confirmationPage = false;
+            });
+          }
+
         }
         else if(_pickCommands == true){
-          _showWelcomeScreen = false;
-          _pickButtonTypeAndName = false;
-          _pickCommands = false;
-          _pickTheme = true;
-          _confirmationPage = false;
+          setState(() {
+            _showWelcomeScreen = false;
+            _pickButtonTypeAndName = false;
+            _pickCommands = false;
+            _pickTheme = true;
+            _confirmationPage = false;
+          });
+
         }
         else if(_pickTheme == true){
-          _showWelcomeScreen = false;
-          _pickButtonTypeAndName = false;
-          _pickCommands = false;
-          _pickTheme = false;
-          _confirmationPage = true;
+          setState(() {
+            _showWelcomeScreen = false;
+            _pickButtonTypeAndName = false;
+            _pickCommands = false;
+            _pickTheme = false;
+            _confirmationPage = true;
+          });
+
         }
-      });
+
     }
     else{
       if(kDebugMode){
         print('adding button');
       }
+      if(buttonTypeController.text.toLowerCase()=='tap'){
+        buttonFunction = {
+          'tap': tapCommandTextController.text
+        };
+      }
+      else if(buttonTypeController.text.toLowerCase()=='toggle'){
+        buttonFunction = {
+          'on': toggleOnCommandTextController.text,
+          'off': toggleOffCommandTextController.text,
+        };
+      }
+      else if(buttonTypeController.text.toLowerCase()=='swipe'){
+        buttonFunction = {
+          'up': swipeUpCommandTextController.text,
+          'down': swipeDownCommandTextController.text,
+          'tap': swipeTapCommandTextController.text,
+          'left': swipeLeftCommandTextController.text,
+          'right': swipeRightCommandTextController.text,
+        };
+      }
       await AddNewButton(widget.projectName,
           buttonTypeController.text.toLowerCase(),
           buttonNameController.text,
-          {'tap': 'comfy led 17 1'},
+          buttonFunction,
           buttonColorController.text.toLowerCase(),
           buttonThemeController.text.toLowerCase());
       Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(project_name: widget.projectName)));
@@ -129,7 +168,19 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
             //Page 3: Pick a command
             Visibility(
               visible: _pickCommands,
-                child: const Text('Pick command')
+                child: ButtonCommandCreatePage(
+                  buttonType: buttonTypeController.text.toLowerCase(),
+                  tapCommandTextController: tapCommandTextController,
+
+                  toggleOnCommandTextController: toggleOnCommandTextController,
+                  toggleOffCommandTextController: toggleOffCommandTextController,
+
+                  swipeUpCommandTextController: swipeUpCommandTextController,
+                  swipeDownCommandTextController: swipeDownCommandTextController,
+                  swipeLeftCommandTextController: swipeLeftCommandTextController,
+                  swipeRightCommandTextController: swipeRightCommandTextController,
+                  swipeTapCommandTextController: swipeTapCommandTextController,
+                )
             ),
             const Gap(20),
 
@@ -182,3 +233,4 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
     );
   }
 }
+
