@@ -82,13 +82,18 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
 
         }
         else if(_pickTheme == true){
-          setState(() {
-            _showWelcomeScreen = false;
-            _pickButtonTypeAndName = false;
-            _pickCommands = false;
-            _pickTheme = false;
-            _confirmationPage = true;
-          });
+          if(buttonThemeController.text.isEmpty || buttonColorController.text.isEmpty){
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Theme & Color cannot be empty')));
+          }
+          else{
+            setState(() {
+              _showWelcomeScreen = false;
+              _pickButtonTypeAndName = false;
+              _pickCommands = false;
+              _pickTheme = false;
+              _confirmationPage = true;
+            });
+          }
 
         }
 

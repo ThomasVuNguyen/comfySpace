@@ -18,6 +18,8 @@ class ButtonCommandCreatePage extends StatefulWidget {
     required this.swipeRightCommandTextController,
     required this.swipeTapCommandTextController,
 
+    this.buttonFunction = const {},
+
 
   });
   final String buttonType;
@@ -34,11 +36,35 @@ class ButtonCommandCreatePage extends StatefulWidget {
   final TextEditingController swipeLeftCommandTextController;
   final TextEditingController swipeRightCommandTextController;
   final TextEditingController swipeTapCommandTextController;
+
+  //store existing button data for editing buttons
+  final Map<String, String> buttonFunction;
   @override
   State<ButtonCommandCreatePage> createState() => _ButtonCommandCreatePageState();
 }
 
 class _ButtonCommandCreatePageState extends State<ButtonCommandCreatePage> {
+
+  @override
+  void initState() {
+    //if editing a button, pre-fill the fields
+    if(widget.buttonType == 'tap' && widget.buttonFunction.isNotEmpty){
+      widget.tapCommandTextController.text = widget.buttonFunction['tap']!;
+    }
+    else if(widget.buttonType == 'toggle' && widget.buttonFunction.isNotEmpty ){
+      widget.toggleOnCommandTextController.text = widget.buttonFunction['on']!;
+      widget.toggleOffCommandTextController.text = widget.buttonFunction['off']!;
+    }
+    else if(widget.buttonType == 'swipe' && widget.buttonFunction.isNotEmpty ){
+      widget.swipeUpCommandTextController.text = widget.buttonFunction['up']!;
+      widget.swipeDownCommandTextController.text = widget.buttonFunction['down']!;
+      widget.swipeLeftCommandTextController.text = widget.buttonFunction['left']!;
+      widget.swipeRightCommandTextController.text = widget.buttonFunction['right']!;
+      widget.swipeTapCommandTextController.text = widget.buttonFunction['tap']!;
+    }
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context){

@@ -1,14 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/delete_button.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/project_information.dart';
+import 'package:v2_1/home_screen/components/set_user_info.dart';
+import 'package:v2_1/project_space_screen/components/ButtonCommandCreatePage.dart';
 
 import '../project_space.dart';
 
 class ButtonEditAndDeletePage extends StatefulWidget {
   const ButtonEditAndDeletePage({super.key,
     required this.projectName,
-    required this.buttonName,
+    required this.button,
   });
-  final String projectName;  final String buttonName;
+  final String projectName;  final comfy_button button;
   @override
   State<ButtonEditAndDeletePage> createState() => _ButtonEditAndDeletePageState();
 }
@@ -77,14 +84,18 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
 
       }
       else if(_pickTheme == true){
-        setState(() {
-          _showSelectionScreen = false;
-          _pickButtonTypeAndName = false;
-          _pickCommands = false;
-          _pickTheme = false;
-          _confirmationPage = true;
-        });
-
+        if(buttonThemeController.text.isEmpty || buttonColorController.text.isEmpty){
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Theme & Color cannot be empty')));
+        }
+        else{
+          setState(() {
+            _showSelectionScreen = false;
+            _pickButtonTypeAndName = false;
+            _pickCommands = false;
+            _pickTheme = false;
+            _confirmationPage = true;
+          });
+        }
       }
 
     }
@@ -112,12 +123,9 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
           'right': swipeRightCommandTextController.text,
         };
       }
-      /*await AddNewButton(widget.projectName,
-          buttonTypeController.text.toLowerCase(),
-          buttonNameController.text,
-          buttonFunction,
-          buttonColorController.text.toLowerCase(),
-          buttonThemeController.text.toLowerCase());*/
+      await edit_button(context, widget.projectName, widget.button.name!,
+          buttonNameController.text, buttonTypeController.text.toLowerCase(),
+          buttonColorController.text.toLowerCase(), buttonFunction);
       Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(project_name: widget.projectName)));
     }
 
@@ -127,6 +135,109 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
   Map<String, String> buttonFunction = {};
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //Page 1: Edit or Delete button?
+            Visibility(
+              visible: _showSelectionScreen,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () async {
+                        await delete_button(context, widget.projectName, widget.button.name!);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(project_name: widget.projectName)));
+                        },
+                      icon: const Text('Delete')),
+                  Gap(40),
+                  IconButton(onPressed: navigate, icon: const Text('Edit button'))
+                ],
+              ),
+            ),
+            //Page 2: Pick button name and type
+            Visibility(
+                visible: _pickButtonTypeAndName,
+                child: in_app_textfield(
+                  controller: buttonNameController,
+                  hintText: '', obsureText: false,
+                  titleText: 'Button Name',
+                  initialValue: widget.button.name!,
+                )
+            ),
+            const Gap(20),
+            Visibility(
+                visible: _pickButtonTypeAndName,
+                child: DropdownMenu(
+                  initialSelection: widget.button.type,
+                  label: const Text('Pick a button Type'),
+                  enableSearch: true,
+                  enableFilter: true,
+                  controller: buttonTypeController,
+                  dropdownMenuEntries: const [
+                    DropdownMenuEntry(value: 'tap', label: 'tap'),
+                    DropdownMenuEntry(value: 'toggle', label: 'toggle'),
+                    DropdownMenuEntry(value: 'swipe', label: 'swipe')
+                  ],
+                )
+            ),
+
+            //Page 3: Pick commands
+            Visibility(
+              visible: _pickCommands,
+              child: ButtonCommandCreatePage(
+              buttonType: buttonTypeController.text.toLowerCase(),
+              buttonFunction: widget.button.function!,
+              tapCommandTextController: tapCommandTextController,
+
+              toggleOnCommandTextController: toggleOnCommandTextController,
+              toggleOffCommandTextController: toggleOffCommandTextController,
+
+              swipeUpCommandTextController: swipeUpCommandTextController,
+              swipeDownCommandTextController: swipeDownCommandTextController,
+              swipeLeftCommandTextController: swipeLeftCommandTextController,
+              swipeRightCommandTextController: swipeRightCommandTextController,
+              swipeTapCommandTextController: swipeTapCommandTextController,
+            ),
+            ),
+
+            //Page4: Pick theme & color
+            Visibility(
+                visible: _pickTheme,
+                child: DropdownMenu(
+                  initialSelection: widget.button.color,
+                  controller: buttonColorController,
+                  enableSearch: true, enableFilter: true,
+                  dropdownMenuEntries: const [
+                    DropdownMenuEntry(value: 'red', label: 'Red'),
+                    DropdownMenuEntry(value: 'green', label: 'Green'),
+                    DropdownMenuEntry(value: 'blue', label: 'Blue')
+                  ],
+                )
+            ),
+            const Gap(20),
+            Visibility(
+                visible: _pickTheme,
+                child: DropdownMenu(
+                  controller: buttonThemeController,
+                  enableSearch: true, enableFilter: true,
+                  dropdownMenuEntries: const [
+                    DropdownMenuEntry(value: 'froggie', label: 'Froggie'),
+                    DropdownMenuEntry(value: 'classic', label: 'classic'),
+                  ],
+                )
+            ),
+            //Navigation button
+            Gap(40),
+            Visibility(
+              visible: !_showSelectionScreen,
+                child: IconButton(onPressed: navigate, icon: const Icon(Icons.arrow_circle_right_outlined),))
+
+          ],
+        ),
+      ),
+    );
   }
 }

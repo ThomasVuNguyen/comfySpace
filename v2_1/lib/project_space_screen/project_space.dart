@@ -90,7 +90,9 @@ class _project_spaceState extends State<project_space> {
                       itemBuilder: (context, index){
                         return Container(
                           key: Key(button_list[index].order.toString()),
-                          child: button_sort(button: button_list[index],),
+                          child: button_sort(button: button_list[index],
+                            projectName: widget.project_name,
+                          ),
                         );
                   }
                   ),

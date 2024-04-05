@@ -89,13 +89,21 @@ class _set_user_infoState extends State<set_user_info> {
 
 
 class in_app_textfield extends StatefulWidget {
-  const in_app_textfield({super.key, required this.controller, required this.hintText, required this.obsureText, required this.titleText, this.maxWidth = 1000});
-  final TextEditingController controller; final String hintText; final bool obsureText; final String titleText; final double maxWidth;
+  const in_app_textfield({super.key, required this.controller, required this.hintText, required this.obsureText, required this.titleText, this.maxWidth = 1000, this.initialValue = ''});
+  final TextEditingController controller; final String hintText; final bool obsureText; final String titleText; final double maxWidth; final String initialValue;
   @override
   State<in_app_textfield> createState() => _in_app_textfieldState();
 }
 
 class _in_app_textfieldState extends State<in_app_textfield> {
+  @override
+  void initState() {
+    //pre fill Textfield with value if initial value is set
+    if(widget.initialValue !=''){
+      widget.controller.text = widget.initialValue;
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Center(
