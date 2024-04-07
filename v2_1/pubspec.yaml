@@ -28,6 +28,8 @@ dependencies:
   dot_navigation_bar: ^1.0.2
   salomon_bottom_bar: ^3.3.2
   flutter_expandable_fab: ^2.0.0
+  dartssh2: ^2.8.2
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

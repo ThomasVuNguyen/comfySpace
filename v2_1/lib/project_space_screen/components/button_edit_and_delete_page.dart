@@ -14,8 +14,10 @@ class ButtonEditAndDeletePage extends StatefulWidget {
   const ButtonEditAndDeletePage({super.key,
     required this.projectName,
     required this.button,
+    required this.hostname, required this.username, required this.password
   });
   final String projectName;  final comfy_button button;
+  final String hostname; final String username; final String password;
   @override
   State<ButtonEditAndDeletePage> createState() => _ButtonEditAndDeletePageState();
 }
@@ -126,7 +128,12 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
       await edit_button(context, widget.projectName, widget.button.name!,
           buttonNameController.text, buttonTypeController.text.toLowerCase(),
           buttonColorController.text.toLowerCase(), buttonFunction);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(project_name: widget.projectName)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(
+          project_name: widget.projectName,
+        hostname: widget.hostname,
+        username: widget.username,
+        password: widget.password,
+      )));
     }
 
   }
@@ -149,7 +156,12 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                   IconButton(
                       onPressed: () async {
                         await delete_button(context, widget.projectName, widget.button.name!);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(project_name: widget.projectName)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(
+                            project_name: widget.projectName,
+                          hostname: widget.hostname,
+                          username: widget.username,
+                          password: widget.password,
+                        )));
                         },
                       icon: const Text('Delete')),
                   Gap(40),

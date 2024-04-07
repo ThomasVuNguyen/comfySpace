@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/home_screen/components/account_info.dart';
-import 'package:v2_1/home_screen/components/add_new_project_button.dart';
 import 'package:v2_1/home_screen/components/avatar_icon.dart';
 import 'package:v2_1/home_screen/components/learning_space.dart';
 import 'package:v2_1/home_screen/components/project_list.dart';
@@ -73,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             _selectedPageIndex = 2;
                           });
                         },
-                          child: avatar_icon()
+                          child: const avatar_icon()
                       )
                     ],
                   ),

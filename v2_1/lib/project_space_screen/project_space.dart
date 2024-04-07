@@ -14,128 +14,154 @@ import 'package:v2_1/home_screen/home_screen.dart';
 import 'package:v2_1/project_space_screen/button_list/button_global/button_sort.dart';
 import 'package:v2_1/project_space_screen/components/add_new_button_screen.dart';
 import 'package:v2_1/project_space_screen/components/floating_buttons.dart';
+import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
 
 import '../home_screen/comfy_user_information_function/project_information.dart';
 
 class project_space extends StatefulWidget {
-  const project_space({super.key, required this.project_name});
-  final String project_name;
+  const project_space({super.key, required this.project_name, required this.hostname, required this.username, required this.password});
+  final String project_name; final String hostname; final String username; final String password;
   @override
   State<project_space> createState() => _project_spaceState();
 }
 
 class _project_spaceState extends State<project_space> {
-
   @override
   void initState() {
+    acquireStaticIP(widget.hostname, widget.username, widget.password);
     if (kDebugMode) {
       print(widget.project_name);
     }
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     var screen_width = MediaQuery.of(context).size.width~/200;
-    return Scaffold(
-      appBar:AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: Icon(Icons.subdirectory_arrow_left),
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-          },
-        ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        title: Text('Welcome, ${widget.project_name}'),
-      ),
-      body: Center(
-        child: FutureBuilder(
-          future: get_button_list_information(context, widget.project_name),
-            builder: (context, snapshot){
-            if(snapshot.connectionState != ConnectionState.done){
-              return CircularProgressIndicator();
+    return FutureBuilder(
+        future: getStaticIp(widget.hostname),
+        builder: (context, snapshot){
+          if(snapshot.connectionState != ConnectionState.done){
+            return Text('Static IP acquiring');
+          }
+          else{
+            String staticIP = '0.0.0.0';
+            if(snapshot.data != null){
+              staticIP = snapshot.data!;
             }
-            else if(snapshot.hasError){
-              if(snapshot.error.toString().contains('No element') == true){
-                return const SizedBox(
-                  height: 400, width: 200,
-                  child: TypeWriterText(
-                    text: Text('Welcome to your project!'),
-                    duration: Duration(milliseconds: 100),
-                    alignment: Alignment.center,
-                  ),
-                );
-              }
-              else{
-                return Text(snapshot.error.toString());
-              }
-
-            }
-            else{
-              var button_list = snapshot.data;
-
-              return Center(
-                child: SafeArea(
-                  child: ReorderableGridView.builder(
-                      itemCount: button_list!.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: screen_width),
-                    onReorder: (oldIndex, newIndex) async{
-                        if (kDebugMode) {
-                          print('$oldIndex swapped with $newIndex');
+            return Scaffold(
+              appBar:AppBar(
+                automaticallyImplyLeading: false,
+                leading: IconButton(
+                  icon: Icon(Icons.subdirectory_arrow_left),
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                  },
+                ),
+                backgroundColor: Theme.of(context).colorScheme.surface,
+                title: Text('Welcome, ${widget.project_name}'),
+              ),
+              body: Center(
+                child: FutureBuilder(
+                    future: get_button_list_information(context, widget.project_name),
+                    builder: (context, snapshot){
+                      if(snapshot.connectionState != ConnectionState.done){
+                        return CircularProgressIndicator();
+                      }
+                      else if(snapshot.hasError){
+                        if(snapshot.error.toString().contains('No element') == true){
+                          return const SizedBox(
+                            height: 400, width: 200,
+                            child: TypeWriterText(
+                              text: Text('Welcome to your project!'),
+                              duration: Duration(milliseconds: 100),
+                              alignment: Alignment.center,
+                            ),
+                          );
+                        }
+                        else{
+                          return Text(snapshot.error.toString());
                         }
 
-                      await SwapButton(oldIndex, newIndex, button_list, widget.project_name);
-                        setState(() {});
-                        },
-                      itemBuilder: (context, index){
-                        return Container(
-                          key: Key(button_list[index].order.toString()),
-                          child: button_sort(button: button_list[index],
-                            projectName: widget.project_name,
+                      }
+                      else{
+                        var button_list = snapshot.data;
+
+                        return Center(
+                          child: SafeArea(
+                            child: ReorderableGridView.builder(
+                                itemCount: button_list!.length,
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: screen_width),
+                                onReorder: (oldIndex, newIndex) async{
+                                  if (kDebugMode) {
+                                    print('$oldIndex swapped with $newIndex');
+                                  }
+
+                                  await SwapButton(oldIndex, newIndex, button_list, widget.project_name);
+                                  setState(() {});
+                                },
+                                itemBuilder: (context, index){
+                                  return Container(
+                                    key: Key(button_list[index].order.toString()),
+                                    child: button_sort(
+                                      button: button_list[index],
+                                      projectName: widget.project_name,
+                                      hostname: widget.hostname,
+                                      username: widget.username,
+                                      password: widget.password,
+                                      staticIP: staticIP,
+                                    ),
+                                  );
+                                }
+                            ),
                           ),
                         );
-                  }
-                  ),
+                      }
+                    }
+
                 ),
-              );
-            }
-            }
+              ),
+              floatingActionButton: ExpandableFab(
+                openButtonBuilder: FloatingActionButtonBuilder(
+                    size: 56,
+                    builder: (BuildContext context, void Function()? onPressed, Animation<double> progress) {
+                      return FloatingButton(
+                          assetPath: 'assets/component_assets/floating_button/ComfyLogo.png',
+                          color: Theme.of(context).colorScheme.primaryContainer);
+                    }
+                ),
+                children: [
+                  IconButton(
+                      onPressed: (){
 
-        ),
-      ),
-      floatingActionButton: ExpandableFab(
-        openButtonBuilder: FloatingActionButtonBuilder(
-            size: 56,
-            builder: (BuildContext context, void Function()? onPressed, Animation<double> progress) { 
-              return FloatingButton(
-                  assetPath: 'assets/component_assets/floating_button/ComfyLogo.png',
-                  color: Theme.of(context).colorScheme.primaryContainer);
-            }
-        ),
-        children: [
-          IconButton(
-              onPressed: (){
-
-              },
-              icon: FloatingButtonIcon(
-                icon: Icons.settings,
-                bgcolor: Theme.of(context).colorScheme.primaryContainer,
-                iconColor: Theme.of(context).colorScheme.onPrimaryContainer,
-              )
-          ),
-          IconButton(
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewButtonScreen(projectName: widget.project_name)));
-              },
-              icon: FloatingButtonIcon(
-                icon: Icons.add,
-                bgcolor: Theme.of(context).colorScheme.primaryContainer,
-                iconColor: Theme.of(context).colorScheme.onPrimaryContainer,
-              )
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: ExpandableFab.location,
+                      },
+                      icon: FloatingButtonIcon(
+                        icon: Icons.settings,
+                        bgcolor: Theme.of(context).colorScheme.primaryContainer,
+                        iconColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                      )
+                  ),
+                  IconButton(
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewButtonScreen(
+                          projectName: widget.project_name,
+                          hostname: widget.hostname,
+                          username: widget.username,
+                          password: widget.password,
+                        )));
+                      },
+                      icon: FloatingButtonIcon(
+                        icon: Icons.add,
+                        bgcolor: Theme.of(context).colorScheme.primaryContainer,
+                        iconColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                      )
+                  ),
+                ],
+              ),
+              floatingActionButtonLocation: ExpandableFab.location,
+            );
+          }
+        }
     );
   }
 }

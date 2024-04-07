@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,6 +9,7 @@ import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dar
 import 'package:v2_1/home_screen/comfy_user_information_function/unsplash/generate_image.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/home_screen/home_screen.dart';
+import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
 
 String imgURLPlaceHolder = '';
 class create_new_project extends StatefulWidget {
@@ -27,6 +30,7 @@ class _create_new_projectState extends State<create_new_project> {
   bool _pageThreeVisible = false;
   bool _pageFourVisible = false;
   bool _pageFiveVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +106,7 @@ class _create_new_projectState extends State<create_new_project> {
               children: [
                 IconButton(onPressed:(){ Navigator.pop(context); }, icon: const Icon(Icons.back_hand)),
                 IconButton(
-                    onPressed: (){
+                    onPressed: () async {
                       if(_pageOneVisible == true){
                         setState(() {
                           _pageOneVisible = !_pageOneVisible;
@@ -132,13 +136,38 @@ class _create_new_projectState extends State<create_new_project> {
 
                       }
                       else if(_pageFourVisible == true){
-                        setState(() {
-                          _pageOneVisible = false;
-                          _pageTwoVisible = false;
-                          _pageThreeVisible = false;
-                          _pageFourVisible = !_pageFourVisible;
-                          _pageFiveVisible = true;
-                        });
+                        try{
+                          print('acquiring static ip');
+                          await acquireStaticIP(hostnameController.text, usernameController.text, passwordController.text).timeout(Duration(seconds: 5));
+                          setState(() {
+                            _pageOneVisible = false;
+                            _pageTwoVisible = false;
+                            _pageThreeVisible = false;
+                            _pageFourVisible = !_pageFourVisible;
+                            _pageFiveVisible = true;
+                          });
+                        } on TimeoutException{
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Timeout finding the Raspberry Pi on network')));
+                          print('time out acquiring static ip');
+                          setState(() {
+                            _pageOneVisible = false;
+                            _pageTwoVisible = false;
+                            _pageThreeVisible = false;
+                            _pageFourVisible = !_pageFourVisible;
+                            _pageFiveVisible = true;
+                          });
+                        }
+                        catch (e){
+                          print('error acquiring static ip: $e');
+                          setState(() {
+                            _pageOneVisible = false;
+                            _pageTwoVisible = false;
+                            _pageThreeVisible = false;
+                            _pageFourVisible = !_pageFourVisible;
+                            _pageFiveVisible = true;
+                          });
+                        }
+
 
                       }
                       else if(_pageFiveVisible == true){

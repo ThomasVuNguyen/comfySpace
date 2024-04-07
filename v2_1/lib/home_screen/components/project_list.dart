@@ -12,7 +12,6 @@ import 'package:v2_1/home_screen/home_screen.dart';
 
 import '../../project_space_screen/project_space.dart';
 import '../comfy_user_information_function/project_information.dart';
-import 'add_new_project_button.dart';
 import 'create_new_project.dart';
 
 class project_list extends StatefulWidget {
@@ -116,7 +115,10 @@ class _project_cardState extends State<project_card> {
 
   void openProjectSpace(){
 
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => project_space(project_name: widget.project_name!)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => project_space(
+        project_name: widget.project_name!,
+      hostname: widget.hostname!, username: widget.username!, password: widget.password!,
+    )));
   }
   @override
   Widget build(BuildContext context) {

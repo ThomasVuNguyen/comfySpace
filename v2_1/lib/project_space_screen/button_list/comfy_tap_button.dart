@@ -1,16 +1,18 @@
+import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/project_information.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/unsplash/generate_image.dart';
 import 'package:v2_1/project_space_screen/button_list/button_global/variables.dart';
 
 import '../../home_screen/comfy_user_information_function/project_information.dart';
 
 class comfy_tap_button extends StatefulWidget {
-  const comfy_tap_button({super.key, required this.button});
-  final comfy_button button;
+  const comfy_tap_button({super.key, required this.button, required this.hostname, required this.staticIP, required this.username, required this.password});
+  final comfy_button button; final String hostname; final String username; final String password; final String staticIP;
 
   @override
   State<comfy_tap_button> createState() => _comfy_tap_buttonState();
@@ -18,16 +20,47 @@ class comfy_tap_button extends StatefulWidget {
 
 class _comfy_tap_buttonState extends State<comfy_tap_button> {
   bool _status = false;
+  late SSHClient sshClient;
 
-  void onClick(){
+  @override
+  void initState(){
+    initClient();
+    super.initState();
+  }
+
+  Future<void> initClient() async{
+    for(String potentialHostName in [widget.staticIP, widget.hostname]){
+      try{
+        sshClient = SSHClient(
+          await SSHSocket.connect(potentialHostName, 22),
+          username: widget.username,
+          onPasswordRequest: () => widget.password,
+        );
+        //attempt a connection
+        await sshClient.execute('echo hi');
+        print('ssh connection successfully created with hostname $potentialHostName');
+        break;
+
+      }
+      catch (e){
+        //if all hostname tested and not working, report!
+        if(potentialHostName == widget.hostname){
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
+        }
+
+      }
+    }
+  }
+  Future<void> onClick() async {
     HapticFeedback.heavyImpact();
     SystemSound.play(SystemSoundType.click);
+    await sshClient.run(widget.button.function!['tap']!);
   }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (details){
-        onClick();
+      onTapDown: (details) async{
+        await onClick();
         setState(
             () {
               _status = !_status;
@@ -35,7 +68,7 @@ class _comfy_tap_buttonState extends State<comfy_tap_button> {
         );
       },
         onTapUp: (details) async {
-          onClick();
+          await onClick();
           if(_status){
             print('tap up');
             await Future.delayed(Duration(milliseconds: 100));

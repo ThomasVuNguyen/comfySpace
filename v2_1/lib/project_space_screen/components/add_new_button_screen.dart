@@ -8,10 +8,10 @@ import 'package:v2_1/project_space_screen/project_space.dart';
 
 class AddNewButtonScreen extends StatefulWidget {
   const AddNewButtonScreen({super.key,
-    required this.projectName
+    required this.projectName, required this.hostname, required this.username, required this.password
   });
   final String projectName;
-
+  final String hostname; final String username; final String password;
   @override
   State<AddNewButtonScreen> createState() => _AddNewButtonScreenState();
 }
@@ -128,7 +128,12 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
           buttonFunction,
           buttonColorController.text.toLowerCase(),
           buttonThemeController.text.toLowerCase());
-      Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(project_name: widget.projectName)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(
+          project_name: widget.projectName,
+        hostname: widget.hostname,
+        username: widget.username,
+        password: widget.password,
+      )));
     }
 
   }
