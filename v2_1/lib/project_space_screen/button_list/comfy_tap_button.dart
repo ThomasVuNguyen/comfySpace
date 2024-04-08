@@ -47,7 +47,6 @@ class _comfy_tap_buttonState extends State<comfy_tap_button> {
         if(potentialHostName == widget.hostname){
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
         }
-
       }
     }
   }
