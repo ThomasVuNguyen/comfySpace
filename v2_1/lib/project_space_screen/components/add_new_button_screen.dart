@@ -128,12 +128,13 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
           buttonFunction,
           buttonColorController.text.toLowerCase(),
           buttonThemeController.text.toLowerCase());
-      Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(
+      Navigator.pop(context);
+      /*Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(
           project_name: widget.projectName,
         hostname: widget.hostname,
         username: widget.username,
         password: widget.password,
-      )));
+      )));*/
     }
 
   }

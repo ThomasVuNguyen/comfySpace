@@ -1,3 +1,4 @@
+import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,6 +15,7 @@ class comfy_swipe_button extends StatefulWidget {
 
 class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
   bool _status = false;
+  late SSHClient sshClient;
 
   void onClick(){
     HapticFeedback.heavyImpact();
