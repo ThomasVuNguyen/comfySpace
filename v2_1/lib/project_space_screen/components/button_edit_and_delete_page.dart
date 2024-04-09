@@ -128,7 +128,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
       await edit_button(context, widget.projectName, widget.button.name!,
           buttonNameController.text, buttonTypeController.text.toLowerCase(),
           buttonColorController.text.toLowerCase(), buttonFunction);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => project_space(
           project_name: widget.projectName,
         hostname: widget.hostname,
         username: widget.username,
@@ -155,13 +155,13 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                 children: [
                   IconButton(
                       onPressed: () async {
-                        await delete_button(context, widget.projectName, widget.button.name!);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(
-                            project_name: widget.projectName,
-                          hostname: widget.hostname,
-                          username: widget.username,
-                          password: widget.password,
-                        )));
+                        await delete_button(context, widget.projectName, widget.button.name!).then((value) =>
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => project_space(
+                              project_name: widget.projectName,
+                              hostname: widget.hostname,
+                              username: widget.username,
+                              password: widget.password,
+                            ))));
                         },
                       icon: const Text('Delete')),
                   Gap(40),

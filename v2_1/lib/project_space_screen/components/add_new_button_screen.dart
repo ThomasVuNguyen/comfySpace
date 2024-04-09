@@ -128,19 +128,23 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
           buttonFunction,
           buttonColorController.text.toLowerCase(),
           buttonThemeController.text.toLowerCase());
-      Navigator.pop(context);
-      /*Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => project_space(
           project_name: widget.projectName,
         hostname: widget.hostname,
         username: widget.username,
         password: widget.password,
-      )));*/
+      )),
+            (Route<dynamic> route) => false,
+      );
     }
 
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -232,12 +236,21 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(onPressed: (){Navigator.pop(context);}, icon: const Icon(Icons.assignment_return)),
+                IconButton(onPressed: (){
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => project_space(
+                      project_name: widget.projectName,
+                      hostname: widget.hostname,
+                      username: widget.username,
+                      password: widget.password,
+                    )),
+                        (Route<dynamic> route) => false,
+                  );
+                  }, icon: const Icon(Icons.assignment_return)),
                 IconButton(onPressed: () { navigate();}, icon: const Icon(Icons.arrow_right))
               ],
             )
-
-
           ],
         ),
       ),

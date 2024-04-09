@@ -72,11 +72,12 @@ class _button_sortState extends State<button_sort> {
             ),
             padding: EdgeInsets.all(0),
               child: IconButton(onPressed: (){
-                Navigator.push(context,
+                Navigator.pushAndRemoveUntil(context,
                   MaterialPageRoute(builder: (context) => ButtonEditAndDeletePage(
                     projectName: widget.projectName, button: widget.button,
                     hostname: widget.hostname, username: widget.username, password: widget.password,
-                  ))
+                  )),
+                      (Route<dynamic> route) => false,
                 );
               }, icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.onPrimaryContainer,size: 12,))),
         ),
