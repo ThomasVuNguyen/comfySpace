@@ -16,12 +16,13 @@ import 'package:v2_1/project_space_screen/components/add_new_button_screen.dart'
 import 'package:v2_1/project_space_screen/components/floating_buttons.dart';
 import 'package:v2_1/project_space_screen/components/raspberrypi_setup.dart';
 import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
+import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../home_screen/comfy_user_information_function/project_information.dart';
 
 class project_space extends StatefulWidget {
-  const project_space({super.key, required this.project_name, required this.hostname, required this.username, required this.password});
-  final String project_name; final String hostname; final String username; final String password;
+  const project_space({super.key, required this.project_name, required this.hostname, required this.username, required this.password, this.raspberryPiInit = false});
+  final String project_name; final String hostname; final String username; final String password; final bool raspberryPiInit;
   @override
   State<project_space> createState() => _project_spaceState();
 }
@@ -51,10 +52,10 @@ class _project_spaceState extends State<project_space> {
   Widget build(BuildContext context) {
     var screen_width = MediaQuery.of(context).size.width~/200;
     return FutureBuilder(
-          future: project_space_initialize(context, widget.hostname, widget.username, widget.password, widget.project_name),
+          future: project_space_initialize(context, widget.hostname, widget.username, widget.password, widget.project_name, widget.raspberryPiInit),
           builder: (context, snapshot){
             if(snapshot.connectionState != ConnectionState.done){
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: randomLoadingWidget());
             }
             else if(snapshot.hasError){
               if(snapshot.error.toString().contains('No element') == true){
@@ -62,11 +63,11 @@ class _project_spaceState extends State<project_space> {
                   appBar: AppBar(
                     automaticallyImplyLeading: false,
                     leading: IconButton(
-                      icon: Icon(Icons.subdirectory_arrow_left),
+                      icon: const Icon(Icons.subdirectory_arrow_left),
                       onPressed: (){
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => HomeScreen()),
+                            MaterialPageRoute(builder: (context) => const HomeScreen()),
                               (Route<dynamic> route) => false,
                         );
                       },
@@ -129,9 +130,8 @@ class _project_spaceState extends State<project_space> {
                 );
               }
               else{
-                return Text(snapshot.error.toString());
+                return Center(child: Text(snapshot.error.toString()));
               }
-
             }
             else{
               String staticIP = '0.0.0.0';
@@ -230,18 +230,23 @@ class _project_spaceState extends State<project_space> {
               );
             }
           }
-
       );
   }
 }
 
-Future<List<dynamic>> project_space_initialize(BuildContext context, String hostname, String username, String password, String project_name) async{
-  await setUpRaspberryPi(context, hostname, username, password);
+Future<List<dynamic>> project_space_initialize(BuildContext context, String hostname, String username, String password, String project_name, bool raspberryPiInit) async{
+  double beginningTime = DateTime.now().microsecondsSinceEpoch/1000000;
+  //if project screen is loaded from the home screen, run raspberry pi init function
+  if(raspberryPiInit == true){
+    await setUpRaspberryPi(context, hostname, username, password);
+  }
+
   String? staticIP = await getStaticIp(hostname);
   List<comfy_button> button_list = await get_button_list_information(context, project_name);
+  double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
+  print('time taken to load in project $project_name: ${endTime-beginningTime} ');
   if(kIsWeb){
     return ['0.0.0.0', button_list];
   }
   return [staticIP, button_list];
-
 }

@@ -29,8 +29,14 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
     sshClient.close();
     super.dispose();
   }
+
+  @override
+  void deactivate(){
+    sshClient.close();
+    super.deactivate();
+  }
   Future<void> initClient() async{
-    for(String potentialHostName in [widget.staticIP, widget.hostname]){
+    for(String potentialHostName in [widget.staticIP.trim(), widget.hostname]){
       try{
         sshClient = SSHClient(
           await SSHSocket.connect(potentialHostName, 22),

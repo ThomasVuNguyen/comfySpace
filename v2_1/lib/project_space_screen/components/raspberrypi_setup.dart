@@ -8,10 +8,11 @@ import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
 Future<void> setUpRaspberryPi(BuildContext context, String hostname, String username, String password) async{
   if(kIsWeb == false){
     double beginningTime = DateTime.now().microsecondsSinceEpoch/1000000;
-    String? staticIP = await getStaticIp(hostname);
+    String? static = await getStaticIp(hostname);
+    String staticIP = static!;
     double staticIPacquiredTime = DateTime.now().microsecondsSinceEpoch/1000000;
     late SSHClient sshClient;
-    for(String potentialHostName in [staticIP!, hostname]){
+    for(String potentialHostName in [staticIP.trim(), hostname]){
       try{
         sshClient = SSHClient(
           await SSHSocket.connect(potentialHostName, 22),
@@ -26,12 +27,20 @@ Future<void> setUpRaspberryPi(BuildContext context, String hostname, String user
         var updateRepo = await sshClient.run('cd comfyScript && git pull');
         double updateRepoTime = DateTime.now().microsecondsSinceEpoch/1000000;
 
-        var installTmux = await sshClient.run('echo $password | sudo apt install tmux');
+        var tmuxCheck = await sshClient.run('which tmux');
+        String tmuxCheckString = utf8.decode(tmuxCheck);
+        print('tmux: ${tmuxCheckString.length}');
+        if(tmuxCheckString.length == 0){
+          if (kDebugMode) {
+            print('installing tmux');
+          }
+          var installTmux = await sshClient.run('echo $password | sudo apt -y install tmux');
+        }
         double installTmuxTime = DateTime.now().microsecondsSinceEpoch/1000000;
 
-        var comfyExeCheck = await sshClient.run('echo $password | sudo [ -f /usr/bin/comfy ] && echo "1" || echo "0"');
-        int comfyExeCheckString = int.parse(utf8.decode(comfyExeCheck));
-        if (comfyExeCheckString==0){
+        var comfyExeCheck = await sshClient.run('which comfy');
+        String comfyExeCheckString = utf8.decode(comfyExeCheck);
+        if (comfyExeCheckString==''){
           print('creating comfy command');
           var makeExecutable = await sshClient.run('echo $password | sudo cp comfyScript/bash/comfy /usr/bin/comfy');
           var assignchmod = await sshClient.run('echo $password | sudo chmod +x /usr/bin/comfy');
@@ -54,9 +63,10 @@ Future<void> setUpRaspberryPi(BuildContext context, String hostname, String user
       }
       catch (e){
         //if all hostname tested and not working, report!
-        if(potentialHostName == hostname){
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
+        if (kDebugMode) {
+          print('hostname $potentialHostName error: $e');
         }
+
       }
     }
     sshClient.close();

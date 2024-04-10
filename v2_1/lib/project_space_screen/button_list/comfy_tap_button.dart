@@ -27,9 +27,19 @@ class _comfy_tap_buttonState extends State<comfy_tap_button> {
     initClient();
     super.initState();
   }
+  @override
+  void dispose(){
+    sshClient.close();
+    super.dispose();
+  }
 
+  @override
+  void deactivate(){
+    sshClient.close();
+    super.deactivate();
+  }
   Future<void> initClient() async{
-    for(String potentialHostName in [widget.staticIP, widget.hostname]){
+    for(String potentialHostName in [widget.staticIP.trim(), widget.hostname]){
       try{
         sshClient = SSHClient(
           await SSHSocket.connect(potentialHostName, 22),

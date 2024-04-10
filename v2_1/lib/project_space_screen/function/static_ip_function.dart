@@ -69,7 +69,7 @@ Future<void> acquireStaticIP(String hostname, String username, String password) 
   );
   try{
     final _clientResponse = await _sshClient.run('hostname -I | awk \'{print \$1}\'').timeout(Duration(seconds: 5));
-    String staticIP = utf8.decode(_clientResponse);
+    String staticIP = utf8.decode(_clientResponse).trim();
     await saveStaticIP(hostname, staticIP);
     if (kDebugMode) {
       print('$hostname static IP saved as $staticIP');

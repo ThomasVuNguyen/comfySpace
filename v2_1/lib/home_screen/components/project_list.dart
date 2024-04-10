@@ -118,7 +118,7 @@ class _project_cardState extends State<project_card> {
 
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => project_space(
         project_name: widget.project_name!,
-      hostname: widget.hostname!, username: widget.username!, password: widget.password!,
+      hostname: widget.hostname!, username: widget.username!, password: widget.password!, raspberryPiInit: true,
     )));
   }
   @override
@@ -257,44 +257,3 @@ class _add_project_cardState extends State<add_project_card> {
   }
 }
 
-/*
-void create_project_prompt(BuildContext context){
-  final projectNameController = TextEditingController();
-  final projectDescriptionController = TextEditingController();
-  final hostnameController = TextEditingController();
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-  showDialog(context: context, builder: (context){
-    return AlertDialog(
-      content: Column(
-        children: [
-          in_app_textfield(
-              controller: projectNameController,
-              hintText: 'Robbie the Robot',
-              obsureText: false,
-              titleText: 'Project Name'),
-          Gap(20),
-          in_app_textfield(
-              controller: projectDescriptionController,
-              hintText: 'A robot to help clean my work desk',
-              obsureText: false,
-              titleText: 'Description'),
-          Gap(20),
-          in_app_textfield(
-              controller: hostnameController,
-              hintText: 'Robbie the Robot',
-              obsureText: false,
-              titleText: 'title'),
-          Gap(20),
-        ],
-      ),
-      actions: [
-        TextButton(onPressed: (){
-          AddNewProject();
-          Navigator.pop(context);
-        }, child: Text('add'))
-      ],
-    );
-  });
-}
-*/
