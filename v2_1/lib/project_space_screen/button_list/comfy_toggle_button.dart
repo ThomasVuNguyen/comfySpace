@@ -23,6 +23,12 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
     initClient();
     super.initState();
   }
+
+  @override
+  void dispose(){
+    sshClient.close();
+    super.dispose();
+  }
   Future<void> initClient() async{
     for(String potentialHostName in [widget.staticIP, widget.hostname]){
       try{

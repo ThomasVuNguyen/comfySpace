@@ -9,6 +9,7 @@ import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dar
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/home_screen/home_screen.dart';
+import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../../project_space_screen/project_space.dart';
 import '../comfy_user_information_function/project_information.dart';
@@ -153,8 +154,15 @@ class _project_cardState extends State<project_card> {
                                 return child;
                               }
                               else{
-                                return Center(child: CircularProgressIndicator(),);
+                                return const Center(
+                                  child: randomLoadingWidget()
+                                );
                               }
+                            },
+                            errorBuilder: (context, object, stack){
+                              return const Center(
+                                  child: randomLoadingWidget()
+                              );
                             },
                           fit: BoxFit.cover,))),
                   Container(height: 60, alignment: Alignment.center,

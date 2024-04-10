@@ -9,6 +9,7 @@ import 'package:v2_1/home_screen/components/avatar_icon.dart';
 import 'package:v2_1/home_screen/components/learning_space.dart';
 import 'package:v2_1/home_screen/components/project_list.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
+import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../comfyauth/authentication/components/signout.dart';
 
@@ -109,12 +110,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 /*floatingActionButton: (_selectedPageIndex==0)? add_new_project(): null,*/
               );
-
+          }
+          else if(snapshot.connectionState == ConnectionState.waiting){
+            if (kDebugMode) {
+              print('loading user info');
+            }
+            return const Center(child: randomLoadingWidget());
           }
           else{
-            return const Center(child: CircularProgressIndicator());
+            print(snapshot.connectionState.toString());
+            return Center(child: Text(snapshot.connectionState.toString()));
           }
-
         }
     );
   }

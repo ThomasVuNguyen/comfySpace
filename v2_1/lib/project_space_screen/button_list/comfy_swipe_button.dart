@@ -6,101 +6,176 @@ import '../../home_screen/comfy_user_information_function/project_information.da
 import 'button_global/variables.dart';
 
 class comfy_swipe_button extends StatefulWidget {
-  const comfy_swipe_button({super.key, required this.button});
-  final comfy_button button;
+  const comfy_swipe_button({super.key, required this.button, required this.hostname, required this.staticIP, required this.username, required this.password});
+  final comfy_button button; final String hostname; final String username; final String password; final String staticIP;
 
   @override
   State<comfy_swipe_button> createState() => _comfy_swipe_buttonState();
 }
 
 class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
-  bool _status = false;
+  String _direction = 'tap'; int index = 0;
+  // tap: 0, left: 1, right:2, down: 3, up: 4
   late SSHClient sshClient;
 
-  void onClick(){
+  @override
+  void initState(){
+    initClient();
+    super.initState();
+  }
+
+  @override
+  void dispose(){
+    sshClient.close();
+    super.dispose();
+  }
+  Future<void> initClient() async{
+    for(String potentialHostName in [widget.staticIP, widget.hostname]){
+      try{
+        sshClient = SSHClient(
+          await SSHSocket.connect(potentialHostName, 22),
+          username: widget.username,
+          onPasswordRequest: () => widget.password,
+        );
+        //attempt a connection
+        await sshClient.execute('echo hi');
+        print('ssh connection successfully created with hostname $potentialHostName');
+        break;
+
+      }
+      catch (e){
+        //if all hostname tested and not working, report!
+        if(potentialHostName == widget.hostname){
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
+        }
+      }
+    }
+  }
+
+  Future<void> onSwipe(String direction) async {
     HapticFeedback.heavyImpact();
     SystemSound.play(SystemSoundType.click);
+    if(direction == 'up'){
+      await sshClient.run(widget.button.function!['up']!);
+    }
+    else if(direction == 'down'){
+      await sshClient.run(widget.button.function!['down']!);
+    }
+    else if(direction == 'left'){
+      await sshClient.run(widget.button.function!['left']!);
+    }
+    else if(direction == 'right'){
+      await sshClient.run(widget.button.function!['right']!);
+    }
+    else{
+      await sshClient.run(widget.button.function!['tap']!);
+    }
   }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: (){
-          onClick();
-          setState(
-                  () {
-                _status = !_status;
-              }
-          );
+      onTap: () async {
+        setState(() {
+          _direction = 'tap';
+        });
+        await onSwipe(_direction);
+      },
+        onVerticalDragUpdate: (dragDetail){
+          if(dragDetail.primaryDelta!<0){
+            setState((){
+              _direction = 'up';
+              index=4;
+            });
+          }
+          else if(dragDetail.primaryDelta!>0){
+            setState(() {
+              _direction = 'down';
+              index=3;
+            });
+          }
+        },
+        onHorizontalDragUpdate: (dragDetail){
+          if(dragDetail.primaryDelta!<0){
+            setState((){
+              _direction = 'left';
+              index=1;
+            });
+          }
+          else if(dragDetail.primaryDelta!>0){
+            setState(() {
+              _direction = 'right';
+              index=2;
+            });
+          }
+        },
+        onVerticalDragEnd: (dragDetail) async{
+          if(_direction == 'up' || _direction == 'down'){
+            await onSwipe(_direction);
+          }
+        },
+        onHorizontalDragEnd: (dragDetail) async{
+          if(_direction == 'left' || _direction == 'right'){
+            await onSwipe(_direction);
+          }
         },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          child: Stack(
+            duration: const Duration(milliseconds: 50),
+            child: Stack(
+              alignment: Alignment.bottomCenter,
               children: [
                 Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-
-
-                    )
-                ),
-                Padding(
-                  padding: _status?
-                  const EdgeInsets.only(
-                      top: 30, bottom: 30, left: 30, right: 30
-                  ): EdgeInsets.all(
-                      20
-                  ),
+                  padding: const EdgeInsets.all(10.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2,
-                          color:Theme.of(context).colorScheme.onBackground
-                      ),
-                      borderRadius: button_border,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.background,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(6),
-                                  topRight: Radius.circular(6)
-                              )),
-                          child: Center(
-                            child: Text(
-                              widget.button.name!,
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          ),
-                        ),
-                        Container(height: 2, color: Colors.black,),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: widget.button.color,
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6)
-                                )
-                            ),
-                          ),
-                        )
-                      ],
+                        color: Color(0xFFDAEED7),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Theme.of(context).colorScheme.onBackground, width: 2)
                     ),
                   ),
                 ),
-
-              ]
-          ),
+                Builder(
+                    builder: (context){
+                      if(_direction=='up') {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
+                          child: Icon(Icons.arrow_upward)
+                        );
+                      }
+                      else if(_direction == 'down'){
+                        return Padding(
+                            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
+                            child: Icon(Icons.arrow_downward)
+                        );
+                      }
+                      else if(_direction == 'left'){
+                        return Padding(
+                            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
+                            child: Icon(Icons.arrow_left)
+                        );
+                      }
+                      else if(_direction == 'right'){
+                        return Padding(
+                            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
+                            child: Icon(Icons.arrow_right)
+                        );
+                      }
+                      else{
+                        return Padding(
+                            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
+                            child: Icon(Icons.pause)
+                        );
+                      }
+                    }
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    widget.button.name!,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                ),
+              ],
+            )
         )
     );
 

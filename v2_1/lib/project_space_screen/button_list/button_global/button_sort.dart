@@ -57,7 +57,7 @@ class _button_sortState extends State<button_sort> {
                     case 'toggle':
                       return comfy_toggle_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password,);
                     case 'swipe':
-                      return comfy_swipe_button(button: widget.button);
+                      return comfy_swipe_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password,);
                     default:
                       return Text('unidentified ${widget.button.type}');
                   }
