@@ -144,25 +144,25 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
                       if(_direction=='up') {
                         return Padding(
                           padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
-                          child: Icon(Icons.arrow_upward)
+                          child: Image.asset('assets/froggie/swipe up.png'),
                         );
                       }
                       else if(_direction == 'down'){
                         return Padding(
                             padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
-                            child: Icon(Icons.arrow_downward)
+                          child: Image.asset('assets/froggie/swipe down.png'),
                         );
                       }
                       else if(_direction == 'left'){
                         return Padding(
                             padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
-                            child: Icon(Icons.arrow_left)
+                          child: Image.asset('assets/froggie/swipe left.png'),
                         );
                       }
                       else if(_direction == 'right'){
                         return Padding(
                             padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
-                            child: Icon(Icons.arrow_right)
+                          child: Image.asset('assets/froggie/swipe right.png'),
                         );
                       }
                       else{
