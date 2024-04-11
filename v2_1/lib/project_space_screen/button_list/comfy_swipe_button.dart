@@ -1,14 +1,19 @@
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../../home_screen/comfy_user_information_function/project_information.dart';
 import 'button_global/variables.dart';
 
 class comfy_swipe_button extends StatefulWidget {
-  const comfy_swipe_button({super.key, required this.button, required this.hostname, required this.staticIP, required this.username, required this.password});
+  const comfy_swipe_button({super.key, required this.button,
+    required this.hostname, required this.staticIP, required this.username, required this.password,
+    this.swipeUpImg = 'assets/froggie/swipe up.png',  this.swipeDownImg = 'assets/froggie/swipe down.png',
+    this.swipeLeftImg = 'assets/froggie/swipe left.png', this.swipeRightImg = 'assets/froggie/swipe right.png',
+  });
   final comfy_button button; final String hostname; final String username; final String password; final String staticIP;
-
+  final String swipeUpImg; final String swipeDownImg; final String swipeLeftImg; final String swipeRightImg;
   @override
   State<comfy_swipe_button> createState() => _comfy_swipe_buttonState();
 }
@@ -143,32 +148,49 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
                     builder: (context){
                       if(_direction=='up') {
                         return Padding(
-                          padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
-                          child: Image.asset('assets/froggie/swipe up.png'),
+                          padding: const EdgeInsets.only(left: 25, right: 25, bottom: 60),
+                          child: Image.asset(widget.swipeUpImg,),
                         );
                       }
                       else if(_direction == 'down'){
                         return Padding(
                             padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
-                          child: Image.asset('assets/froggie/swipe down.png'),
+                          child: Image.asset(widget.swipeDownImg),
                         );
                       }
                       else if(_direction == 'left'){
                         return Padding(
                             padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
-                          child: Image.asset('assets/froggie/swipe left.png'),
+                          child: Image.asset(widget.swipeLeftImg),
                         );
                       }
                       else if(_direction == 'right'){
                         return Padding(
                             padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
-                          child: Image.asset('assets/froggie/swipe right.png'),
+                          child: Image.asset(widget.swipeRightImg),
                         );
                       }
                       else{
                         return Padding(
-                            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
-                            child: Icon(Icons.pause)
+                          padding: EdgeInsets.only(left:15, right: 15, top: 15, bottom: 45),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                RotatedBox(quarterTurns: 3, child: Icon(Iconsax.arrow_right),),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    RotatedBox(quarterTurns: 2, child: Icon(Iconsax.arrow_right),),
+                                    Icon(Icons.pause_circle_outline, color: Theme.of(context).colorScheme.primary,size: 40,),
+                                    Icon(Iconsax.arrow_right)
+                                  ],
+                                ),
+                                Icon(Icons.swipe_down)
+                                //RotatedBox(quarterTurns: 1, child: Icon(Iconsax.arrow_right),),
+                              ],
+                            ),
+                          ),
                         );
                       }
                     }
