@@ -6,12 +6,16 @@ import 'package:dartssh2/dartssh2.dart';
 import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
 
 Future<void> setUpRaspberryPi(BuildContext context, String hostname, String username, String password) async{
+
+  bool _sshAvailable = true;
+  late SSHClient sshClient;
+
   if(kIsWeb == false){
     double beginningTime = DateTime.now().microsecondsSinceEpoch/1000000;
     String? static = await getStaticIp(hostname);
     String staticIP = static!;
     double staticIPacquiredTime = DateTime.now().microsecondsSinceEpoch/1000000;
-    late SSHClient sshClient;
+
     for(String potentialHostName in [staticIP.trim(), hostname]){
       try{
         sshClient = SSHClient(
@@ -59,14 +63,12 @@ Future<void> setUpRaspberryPi(BuildContext context, String hostname, String user
         print('install tmux time: ${installTmuxTime - downloadRepoTime}s');
         print('install comfy exe time: ${comfyExeTime - installTmuxTime}s');
         break;
-
       }
       catch (e){
         //if all hostname tested and not working, report!
         if (kDebugMode) {
           print('hostname $potentialHostName error: $e');
         }
-
       }
     }
     sshClient.close();

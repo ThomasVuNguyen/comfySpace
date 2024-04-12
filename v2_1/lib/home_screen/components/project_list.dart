@@ -9,6 +9,7 @@ import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dar
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/home_screen/home_screen.dart';
+import 'package:v2_1/universal_widget/buttons.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../../project_space_screen/project_space.dart';
@@ -75,7 +76,7 @@ class _project_listState extends State<project_list> {
                         print('index is $index');
                       }
                       if(index == project_list.length){
-                        return add_project_card(title: 'Add a new project', subtitle: 'whatever your heart desrires');
+                        return const add_project_card(title: 'Create new project', subtitle: 'whatever your mind desires');
                       }
                       else{
                         return project_card(
@@ -87,9 +88,6 @@ class _project_listState extends State<project_list> {
                           imgURL: project_list[index].imgURL,
                         );
                       }
-
-
-
                       }
                   );
               }
@@ -134,7 +132,7 @@ class _project_cardState extends State<project_card> {
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.outlineVariant
+                  color: Theme.of(context).colorScheme.outline
               ),
                 color: Theme.of(context).colorScheme.surface
               ),
@@ -170,38 +168,34 @@ class _project_cardState extends State<project_card> {
                   Container(
                     height: 30, alignment: Alignment.center,
                       child: Text(widget.project_description!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary))),
-                  ExpansionTile(
-                      title: Center(child: Text('more')),
-                    children: [
-                      Center(
-                        child: Row(
-                          children: [
-                            Column(
-                              children: [
-                                Text('Hostname'), Text('username'), Text('password'),
-                              ],
-                            ),
-                            Gap(50),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(widget.hostname!),
-                                Text(widget.username!),
-                                Text(widget.password!),
-                              ],
-                            ),
-                            Gap(50),
-                            IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
-                            Gap(20),
-                            IconButton(onPressed: () async{
-                                await delete_project(widget.project_name!, widget.project_description!, context);
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-                            }, icon: Icon(Icons.delete))
-                          ],
-                        ),
-                      )
+                  Theme(
+                    data: ThemeData(
+                      dividerColor: Colors.transparent
+                  ),
+                    child: ExpansionTile(
+                      title: Gap(0),
+                      children: [
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Click to open project!', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
+                              Text('Host info: ${widget.username}@${widget.hostname}', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
+                              //Text(widget.password!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
+                              //IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+                              Gap(20),
+                              clickable(
+                                  icon: Icons.delete,
+                                  onTap: () async{
+                                    await delete_project_prompt(widget.project_name!, widget.project_description!, context);
+                                  },
+                              ),
+                            ],
+                          ),
+                        )
 
-                    ],
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -234,19 +228,30 @@ class _add_project_cardState extends State<add_project_card> {
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: DottedBorder(
-              color: Theme.of(context).colorScheme.outlineVariant,
+              color: Theme.of(context).colorScheme.outline,
               borderType: BorderType.RRect,
-              padding: EdgeInsets.all(40),
+              padding: EdgeInsets.symmetric(vertical: 40, horizontal: 10),
               radius: Radius.circular(12),
               strokeWidth: 1,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(height: 50, alignment: Alignment.center,
-                      child: Text(widget.title, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary),)),
-                  Container(
-                      height: 30, alignment: Alignment.center,
-                      child: Text(widget.subtitle, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary))),
+                  Center(
+                    child: Container(height: 50, alignment: Alignment.center,
+                        child: Text(
+                          widget.title,
+                          style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary),
+                          textAlign: TextAlign.center,
+                        )
+                    ),
+                  ),
+                  Gap(10),
+                  Center(
+                    child: Container(
+                        height: 30, alignment: Alignment.center,
+                        child: Text(widget.subtitle, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary))
+                    ),
+                  ),
                 ],
               ),
             ),

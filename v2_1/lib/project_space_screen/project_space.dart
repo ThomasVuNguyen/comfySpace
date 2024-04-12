@@ -57,8 +57,7 @@ class _project_spaceState extends State<project_space> {
             if(snapshot.connectionState != ConnectionState.done){
               return const Center(child: randomLoadingWidget());
             }
-            else if(snapshot.hasError){
-              if(snapshot.error.toString().contains('No element') == true){
+            else if(snapshot.hasError && snapshot.error.toString().contains('No element') == true){
                 return Scaffold(
                   appBar: AppBar(
                     automaticallyImplyLeading: false,
@@ -128,12 +127,9 @@ class _project_spaceState extends State<project_space> {
                   ),
                   floatingActionButtonLocation: ExpandableFab.location,
                 );
-              }
-              else{
-                return Center(child: Text(snapshot.error.toString()));
-              }
             }
             else{
+              print('comfy project snapshot data: ${snapshot.data.toString()}');
               String staticIP = '0.0.0.0';
               if(snapshot.data != null){
                 staticIP = snapshot.data![0];
@@ -238,14 +234,19 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
   double beginningTime = DateTime.now().microsecondsSinceEpoch/1000000;
   //if project screen is loaded from the home screen, run raspberry pi init function
   if(raspberryPiInit == true){
-    await setUpRaspberryPi(context, hostname, username, password);
+    try{
+      await setUpRaspberryPi(context, hostname, username, password);
+    } catch(e){
+      print('error inititalize rapsberry pi: $e');
+    }
+
   }
 
   String? staticIP = await getStaticIp(hostname);
   List<comfy_button> button_list = await get_button_list_information(context, project_name);
   double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
   print('time taken to load in project $project_name: ${endTime-beginningTime} ');
-  if(kIsWeb){
+  if(kIsWeb || staticIP == null){
     return ['0.0.0.0', button_list];
   }
   return [staticIP, button_list];

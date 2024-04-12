@@ -31,13 +31,22 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
 
   @override
   void dispose(){
-    sshClient.close();
+    try{
+      sshClient.close();
+    } catch (e){
+
+    }
+
     super.dispose();
   }
 
   @override
   void deactivate(){
-    sshClient.close();
+    try{
+      sshClient.close();
+    } catch (e){
+
+    }
     super.deactivate();
   }
   Future<void> initClient() async{
@@ -49,9 +58,12 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
           onPasswordRequest: () => widget.password,
         );
         //attempt a connection
-        await sshClient.execute('echo hi');
-        print('ssh connection successfully created with hostname $potentialHostName');
-        break;
+        try{
+          sshClient.close();
+        } catch (e){
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('error disposing: $e')));
+        }
+
 
       }
       catch (e){

@@ -26,13 +26,22 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
 
   @override
   void dispose(){
-    sshClient.close();
+    try{
+      sshClient.close();
+    } catch (e){
+
+    }
+
     super.dispose();
   }
 
   @override
   void deactivate(){
-    sshClient.close();
+    try{
+      sshClient.close();
+    } catch (e){
+
+    }
     super.deactivate();
   }
   Future<void> initClient() async{

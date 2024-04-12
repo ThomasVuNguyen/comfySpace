@@ -18,7 +18,8 @@ Future<String?> getStaticIp(String hostname) async{
   }
   int hostnameIndex = currentLocalhostList.indexOf(hostname);
   String staticIP = currentStaticIPList[hostnameIndex];
-
+  print(currentLocalhostList.toString());
+  print(currentStaticIPList.toString());
   return staticIP;
 
 }
@@ -61,27 +62,32 @@ Future<void> saveStaticIP(String hostname, String staticIP) async{
   }
 }
 
-Future<void> acquireStaticIP(String hostname, String username, String password) async{
-  SSHClient _sshClient = SSHClient(
+Future<String> acquireStaticIP(String hostname, String username, String password) async{
+  try{
+    SSHClient _sshClient = SSHClient(
       await SSHSocket.connect(hostname, 22),
       username: username,
-  onPasswordRequest: () => password,
-  );
-  try{
+      onPasswordRequest: () => password,
+    );
     final _clientResponse = await _sshClient.run('hostname -I | awk \'{print \$1}\'').timeout(Duration(seconds: 5));
     String staticIP = utf8.decode(_clientResponse).trim();
     await saveStaticIP(hostname, staticIP);
     if (kDebugMode) {
       print('$hostname static IP saved as $staticIP');
     }
+    return staticIP;
   } on TimeoutException{
     print('time out acquiring static ip');
+    await saveStaticIP(hostname, '1.3.0.6');
+    return '1.3.0.6';
     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Connection timed out')));
   }
   catch (e){
     print('error acquiring static ip: $e');
+    await saveStaticIP(hostname, '1.3.0.6');
+    return '1.3.0.6';
   }
   finally{
-    _sshClient.close();
+    print('done');
   }
 }

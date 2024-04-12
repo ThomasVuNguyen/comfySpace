@@ -29,13 +29,22 @@ class _comfy_tap_buttonState extends State<comfy_tap_button> {
   }
   @override
   void dispose(){
-    sshClient.close();
+    try{
+      sshClient.close();
+    } catch (e){
+
+    }
+
     super.dispose();
   }
 
   @override
   void deactivate(){
-    sshClient.close();
+    try{
+      sshClient.close();
+    } catch (e){
+
+    }
     super.deactivate();
   }
   Future<void> initClient() async{
