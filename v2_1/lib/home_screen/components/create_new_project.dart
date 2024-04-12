@@ -47,13 +47,21 @@ class _create_new_projectState extends State<create_new_project> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               //Page 1: Project name & description
+
+              Visibility(
+                visible: _pageOneVisible,
+                  child: Image.asset('assets/froggie/create_project_pick_name.png')),
+
+              Visibility(
+                  visible: _pageTwoVisible,
+                  child: Text('Pick an image!', style: Theme.of(context).textTheme.titleMedium)
+              ),
+
               Visibility(
                   visible: _pageThreeVisible,
                   child: Text('Enter host information', style: Theme.of(context).textTheme.titleMedium)
               ),
-              Visibility(
-                visible: _pageOneVisible,
-                  child: Image.asset('assets/froggie/create_project_pick_name.png')),
+
               Gap(20),
               Visibility(
                 visible: _pageOneVisible,
@@ -303,7 +311,7 @@ class _coverImageGeneratorState extends State<coverImageGenerator> {
                       itemBuilder: (BuildContext context, int index) {
                         return Image.network(
                           imgURL[index],
-                          fit: BoxFit.fill,
+                          fit: BoxFit.fitWidth,
                         );
                       },
                       itemCount: imgURL.length,
@@ -323,7 +331,7 @@ class _coverImageGeneratorState extends State<coverImageGenerator> {
               }
 
           ),
-          Container(
+          /*Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               //borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -333,7 +341,7 @@ class _coverImageGeneratorState extends State<coverImageGenerator> {
             ),
             child: IconButton(onPressed: (){
               setState(() {
-              });}, icon:Icon(Icons.refresh, color: Theme.of(context).colorScheme.background,)))
+              });}, icon:Icon(Icons.refresh, color: Theme.of(context).colorScheme.background,)))*/
 
         ],
       ),
