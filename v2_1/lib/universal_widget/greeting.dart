@@ -15,7 +15,7 @@ class randomGreeting extends StatelessWidget {
       'Greetings',
       'Howdy',
       'Konnichiwa',
-      'How\'s it going'
+      //'How\'s it going'
     ];
     int _widgetIndex = Random().nextInt(greetingList.length);
     return Text(

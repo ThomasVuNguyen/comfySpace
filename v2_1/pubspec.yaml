@@ -38,16 +38,13 @@ dependencies:
   carousel_slider: ^4.2.1
   card_swiper: ^3.0.1
   animated_text_kit: ^4.2.2
+  flutter_launcher_icons: ^0.13.1
+  icons_launcher: ^2.1.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^3.0.0
 
 # For information on the generic Dart part of this file, see the
@@ -55,16 +52,13 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
     - assets/raspberrypi_4.png
+    - assets/comfy_logo_ambience.png
     - assets/comfy_icon.png
     - assets/google_icon.png
     - assets/apple_icon.png
@@ -102,3 +96,43 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/comfy_logo_ambience.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/comfy_logo_ambience.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/comfy_logo_ambience.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/comfy_logo_ambience.png"
+
+icons_launcher:
+  image_path: "assets/comfy.png"
+  platforms:
+    android:
+      enable: true
+      image_path: "assets/comfySpaceIcon.png"
+    ios:
+      enable: true
+      image_path: "assets/comfyspace_icon_ios.png"
+    web:
+      enable: true
+      image_path: "assets/comfySpaceIcon.png"
+      favicon_path: "assets/comfySpaceIcon.png"
+    macos:
+      enable: true
+      image_path: "assets/comfySpaceIcon.png"
+    windows:
+      enable: true
+      image_path: "assets/comfySpaceIcon.png"
+    linux:
+      enable: true
+      image_path: "assets/comfySpaceIcon.png"

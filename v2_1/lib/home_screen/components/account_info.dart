@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:v2_1/comfyauth/authentication/components/signout.dart';
@@ -28,29 +29,27 @@ class _account_infoState extends State<account_info> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Stack(
-              alignment: Alignment.topRight,
+            Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      Text('${widget.name}', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary), textAlign: TextAlign.center,),
-                      Gap(20),
-                      Text('${widget.tagline}',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary),
-                        textAlign: TextAlign.center,
-                      ),
-                      Gap(20),
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('${widget.name}', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary), textAlign: TextAlign.center,),
+                    IconButton(onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const set_user_info()),
+                      );
+                    }
+                        , icon: Icon(Icons.edit))
+                  ],
                 ),
-                clickable(icon: Icons.edit, onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const set_user_info()),
-                  );
-                },),
+                Gap(20),
+                Text('${widget.tagline}',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary),
+                  textAlign: TextAlign.center,
+                ),
+                Gap(20)
               ],
             ),
 
@@ -61,7 +60,7 @@ class _account_infoState extends State<account_info> {
             ),
             Gap(20),
             clickable_text(
-                text: 'Sign out',
+                text: 'Wanna sign out ?',
                 onTap: () async {
                   // show loading screen
                   showDialog(context: context, builder: (context){

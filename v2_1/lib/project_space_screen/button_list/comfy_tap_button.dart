@@ -64,7 +64,8 @@ class _comfy_tap_buttonState extends State<comfy_tap_button> {
       catch (e){
         //if all hostname tested and not working, report!
         if(potentialHostName == widget.hostname){
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
+          //SSH connection not made
+          //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
         }
       }
     }

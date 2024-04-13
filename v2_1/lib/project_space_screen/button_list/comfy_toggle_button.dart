@@ -60,7 +60,8 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
       catch (e){
         //if all hostname tested and not working, report!
         if(potentialHostName == widget.hostname){
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
+          //report SSH not working
+          //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
         }
       }
     }
@@ -94,7 +95,7 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
                   decoration: BoxDecoration(
                       color: Color(0xFFDAEED7),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Theme.of(context).colorScheme.onBackground, width: 2)
+                    border: Border.all(color: widget.button.color!, width: 2)
                   ),
 
                 ),

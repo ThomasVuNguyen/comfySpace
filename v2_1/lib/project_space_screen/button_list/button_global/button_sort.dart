@@ -38,7 +38,8 @@ class _button_sortState extends State<button_sort> {
 
       }
       catch (e){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
+        //SSH error not connected
+        //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
       }
     }
     return sshClient;

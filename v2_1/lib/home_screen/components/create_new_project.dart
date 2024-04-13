@@ -47,15 +47,22 @@ class _create_new_projectState extends State<create_new_project> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               //Page 1: Project name & description
+              Visibility(
+                  visible: _pageOneVisible,
+                  child: Text(
+                      'What would you call this project?',
+                      style: Theme.of(context).textTheme.titleMedium
+                  )
+              ),
+              Visibility(
+                  visible: _pageOneVisible,
+                  child: Gap(20)),
 
               Visibility(
                 visible: _pageOneVisible,
                   child: Image.asset('assets/froggie/create_project_pick_name.png')),
 
-              Visibility(
-                  visible: _pageTwoVisible,
-                  child: Text('Pick an image!', style: Theme.of(context).textTheme.titleMedium)
-              ),
+
 
               Visibility(
                   visible: _pageThreeVisible,
@@ -81,6 +88,12 @@ class _create_new_projectState extends State<create_new_project> {
                     titleText: 'Description'),
               ),
               //Page 2: generate image
+
+              Visibility(
+                  visible: _pageTwoVisible,
+                  child: Text('Pick an image!', style: Theme.of(context).textTheme.titleMedium)
+              ),
+
               Visibility(
                 visible: _pageTwoVisible,
                   child: coverImageGenerator(query: projectNameController.text,),
@@ -119,6 +132,21 @@ class _create_new_projectState extends State<create_new_project> {
                     obsureText: true,
                     titleText: 'Password'),
               ),
+              Visibility(
+                  visible: _pageThreeVisible,
+                  child: const Gap(20)
+              ),
+              Visibility(
+                  visible: _pageThreeVisible,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    child: Text(
+                        'If you don\'t have it nor know what this is, it\'s ok just to skip ahead!',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  )
+              ),
+
               //Page 4: Detecting your raspberry pi
               Visibility(
                   visible: _pageFourVisible,
