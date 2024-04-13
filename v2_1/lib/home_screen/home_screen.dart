@@ -9,6 +9,8 @@ import 'package:v2_1/home_screen/components/avatar_icon.dart';
 import 'package:v2_1/home_screen/components/learning_space.dart';
 import 'package:v2_1/home_screen/components/project_list.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
+import 'package:v2_1/universal_widget/buttons.dart';
+import 'package:v2_1/universal_widget/greeting.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../comfyauth/authentication/components/signout.dart';
@@ -50,19 +52,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         if(user?.name == null){
                           return Row(
                             children: [
-                              Text('Greetings, '),
-                              TextButton(onPressed: (){
+                              const randomGreeting(),
+                              clickable_text(text: 'Pick a username!', onTap: (){
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => const set_user_info()),
                                 );
-                              }, child: Text('[insert username]'))
+                              })
                             ],
                           );
                           return Text('Greetings, ${user?.name}');
                         }
                         else{
-                          return Text('Greetings, ${user?.name}');
+                          return randomGreeting(name: user!.name!,);
                         }
                       },
                     ),

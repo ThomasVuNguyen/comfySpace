@@ -16,20 +16,19 @@ Future<String?> getStaticIp(String hostname) async{
 
   //if no list existed, return a random ip - showcase mode
   if(currentStaticIPList == null || currentLocalhostList == null){
-    return '1.3.0.6';
+    return 'no static list found';
   }
 
   //if no existing static ip is found, assign a random number for now
   int hostnameIndex = currentLocalhostList.indexOf(hostname);
   if(currentStaticIPList.length<hostnameIndex+1){
-    return '1.3.0.6';
+    return 'no static ip created yet';
   }
   //if existing static ip found, use it
   else{
     String staticIP = currentStaticIPList[hostnameIndex];
     print(currentLocalhostList.toString());
     print(currentStaticIPList.toString());
-    return '1.3.0.6';
     return staticIP;
   }
 

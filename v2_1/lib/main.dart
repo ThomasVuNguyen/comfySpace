@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           textTheme: ComfyTextTheme,
         ),
         debugShowCheckedModeBanner: false,
-        home: const auth_page()
+        home: const auth_page(welcomePage: true,)
     );
   }
 }
