@@ -13,13 +13,19 @@ Future<void> setUpRaspberryPi(BuildContext context, String hostname, String user
   if(kIsWeb == false){
     double beginningTime = DateTime.now().microsecondsSinceEpoch/1000000;
     String? static = await getStaticIp(hostname);
-    String staticIP = static!;
+    late String staticIP;
+    if(static == null){
+      staticIP = '1.3.0.6';
+    }
+    else{
+      staticIP = static;
+    }
     double staticIPacquiredTime = DateTime.now().microsecondsSinceEpoch/1000000;
 
     for(String potentialHostName in [staticIP.trim(), hostname]){
       try{
         sshClient = SSHClient(
-          await SSHSocket.connect(potentialHostName, 22),
+          await SSHSocket.connect(potentialHostName, 22, timeout: const Duration(seconds: 5)),
           username: username,
           onPasswordRequest: () => password,
         );

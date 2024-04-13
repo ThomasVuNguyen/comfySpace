@@ -54,9 +54,8 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
         );
         //attempt a connection
         await sshClient.execute('echo hi');
-        print('ssh connection successfully created with hostname $potentialHostName');
+        print('button ssh connection successfully created with hostname $potentialHostName');
         break;
-
       }
       catch (e){
         //if all hostname tested and not working, report!

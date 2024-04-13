@@ -11,25 +11,38 @@ Future<String?> getStaticIp(String hostname) async{
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   //get the existing list if possible
-  final List<String>? currentLocalhostList = await prefs.getStringList('localhostList');
-  final List<String>? currentStaticIPList = await prefs.getStringList('staticIPList');
+  final List<String>? currentLocalhostList = prefs.getStringList('localhostList');
+  final List<String>? currentStaticIPList = prefs.getStringList('staticIPList');
+
+  //if no list existed, return a random ip - showcase mode
   if(currentStaticIPList == null || currentLocalhostList == null){
-    return null;
+    return '1.3.0.6';
   }
+
+  //if no existing static ip is found, assign a random number for now
   int hostnameIndex = currentLocalhostList.indexOf(hostname);
-  String staticIP = currentStaticIPList[hostnameIndex];
-  print(currentLocalhostList.toString());
-  print(currentStaticIPList.toString());
-  return staticIP;
+  if(currentStaticIPList.length<hostnameIndex+1){
+    return '1.3.0.6';
+  }
+  //if existing static ip found, use it
+  else{
+    String staticIP = currentStaticIPList[hostnameIndex];
+    print(currentLocalhostList.toString());
+    print(currentStaticIPList.toString());
+    return '1.3.0.6';
+    return staticIP;
+  }
+
 
 }
 
 Future<void> saveStaticIP(String hostname, String staticIP) async{
+  print('saving static ip of $hostname as $staticIP');
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   //get the existing list if possible
-  final List<String>? currentLocalhostList = await prefs.getStringList('localhostList');
-  final List<String>? currentStaticIPList = await prefs.getStringList('staticIPList');
+  final List<String>? currentLocalhostList = prefs.getStringList('localhostList');
+  final List<String>? currentStaticIPList = prefs.getStringList('staticIPList');
 
   //if no existing list available, create empty list
   if(currentLocalhostList == null || currentStaticIPList == null){
@@ -62,32 +75,19 @@ Future<void> saveStaticIP(String hostname, String staticIP) async{
   }
 }
 
-Future<String> acquireStaticIP(String hostname, String username, String password) async{
-  try{
-    SSHClient _sshClient = SSHClient(
-      await SSHSocket.connect(hostname, 22),
+Future<void> acquireStaticIP(String hostname, String username, String password) async{
+  print('acquiring static ip');
+    SSHClient sshClient = SSHClient(
+      await SSHSocket.connect(hostname, 22, timeout: const Duration(seconds: 5)),
       username: username,
       onPasswordRequest: () => password,
     );
-    final _clientResponse = await _sshClient.run('hostname -I | awk \'{print \$1}\'').timeout(Duration(seconds: 5));
-    String staticIP = utf8.decode(_clientResponse).trim();
+    final clientResponse = await sshClient.run('hostname -I | awk \'{print \$1}\'');
+    String staticIP = utf8.decode(clientResponse).trim();
+    print("static ip is $staticIP");
     await saveStaticIP(hostname, staticIP);
     if (kDebugMode) {
       print('$hostname static IP saved as $staticIP');
     }
-    return staticIP;
-  } on TimeoutException{
-    print('time out acquiring static ip');
-    await saveStaticIP(hostname, '1.3.0.6');
-    return '1.3.0.6';
-    //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Connection timed out')));
-  }
-  catch (e){
-    print('error acquiring static ip: $e');
-    await saveStaticIP(hostname, '1.3.0.6');
-    return '1.3.0.6';
-  }
-  finally{
-    print('done');
-  }
+    //return staticIP;
 }

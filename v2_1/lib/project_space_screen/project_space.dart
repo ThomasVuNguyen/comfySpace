@@ -57,7 +57,8 @@ class _project_spaceState extends State<project_space> {
             if(snapshot.connectionState != ConnectionState.done){
               return const Center(child: randomLoadingWidget());
             }
-            else if(snapshot.hasError && snapshot.error.toString().contains('No element') == true){
+            else if(snapshot.hasError && snapshot.error.toString().contains('No element') == true || snapshot.data == null){
+              print('comfy project snapshot data error: ${snapshot.data.toString()}');
                 return Scaffold(
                   appBar: AppBar(
                     automaticallyImplyLeading: false,
@@ -231,7 +232,16 @@ class _project_spaceState extends State<project_space> {
 }
 
 Future<List<dynamic>> project_space_initialize(BuildContext context, String hostname, String username, String password, String project_name, bool raspberryPiInit) async{
+  //start timer
   double beginningTime = DateTime.now().microsecondsSinceEpoch/1000000;
+
+  //acquire button list
+  List<comfy_button> button_list = await get_button_list_information(context, project_name);
+
+  // if on web, bypass
+  if(kIsWeb){
+    return ['web bypass', button_list];
+  }
   //if project screen is loaded from the home screen, run raspberry pi init function
   if(raspberryPiInit == true){
     try{
@@ -239,15 +249,29 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
     } catch(e){
       print('error inititalize rapsberry pi: $e');
     }
-
   }
 
-  String? staticIP = await getStaticIp(hostname);
-  List<comfy_button> button_list = await get_button_list_information(context, project_name);
-  double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
-  print('time taken to load in project $project_name: ${endTime-beginningTime} ');
-  if(kIsWeb || staticIP == null){
-    return ['0.0.0.0', button_list];
+  //try getting static ip
+  String? staticIP = '1.3.0.6';
+  try{
+    staticIP = await getStaticIp(hostname).timeout(Duration(seconds: 3));
+    print('opening project: static ip is $staticIP');
+
+    double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
+    print('time taken to load in project $project_name: ${endTime-beginningTime} ');
+
+    return [staticIP, button_list];
+  } catch(e){
+
+    double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
+    print('time taken to load in project $project_name: ${endTime-beginningTime} ');
+
+    return ['comfy space initialize, static ip not found', button_list];
+    // if no static ip found, return a random result
   }
-  return [staticIP, button_list];
+
+
+
+
+
 }
