@@ -63,7 +63,7 @@ class _set_user_infoState extends State<set_user_info> {
                   }),
           
                   clickable(icon: Icons.check, onTap: () async{
-                    if(nameController.text == '' || taglineController.text=='' ||nameController.text== null || taglineController.text==null){
+                   if(nameController.text == '' || taglineController.text=='' ||nameController.text== null || taglineController.text==null){
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('information cannot be blank')));
                     }
                     else{
@@ -89,11 +89,11 @@ class _set_user_infoState extends State<set_user_info> {
 
 
 class in_app_textfield extends StatefulWidget {
-  const in_app_textfield({super.key, required this.controller, required this.hintText, required this.obsureText, required this.titleText, this.maxWidth = 1000, this.initialValue = ''
-    ,
+  const in_app_textfield({super.key, required this.controller, required this.hintText, required this.obsureText, required this.titleText, this.maxWidth = 1000, this.initialValue = '',
+    this.multiline = false
   });
   final TextEditingController controller; final String hintText; final bool obsureText; final String titleText; final double maxWidth; final String initialValue;
-
+  final bool multiline;
   @override
   State<in_app_textfield> createState() => _in_app_textfieldState();
 }
@@ -126,6 +126,7 @@ class _in_app_textfieldState extends State<in_app_textfield> {
               ),
               Gap(10),
               TextField(
+                keyboardType: (widget.multiline == true)? TextInputType.multiline: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 obscureText: widget.obsureText,
                 controller: widget.controller,

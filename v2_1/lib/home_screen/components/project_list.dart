@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:rive/rive.dart';
+import 'package:v2_1/beginner_project_support/beginner_project_message.dart';
 import 'package:v2_1/comfyauth/authentication/components/signout.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/delete_project.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
@@ -113,11 +114,17 @@ class project_card extends StatefulWidget {
 class _project_cardState extends State<project_card> {
 
   void openProjectSpace(){
-
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => project_space(
+    if(widget.hostname?.contains('pending') == false){
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => project_space(
         project_name: widget.project_name!,
-      hostname: widget.hostname!, username: widget.username!, password: widget.password!, raspberryPiInit: true,
-    )));
+        hostname: widget.hostname!, username: widget.username!, password: widget.password!, raspberryPiInit: true,
+      )));
+    }
+    else{
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => beginnerProjectMessage()
+      ));
+    }
+
   }
   @override
   Widget build(BuildContext context) {
