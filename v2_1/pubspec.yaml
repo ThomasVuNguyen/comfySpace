@@ -71,6 +71,7 @@ flutter:
     - assets/rive/arrow.riv
     - assets/component_assets/floating_button/
     - assets/notion_style/
+    - assets/comfy_logo_android.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -97,43 +98,26 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/comfy_logo_ambience.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21
-  web:
-    generate: true
-    image_path: "assets/comfy_logo_ambience.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
-  windows:
-    generate: true
-    image_path: "assets/comfy_logo_ambience.png"
-    icon_size: 48 # min:48, max:256, default: 48
-  macos:
-    generate: true
-    image_path: "assets/comfy_logo_ambience.png"
 
 icons_launcher:
-  image_path: "assets/comfy.png"
+  image_path: "assets/comfy_logo_ambience.png"
   platforms:
     android:
       enable: true
-      image_path: "assets/comfySpaceIcon.png"
+      image_path: "assets/comfy_logo_android.png"
     ios:
       enable: true
-      image_path: "assets/comfyspace_icon_ios.png"
+      image_path: "assets/comfy_logo_ambience.png"
     web:
       enable: true
-      image_path: "assets/comfySpaceIcon.png"
-      favicon_path: "assets/comfySpaceIcon.png"
+      image_path: "assets/comfy_logo_ambience.png"
+      favicon_path: "assets/comfy_logo_ambience.png"
     macos:
       enable: true
-      image_path: "assets/comfySpaceIcon.png"
+      image_path: "assets/comfy_logo_ambience.png"
     windows:
       enable: true
-      image_path: "assets/comfySpaceIcon.png"
+      image_path: "assets/comfy_logo_ambience.png"
     linux:
       enable: true
-      image_path: "assets/comfySpaceIcon.png"
+      image_path: "assets/comfy_logo_ambience.png"
