@@ -16,20 +16,24 @@ import 'package:v2_1/universal_widget/random_widget_loading.dart';
 import '../comfyauth/authentication/components/signout.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
+  const HomeScreen({super.key, this.pageIndex = 0});
+  final int pageIndex;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   var user_info;
+  int _selectedPageIndex = 0;
   @override
   void initState() {
+    if(widget.pageIndex == 1){
+      _selectedPageIndex = 1;
+    }
     user_info = get_user_information();
     super.initState();
   }
-  int _selectedPageIndex = 0;
+
 
   @override
   Widget build(BuildContext context) {
