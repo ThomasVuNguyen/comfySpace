@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
         ),
         darkTheme: ThemeData(
           useMaterial3: true,
-          colorScheme: darkColorScheme,
+          colorScheme: lightColorScheme,
+          //darkColorScheme,
           textTheme: ComfyTextTheme,
         ),
         debugShowCheckedModeBanner: false,
