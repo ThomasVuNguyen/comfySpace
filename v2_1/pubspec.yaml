@@ -72,6 +72,7 @@ flutter:
     - assets/component_assets/floating_button/
     - assets/notion_style/
     - assets/comfy_logo_android.png
+    - shorebird.yaml
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
