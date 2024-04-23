@@ -1,7 +1,9 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:v2_1/comfyauth/authentication/components/signout.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/lesson_function.dart';
+import 'package:v2_1/lesson_page/comfy_lesson_page.dart';
 import 'package:v2_1/home_screen/components/project_list.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
@@ -59,7 +61,7 @@ class learning_tab extends StatelessWidget {
         future: getAllLessonInformation(),
         builder: (context, snapshot){
           if(snapshot.connectionState != ConnectionState.done){
-            return randomLoadingWidget();
+            return const randomLoadingWidget();
           }
           else{
             List<comfy_lesson>? comfyLessonList = snapshot.data;
@@ -133,20 +135,6 @@ class lesson_card extends StatelessWidget {
                           },
                         ),
                       ),
-                      /*
-                      Padding(
-                          padding: EdgeInsets.all(8.0),
-                        child: Text(lesson.title!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.onPrimary),),
-                      ),
-                      Positioned(
-                        bottom: 0, right: 0,
-                        child:
-                        IconButton(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          icon: Icon(Icons.arrow_forward),
-                          onPressed: (){}
-                        ),
-                      )*/
                     ],
                   ),
                 ),
@@ -155,9 +143,21 @@ class lesson_card extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(lesson.title!, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),),
+                      child: AnimatedTextKit(
+                        totalRepeatCount: 1,
+                        animatedTexts: [
+                          TyperAnimatedText(
+                              lesson.title!,
+                            speed: const Duration(milliseconds: 100),
+                            textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                          )
+                        ],
+                      )
+                      //Text(lesson.title!, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),),
                     ),
-                    IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward))
+                    IconButton(onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ComfyLessonPage(lesson: lesson)));
+                    }, icon: Icon(Icons.arrow_forward))
                   ],
                 ),
 
