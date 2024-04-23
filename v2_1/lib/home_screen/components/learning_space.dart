@@ -16,8 +16,8 @@ class learning_space extends StatelessWidget {
         length: 2, child: Scaffold(
       appBar: TabBar(
         tabs: [
-          Text('Learn'),
-          Text('Projects'),
+          Text(''),
+          //Text('Projects'),
         ],
       ),
         body:
@@ -25,7 +25,7 @@ class learning_space extends StatelessWidget {
           clipBehavior: Clip.none,
             children: [
           learning_tab(),
-          community_project_tab()
+          //community_project_tab()
         ])
 
             ));

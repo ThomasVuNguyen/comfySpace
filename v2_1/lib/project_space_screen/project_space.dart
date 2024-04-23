@@ -50,7 +50,7 @@ class _project_spaceState extends State<project_space> {
 
   @override
   Widget build(BuildContext context) {
-    var screen_width = MediaQuery.of(context).size.width~/200;
+    var screen_width = MediaQuery.of(context).size.width~/150;
     return FutureBuilder(
           future: project_space_initialize(context, widget.hostname, widget.username, widget.password, widget.project_name, widget.raspberryPiInit),
           builder: (context, snapshot){
