@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gap/gap.dart';
 import 'package:rive/rive.dart';
 import 'package:v2_1/beginner_project_support/beginner_project_message.dart';
@@ -132,7 +133,7 @@ class _project_cardState extends State<project_card> {
       onTap: openProjectSpace,
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1000),
+          constraints: const BoxConstraints(maxWidth: 500),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Container(
@@ -143,49 +144,76 @@ class _project_cardState extends State<project_card> {
               ),
                 color: Theme.of(context).colorScheme.surface
               ),
-              padding: const EdgeInsets.only(bottom: 30),
+              padding: const EdgeInsets.only(bottom: 0),
               child: Column(
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(11), topRight: Radius.circular(11)
-              ),
-                      child: AspectRatio(
-                        aspectRatio: 2/1,
-                          child: Image.network(
-                            widget.imgURL!,
-                            loadingBuilder: (context, child, loadingProgess){
-                              if(loadingProgess == null){
-                                return child;
-                              }
-                              else{
+                    borderRadius: const BorderRadius.all(Radius.circular(11)),
+                      child: Stack(
+                        alignment: Alignment.bottomLeft,
+                        children: [
+                          AspectRatio(
+                          aspectRatio: 2/1,
+                            child: Image.network(
+                              widget.imgURL!,
+                              loadingBuilder: (context, child, loadingProgess){
+                                if(loadingProgess == null){
+                                  return child;
+                                }
+                                else{
+                                  return const Center(
+                                    child: randomLoadingWidget()
+                                  );
+                                }
+                              },
+                              errorBuilder: (context, object, stack){
                                 return const Center(
-                                  child: randomLoadingWidget()
+                                    child: randomLoadingWidget()
                                 );
-                              }
+                              },
+                            fit: BoxFit.cover,)),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(widget.project_name!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.onPrimary),),
+                          ),
+                          Positioned(
+                            top: 0, right: 0,
+                            child: IconButton(
+                              color: Theme.of(context).colorScheme.primary,
+                            icon: Icon(Icons.delete),
+                            onPressed: () async{
+                              await delete_project_prompt(widget.project_name!, widget.project_description!, context);
                             },
-                            errorBuilder: (context, object, stack){
-                              return const Center(
-                                  child: randomLoadingWidget()
-                              );
-                            },
-                          fit: BoxFit.cover,))),
-                  Container(height: 60, alignment: Alignment.center,
+                          ),),
+                          Positioned(
+                            bottom: 0, right: 0,
+                            child:
+                            IconButton(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              icon: Icon(Icons.arrow_forward),
+                              onPressed: openProjectSpace,
+                            ),
+                          )
+
+                        ]
+                      )),
+                  /*Container(height: 60, alignment: Alignment.center,
                       child: Text(widget.project_name!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary),)),
                   Container(
                     height: 30, alignment: Alignment.center,
-                      child: Text(widget.project_description!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary))),
-                  Theme(
+                      child: Text(widget.project_description!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary))),*/
+                  /*Theme(
                     data: ThemeData(
                       dividerColor: Colors.transparent
                   ),
                     child: ExpansionTile(
-                      title: Gap(0),
+                      title: Text(widget.project_name!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary),),
                       children: [
                         Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(widget.project_description!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
                               Text('Click to open project!', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
                               Text('Host info: ${widget.username}@${widget.hostname}', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
                               //Text(widget.password!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
@@ -203,7 +231,7 @@ class _project_cardState extends State<project_card> {
 
                       ],
                     ),
-                  )
+                  )*/
                 ],
               ),
             ),
@@ -226,7 +254,7 @@ class _add_project_cardState extends State<add_project_card> {
   Widget build(BuildContext context) {
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1000),
+        constraints: const BoxConstraints(maxWidth: 500),
         child: GestureDetector(
           onTap: (){
             Navigator.push(context, MaterialPageRoute(builder: (context) => create_new_project()));
