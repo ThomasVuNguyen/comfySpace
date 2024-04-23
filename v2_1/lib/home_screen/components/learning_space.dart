@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:v2_1/comfyauth/authentication/components/signout.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/lesson_function.dart';
 import 'package:v2_1/home_screen/components/project_list.dart';
+import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 class learning_space extends StatelessWidget {
   const learning_space({super.key});
@@ -53,15 +55,24 @@ class learning_tab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          learning_card(),
-          learning_card(),learning_card(),learning_card(),learning_card(),learning_card(),learning_card(),learning_card(),learning_card(),
-        ],
-      ),
+    return FutureBuilder(
+        future: getAllLessonInformation(),
+        builder: (context, snapshot){
+          if(snapshot.connectionState != ConnectionState.done){
+            return randomLoadingWidget();
+          }
+          else{
+            List<comfy_lesson>? comfyLessonList = snapshot.data;
+            return ListView.builder(
+              itemCount: comfyLessonList?.length,
+                itemBuilder: (context, index){
+                  return lesson_card(lesson: comfyLessonList![index]);
+                });
+            return Center(child: Text(snapshot.data!.length.toString()),);
+          }
+        }
     );
+
   }
 }
 
@@ -75,6 +86,85 @@ class community_project_tab extends StatelessWidget {
         children: [
           Text('community')
         ],
+      ),
+    );
+  }
+}
+
+class lesson_card extends StatelessWidget {
+  const lesson_card({super.key, required this.lesson});
+  final comfy_lesson lesson;
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.outlineVariant
+              )
+            ),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(topRight: Radius.circular(11), topLeft: Radius.circular(11)),
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      AspectRatio(
+                          aspectRatio: 2/1,
+                        child: Image.network(
+                          lesson.img!,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress){
+                            if(loadingProgress == null){
+                              return child;
+                            }else{
+                              return randomLoadingWidget();
+                            }
+                          },
+                          errorBuilder: (context, object, stack){
+                            return Icon(Icons.error);
+                          },
+                        ),
+                      ),
+                      /*
+                      Padding(
+                          padding: EdgeInsets.all(8.0),
+                        child: Text(lesson.title!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.onPrimary),),
+                      ),
+                      Positioned(
+                        bottom: 0, right: 0,
+                        child:
+                        IconButton(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          icon: Icon(Icons.arrow_forward),
+                          onPressed: (){}
+                        ),
+                      )*/
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(lesson.title!, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),),
+                    ),
+                    IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward))
+                  ],
+                ),
+
+              ],
+            )
+          ),
+        ),
       ),
     );
   }

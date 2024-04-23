@@ -144,96 +144,56 @@ class _project_cardState extends State<project_card> {
               ),
                 color: Theme.of(context).colorScheme.surface
               ),
-              padding: const EdgeInsets.only(bottom: 0),
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(11)),
-                      child: Stack(
-                        alignment: Alignment.bottomLeft,
-                        children: [
-                          AspectRatio(
-                          aspectRatio: 2/1,
-                            child: Image.network(
-                              widget.imgURL!,
-                              loadingBuilder: (context, child, loadingProgess){
-                                if(loadingProgess == null){
-                                  return child;
-                                }
-                                else{
-                                  return const Center(
-                                    child: randomLoadingWidget()
-                                  );
-                                }
-                              },
-                              errorBuilder: (context, object, stack){
-                                return const Center(
-                                    child: randomLoadingWidget()
-                                );
-                              },
-                            fit: BoxFit.cover,)),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(widget.project_name!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.onPrimary),),
-                          ),
-                          Positioned(
-                            top: 0, right: 0,
-                            child: IconButton(
-                              color: Theme.of(context).colorScheme.primary,
-                            icon: Icon(Icons.delete),
-                            onPressed: () async{
-                              await delete_project_prompt(widget.project_name!, widget.project_description!, context);
-                            },
-                          ),),
-                          Positioned(
-                            bottom: 0, right: 0,
-                            child:
-                            IconButton(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              icon: Icon(Icons.arrow_forward),
-                              onPressed: openProjectSpace,
-                            ),
-                          )
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(11)),
+                  child: Stack(
+                    alignment: Alignment.bottomLeft,
+                    children: [
+                      AspectRatio(
+                      aspectRatio: 2/1,
+                        child: Image.network(
+                          widget.imgURL!,
+                          loadingBuilder: (context, child, loadingProgess){
+                            if(loadingProgess == null){
+                              return child;
+                            }
+                            else{
+                              return const Center(
+                                child: randomLoadingWidget()
+                              );
+                            }
+                          },
+                          errorBuilder: (context, object, stack){
+                            return const Center(
+                                child: randomLoadingWidget()
+                            );
+                          },
+                        fit: BoxFit.cover,)),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(widget.project_name!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.onPrimary),),
+                      ),
+                      Positioned(
+                        top: 0, right: 0,
+                        child: IconButton(
+                          color: Theme.of(context).colorScheme.primary,
+                        icon: Icon(Icons.delete),
+                        onPressed: () async{
+                          await delete_project_prompt(widget.project_name!, widget.project_description!, context);
+                        },
+                      ),),
+                      Positioned(
+                        bottom: 0, right: 0,
+                        child:
+                        IconButton(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          icon: Icon(Icons.arrow_forward),
+                          onPressed: openProjectSpace,
+                        ),
+                      )
 
-                        ]
-                      )),
-                  /*Container(height: 60, alignment: Alignment.center,
-                      child: Text(widget.project_name!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary),)),
-                  Container(
-                    height: 30, alignment: Alignment.center,
-                      child: Text(widget.project_description!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary))),*/
-                  /*Theme(
-                    data: ThemeData(
-                      dividerColor: Colors.transparent
-                  ),
-                    child: ExpansionTile(
-                      title: Text(widget.project_name!, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary),),
-                      children: [
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(widget.project_description!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
-                              Text('Click to open project!', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
-                              Text('Host info: ${widget.username}@${widget.hostname}', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
-                              //Text(widget.password!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary)),
-                              //IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
-                              Gap(20),
-                              clickable(
-                                  icon: Icons.delete,
-                                  onTap: () async{
-                                    await delete_project_prompt(widget.project_name!, widget.project_description!, context);
-                                  },
-                              ),
-                            ],
-                          ),
-                        )
-
-                      ],
-                    ),
-                  )*/
-                ],
-              ),
+                    ]
+                  )),
             ),
           ),
         ),
