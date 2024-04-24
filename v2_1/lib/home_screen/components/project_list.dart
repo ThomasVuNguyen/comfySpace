@@ -1,17 +1,10 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gap/gap.dart';
-import 'package:rive/rive.dart';
 import 'package:v2_1/beginner_project_support/beginner_project_message.dart';
 import 'package:v2_1/comfyauth/authentication/components/signout.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/delete_project.dart';
-import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
-import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
-import 'package:v2_1/home_screen/components/set_user_info.dart';
-import 'package:v2_1/home_screen/home_screen.dart';
-import 'package:v2_1/universal_widget/buttons.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../../project_space_screen/project_space.dart';
@@ -47,29 +40,6 @@ class _project_listState extends State<project_list> {
                     child: add_project_card(title: 'Fancy a project?', subtitle:  '~ click here to create one ~' ));
               }
               else{
-                /*
-                return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio:3/2,
-                      crossAxisCount: (kIsWeb==true)? MediaQuery.of(context).size.width~/500 :1
-                        //
-                    ),
-                    itemCount: project_list!.length + 1,
-                    itemBuilder: (context, index){
-                      if(index==project_list.length){
-                        return add_project_card();
-                      }
-                      else{
-                        return project_card(
-                          project_name: project_list[index].name,
-                          project_description: project_list[index].description,
-                          hostname: project_list[index].hostname,
-                          username: project_list[index].username,
-                          password: project_list[index].password,
-                        );
-                      }
-                    }
-                );*/
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: project_list!.length+1,
@@ -222,32 +192,44 @@ class _add_project_cardState extends State<add_project_card> {
 
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: DottedBorder(
-              color: Theme.of(context).colorScheme.outline,
-              borderType: BorderType.RRect,
-              padding: EdgeInsets.symmetric(vertical: 40, horizontal: 10),
-              radius: Radius.circular(12),
-              strokeWidth: 1,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Container(height: 50, alignment: Alignment.center,
-                        child: Text(
-                          widget.title,
-                          style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary),
-                          textAlign: TextAlign.center,
-                        )
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                      Theme.of(context).colorScheme.primaryContainer,
+                       Theme.of(context).colorScheme.tertiaryContainer
+                    ]
+                )
+              ),
+              child: DottedBorder(
+                color: Theme.of(context).colorScheme.outline,
+                borderType: BorderType.RRect,
+                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
+                radius: const Radius.circular(12),
+                strokeWidth: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Container(height: 50, alignment: Alignment.center,
+                          child: Text(
+                            widget.title,
+                            style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
+                            textAlign: TextAlign.center,
+                          )
+                      ),
                     ),
-                  ),
-                  Gap(10),
-                  Center(
-                    child: Container(
-                        height: 30, alignment: Alignment.center,
-                        child: Text(widget.subtitle, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.tertiary))
+                    Gap(10),
+                    Center(
+                      child: Container(
+                          height: 30, alignment: Alignment.center,
+                          child: Text(widget.subtitle, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onTertiaryContainer))
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

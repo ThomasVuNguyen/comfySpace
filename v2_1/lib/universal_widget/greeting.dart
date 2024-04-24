@@ -19,7 +19,7 @@ class randomGreeting extends StatelessWidget {
     ];
     int _widgetIndex = Random().nextInt(greetingList.length);
     return Text(
-      '${greetingList[_widgetIndex]}, $name',
+      '${greetingList[_widgetIndex]}! $name',
         style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.tertiary
     ));
   }

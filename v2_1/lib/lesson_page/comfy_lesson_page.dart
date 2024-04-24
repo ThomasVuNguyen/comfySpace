@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -24,7 +25,10 @@ class _ComfyLessonPageState extends State<ComfyLessonPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.lesson.title!)
+        title: Text(
+            widget.lesson.title!,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.tertiary)
+        )
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -33,7 +37,13 @@ class _ComfyLessonPageState extends State<ComfyLessonPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(widget.lesson.description!),
+              Text(
+                widget.lesson.description!,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.tertiary,
+                    fontStyle: FontStyle.italic
+                  )
+              ),
               const Gap(16),
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
@@ -52,6 +62,10 @@ class _ComfyLessonPageState extends State<ComfyLessonPage> {
                         }
                       },
                       errorBuilder: (context, object, stack){
+                        if (kDebugMode) {
+                          print('error loading lesson');
+                          print(stack.toString());
+                        }
                         return const Icon(Icons.error);
                       },
                     ),
@@ -59,8 +73,7 @@ class _ComfyLessonPageState extends State<ComfyLessonPage> {
                 ),
               ),
               Gap(16),
-              Text(widget.lesson.author!),
-              Gap(16),
+              //Text(widget.lesson.author!), Gap(16),
               Flexible(
                   fit: FlexFit.loose,
                   flex: 0,

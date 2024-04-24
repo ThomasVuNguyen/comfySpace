@@ -13,7 +13,7 @@ class learning_space extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2, child: Scaffold(
+        length: 1, child: Scaffold(
       appBar: TabBar(
         tabs: [
           Text(''),

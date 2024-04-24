@@ -20,6 +20,7 @@ import 'package:v2_1/universal_widget/buttons.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../comfy_user_information_function/beginner_project/add_project_suggestion.dart';
+import '../comfy_user_information_function/sendEmail.dart';
 
 String imgURLPlaceHolder = '';
 class create_new_project extends StatefulWidget {
@@ -125,6 +126,16 @@ class _create_new_projectState extends State<create_new_project> {
           imgURLPlaceHolder,
         ideaDescriptionController.text,
       );
+      try{
+        await sendEmailAboutBeginnerProject(
+            projectNameController.text,
+            projectDescriptionController.text,
+            ideaDescriptionController.text
+        );
+      } catch (e){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('email sending failed')));
+      }
+
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
     }
