@@ -126,6 +126,7 @@ class _in_app_textfieldState extends State<in_app_textfield> {
               ),
               Gap(10),
               TextField(
+                maxLines: (widget.multiline == true)? 5 :1,
                 keyboardType: (widget.multiline == true)? TextInputType.multiline: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 obscureText: widget.obsureText,

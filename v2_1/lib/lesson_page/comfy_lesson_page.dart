@@ -6,6 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/lesson_function.dart';
+import 'package:v2_1/lesson_page/components/contact_button.dart';
 import 'package:v2_1/lesson_page/components/like_button.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
 
@@ -79,7 +80,13 @@ class _ComfyLessonPageState extends State<ComfyLessonPage> {
                   flex: 0,
                   child: MarkdownRenderer(path: widget.lesson.content!)),
               Gap(20),
-              likeButton(lesson: widget.lesson)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  contact_button(text: 'Comment', lessonName: widget.lesson.title!),
+                  likeButton(lesson: widget.lesson),
+                ],
+              )
             ],
           ),
         ),

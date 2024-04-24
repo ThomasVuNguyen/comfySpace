@@ -281,7 +281,7 @@ class _create_new_projectState extends State<create_new_project> {
                     constraints: const BoxConstraints(maxWidth: 400, maxHeight: 500),
                     child: Swiper(
                       //pagination: SwiperPagination(),
-                      control: SwiperControl(),
+                      control: const SwiperControl(),
                         itemCount: userExperienceLevelList.length,
                       viewportFraction: 0.8,
                       scale: 0.9,
@@ -329,7 +329,7 @@ class _create_new_projectState extends State<create_new_project> {
                   child: in_app_textfield(
                       controller: ideaDescriptionController,
                       multiline: true,
-                      hintText: '',
+                      hintText: 'I would like it to be portable, environmentally-friendly, and green please. Thank you!',
                       obsureText: false,
                       titleText: ''),
                 ),

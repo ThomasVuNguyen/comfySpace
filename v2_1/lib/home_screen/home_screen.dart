@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Icon(Icons.home), label: 'Home', selectedIcon: Icon(Icons.house),
                         ),
                         NavigationDestination(
-                          icon: Icon(Icons.library_books), label: 'Learn', selectedIcon: Icon(Icons.local_library),
+                          icon: Icon(Icons.library_books), label: 'Academy', selectedIcon: Icon(Icons.local_library),
                         ),
                         NavigationDestination(
                           icon: Icon(Icons.self_improvement), label: 'You', selectedIcon: Icon(Icons.accessibility_new),
