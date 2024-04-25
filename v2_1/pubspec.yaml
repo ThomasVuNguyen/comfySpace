@@ -48,6 +48,8 @@ dependencies:
   dart_markdown: ^3.1.7
   flutter_widget_from_html_core: ^0.14.11
   mailer: ^6.1.0
+  icons_plus: ^5.0.0
+  material_design_icons_flutter: ^7.0.7296
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +70,7 @@ flutter:
     - assets/raspberrypi_4.png
     - assets/comfy_logo_ambience.png
     - assets/comfy_icon.png
+    - assets/comfy_logo_ios.png
     - assets/google_icon.png
     - assets/apple_icon.png
     - assets/comfy_logo_no_background.png
@@ -116,7 +119,7 @@ icons_launcher:
       image_path: "assets/comfy_logo_android.png"
     ios:
       enable: true
-      image_path: "assets/comfy_logo_ambience.png"
+      image_path: "assets/comfy_logo_ios.png"
     web:
       enable: true
       image_path: "assets/comfy_logo_ambience.png"

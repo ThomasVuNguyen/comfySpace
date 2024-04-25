@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/home_screen/components/account_info.dart';
 import 'package:v2_1/home_screen/components/avatar_icon.dart';
@@ -96,9 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       //Theme.of(context).colorScheme.primaryContainer,
                       selectedIndex: _selectedPageIndex,
-                      destinations: const [
+                      destinations: [
                         NavigationDestination(
-                          icon: Icon(Icons.home), label: 'Home', selectedIcon: Icon(Icons.house),
+                            icon: Icon(Icons.build), label: 'Projects', selectedIcon: Icon(Icons.handyman),
                         ),
                         NavigationDestination(
                           icon: Icon(Icons.library_books), label: 'Academy', selectedIcon: Icon(Icons.local_library),
