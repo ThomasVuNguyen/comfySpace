@@ -22,8 +22,10 @@ class ComfyLessonPage extends StatefulWidget {
 }
 
 class _ComfyLessonPageState extends State<ComfyLessonPage> {
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
