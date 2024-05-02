@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:v2_1/comfyauth/authentication/components/signout.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/sendEmail.dart';
 import 'package:v2_1/home_screen/components/avatar_icon.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
@@ -86,7 +87,18 @@ class _account_infoState extends State<account_info> {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context) => auth_page(welcomePage: true,)));
                   }
-              )
+              ),
+
+              Gap(120),
+              TextButton(
+                  child: Text('Delete account?', style: TextStyle(
+                      color: Theme.of(context).colorScheme.tertiaryContainer
+                  ),),
+                  onPressed: () async{
+                String? email = FirebaseAuth.instance.currentUser?.email.toString();
+                await sendEmailGeneral('$email would like to delete their account');
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Account deletion requested, will complete in 48 hours')));
+              }),
             ],
           ),
 
