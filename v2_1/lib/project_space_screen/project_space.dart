@@ -30,23 +30,14 @@ class project_space extends StatefulWidget {
 class _project_spaceState extends State<project_space> {
   @override
   void initState() {
-    acquireStaticIP(widget.hostname, widget.username, widget.password);
 
+    acquireStaticIP(widget.hostname, widget.username, widget.password);
     if (kDebugMode) {
       print(widget.project_name);
     }
     super.initState();
   }
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
-  @override
-  void deactivate() {
-    // TODO: implement deactivate
-    super.deactivate();
-  }
 
   @override
   Widget build(BuildContext context) {

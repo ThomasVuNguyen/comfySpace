@@ -6,6 +6,7 @@ import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:v2_1/web_socket/webSocketFunction.dart';
 
 Future<String?> getStaticIp(String hostname) async{
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -76,6 +77,7 @@ Future<void> saveStaticIP(String hostname, String staticIP) async{
 
 Future<void> acquireStaticIP(String hostname, String username, String password) async{
   print('acquiring static ip');
+  if(kIsWeb == false){
     SSHClient sshClient = SSHClient(
       await SSHSocket.connect(hostname, 22, timeout: const Duration(seconds: 5)),
       username: username,
@@ -89,4 +91,10 @@ Future<void> acquireStaticIP(String hostname, String username, String password) 
       print('$hostname static IP saved as $staticIP');
     }
     //return staticIP;
+  }
+  else{
+    await initializeWebSocket(hostname);
+
+  }
+
 }

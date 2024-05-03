@@ -958,7 +958,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.32):
     - BoringSSL-GRPC/Interface (= 0.0.32)
   - BoringSSL-GRPC/Interface (0.0.32)
-  - cloud_firestore (4.17.0):
+  - cloud_firestore (4.17.2):
     - Firebase/Firestore (= 10.24.0)
     - firebase_core
     - Flutter
@@ -973,14 +973,14 @@ PODS:
   - Firebase/Storage (10.24.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.24.0)
-  - firebase_auth (4.19.2):
+  - firebase_auth (4.19.4):
     - Firebase/Auth (= 10.24.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.30.0):
+  - firebase_core (2.30.1):
     - Firebase/CoreOnly (= 10.24.0)
     - Flutter
-  - firebase_storage (11.7.2):
+  - firebase_storage (11.7.4):
     - Firebase/Storage (= 10.24.0)
     - firebase_core
     - Flutter
@@ -1163,6 +1163,8 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - sign_in_with_apple (0.0.1):
+    - Flutter
   - url_launcher_ios (0.0.1):
     - Flutter
 
@@ -1176,6 +1178,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - rive_common (from `.symlinks/plugins/rive_common/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
@@ -1224,6 +1227,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/rive_common/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  sign_in_with_apple:
+    :path: ".symlinks/plugins/sign_in_with_apple/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
@@ -1231,11 +1236,11 @@ SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
-  cloud_firestore: ec5623634fc3b82f7b23a6e87f116c953eae714d
+  cloud_firestore: a291c7ca0e498f9b08bbabd47a2499a5ae02c152
   Firebase: 91fefd38712feb9186ea8996af6cbdef41473442
-  firebase_auth: c889ae9f6d5116804d50bf9fa931b383f3e82a9b
-  firebase_core: 66b99b4fb4e5d7cc4e88d4c195fe986681f3466a
-  firebase_storage: 056e3c8f9ec19df166eec9211cd3dba876d1ca36
+  firebase_auth: b782567cafd5cfd64debf54638a9f29b63abd7bf
+  firebase_core: 7f1e1156934d0da3be260174812842df9420e4ab
+  firebase_storage: f65f7610b4be6ab404184de0f64b0eeb8a1bdeaf
   FirebaseAppCheckInterop: fecc08c89936c8acb1428d8088313aabedb348e4
   FirebaseAuth: 711d01cccefaf10035b3090a92956d0dd4f99088
   FirebaseAuthInterop: 29336ab84df12fc0f340ba5fe58d3e5811a4192d
@@ -1261,6 +1266,7 @@ SPEC CHECKSUMS:
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   rive_common: 8630be7f6385198f9d31a5bc8cd7f6ccccedf5a1
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
 
 PODFILE CHECKSUM: a93af4711c3860e6ca9f652e4964065d4e9746f1
