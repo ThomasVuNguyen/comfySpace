@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:v2_1/comfyauth/authentication/components/signout.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/sendEmail.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/userIdentifier.dart';
 import 'package:v2_1/home_screen/components/avatar_icon.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
@@ -95,10 +97,21 @@ class _account_infoState extends State<account_info> {
                       color: Theme.of(context).colorScheme.tertiaryContainer
                   ),),
                   onPressed: () async{
-                String? email = FirebaseAuth.instance.currentUser?.email.toString();
+                String? email = getUserID().toString();
                 await sendEmailGeneral('$email would like to delete their account');
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Account deletion requested, will complete in 48 hours')));
               }),
+              Gap(20),
+              TextButton(
+                  child: Text('Need support / information ?', style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground
+                  ),),
+                  onPressed: () async{
+                    String? email = getUserID().toString();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Forwarding to support site')));
+                    await(launchUrl(Uri.parse('https://comfyspace.tech/support')));
+                    await sendEmailGeneral('$email needs support');
+                  }),
             ],
           ),
 
