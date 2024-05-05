@@ -98,8 +98,8 @@ class _account_infoState extends State<account_info> {
                   ),),
                   onPressed: () async{
                 String? email = getUserID().toString();
-                await sendEmailGeneral('$email would like to delete their account');
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Account deletion requested, will complete in 48 hours')));
+                await sendEmailGeneral('$email would like to delete their account');
               }),
               Gap(20),
               TextButton(
