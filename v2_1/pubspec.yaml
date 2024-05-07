@@ -3,7 +3,7 @@ description: "Comfy Space 2.1"
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+2
+version: 1.0.0+3
 
 environment:
   sdk: '>=3.3.1 <4.0.0'
@@ -94,9 +94,6 @@ icons_launcher:
     android:
       enable: true
       image_path: "assets/comfy_logo_android.png"
-    ios:
-      enable: true
-      image_path: "assets/comfy_logo_ios.png"
     web:
       enable: true
       image_path: "assets/comfy_logo_ambience.png"
