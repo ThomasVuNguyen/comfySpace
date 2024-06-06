@@ -85,6 +85,7 @@ flutter:
     - assets/flutter-webp-nomeno/characters/
     - assets/flutter-webp-nomeno/characters/generated/
     - assets/froggie/
+    - assets/pattern/
     - assets/rive/arrow.riv
     - assets/component_assets/floating_button/
     - assets/notion_style/

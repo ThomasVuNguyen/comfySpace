@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   bottomNavigationBar: NavigationBarTheme(
                     data: NavigationBarThemeData(
                         height: 80,
-                        labelTextStyle: MaterialStateProperty.all(
+                        labelTextStyle: WidgetStateProperty.all(
                             Theme.of(context).textTheme.labelMedium
                         )
                     ),
@@ -115,7 +115,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
-                /*floatingActionButton: (_selectedPageIndex==0)? add_new_project(): null,*/
+                floatingActionButton: (_selectedPageIndex==0)? 
+                    FloatingActionButton(
+                      child: Icon(Icons.add),
+                        onPressed: (){})
+                    : null,
               );
           }
           else if(snapshot.connectionState == ConnectionState.waiting){

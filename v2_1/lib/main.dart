@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:v2_1/comfyauth/authentication/components/signout.dart';
 import 'package:v2_1/themes/color_schemes.dart';
 import 'package:v2_1/themes/typography.dart';
@@ -13,6 +14,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
 
   //firebase initializing finished, run app
   runApp(const MyApp());

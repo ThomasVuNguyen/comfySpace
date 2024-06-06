@@ -5,6 +5,9 @@ class avatar_icon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network('https://blog.prototion.com/content/images/2021/09/peep-1.png', height: 50,);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Image.asset('assets/froggie/froggie-basic.png', height: 35,),
+    );
   }
 }
