@@ -53,6 +53,9 @@ dependencies:
   sign_in_with_apple: ^6.1.0
   web_socket_channel: ^2.4.5
   url_launcher: ^6.2.6
+  flutter_animated_button: ^2.0.3
+  flutter_chat_ui: ^1.6.13
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:
