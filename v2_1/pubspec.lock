@@ -350,6 +350,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  flutter_animated_icons:
+    dependency: "direct main"
+    description:
+      name: flutter_animated_icons
+      sha256: f9d8069c746b3723d7c9a70087913ddff8e44ea636b831bcccfc58082600afe9
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_chat_types:
     dependency: transitive
     description:
@@ -640,6 +648,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.19.0"
+  item_picker:
+    dependency: "direct main"
+    description:
+      name: item_picker
+      sha256: f43dc552d4ed81aa48fb583206bc38fe8d82a5812ac163705b34e4135b1ef15b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   js:
     dependency: transitive
     description:
@@ -720,6 +736,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  lottie:
+    dependency: transitive
+    description:
+      name: lottie
+      sha256: "893da7a0022ec2fcaa616f34529a081f617e86cc501105b856e5a3184c58c7c2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.3"
   mailer:
     dependency: "direct main"
     description:

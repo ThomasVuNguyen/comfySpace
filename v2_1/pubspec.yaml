@@ -56,6 +56,8 @@ dependencies:
   flutter_animated_button: ^2.0.3
   flutter_chat_ui: ^1.6.13
   uuid: ^4.4.0
+  flutter_animated_icons: ^1.0.1
+  item_picker: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -34,10 +34,13 @@ class _project_listState extends State<project_list> {
               if(snapshot.connectionState != ConnectionState.done){
                 return CircularProgressIndicator();
               }
+              //If there's no project
               else if(snapshot.hasData == false){
+                return Text('Add a project');
+                /*
                 return ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: 500),
-                    child: add_project_card(title: 'Fancy a project?', subtitle:  '~ click here to create one ~' ));
+                    child: add_project_card(title: 'Fancy a project?', subtitle:  '~ click here to create one ~' ));*/
               }
               else{
                   return ListView.builder(
@@ -189,7 +192,6 @@ class _add_project_cardState extends State<add_project_card> {
           onTap: (){
             Navigator.push(context, MaterialPageRoute(builder: (context) => create_new_project()));
           },
-
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Container(

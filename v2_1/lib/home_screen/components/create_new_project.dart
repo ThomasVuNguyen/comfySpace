@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:unsplash_client/unsplash_client.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:v2_1/chat_ui/chat_ui.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/unsplash/generate_image.dart';
 import 'package:v2_1/home_screen/components/project_list.dart';
@@ -23,6 +25,7 @@ import '../comfy_user_information_function/beginner_project/add_project_suggesti
 import '../comfy_user_information_function/sendEmail.dart';
 
 String imgURLPlaceHolder = '';
+
 class create_new_project extends StatefulWidget {
   const create_new_project({super.key});
 
@@ -31,416 +34,144 @@ class create_new_project extends StatefulWidget {
 }
 
 class _create_new_projectState extends State<create_new_project> {
-  final projectNameController = TextEditingController();
-  final projectDescriptionController = TextEditingController();
-
-  List<String> userExperienceLevelList = ['beginner', 'masterful'];
-  List<String> userExperienceDescriptionList = [
-    'You have a great idea and just needs help with putting together - hardware & software.',
-    'You have an idea and have a good general understanding of Raspberry PI, SSH, and electronics.'
-];
-  List<String> userExperienceImageList = [
-    'assets/froggie/swipe up.png',
-    'assets/froggie/froggie_happy.png'
-  ];
-  int userExperienceIndex = 0;
-
-  final ideaDescriptionController = TextEditingController();
-
-  final hostnameController = TextEditingController();
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  bool _pageProjectNameAndDescription = true;
-  bool _pagePicImage = false;
-  bool _pageHostInformation = false;
-  bool _pageProjectCardPreview = false;
-  bool _pageFiveVisible = false;
-
-  bool _pageExperienceQuestion = false;
-  bool _pageIdeaInformation = false;
-
-  Future<void> navigate() async {
-    if(_pageProjectNameAndDescription == true){
-      if(projectNameController.text == '' || projectDescriptionController.text == ''){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Project name & description cannot be empty')));
-      }
-      else{
-        setState(() {
-          _pageProjectNameAndDescription = !_pageProjectNameAndDescription;
-          _pagePicImage = true;
-          _pageHostInformation = false;
-          _pageProjectCardPreview = false;
-          _pageFiveVisible = false;
-        });
-      }
-    }
-    else if(_pagePicImage == true){
-        setState(() {
-          _pageProjectNameAndDescription = false;
-          _pagePicImage = false;
-          _pageExperienceQuestion = true;
-          _pageIdeaInformation = false;
-          _pageHostInformation = false;
-          _pageProjectCardPreview = false;
-          _pageFiveVisible = false;
-        });
-    }
-    else if(_pageExperienceQuestion == true) {
-      if (userExperienceIndex == 0) {
-        setState(() {
-          _pageProjectNameAndDescription = false;
-          _pagePicImage = false;
-          _pageExperienceQuestion = false;
-          _pageIdeaInformation = true;
-          _pageHostInformation = false;
-          _pageProjectCardPreview = false;
-          _pageFiveVisible = false;
-        });
-      }
-      else {
-        setState(() {
-          _pageProjectNameAndDescription = false;
-          _pagePicImage = false;
-          _pageExperienceQuestion = false;
-          _pageIdeaInformation = false;
-          _pageHostInformation = true;
-          _pageProjectCardPreview = false;
-          _pageFiveVisible = false;
-        });
-      }
-    }
-    else if(_pageIdeaInformation == true){
-      await AddNewProject(
-          context,
-          projectNameController.text,
-          projectDescriptionController.text,
-          'pending beginner project',
-          ideaDescriptionController.text,
-          'pending beginner project',
-          imgURLPlaceHolder);
-      await AddNewBeginnerProject(
-          context,
-        projectNameController.text,
-        projectDescriptionController.text,
-          imgURLPlaceHolder,
-        ideaDescriptionController.text,
-      );
-      try{
-        await sendEmailAboutBeginnerProject(
-            projectNameController.text,
-            projectDescriptionController.text,
-            ideaDescriptionController.text
-        );
-      } catch (e){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('email sending failed')));
-      }
-
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
-    }
-    else if(_pageHostInformation == true){
-      setState(() {
-        _pageProjectNameAndDescription = false;
-        _pagePicImage = false;
-        _pageHostInformation = false;
-        _pageProjectCardPreview = true;
-        _pageFiveVisible = false;
-      });
-    }
-    /*else if(_pageFourVisible == true){
-                            try{
-                              print('acquiring static ip');
-                              await acquireStaticIP(hostnameController.text, usernameController.text, passwordController.text).timeout(Duration(seconds: 5));
-                              setState(() {
-                                _pageOneVisible = false;
-                                _pageTwoVisible = false;
-                                _pageThreeVisible = false;
-                                _pageFourVisible = !_pageFourVisible;
-                                _pageFiveVisible = true;
-                              });
-                            } on TimeoutException{
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Timeout finding the Raspberry Pi on network')));
-                              print('time out acquiring static ip');
-                              setState(() {
-                                _pageOneVisible = false;
-                                _pageTwoVisible = false;
-                                _pageThreeVisible = false;
-                                _pageFourVisible = !_pageFourVisible;
-                                _pageFiveVisible = true;
-                              });
-                            }
-                            catch (e){
-                              print('error acquiring static ip: $e');
-                              setState(() {
-                                _pageOneVisible = false;
-                                _pageTwoVisible = false;
-                                _pageThreeVisible = false;
-                                _pageFourVisible = !_pageFourVisible;
-                                _pageFiveVisible = true;
-                              });
-                            }
-
-
-                          }*/
-    else if(
-    //_pageFiveVisible == true
-    _pageProjectCardPreview == true
-    ){
-      AddNewProject(
-          context,
-          projectNameController.text,
-          projectDescriptionController.text,
-          hostnameController.text,
-          usernameController.text,
-          passwordController.text,
-          imgURLPlaceHolder
-      );
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                //Page 1: Project name & description
-                Visibility(
-                    visible: _pageProjectNameAndDescription,
-                    child: Text(
-                        'What would you call this project?',
-                        style: Theme.of(context).textTheme.titleMedium
-                    )
-                ),
-                Visibility(
-                    visible: _pageProjectNameAndDescription,
-                    child: Gap(20)),
-          
-                Visibility(
-                  visible: _pageProjectNameAndDescription,
-                    child: Image.asset('assets/froggie/create_project_pick_name.png')),
-          
-                Visibility(
-                    visible: _pageHostInformation,
-                    child: Text('Enter host information', style: Theme.of(context).textTheme.titleMedium)
-                ),
-          
-                Gap(20),
-                Visibility(
-                  visible: _pageProjectNameAndDescription,
-                  child: in_app_textfield(
-                      controller: projectNameController,
-                      hintText: 'Robbie the Robot',
-                      obsureText: false,
-                      titleText: 'Project Name'),
-                ),
-                Gap(20),
-                Visibility(
-                  visible: _pageProjectNameAndDescription,
-                  child: in_app_textfield(
-                      controller: projectDescriptionController,
-                      hintText: 'A robot to help clean my work desk',
-                      obsureText: false,
-                      titleText: 'Description'),
-                ),
-                //Page 2: generate image
-          
-                Visibility(
-                    visible: _pagePicImage,
-                    child: Text('Pick an image!', style: Theme.of(context).textTheme.titleMedium)
-                ),
-          
-                Visibility(
-                  visible: _pagePicImage,
-                    child: coverImageGenerator(query: projectNameController.text,),
-                ),
-                Visibility(visible: _pagePicImage, child: Gap(20)),
-                Visibility(visible: _pagePicImage, child: Text(
-                    '*Image generated based on Project Name by Unsplash',
-                  style: Theme.of(context).textTheme.titleSmall,
-                )),
-          
-                //Page 2.5: Experience level question
-                Visibility(
-                    visible: _pageExperienceQuestion,
-                    child: Text(
-                        'How would you describe yourself ?',
-                        style: Theme.of(context).textTheme.titleMedium
-                    )
-                ),
-                Visibility(child: Gap(40), visible: _pageExperienceQuestion,),
-                Visibility(
-                  visible: _pageExperienceQuestion,
-                  child: Container(
-                    constraints: const BoxConstraints(maxWidth: 400, maxHeight: 500),
-                    child: Swiper(
-                      //pagination: SwiperPagination(),
-                      control: const SwiperControl(),
-                        itemCount: userExperienceLevelList.length,
-                      viewportFraction: 0.8,
-                      scale: 0.9,
-                      itemBuilder: (context, index){
-                        return userExperienceCard(
-                            title: userExperienceLevelList[index],
-                            subtitle: userExperienceDescriptionList[index],
-                            img: userExperienceImageList[index]);
-                      },
-                      onIndexChanged: (index){
-                          userExperienceIndex = index;
-                          print('user experience ${userExperienceLevelList[index]}');
-                      },
-                    ),
-                  ),
-                ),
+          child: chatPage(
+            questions: {
+              'project_name': ['Hi there! Let\'s create a project together', 'Pick a cool name for your project!', 'Example: Rumble Robot, Chatty Bot, Dope Drone, etc.'],
+              'project_description':['In one short sentence, describe what you\'re building!', 'Example: A traversal remote-controlled car with a camera mounted']
+            },
+            answers: {}, title: 'Create a robotic project',
+            pageName: 'create_new_project_pick_name',
+          )
+        ),
+      ),
+    );
+  }
+}
 
-                //Page 3: Project description
 
-                Visibility(
-                  visible: _pageIdeaInformation,
-                    child: AnimatedTextKit(
-                      isRepeatingAnimation: false,
-                      animatedTexts: [
-                        TypewriterAnimatedText(
-                            'Is there anything else you would like to add?',
-                            textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
-                            speed: const Duration(milliseconds: 100)
+class pickProjectImage extends StatefulWidget {
+  const pickProjectImage({super.key, 
+  required this.project_name, required this.project_description});
+  final String project_name; final String project_description;
+  @override
+  State<pickProjectImage> createState() => _pickProjectImageState();
+}
+
+class _pickProjectImageState extends State<pickProjectImage> {
+  @override
+  void initState() {
+    if (kDebugMode) {
+      print('unsplash reload');
+    }
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    Future<List<Photo>> photoSearch = search_image(widget.project_name);
+    return Scaffold(
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(
+            maxWidth: 500,
+          ),
+          child:
+          Stack(
+            alignment: Alignment.topRight,
+            children: [
+              FutureBuilder(
+                  future: photoSearch,
+                  builder: (context, snapshot){
+                    if(snapshot.connectionState == ConnectionState.done){
+                      List<String> imgURL = [];
+                      List<String> imgAuthor = [];
+                      imgURLPlaceHolder = snapshot.data![0].urls.full.toString();
+                      for (int i = 0; i< snapshot.data!.length; i++){
+                        imgURL.add(snapshot.data![i].urls.full.toString());
+                        imgAuthor.add(snapshot.data![i].user.name);
+                      }
+                      List<Photo> photoList = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: photoList.length,
+                          itemBuilder: (context, index){
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                  border: Border.all(
+                                      color: Theme.of(context).colorScheme.outline
+                                  ),
+                                  color: Theme.of(context).colorScheme.surface
+                              ),
+
+                              child: Stack(
+                                alignment: Alignment.bottomRight,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.all(Radius.circular(11)),
+                                    child: Image.network(
+                                        photoList[index].urls.regular.toString(),
+                                        fit: BoxFit.fitWidth
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(11)),
+                                        color: Colors.white,
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(photoList[index].user.name),
+                                    ),
+                                    onTap: () async{
+                                      await launchUrl(photoList[index].user.links.html);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                          }
+                      );
+                      /*return Container(
+                        width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height/3,
+                        child: Swiper(
+                          pagination: SwiperPagination(),
+                          control: SwiperControl(),
+                          onIndexChanged: (index){
+                            imgURLPlaceHolder = imgURL[index];
+                          },
+                          itemBuilder: (BuildContext context, int index) {
+                            return Column(
+                              children: [
+                                Image.network(
+                                  imgURL[index],
+                                  fit: BoxFit.contain,
+                                ),
+                                Text(imgAuthor[index]),
+                              ],
+                            );
+                          },
+                          itemCount: imgURL.length,
+                          //viewportFraction: 0.8,
+                          //scale: 0.9,
                         ),
-                        TypewriterAnimatedText(
-                            'Such as a functionality you like or favorite color, feel free to share anything!',
-                            textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
-                            speed: const Duration(milliseconds: 100)
-                        ),
-                      ],
+                      );*/
+                    }
+                    else{
+                      return const randomLoadingWidget();
+                    }
+                  }
 
-                    ),
+              ),
 
-                ),
-                Visibility(
-                  visible: _pageIdeaInformation,
-                    child: Gap(40)),
-                Visibility(
-                  visible: _pageIdeaInformation,
-                  child: in_app_textfield(
-                      controller: ideaDescriptionController,
-                      multiline: true,
-                      hintText: 'I would like it to be portable, environmentally-friendly, and green please. Thank you!',
-                      obsureText: false,
-                      titleText: ''),
-                ),
-
-                //Page 3: Host information
-                Gap(20),
-                Visibility(
-                  visible: _pageHostInformation,
-                    child: Image.asset('assets/raspberrypi_4.png')
-                ),
-                Gap(20),
-                Visibility(
-                  visible: _pageHostInformation,
-                  child: in_app_textfield(
-                      controller: hostnameController,
-                      hintText: 'raspberrypi.local',
-                      obsureText: false,
-                      titleText: 'Hostname'),
-                ),
-                Gap(20),
-                Visibility(
-                  visible: _pageHostInformation,
-                  child: in_app_textfield(
-                      controller: usernameController,
-                      hintText: '',
-                      obsureText: false,
-                      titleText: 'Username'),
-                ),
-                Gap(20),
-                Visibility(
-                  visible: _pageHostInformation,
-                  child: in_app_textfield(
-                      controller: passwordController,
-                      hintText: '',
-                      obsureText: true,
-                      titleText: 'Password'),
-                ),
-                Visibility(
-                    visible: _pageHostInformation,
-                    child: const Gap(20)
-                ),
-                Visibility(
-                    visible: _pageHostInformation,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                      child: Text(
-                          'If you don\'t have it nor know what this is, it\'s ok just to skip ahead!',
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    )
-                ),
-          
-                //Page 4: Detecting your raspberry pi
-                Visibility(
-                    visible: _pageProjectCardPreview,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: AnimatedTextKit(
-                        isRepeatingAnimation: false,
-                        animatedTexts: [
-                          TypewriterAnimatedText(
-                              'Here is your project card, in the future, you can click on it to open!',
-                              textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
-                              speed: const Duration(milliseconds: 100)
-                          ),
-                        ],
-                        onTap: () {
-                        },
-                      ),
-                    ),
-                  //Text('loading animation here')
-                ),
-                Visibility(
-                  visible: _pageProjectCardPreview,
-                    child: IgnorePointer(
-                      child: project_card(
-                        project_name: projectNameController.text,
-                        project_description: projectDescriptionController.text,
-                        hostname: '', username: '', password: '',
-                        imgURL: imgURLPlaceHolder,
-                      ),
-                    )
-                  //Text('loading animation here')
-                ),
-          
-            
-                //Page 5: Scanning result
-                Visibility(
-                  visible: _pageFiveVisible,
-                    child: Text('Scanning result here')),
-                Gap(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: clickable(
-                          icon: Icons.arrow_back,
-                          onTap: (){Navigator.pop(context);}),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: clickable(
-                          icon: Icons.arrow_forward,
-                        onTap: navigate
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
+            ],
           ),
         ),
       ),
@@ -448,68 +179,3 @@ class _create_new_projectState extends State<create_new_project> {
   }
 }
 
-class coverImageGenerator extends StatefulWidget {
-  const coverImageGenerator({super.key, required this.query});
-  final String query;
-  @override
-  State<coverImageGenerator> createState() => _coverImageGeneratorState();
-}
-
-class _coverImageGeneratorState extends State<coverImageGenerator> {
-  @override
-  void initState() {
-    print('unsplash reload');
-    super.initState();
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(
-        maxWidth: 500,
-      ),
-      child:
-      Stack(
-        alignment: Alignment.topRight,
-        children: [
-          FutureBuilder(
-              future: search_image(widget.query), 
-              builder: (context, snapshot){
-                if(snapshot.connectionState == ConnectionState.done){
-                  List<String> imgURL = [];
-                  imgURLPlaceHolder = snapshot.data![0].urls.full.toString();
-                  for (int i = 0; i< snapshot.data!.length; i++){
-                    imgURL.add(snapshot.data![i].urls.full.toString());
-                  }
-                  return Container(
-                    width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height/3,
-                    child: Swiper(
-                      pagination: SwiperPagination(),
-                      control: SwiperControl(),
-                      onIndexChanged: (index){
-                        print(index);
-                        imgURLPlaceHolder = imgURL[index];
-                      },
-                      itemBuilder: (BuildContext context, int index) {
-                        return Image.network(
-                          imgURL[index],
-                          fit: BoxFit.fitWidth,
-                        );
-                      },
-                      itemCount: imgURL.length,
-                      viewportFraction: 0.8,
-                      scale: 0.9,
-                    ),
-                  );
-                }
-                else{
-                  return const randomLoadingWidget();
-                }
-              }
-
-          ),
-
-        ],
-      ),
-    );
-  }
-}
