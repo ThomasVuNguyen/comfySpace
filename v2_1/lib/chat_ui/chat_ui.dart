@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:uuid/uuid.dart';
-import 'package:v2_1/home_screen/components/create_new_project.dart';
+import 'package:v2_1/create_new_project/create_new_project.dart';
+
+import '../create_new_project/components/pick_image.dart';
 
 class chatPage extends StatefulWidget {
   const chatPage({super.key, required this.questions, required this.answers, required this.title, required this.pageName});

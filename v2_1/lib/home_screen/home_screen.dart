@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:v2_1/create_new_project/components/experience_picker.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/home_screen/components/account_info.dart';
 import 'package:v2_1/home_screen/components/add_project_button.dart';
@@ -77,9 +78,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     actions: [
                       GestureDetector(
                         onTap: (){
-                          setState(() {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => experiencePicker(project_name: '', project_description: '', imgURL: '')));
+                          /*setState(() {
                             _selectedPageIndex = 2;
-                          });
+                          });*/
                         },
                           child: const avatar_icon()
                       )

@@ -9,7 +9,7 @@ import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../../project_space_screen/project_space.dart';
 import '../comfy_user_information_function/project_information.dart';
-import 'create_new_project.dart';
+import '../../create_new_project/create_new_project.dart';
 
 class project_list extends StatefulWidget {
   const project_list({super.key});
@@ -36,11 +36,7 @@ class _project_listState extends State<project_list> {
               }
               //If there's no project
               else if(snapshot.hasData == false){
-                return Text('Add a project');
-                /*
-                return ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 500),
-                    child: add_project_card(title: 'Fancy a project?', subtitle:  '~ click here to create one ~' ));*/
+                return Text('howdyy');
               }
               else{
                   return ListView.builder(
