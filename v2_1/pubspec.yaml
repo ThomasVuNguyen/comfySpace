@@ -58,6 +58,8 @@ dependencies:
   uuid: ^4.4.0
   flutter_animated_icons: ^1.0.1
   item_picker: ^2.0.0
+  bubble: ^1.2.1
+  introduction_screen: ^3.1.14
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +77,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/tutorials/
     - assets/raspberrypi_4.png
     - assets/comfy_logo_ambience.png
     - assets/comfy_icon.png
@@ -93,6 +96,7 @@ flutter:
     - assets/notion_style/
     - assets/comfy_logo_android.png
     - shorebird.yaml
+
 
 icons_launcher:
   image_path: "assets/comfy_logo_ambience.png"

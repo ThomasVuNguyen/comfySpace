@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:v2_1/beginner_project_support/beginner_project_message.dart';
 import 'package:v2_1/create_new_project/components/beginner_project_response.dart';
+import 'package:v2_1/create_new_project/components/raspi_setup.dart';
 import 'package:v2_1/universal_widget/talking_head.dart';
 
 class experiencePicker extends StatelessWidget {
@@ -20,80 +21,93 @@ class experiencePicker extends StatelessWidget {
     ];
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            talkingHead(text: 'Great! Now that the project information is done, let\'s pick your experience level.'),
-            ListView.builder(
-            shrinkWrap: true,
-            itemCount: experienceDescription.length, 
-                itemBuilder: (context, index){
-              return GestureDetector(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                                border: Border.all(
-                    color: Theme.of(context).colorScheme.outline
-                                ),
-                                color: Theme.of(context).colorScheme.surface
-                            ),
-                            child: Stack(
-                              alignment: Alignment.bottomRight,
-                              children: [
-                                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(11)),
-                    child: Image.network(
-                        experienceDescription[index]['img']!,
-                        fit: BoxFit.fitWidth
-                    ),
-                  ),
-                                ),
-                                Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(11)),
-                    color: Colors.white,
-                  ),
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    experienceDescription[index]['description']!,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                                ),
-                                Positioned(
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(11)),
-                                      color: Colors.white,
-                                    ),
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      experienceDescription[index]['title']!,
-                                      style: Theme.of(context).textTheme.bodySmall,
-                                    ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              talkingHead(text: 'Great! Now that the project information is done, let\'s pick your experience level.'),
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: experienceDescription.length,
+                  itemBuilder: (context, index){
+                return GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                  border: Border.all(
+                      color: Theme.of(context).colorScheme.outline
                                   ),
-                                  right: 0,
-                                  top: 0,
-                                )
+                                  color: Theme.of(context).colorScheme.surface
+                              ),
+                              child: Stack(
+                                alignment: Alignment.bottomRight,
+                                children: [
+                                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(11)),
+                      child: Image.network(
+                          experienceDescription[index]['img']!,
+                          fit: BoxFit.fitWidth
+                      ),
+                    ),
+                                  ),
+                                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(11)),
+                      color: Colors.white,
+                    ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      experienceDescription[index]['description']!,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                                  ),
+                                  Positioned(
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(11)),
+                                        color: Colors.white,
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        experienceDescription[index]['title']!,
+                                        style: Theme.of(context).textTheme.bodySmall,
+                                      ),
+                                    ),
+                                    right: 0,
+                                    top: 0,
+                                  )
 
 
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                ),
-        onTap: (){
-          //push to RaspberryPi Setup page or we-will-support page
-          if(index == 0){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => beginnerProjectResponse(project_name: project_name, project_description: project_description, imgURL: imgURL)));
-          }
-        },
-      );
-    }
-            )
-          ],
+                  ),
+          onTap: (){
+            //push to RaspberryPi Setup page or we-will-support page
+            if(index == 0){
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                  beginnerProjectResponse(project_name: project_name, project_description: project_description, imgURL: imgURL)));
+            }
+            if(index == 1){
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                  raspberryPiSetup(
+                    project_name: project_name,
+                    project_description: project_description,
+                    imgURL: imgURL,
+                  )
+              ));
+            }
+          },
+                );
+              }
+              )
+            ],
+          ),
         ),
       ),
     );

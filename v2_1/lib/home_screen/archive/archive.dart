@@ -30,6 +30,7 @@ class create_new_project_archive extends StatefulWidget {
 }
 
 class _create_new_project_archiveState extends State<create_new_project_archive> {
+  String imgURLPlaceHolder = '';
   final projectNameController = TextEditingController();
   final projectDescriptionController = TextEditingController();
 
@@ -257,7 +258,8 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
 
                 Visibility(
                   visible: _pagePicImage,
-                  child: coverImageGenerator(query: projectNameController.text,),
+                  child: Text('Placeholder')
+                  //coverImageGenerator(query: projectNameController.text,),
                 ),
                 Visibility(visible: _pagePicImage, child: Gap(20)),
                 Visibility(visible: _pagePicImage, child: Text(

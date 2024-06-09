@@ -1,12 +1,19 @@
 import 'dart:io';
+import 'package:bubble/bubble.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:uuid/uuid.dart';
+import 'package:v2_1/chat_ui/components/bubble.dart';
+import 'package:v2_1/comfyauth/authentication/registerPage.dart';
 import 'package:v2_1/create_new_project/create_new_project.dart';
 
 import '../create_new_project/components/pick_image.dart';
+import '../home_screen/comfy_user_information_function/userIdentifier.dart';
+import '../home_screen/comfy_user_information_function/user_information.dart';
+import '../home_screen/home_screen.dart';
 
 class chatPage extends StatefulWidget {
   const chatPage({super.key, required this.questions, required this.answers, required this.title, required this.pageName});
@@ -28,7 +35,7 @@ class _chatPageState extends State<chatPage> {
   final _comfyHelper = const types.User(
       id: 'comfyHelper',
       role: types.Role.admin,
-      imageUrl: 'https://comfystudio.tech/chilling-in-the-park.jpg'
+      imageUrl: 'https://comfyspace.tech/chilling-in-the-park.jpg'
   );
   List<types.Message> _messages = [];
 
@@ -67,12 +74,19 @@ class _chatPageState extends State<chatPage> {
     if (kDebugMode) {
       print(userAnswer.toString());
     }
-    _moveToNextPage();
+    await _moveToNextPage();
   }
-  void _moveToNextPage(){
+  Future<void> _moveToNextPage() async {
    switch (widget.pageName){
      //If user are in "create a new project" & finished "picking name & description", move to pick image page
      case 'create_new_project_pick_name': Navigator.push(context, MaterialPageRoute(builder: (context) => pickProjectImage(project_name: userAnswer['project_name']!, project_description: userAnswer['project_description']!)));
+     case 'register_new_user': await signUserUp(
+         context,
+         userAnswer['email']!,
+         userAnswer['password']!,
+         userAnswer['name']!,
+         userAnswer['tagline']!,
+         );
    }
   }
   void _sendAdminMessage(String msg){
@@ -109,6 +123,28 @@ class _chatPageState extends State<chatPage> {
       _messages.insert(0, message);
     });
   }
+  Widget _bubbleBuilder(
+      Widget child, {
+        required message,
+        required nextMessageInGroup,
+      }) =>
+      Bubble(
+        color: _user.id != message.author.id ||
+            message.type == types.MessageType.image
+            ? Theme.of(context).colorScheme.secondaryContainer
+            : Theme.of(context).colorScheme.secondary,
+        radius: Radius.circular(12),
+        showNip: true,
+        /*margin: nextMessageInGroup
+            ? const BubbleEdges.symmetric(horizontal: 6)
+            : null,
+        nip: nextMessageInGroup
+            ? BubbleNip.no
+            : _user.id != message.author.id
+            ? BubbleNip.leftBottom
+            : BubbleNip.rightBottom,*/
+        child: child,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +155,7 @@ class _chatPageState extends State<chatPage> {
 
       ),
       body: Chat(
+        bubbleBuilder: _bubbleBuilder,
           messages: _messages,
           onSendPressed: _handleSendPressed,
           user: _user,
@@ -137,5 +174,6 @@ class _chatPageState extends State<chatPage> {
           )
       ),
     );
+
   }
 }

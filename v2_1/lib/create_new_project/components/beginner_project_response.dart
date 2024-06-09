@@ -4,6 +4,7 @@ import 'package:v2_1/comfyauth/authentication/components/text_field.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/beginner_project/add_project_suggestion.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/sendEmail.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
+import 'package:v2_1/home_screen/home_screen.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
 import 'package:v2_1/universal_widget/talking_head.dart';
 
@@ -33,7 +34,7 @@ class beginnerProjectResponse extends StatelessWidget {
               clickable_text(
                   text: 'Finish',
                   onTap: () async{
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => thankYouNote()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => thankYouNote( project_name: project_name,)));
                     await AddNewBeginnerProject(context, project_name, project_description, imgURL, noteTextController.text);
                     await sendEmailAboutBeginnerProject(project_name, project_description, noteTextController.text);
                   }
@@ -48,10 +49,28 @@ class beginnerProjectResponse extends StatelessWidget {
 }
 
 class thankYouNote extends StatelessWidget {
-  const thankYouNote({super.key});
-
+  const thankYouNote({super.key, required this.project_name});
+  final String project_name;
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Thanks'),);
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            talkingHead(
+              text: 'Your project $project_name has been assigned to Thomas (creator of Comfy & experienced builder). You will get an email from him in the next 48 hours! In the meantime, feel free to read through some tutorials!',
+            ),
+            clickable_text(text: 'Return home', onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen(pageIndex: 1,))
+              );
+            })
+          ],
+        ),
+
+      ),
+    );
   }
 }
