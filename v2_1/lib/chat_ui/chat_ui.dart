@@ -8,6 +8,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:uuid/uuid.dart';
 import 'package:v2_1/chat_ui/components/bubble.dart';
 import 'package:v2_1/comfyauth/authentication/registerPage.dart';
+import 'package:v2_1/create_new_project/components/ssh_scan.dart';
 import 'package:v2_1/create_new_project/create_new_project.dart';
 
 import '../create_new_project/components/pick_image.dart';
@@ -41,6 +42,7 @@ class _chatPageState extends State<chatPage> {
 
   @override
   void initState() {
+    userAnswer.addAll(widget.answers);
     _conversationSequence();
     super.initState();
   }
@@ -87,6 +89,15 @@ class _chatPageState extends State<chatPage> {
          userAnswer['name']!,
          userAnswer['tagline']!,
          );
+     case 'ssh_credentials': Navigator.push(context, MaterialPageRoute(builder: (context) =>
+         SSHInitialScan(
+             project_name: userAnswer['project_name']!,
+             project_description: userAnswer['project_description']!,
+             imgURL: userAnswer['imgURL']!,
+             hostname: userAnswer['hostname']!,
+             username: userAnswer['username']!,
+             password: userAnswer['password']!))
+     );
    }
   }
   void _sendAdminMessage(String msg){

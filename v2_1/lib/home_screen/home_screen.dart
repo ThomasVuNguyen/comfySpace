@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:v2_1/create_new_project/components/experience_picker.dart';
 import 'package:v2_1/create_new_project/components/raspi_setup.dart';
+import 'package:v2_1/create_new_project/components/ssh_scan.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/home_screen/components/account_info.dart';
 import 'package:v2_1/home_screen/components/add_project_button.dart';
@@ -79,7 +80,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     actions: [
                       GestureDetector(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => raspberryPiSetup(project_name: '', project_description: '', imgURL: '')));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                              SSHInitialScan(project_name: '', project_description: '', imgURL: '', hostname: 'tom', username: 'thomas', password: 'thomas',)
+                          ));
+
                           /*setState(() {
                             _selectedPageIndex = 2;
                           });*/
@@ -101,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       //Theme.of(context).colorScheme.primaryContainer,
                       selectedIndex: _selectedPageIndex,
-                      destinations: [
+                      destinations: const [
                         NavigationDestination(
                             icon: Icon(Icons.build), label: 'Projects', selectedIcon: Icon(Icons.handyman),
                         ),
@@ -131,7 +135,9 @@ class _HomeScreenState extends State<HomeScreen> {
             return const Center(child: randomLoadingWidget());
           }
           else{
-            print(snapshot.connectionState.toString());
+            if (kDebugMode) {
+              print(snapshot.connectionState.toString());
+            }
             return Center(child: Text(snapshot.connectionState.toString()));
           }
         }

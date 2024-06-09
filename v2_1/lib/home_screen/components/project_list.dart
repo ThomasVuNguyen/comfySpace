@@ -41,15 +41,11 @@ class _project_listState extends State<project_list> {
               else{
                   return ListView.builder(
                     shrinkWrap: true,
-                    itemCount: project_list!.length+1,
+                    itemCount: project_list!.length,
                       itemBuilder: (context, index){
                       if (kDebugMode) {
                         print('index is $index');
                       }
-                      if(index == project_list.length){
-                        return const add_project_card(title: 'Create new project', subtitle: 'whatever your mind desires');
-                      }
-                      else{
                         return project_card(
                           project_name: project_list[index].name,
                           project_description: project_list[index].description,
@@ -58,7 +54,7 @@ class _project_listState extends State<project_list> {
                           password: project_list[index].password,
                           imgURL: project_list[index].imgURL,
                         );
-                      }
+
                       }
                   );
               }
@@ -84,7 +80,7 @@ class project_card extends StatefulWidget {
 class _project_cardState extends State<project_card> {
 
   void openProjectSpace(){
-    if(widget.hostname?.contains('pending') == false){
+    if(widget.hostname != ''){
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => project_space(
         project_name: widget.project_name!,
         hostname: widget.hostname!, username: widget.username!, password: widget.password!, raspberryPiInit: true,
@@ -170,7 +166,7 @@ class _project_cardState extends State<project_card> {
     );
   }
 }
-
+/*
 class add_project_card extends StatefulWidget {
   const add_project_card({super.key, required this.title, required this.subtitle});
   final String title; final String subtitle;
@@ -235,5 +231,5 @@ class _add_project_cardState extends State<add_project_card> {
       ),
     );
   }
-}
+}*/
 

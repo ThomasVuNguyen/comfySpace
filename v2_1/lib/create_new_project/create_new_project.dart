@@ -22,7 +22,7 @@ import 'package:v2_1/universal_widget/buttons.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 import 'package:v2_1/universal_widget/talking_head.dart';
 
-import '../home_screen/comfy_user_information_function/beginner_project/add_project_suggestion.dart';
+import '../home_screen/comfy_user_information_function/add_project.dart';
 import '../home_screen/comfy_user_information_function/sendEmail.dart';
 
 String imgURLPlaceHolder = '';

@@ -63,8 +63,6 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
         } catch (e){
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('error disposing: $e')));
         }
-
-
       }
       catch (e){
         //if all hostname tested and not working, report!

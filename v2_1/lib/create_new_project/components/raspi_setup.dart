@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:v2_1/create_new_project/components/ssh_info_page.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
 import 'package:v2_1/universal_widget/instruction_text.dart';
 import 'package:v2_1/universal_widget/talking_head.dart';
@@ -17,9 +19,14 @@ class raspberryPiSetup extends StatelessWidget {
         child: IntroductionScreen(
           pages: raspberryPiSetupSteps,
           showNextButton: false,
-          done: clickable_text(text: 'next', onTap: (){},),
+          done: clickable_text(text: 'next', onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SSHInfoPage(project_name: project_name, project_description: project_description, imgURL: imgURL)));
+          },),
           onDone: () {
-            // On button pressed
+            // On button pressed, move to next page
+            if (kDebugMode) {
+              print('setup finished');
+            }
           },
         ),
       )
@@ -111,7 +118,53 @@ List<PageViewModel> raspberryPiSetupSteps = [
         ],
       )
   ),
-  //Imager Wifi & SSH
+  //Secret Menu
+  PageViewModel(
+      decoration: const PageDecoration(
+      ),
+      titleWidget: const talkingHead(text: 'Next, let\'s setup a remote connection for the Raspberry Pi.',),
+      bodyWidget: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const instructionTitle(text: '1. Open the "secret menu".'),
+          Container(
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/tutorials/ImagerSecretMenu.png'),
+          ),
+          const instructionTitle(text: '2. Pick a hostname of your choice.'),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/tutorials/ImagerHostname.png'),
+          ),
+          const instructionTitle(text: '3. Pick a username & password'),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/tutorials/ImagerUserPassword.png'),
+          ),
+          const instructionTitle(text: '4. Enter your wifi information'),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/tutorials/ImagerWifiInfo.png'),
+          ),
+          const instructionTitle(text: '5. Enable SSH'),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/tutorials/ImagerEnableSSH.png'),
+          ),
+          const instructionTitle(text: '5. Flash the Operating Sytem (OS)'),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/tutorials/ImagerFlash.png'),
+          ),
+          const instructionTitle(text: '5. Wait for a few minutes'),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/tutorials/ImagerFlashDone.png'),
+          ),
+        ],
+      )
+  ),
+  //Congrats, you are finished!
   PageViewModel(
       decoration: const PageDecoration(
       ),
@@ -129,12 +182,27 @@ List<PageViewModel> raspberryPiSetupSteps = [
             padding: const EdgeInsets.all(20),
             child: Image.asset('assets/tutorials/PowerSupplyToRpi.png'),
           ),
-          const instructionTitle(text: '3. Congrats! You have finished setting up your Raspberry Pi, the brain of your robot.'),
+          const instructionTitle(text: '3. On your computer, open PowerShell (Windows) or Terminal (MacOS).'),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/tutorials/OpenTerminal.png'),
+          ),
+          const instructionTitle(text: '4. Run commands to scan for Raspberry Pi IP address.'),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/tutorials/ScanIPWindows.png'),
+          ),
+          const instructionTitle(text: 'or'),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/tutorials/ScanIPMac.png'),
+          ),
+          const instructionTitle(text: '5. Congrats! You have finished setting up your Raspberry Pi, the brain of your robot.'),
           Padding(
             padding: const EdgeInsets.all(20),
             child: Image.network('https://comfyspace.tech/chilling-in-the-park.jpg'),
           ),
-          const instructionTitle(text: 'Hi! I\'m Thomas and I\'m proud of your progress so far!'),
+          const instructionTitle(text: 'Hi! I\'m Thomas and I\'m proud of your progress so far! Remember to note down the IP address, username & password (last step).'),
 
         ],
       )

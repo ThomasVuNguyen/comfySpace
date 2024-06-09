@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:v2_1/beginner_project_support/beginner_project_message.dart';
 import 'package:v2_1/create_new_project/components/beginner_project_response.dart';
 import 'package:v2_1/create_new_project/components/raspi_setup.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/add_project.dart';
 import 'package:v2_1/universal_widget/talking_head.dart';
 
 class experiencePicker extends StatelessWidget {

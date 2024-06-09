@@ -19,7 +19,7 @@ import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
-import '../comfy_user_information_function/beginner_project/add_project_suggestion.dart';
+import '../comfy_user_information_function/add_project.dart';
 import '../comfy_user_information_function/sendEmail.dart';
 
 class create_new_project_archive extends StatefulWidget {

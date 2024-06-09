@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:v2_1/comfyauth/authentication/components/text_field.dart';
-import 'package:v2_1/home_screen/comfy_user_information_function/beginner_project/add_project_suggestion.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/add_project.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/sendEmail.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/home_screen/home_screen.dart';
@@ -22,7 +22,7 @@ class beginnerProjectResponse extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              talkingHead(text: 'Step 1, visualize your idea, is complete! A comfy team member will reach out within 48 hours. In the meantime, write down any extra note you like!'),
+              const talkingHead(text: 'Step 1, visualize your idea, is complete! A comfy team member will reach out within 48 hours. In the meantime, write down any extra note you like!'),
 
               in_app_textfield(
                   controller: noteTextController,
@@ -37,6 +37,7 @@ class beginnerProjectResponse extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => thankYouNote( project_name: project_name,)));
                     await AddNewBeginnerProject(context, project_name, project_description, imgURL, noteTextController.text);
                     await sendEmailAboutBeginnerProject(project_name, project_description, noteTextController.text);
+                    await AddNewProject(context, project_name, project_description, '', '', '', imgURL);
                   }
 
               )
