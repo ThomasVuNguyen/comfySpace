@@ -100,7 +100,9 @@ class _pickProjectImageState extends State<pickProjectImage> {
                                                         style: Theme.of(context).textTheme.bodySmall!.copyWith(decoration: TextDecoration.underline),
                                                       ),
                                                       onTap: () async{
-                                                        await launchUrl(photoList[index].user.links.html);
+                                                        String referral_link = '?utm_source=comfyspace&utm_medium=referral';
+                                                        String author_link = photoList[index].user.links.html.toString();
+                                                        await launchUrl(Uri.parse(author_link + referral_link));
                                                       },
                                                     ),
                                                     Text(
@@ -113,7 +115,9 @@ class _pickProjectImageState extends State<pickProjectImage> {
                                                         style: Theme.of(context).textTheme.bodySmall!.copyWith(decoration: TextDecoration.underline),
                                                       ),
                                                       onTap: () async{
-                                                        await launchUrl(Uri.parse('https://unsplash.com'));
+                                                        String referral_link = '?utm_source=comfyspace&utm_medium=referral';
+                                                        String unsplash_link = 'https://unsplash.com/';
+                                                        await launchUrl(Uri.parse(unsplash_link + referral_link));
                                                       },
                                                     ),
                                                   ],

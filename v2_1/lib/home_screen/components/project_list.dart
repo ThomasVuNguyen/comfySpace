@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:unsplash_client/unsplash_client.dart';
 import 'package:v2_1/beginner_project_support/beginner_project_message.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/delete_project.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../../project_space_screen/project_space.dart';
 import '../comfy_user_information_function/project_information.dart';
+import '../comfy_user_information_function/unsplash/generate_image.dart';
 
 class project_list extends StatefulWidget {
   const project_list({super.key});
@@ -70,6 +72,11 @@ class project_card extends StatefulWidget {
 
 class _project_cardState extends State<project_card> {
 
+  @override
+  void initState() {
+
+    super.initState();
+  }
   void openProjectSpace(){
     if(widget.hostname != ''){
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => project_space(
@@ -81,7 +88,6 @@ class _project_cardState extends State<project_card> {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => const beginnerProjectMessage()
       ));
     }
-
   }
   @override
   Widget build(BuildContext context) {
