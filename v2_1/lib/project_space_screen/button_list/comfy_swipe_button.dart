@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../home_screen/comfy_user_information_function/project_information.dart';
-import 'button_global/variables.dart';
 
 class comfy_swipe_button extends StatefulWidget {
   const comfy_swipe_button({super.key, required this.button,
@@ -149,7 +148,7 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
                   padding: const EdgeInsets.all(10.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Color(0xFFDAEED7),
+                        color: const Color(0xFFDAEED7),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: widget.button.color!, width: 2)
                     ),
@@ -183,21 +182,21 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
                       }
                       else{
                         return Padding(
-                          padding: EdgeInsets.only(left:15, right: 15, top: 15, bottom: 45),
+                          padding: const EdgeInsets.only(left:15, right: 15, top: 15, bottom: 45),
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                RotatedBox(quarterTurns: 3, child: Icon(Iconsax.arrow_right),),
+                                const RotatedBox(quarterTurns: 3, child: Icon(Iconsax.arrow_right),),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    RotatedBox(quarterTurns: 2, child: Icon(Iconsax.arrow_right),),
+                                    const RotatedBox(quarterTurns: 2, child: Icon(Iconsax.arrow_right),),
                                     Icon(Icons.pause_circle_outline, color: Theme.of(context).colorScheme.primary,size: 40,),
-                                    Icon(Iconsax.arrow_right)
+                                    const Icon(Iconsax.arrow_right)
                                   ],
                                 ),
-                                Icon(Icons.swipe_down)
+                                const Icon(Icons.swipe_down)
                                 //RotatedBox(quarterTurns: 1, child: Icon(Iconsax.arrow_right),),
                               ],
                             ),

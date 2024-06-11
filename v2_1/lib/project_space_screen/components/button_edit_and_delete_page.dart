@@ -1,5 +1,4 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -168,7 +167,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
               }:
                   widget.button.function!
               ;
-              Color color = (widget.button.color == null)?  Theme.of(context).colorScheme.onBackground: widget.button.color!;
+              Color color = (widget.button.color == null)?  Theme.of(context).colorScheme.onSurface: widget.button.color!;
 
               if (buttonNameController.text != '') {
                 btnName = buttonNameController.text;
@@ -180,7 +179,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                 color = colorConversion(context, buttonColorController.text.toLowerCase());
               }
               return Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 width: 240, height: 240,
                 child: button_sort(
                     button: comfy_button(
@@ -365,7 +364,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
               ),
             ),
             //Navigation button
-            Gap(40),
+            const Gap(40),
             Visibility(
               visible: !_showSelectionScreen,
                 child:

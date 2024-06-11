@@ -2,22 +2,13 @@ import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
-import 'package:unsplash_client/unsplash_client.dart';
-import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
-import 'package:v2_1/home_screen/comfy_user_information_function/unsplash/generate_image.dart';
 import 'package:v2_1/home_screen/components/project_list.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/home_screen/components/user_experience_card.dart';
 import 'package:v2_1/home_screen/home_screen.dart';
-import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
-import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../comfy_user_information_function/add_project.dart';
 import '../comfy_user_information_function/sendEmail.dart';
@@ -63,7 +54,7 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
   Future<void> navigate() async {
     if(_pageProjectNameAndDescription == true){
       if(projectNameController.text == '' || projectDescriptionController.text == ''){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Project name & description cannot be empty')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Project name & description cannot be empty')));
       }
       else{
         setState(() {
@@ -133,11 +124,11 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
             ideaDescriptionController.text
         );
       } catch (e){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('email sending failed')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('email sending failed')));
       }
 
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     }
     else if(_pageHostInformation == true){
       setState(() {
@@ -196,7 +187,7 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
           passwordController.text,
           imgURLPlaceHolder
       );
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     }
   }
 
@@ -220,7 +211,7 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
                 ),
                 Visibility(
                     visible: _pageProjectNameAndDescription,
-                    child: Gap(20)),
+                    child: const Gap(20)),
 
                 Visibility(
                     visible: _pageProjectNameAndDescription,
@@ -231,7 +222,7 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
                     child: Text('Enter host information', style: Theme.of(context).textTheme.titleMedium)
                 ),
 
-                Gap(20),
+                const Gap(20),
                 Visibility(
                   visible: _pageProjectNameAndDescription,
                   child: in_app_textfield(
@@ -240,7 +231,7 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
                       obsureText: false,
                       titleText: 'Project Name'),
                 ),
-                Gap(20),
+                const Gap(20),
                 Visibility(
                   visible: _pageProjectNameAndDescription,
                   child: in_app_textfield(
@@ -258,10 +249,10 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
 
                 Visibility(
                   visible: _pagePicImage,
-                  child: Text('Placeholder')
+                  child: const Text('Placeholder')
                   //coverImageGenerator(query: projectNameController.text,),
                 ),
-                Visibility(visible: _pagePicImage, child: Gap(20)),
+                Visibility(visible: _pagePicImage, child: const Gap(20)),
                 Visibility(visible: _pagePicImage, child: Text(
                   '*Image generated based on Project Name by Unsplash',
                   style: Theme.of(context).textTheme.titleSmall,
@@ -275,7 +266,7 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
                         style: Theme.of(context).textTheme.titleMedium
                     )
                 ),
-                Visibility(child: Gap(40), visible: _pageExperienceQuestion,),
+                Visibility(visible: _pageExperienceQuestion,child: const Gap(40),),
                 Visibility(
                   visible: _pageExperienceQuestion,
                   child: Container(
@@ -324,7 +315,7 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
                 ),
                 Visibility(
                     visible: _pageIdeaInformation,
-                    child: Gap(40)),
+                    child: const Gap(40)),
                 Visibility(
                   visible: _pageIdeaInformation,
                   child: in_app_textfield(
@@ -336,12 +327,12 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
                 ),
 
                 //Page 3: Host information
-                Gap(20),
+                const Gap(20),
                 Visibility(
                     visible: _pageHostInformation,
                     child: Image.asset('assets/raspberrypi_4.png')
                 ),
-                Gap(20),
+                const Gap(20),
                 Visibility(
                   visible: _pageHostInformation,
                   child: in_app_textfield(
@@ -350,7 +341,7 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
                       obsureText: false,
                       titleText: 'Hostname'),
                 ),
-                Gap(20),
+                const Gap(20),
                 Visibility(
                   visible: _pageHostInformation,
                   child: in_app_textfield(
@@ -359,7 +350,7 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
                       obsureText: false,
                       titleText: 'Username'),
                 ),
-                Gap(20),
+                const Gap(20),
                 Visibility(
                   visible: _pageHostInformation,
                   child: in_app_textfield(
@@ -420,8 +411,8 @@ class _create_new_project_archiveState extends State<create_new_project_archive>
                 //Page 5: Scanning result
                 Visibility(
                     visible: _pageFiveVisible,
-                    child: Text('Scanning result here')),
-                Gap(20),
+                    child: const Text('Scanning result here')),
+                const Gap(20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center,
                   children: [

@@ -1,9 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:v2_1/comfyauth/authentication/components/auth_button.dart';
-import 'package:v2_1/comfyauth/authentication/components/signout.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/home_screen/home_screen.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
@@ -37,23 +33,23 @@ class _set_user_infoState extends State<set_user_info> {
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.tertiary
                 )
               ),
-              Gap(20),
+              const Gap(20),
               Image.asset('assets/froggie/welcoming_froggie.png'),
-              Gap(20),
+              const Gap(20),
               in_app_textfield(
                   titleText: 'Pick a username',
                   controller: nameController,
                   hintText: 'Thomas the Maker',
                   obsureText: false,
               ),
-              Gap(20),
+              const Gap(20),
               in_app_textfield(
                   titleText: 'Pick a tagline',
                   controller: taglineController,
                   hintText: 'Loves to tinker',
                   obsureText: false
               ),
-              Gap(40),
+              const Gap(40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,8 +59,8 @@ class _set_user_infoState extends State<set_user_info> {
                   }),
           
                   clickable(icon: Icons.check, onTap: () async{
-                   if(nameController.text == '' || taglineController.text=='' ||nameController.text== null || taglineController.text==null){
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('information cannot be blank')));
+                   if(nameController.text == '' || taglineController.text==''){
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('information cannot be blank')));
                     }
                     else{
                       await update_user_information(nameController.text, taglineController.text);
@@ -124,7 +120,7 @@ class _in_app_textfieldState extends State<in_app_textfield> {
                   widget.titleText,
                   style: Theme.of(context).textTheme.titleMedium,
               ),
-              Gap(10),
+              const Gap(10),
               TextField(
                 maxLines: (widget.multiline == true)? 5 :1,
                 keyboardType: (widget.multiline == true)? TextInputType.multiline: TextInputType.text,
@@ -133,7 +129,7 @@ class _in_app_textfieldState extends State<in_app_textfield> {
                 controller: widget.controller,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
-                  enabledBorder: OutlineInputBorder(),
+                  enabledBorder: const OutlineInputBorder(),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
                   ),

@@ -14,12 +14,12 @@ dependencies:
   cupertino_icons: ^1.0.6
   google_fonts: ^6.2.1
   rename: ^3.0.2
-  firebase_core: ^2.27.1
+  firebase_core: ^3.0.0
   gap: ^3.0.1
-  firebase_auth: ^4.17.9
+  firebase_auth: ^5.0.0
   google_sign_in: ^6.2.1
   dotted_border: ^2.1.0
-  cloud_firestore: ^4.15.9
+  cloud_firestore: ^5.0.0
   reorderable_grid: ^1.0.10
   rive: ^0.13.1
   unsplash_client: ^2.2.0
@@ -41,17 +41,17 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   icons_launcher: ^2.1.7
   flutter_slidable: ^3.1.0
-  firebase_storage: ^11.7.2
+  firebase_storage: ^12.0.0
   flutter_markdown: ^0.7.1
   like_button: ^2.0.5
   markdown_widget: ^2.3.2+6
   dart_markdown: ^3.1.7
-  flutter_widget_from_html_core: ^0.14.11
+  flutter_widget_from_html_core: ^0.15.1
   mailer: ^6.1.0
   icons_plus: ^5.0.0
   material_design_icons_flutter: ^7.0.7296
   sign_in_with_apple: ^6.1.0
-  web_socket_channel: ^2.4.5
+  web_socket_channel: ^3.0.0
   url_launcher: ^6.2.6
   flutter_animated_button: ^2.0.3
   flutter_chat_ui: ^1.6.13
@@ -60,12 +60,14 @@ dependencies:
   item_picker: ^2.0.0
   bubble: ^1.2.1
   introduction_screen: ^3.1.14
+  webview_flutter: ^4.8.0
 
+  flutter_chat_types: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

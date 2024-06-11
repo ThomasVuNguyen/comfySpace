@@ -1,20 +1,14 @@
-import 'dart:io';
 import 'package:bubble/bubble.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:uuid/uuid.dart';
-import 'package:v2_1/chat_ui/components/bubble.dart';
 import 'package:v2_1/comfyauth/authentication/registerPage.dart';
 import 'package:v2_1/create_new_project/components/ssh_scan.dart';
-import 'package:v2_1/create_new_project/create_new_project.dart';
+import 'package:v2_1/lesson_page/comfy_lesson_page.dart';
 
 import '../create_new_project/components/pick_image.dart';
-import '../home_screen/comfy_user_information_function/userIdentifier.dart';
-import '../home_screen/comfy_user_information_function/user_information.dart';
-import '../home_screen/home_screen.dart';
 
 class chatPage extends StatefulWidget {
   const chatPage({super.key, required this.questions, required this.answers, required this.title, required this.pageName});
@@ -38,7 +32,7 @@ class _chatPageState extends State<chatPage> {
       role: types.Role.admin,
       imageUrl: 'https://comfyspace.tech/chilling-in-the-park.jpg'
   );
-  List<types.Message> _messages = [];
+  final List<types.Message> _messages = [];
 
   @override
   void initState() {
@@ -53,16 +47,16 @@ class _chatPageState extends State<chatPage> {
     for(var title in questionMap.keys) {
       List<String> questions = questionMap[title]!;
       //Send all questions in the question
-      await Future.delayed(Duration(milliseconds: 200));
+      await Future.delayed(const Duration(milliseconds: 200));
       for (final question in questions){
         //Send each question one by one
         _sendAdminMessage(question);
-        await Future.delayed(Duration(milliseconds: 200));
+        await Future.delayed(const Duration(milliseconds: 200));
         print(question);
       }
       //await for response
       while (!_questionAnswered) {
-        await Future.delayed(Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 100));
       }
       //log response
       userAnswer[title] = _messages.first.toJson()['text'];
@@ -72,7 +66,7 @@ class _chatPageState extends State<chatPage> {
       //_sendAdminMessage("$title is ${userAnswer[title]}, confirmed");
 
       //ask the next questions (continue loop)
-    };
+    }
     if (kDebugMode) {
       print(userAnswer.toString());
     }
@@ -98,6 +92,11 @@ class _chatPageState extends State<chatPage> {
              username: userAnswer['username']!,
              password: userAnswer['password']!))
      );
+     case 'lesson_comment': await send_lesson_comment(
+       context,
+         userAnswer['user']!,
+         userAnswer['lesson_title']!,
+         userAnswer['comment']!);
    }
   }
   void _sendAdminMessage(String msg){
@@ -144,7 +143,7 @@ class _chatPageState extends State<chatPage> {
             message.type == types.MessageType.image
             ? Theme.of(context).colorScheme.secondaryContainer
             : Theme.of(context).colorScheme.secondary,
-        radius: Radius.circular(12),
+        radius: const Radius.circular(12),
         showNip: true,
         /*margin: nextMessageInGroup
             ? const BubbleEdges.symmetric(horizontal: 6)

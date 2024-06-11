@@ -81,7 +81,7 @@ class _ButtonCommandCreatePageState extends State<ButtonCommandCreatePage> {
               controller: widget.toggleOnCommandTextController,
               hintText: '', obsureText: false, titleText: 'Toggle on command',
             ),
-            Gap(20),
+            const Gap(20),
             in_app_textfield(
                 controller: widget.toggleOffCommandTextController,
                 hintText: '',
@@ -102,19 +102,19 @@ class _ButtonCommandCreatePageState extends State<ButtonCommandCreatePage> {
                   controller: widget.swipeLeftCommandTextController,
                   hintText: '', obsureText: false, titleText: 'Swipe left command',
                 ),
-                Gap(20),
+                const Gap(20),
                 in_app_textfield(
                   maxWidth: 100,
                   controller: widget.swipeTapCommandTextController,
                   hintText: '', obsureText: false, titleText: 'Swipe tap command',
                 ),
-                Gap(20),
+                const Gap(20),
                 in_app_textfield(
                   maxWidth: 100,
                   controller: widget.swipeRightCommandTextController,
                   hintText: '', obsureText: false, titleText: 'Swipe right command',
                 ),
-            Gap(20),
+            const Gap(20),
             in_app_textfield(
                 controller: widget.swipeDownCommandTextController,
                 hintText: '',

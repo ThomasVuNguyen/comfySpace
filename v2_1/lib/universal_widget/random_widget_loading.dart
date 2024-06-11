@@ -25,8 +25,8 @@ class randomLoadingWidget extends StatelessWidget {
       ),
     ];
 
-    int _widgetIndex = Random().nextInt(loadingWidgetList.length);
+    int widgetIndex = Random().nextInt(loadingWidgetList.length);
 
-    return loadingWidgetList[_widgetIndex];
+    return loadingWidgetList[widgetIndex];
   }
 }

@@ -1,15 +1,8 @@
 
 
-import 'package:dart_markdown/dart_markdown.dart' as md;
-import 'package:flutter_markdown/flutter_markdown.dart' as flmd;
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
 
-import '../../home_screen/comfy_user_information_function/lesson_function.dart';
-import '../../universal_widget/random_widget_loading.dart';
-
+/*
 class MarkdownRenderer extends StatefulWidget {
   const MarkdownRenderer({super.key, required this.path});
   final String path;
@@ -100,3 +93,4 @@ class _MarkdownRendererState extends State<MarkdownRenderer> {
     );
   }
 }
+*/

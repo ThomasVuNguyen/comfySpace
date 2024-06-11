@@ -1,5 +1,4 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -210,7 +209,7 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
               isRepeatingAnimation: false,
               animatedTexts: [
                 TypewriterAnimatedText(
-                    'Let\s create a button!',
+                    'Lets create a button!',
                     textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
                     speed: const Duration(milliseconds: 100)
                 ),
@@ -239,7 +238,7 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                     'left': '',
                     'right': ''
                   };
-                  Color color = Theme.of(context).colorScheme.onBackground;
+                  Color color = Theme.of(context).colorScheme.onSurface;
           
                   if (buttonNameController.text != '') {
                     btnName = buttonNameController.text;
@@ -251,7 +250,7 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                     color = colorConversion(context, buttonColorController.text.toLowerCase());
                   }
                     return Container(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       width: 240, height: 240,
                       child: button_sort(
                           button: comfy_button(

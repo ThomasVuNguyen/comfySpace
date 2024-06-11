@@ -1,15 +1,10 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:typewritertext/typewritertext.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
-import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/home_screen/home_screen.dart';
 import 'package:v2_1/project_space_screen/button_list/button_global/button_sort.dart';
 import 'package:v2_1/project_space_screen/components/add_new_button_screen.dart';
@@ -41,7 +36,7 @@ class _project_spaceState extends State<project_space> {
 
   @override
   Widget build(BuildContext context) {
-    var screen_width = MediaQuery.of(context).size.width~/150;
+    var screenWidth = MediaQuery.of(context).size.width~/150;
     return FutureBuilder(
           future: project_space_initialize(context, widget.hostname, widget.username, widget.password, widget.project_name, widget.raspberryPiInit),
           builder: (context, snapshot){
@@ -129,16 +124,16 @@ class _project_spaceState extends State<project_space> {
                   print('static ip is $staticIP');
                 }
               }
-              var button_list = snapshot.data![1];
+              var buttonList = snapshot.data![1];
               return Scaffold(
                 appBar:AppBar(
                   automaticallyImplyLeading: false,
                   leading: IconButton(
-                    icon: Icon(Icons.subdirectory_arrow_left),
+                    icon: const Icon(Icons.subdirectory_arrow_left),
                     onPressed: (){
                       Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeScreen(),),
+                          MaterialPageRoute(builder: (context) => const HomeScreen(),),
                             (Route<dynamic> route) => false,
                       );
                     },
@@ -149,21 +144,21 @@ class _project_spaceState extends State<project_space> {
                 body: Center(
                   child: SafeArea(
                     child: ReorderableGridView.builder(
-                        itemCount: button_list!.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: screen_width),
+                        itemCount: buttonList!.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: screenWidth),
                         onReorder: (oldIndex, newIndex) async{
                           if (kDebugMode) {
                             print('$oldIndex swapped with $newIndex');
                           }
 
-                          await SwapButton(oldIndex, newIndex, button_list, widget.project_name);
+                          await SwapButton(oldIndex, newIndex, buttonList, widget.project_name);
                           setState(() {});
                         },
                         itemBuilder: (context, index){
                           return Container(
-                            key: Key(button_list[index].order.toString()),
+                            key: Key(buttonList[index].order.toString()),
                             child: button_sort(
-                              button: button_list[index],
+                              button: buttonList[index],
                               projectName: widget.project_name,
                               hostname: widget.hostname,
                               username: widget.username,
@@ -222,16 +217,16 @@ class _project_spaceState extends State<project_space> {
   }
 }
 
-Future<List<dynamic>> project_space_initialize(BuildContext context, String hostname, String username, String password, String project_name, bool raspberryPiInit) async{
+Future<List<dynamic>> project_space_initialize(BuildContext context, String hostname, String username, String password, String projectName, bool raspberryPiInit) async{
   //start timer
   double beginningTime = DateTime.now().microsecondsSinceEpoch/1000000;
 
   //acquire button list
-  List<comfy_button> button_list = await get_button_list_information(context, project_name);
+  List<comfy_button> buttonList = await get_button_list_information(context, projectName);
 
   // if on web, bypass
   if(kIsWeb){
-    return ['web bypass', button_list];
+    return ['web bypass', buttonList];
   }
   //if project screen is loaded from the home screen, run raspberry pi init function
   if(raspberryPiInit == true){
@@ -245,19 +240,19 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
   //try getting static ip
   String? staticIP = '1.3.0.6';
   try{
-    staticIP = await getStaticIp(hostname).timeout(Duration(seconds: 3));
+    staticIP = await getStaticIp(hostname).timeout(const Duration(seconds: 3));
     print('opening project: static ip is $staticIP');
 
     double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
-    print('time taken to load in project $project_name: ${endTime-beginningTime} ');
+    print('time taken to load in project $projectName: ${endTime-beginningTime} ');
 
-    return [staticIP, button_list];
+    return [staticIP, buttonList];
   } catch(e){
 
     double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
-    print('time taken to load in project $project_name: ${endTime-beginningTime} ');
+    print('time taken to load in project $projectName: ${endTime-beginningTime} ');
 
-    return ['comfy space initialize, static ip not found', button_list];
+    return ['comfy space initialize, static ip not found', buttonList];
     // if no static ip found, return a random result
   }
 

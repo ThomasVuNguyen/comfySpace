@@ -1,14 +1,8 @@
 import 'package:dartssh2/dartssh2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/project_information.dart';
-import 'package:v2_1/home_screen/comfy_user_information_function/unsplash/generate_image.dart';
-import 'package:v2_1/project_space_screen/button_list/button_global/variables.dart';
 
-import '../../home_screen/comfy_user_information_function/project_information.dart';
 
 class comfy_tap_button extends StatefulWidget {
   const comfy_tap_button({super.key, required this.button, required this.hostname, required this.staticIP, required this.username, required this.password});
@@ -90,7 +84,7 @@ class _comfy_tap_buttonState extends State<comfy_tap_button> {
           await onClick();
           if(_status){
             print('tap up');
-            await Future.delayed(Duration(milliseconds: 100));
+            await Future.delayed(const Duration(milliseconds: 100));
             setState(() {
               _status =false;
             });
@@ -105,7 +99,7 @@ class _comfy_tap_buttonState extends State<comfy_tap_button> {
                   padding: const EdgeInsets.all(10.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Color(0xFFDAEED7),
+                        color: const Color(0xFFDAEED7),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: widget.button.color!
                         //Theme.of(context).colorScheme.onBackground

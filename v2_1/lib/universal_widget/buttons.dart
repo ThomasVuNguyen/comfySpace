@@ -21,14 +21,14 @@ class clickable extends StatelessWidget {
 }
 
 class clickable_text extends StatelessWidget {
-  const clickable_text({super.key, required this.text, required this.onTap, this.color = null, this.textColor = null});
+  const clickable_text({super.key, required this.text, required this.onTap, this.color, this.textColor});
   final String text; final Function() onTap; final Color? color; final Color? textColor;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
             color: (color == null)?
             Colors.transparent:
@@ -53,7 +53,7 @@ class clickable_text extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             color: (color == null)?

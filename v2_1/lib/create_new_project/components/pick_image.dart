@@ -32,7 +32,7 @@ class _pickProjectImageState extends State<pickProjectImage> {
         child: SingleChildScrollView(
           child: Column(
               children: [
-                talkingHead(text: 'Pick an image that suits your project.',),
+                const talkingHead(text: 'Pick an image that suits your project.',),
                 Container(
                   constraints: const BoxConstraints(
                     maxWidth: 500,
@@ -53,7 +53,7 @@ class _pickProjectImageState extends State<pickProjectImage> {
                               }
                               List<Photo> photoList = snapshot.data!;
                               return ListView.builder(
-                                  physics : NeverScrollableScrollPhysics(),
+                                  physics : const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: photoList.length,
                                   itemBuilder: (context, index){

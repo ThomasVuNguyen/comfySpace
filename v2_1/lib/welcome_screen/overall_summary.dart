@@ -1,4 +1,3 @@
-import 'package:animated_introduction/animated_introduction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
@@ -16,16 +15,16 @@ class overall_summary_screen extends StatelessWidget {
         focusColor: Theme.of(context).colorScheme.primary,
         splashColor: Theme.of(context).colorScheme.primary,
         hoverColor: Theme.of(context).colorScheme.inversePrimary,
-        backgroundColor: Theme.of(context).colorScheme.onBackground,
-        foregroundColor:  Theme.of(context).colorScheme.onBackground,
+        backgroundColor: Theme.of(context).colorScheme.onSurface,
+        foregroundColor:  Theme.of(context).colorScheme.onSurface,
       ),
       hasSkip: true,
         totalPage: 3,
-        headerBackgroundColor: Theme.of(context).colorScheme.onBackground,
+        headerBackgroundColor: Theme.of(context).colorScheme.onSurface,
         background: [
-          Container(color: Theme.of(context).colorScheme.background),
-          Container(color: Theme.of(context).colorScheme.background),
-          Container(color: Theme.of(context).colorScheme.background)
+          Container(color: Theme.of(context).colorScheme.surface),
+          Container(color: Theme.of(context).colorScheme.surface),
+          Container(color: Theme.of(context).colorScheme.surface)
         ],
         speed: 1,
         pageBodies: [
@@ -45,7 +44,7 @@ class overall_summary_screen extends StatelessWidget {
         onFinish: (){
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LoginOrRegister())
+          MaterialPageRoute(builder: (context) => const LoginOrRegister())
       );
     },
 
@@ -60,7 +59,7 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Animate(
         effects: const [FadeEffect(), ScaleEffect()],
         child: Center(

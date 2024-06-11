@@ -18,7 +18,7 @@ class userExperienceCard extends StatelessWidget {
       //MediaQuery.of(context).size.width*2/3,
 
       //MediaQuery.of(context).size.height/2,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           Text(

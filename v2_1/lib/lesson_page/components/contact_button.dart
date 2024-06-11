@@ -31,7 +31,7 @@ class contact_button extends StatelessWidget {
                     icon: Icons.email_outlined,
                     onTap: () async{
                       Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Thanks for sending us a message!')));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Thanks for sending us a message!')));
                       await sendEmailAboutLesson(lessonName, commentController.text);
                     })
               ],

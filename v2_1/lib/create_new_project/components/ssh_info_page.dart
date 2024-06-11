@@ -7,7 +7,7 @@ class SSHInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return chatPage(
-        questions: {
+        questions: const {
           'hostname': ['Now that you have finished setting up, let\'s enter the IP address:'],
           'username': ['Enter your username:'],
           'password': ['Lastly, enter your password. Don\'t worry, we will keep it safe, pinky promise!']

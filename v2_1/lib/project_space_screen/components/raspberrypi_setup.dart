@@ -7,7 +7,7 @@ import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
 
 Future<void> setUpRaspberryPi(BuildContext context, String hostname, String username, String password) async{
 
-  bool _sshAvailable = true;
+  bool sshAvailable = true;
   late SSHClient sshClient;
 
   if(kIsWeb == false){
@@ -40,7 +40,7 @@ Future<void> setUpRaspberryPi(BuildContext context, String hostname, String user
         var tmuxCheck = await sshClient.run('which tmux');
         String tmuxCheckString = utf8.decode(tmuxCheck);
         print('tmux: ${tmuxCheckString.length}');
-        if(tmuxCheckString.length == 0){
+        if(tmuxCheckString.isEmpty){
           if (kDebugMode) {
             print('installing tmux');
           }

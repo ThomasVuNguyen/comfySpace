@@ -1,11 +1,7 @@
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
-import 'package:v2_1/create_new_project/components/experience_picker.dart';
-import 'package:v2_1/create_new_project/components/raspi_setup.dart';
 import 'package:v2_1/create_new_project/components/ssh_scan.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/home_screen/components/account_info.dart';
@@ -46,10 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (BuildContext context, snapshot){
           if(snapshot.connectionState == ConnectionState.done){
             var user = snapshot.data;
-            List<Widget> home_screen_list = [
-              project_list(),
-              learning_space(),
-              account_info(name: user?.name, tagline: user?.tagline,)
+            List<Widget> homeScreenList = [
+              const project_list(),
+              const learning_space(),
+              //account_info(name: user?.name, tagline: user?.tagline,)
             ];
               return Scaffold(
                   appBar: AppBar(
@@ -57,22 +53,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: Theme.of(context).colorScheme.surface,
                     title: Builder(
                       builder: (context){
-                        if(user?.name == null){
-                          return Row(
-                            children: [
-                              const randomGreeting(),
-                              clickable_text(text: 'Pick a username!', onTap: (){
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const set_user_info()),
-                                );
-                              })
-                            ],
-                          );
-                          return Text('Greetings, ${user?.name}');
+                        if(_selectedPageIndex == 1){
+                          return Text('Comfy Academy',
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.tertiary
+                          ));
                         }
                         else{
-                          return randomGreeting(name: user!.name!,);
+                          if(user?.name == null){
+                            return Row(
+                              children: [
+                                const randomGreeting(),
+                                clickable_text(text: 'Pick a username!', onTap: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const set_user_info()),
+                                  );
+                                })
+                              ],
+                            );
+                            return Text('Greetings, ${user?.name}');
+                          }
+                          else{
+                            return randomGreeting(name: user!.name!,);
+                          }
                         }
                       },
                     ),
@@ -81,18 +84,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       GestureDetector(
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                              SSHInitialScan(project_name: '', project_description: '', imgURL: '', hostname: 'tom', username: 'thomas', password: 'thomas',)
+                          account_info(name: user?.name, tagline: user?.tagline)
                           ));
-
-                          /*setState(() {
-                            _selectedPageIndex = 2;
-                          });*/
                         },
                           child: const avatar_icon()
                       )
                     ],
                   ),
-                  body: home_screen_list[_selectedPageIndex],
+                  body: homeScreenList[_selectedPageIndex],
                   bottomNavigationBar: NavigationBarTheme(
                     data: NavigationBarThemeData(
                         height: 80,
@@ -112,9 +111,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         NavigationDestination(
                           icon: Icon(Icons.library_books), label: 'Academy', selectedIcon: Icon(Icons.local_library),
                         ),
-                        NavigationDestination(
-                          icon: Icon(Icons.self_improvement), label: 'You', selectedIcon: Icon(Icons.accessibility_new),
-                        ),
                       ],
                       onDestinationSelected: (selectedIndex){
                         setState(() {
@@ -124,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 floatingActionButton: (_selectedPageIndex==0)? 
-                    addProjectButton()
+                    const addProjectButton()
                     : null,
               );
           }

@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
-import 'package:v2_1/home_screen/comfy_user_information_function/lesson_function.dart';
-
+/*
 class likeButton extends StatefulWidget {
   const likeButton({super.key, required this.lesson});
   final comfy_lesson lesson;
@@ -70,3 +67,4 @@ class _likeButtonState extends State<likeButton> {
     );
   }
 }
+*/

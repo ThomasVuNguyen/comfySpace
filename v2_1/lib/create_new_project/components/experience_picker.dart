@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:v2_1/beginner_project_support/beginner_project_message.dart';
 import 'package:v2_1/create_new_project/components/beginner_project_response.dart';
 import 'package:v2_1/create_new_project/components/raspi_setup.dart';
-import 'package:v2_1/home_screen/comfy_user_information_function/add_project.dart';
 import 'package:v2_1/universal_widget/talking_head.dart';
 
 class experiencePicker extends StatelessWidget {
@@ -26,7 +24,7 @@ class experiencePicker extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              talkingHead(text: 'Great! Now that the project information is done, let\'s pick your experience level.'),
+              const talkingHead(text: 'Great! Now that the project information is done, let\'s pick your experience level.'),
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -68,6 +66,8 @@ class experiencePicker extends StatelessWidget {
                     ),
                                   ),
                                   Positioned(
+                                    right: 0,
+                                    top: 0,
                                     child: Container(
                                       decoration: const BoxDecoration(
                                         borderRadius: BorderRadius.all(Radius.circular(11)),
@@ -79,8 +79,6 @@ class experiencePicker extends StatelessWidget {
                                         style: Theme.of(context).textTheme.bodySmall,
                                       ),
                                     ),
-                                    right: 0,
-                                    top: 0,
                                   )
 
 

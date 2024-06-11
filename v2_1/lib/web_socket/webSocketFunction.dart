@@ -1,5 +1,4 @@
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/status.dart' as status;
 
 Future<WebSocketChannel?> initializeWebSocket(String hostname) async {
   final wsUrl = Uri.parse('ws://$hostname:5000/echo');
@@ -10,6 +9,7 @@ Future<WebSocketChannel?> initializeWebSocket(String hostname) async {
   } catch (e){
     print('error connecting to websocket');
   }
+  return null;
 }
 
 void sendCommand(WebSocketChannel channel, String command){

@@ -10,7 +10,6 @@ Widget comfyBubbleBuilder(
       required user,
     }) =>
     Bubble(
-      child: child,
       color: user.id != message.author.id ||
           message.type == types.MessageType.image
           ? const Color(0xfff5f5f7)
@@ -23,4 +22,5 @@ Widget comfyBubbleBuilder(
           : user.id != message.author.id
           ? BubbleNip.leftBottom
           : BubbleNip.rightBottom,
+      child: child,
     );

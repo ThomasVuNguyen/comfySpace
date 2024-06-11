@@ -1,15 +1,11 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:v2_1/beginner_project_support/beginner_project_message.dart';
-import 'package:v2_1/comfyauth/authentication/components/signout.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/delete_project.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
 import '../../project_space_screen/project_space.dart';
 import '../comfy_user_information_function/project_information.dart';
-import '../../create_new_project/create_new_project.dart';
 
 class project_list extends StatefulWidget {
   const project_list({super.key});
@@ -23,47 +19,42 @@ class _project_listState extends State<project_list> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height*.7,
-        child: Center(
-          child: FutureBuilder(
-            future: get_project,
-            builder: (context, snapshot){
-              final project_list = snapshot.data;
-              if(snapshot.connectionState != ConnectionState.done){
-                return CircularProgressIndicator();
-              }
-              //If there's no project
-              else if(snapshot.hasData == false){
-                return Text('howdyy');
-              }
-              else{
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: project_list!.length,
-                      itemBuilder: (context, index){
-                      if (kDebugMode) {
-                        print('index is $index');
-                      }
-                        return project_card(
-                          project_name: project_list[index].name,
-                          project_description: project_list[index].description,
-                          hostname: project_list[index].hostname,
-                          username: project_list[index].username,
-                          password: project_list[index].password,
-                          imgURL: project_list[index].imgURL,
-                        );
+    return Center(
+      child: FutureBuilder(
+        future: get_project,
+        builder: (context, snapshot){
+          final projectList = snapshot.data;
+          if(snapshot.connectionState != ConnectionState.done){
+            return const CircularProgressIndicator();
+          }
+          //If there's no project
+          else if(snapshot.hasData == false){
+            return const Text('howdyy');
+          }
+          else{
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: projectList!.length,
+                  itemBuilder: (context, index){
+                  if (kDebugMode) {
+                    print('index is $index');
+                  }
+                    return project_card(
+                      project_name: projectList[index].name,
+                      project_description: projectList[index].description,
+                      hostname: projectList[index].hostname,
+                      username: projectList[index].username,
+                      password: projectList[index].password,
+                      imgURL: projectList[index].imgURL,
+                    );
 
-                      }
-                  );
-              }
+                  }
+              );
+          }
 
-            }
-                ,),
-            ),
-      ),
-    );
+        }
+            ,),
+        );
   }
 }
 
@@ -87,7 +78,7 @@ class _project_cardState extends State<project_card> {
       )));
     }
     else{
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => beginnerProjectMessage()
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const beginnerProjectMessage()
       ));
     }
 
@@ -142,7 +133,7 @@ class _project_cardState extends State<project_card> {
                         top: 0, right: 0,
                         child: IconButton(
                           color: Theme.of(context).colorScheme.primary,
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: () async{
                           await delete_project_prompt(widget.project_name!, widget.project_description!, context);
                         },
@@ -152,7 +143,7 @@ class _project_cardState extends State<project_card> {
                         child:
                         IconButton(
                           color: Theme.of(context).colorScheme.onPrimary,
-                          icon: Icon(Icons.arrow_forward),
+                          icon: const Icon(Icons.arrow_forward),
                           onPressed: openProjectSpace,
                         ),
                       )

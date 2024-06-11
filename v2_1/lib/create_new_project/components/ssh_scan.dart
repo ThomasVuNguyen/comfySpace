@@ -1,11 +1,9 @@
 import 'package:dartssh2/dartssh2.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/add_project.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/sendEmail.dart';
 import 'package:v2_1/home_screen/home_screen.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
-import 'package:v2_1/universal_widget/instruction_text.dart';
 
 import '../../project_space_screen/function/static_ip_function.dart';
 import '../../universal_widget/verification_page.dart';
@@ -56,7 +54,7 @@ class SSHInitialScan extends StatelessWidget {
                       onTap: () async{
                         await sendEmailGeneral('$project_name failed at scanning');
                         await AddNewProject(context, project_name, project_description, hostname, username, password, imgURL);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                       },
                     ),
                   );
@@ -80,7 +78,7 @@ class SSHInitialScan extends StatelessWidget {
                             nextButton: clickable_text(
                               text: 'Finish', onTap: () async{
                                 await AddNewProject(context, project_name, project_description, hostname, username, password, imgURL);
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                             },
                             ),
                           );
@@ -133,6 +131,7 @@ Future<String?> InitialSSHScan(String hostname, String username, String password
   } catch (e){
     print('error on initial ssh scan: $e');
   }
+  return null;
 
 
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:v2_1/comfyauth/authentication/components/text_field.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/add_project.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/sendEmail.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
@@ -30,7 +29,7 @@ class beginnerProjectResponse extends StatelessWidget {
                   obsureText: false,
                   titleText: 'Note',
                 multiline: true,),
-              Gap(40),
+              const Gap(40),
               clickable_text(
                   text: 'Finish',
                   onTap: () async{
@@ -65,7 +64,7 @@ class thankYouNote extends StatelessWidget {
             clickable_text(text: 'Return home', onTap: (){
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen(pageIndex: 1,))
+                  MaterialPageRoute(builder: (context) => const HomeScreen(pageIndex: 1,))
               );
             })
           ],

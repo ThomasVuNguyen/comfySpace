@@ -17,9 +17,9 @@ class randomGreeting extends StatelessWidget {
       'Konnichiwa',
       //'How\'s it going'
     ];
-    int _widgetIndex = Random().nextInt(greetingList.length);
+    int widgetIndex = Random().nextInt(greetingList.length);
     return Text(
-      '${greetingList[_widgetIndex]}! $name',
+      '${greetingList[widgetIndex]}! $name',
         style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.tertiary
     ));
   }

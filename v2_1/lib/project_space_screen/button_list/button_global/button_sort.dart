@@ -68,7 +68,7 @@ class _button_sortState extends State<button_sort> {
           child: Container(
             height: 20, width: 20,
             decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).colorScheme.onBackground, width: 2),
+              border: Border.all(color: Theme.of(context).colorScheme.onSurface, width: 2),
               shape: BoxShape.circle,
               color: Theme.of(context).colorScheme.primaryContainer,
               //borderRadius: BorderRadius.circular(20)

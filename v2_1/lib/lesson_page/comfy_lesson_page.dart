@@ -1,101 +1,91 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:gap/gap.dart';
+import 'package:v2_1/chat_ui/chat_ui.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/lesson_function.dart';
-import 'package:v2_1/lesson_page/components/contact_button.dart';
-import 'package:v2_1/lesson_page/components/like_button.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/sendEmail.dart';
+import 'package:v2_1/home_screen/comfy_user_information_function/userIdentifier.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-import '../universal_widget/random_widget_loading.dart';
-import 'components/markdown_renderer.dart';
 
-class ComfyLessonPage extends StatefulWidget {
-  const ComfyLessonPage({super.key, required this.lesson});
+class lessonPage extends StatefulWidget {
+  const lessonPage({super.key, required this.lesson});
   final comfy_lesson lesson;
 
   @override
-  State<ComfyLessonPage> createState() => _ComfyLessonPageState();
+  State<lessonPage> createState() => _lessonPageState();
 }
 
-class _ComfyLessonPageState extends State<ComfyLessonPage> {
+class _lessonPageState extends State<lessonPage> {
+  
+  var controller = WebViewController();
+  
+  @override
+  void initState() {
+    controller
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..setNavigationDelegate(
+      NavigationDelegate(
+        onHttpError: (HttpResponseError error) {},
+        onWebResourceError: (WebResourceError error) {},
+        onPageFinished: (String){
+          controller.runJavaScript(
+              "document.querySelector('header').style.display ='none'; document.querySelector('footer').style.display ='none';");
+        }
+      ),
+
+    )
+    ..loadRequest(Uri.parse(widget.lesson.url!));
+    super.initState();
+  }
+  Future<void> disableHeader() async{
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-            widget.lesson.title!,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.tertiary)
-        )
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                widget.lesson.description!,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.tertiary,
-                    fontStyle: FontStyle.italic
-                  )
-              ),
-              const Gap(16),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: AspectRatio(
-                  aspectRatio: 2/1,
-                  child: Animate(
-                    effects: const [FadeEffect(), ScaleEffect()],
-                    child: Image.network(
-                      widget.lesson.img!,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress){
-                        if(loadingProgress == null){
-                          return child;
-                        }else{
-                          return const randomLoadingWidget();
-                        }
-                      },
-                      errorBuilder: (context, object, stack){
-                        if (kDebugMode) {
-                          print('error loading lesson');
-                          print(stack.toString());
-                        }
-                        return const Icon(Icons.error);
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              Gap(16),
-              //Text(widget.lesson.author!), Gap(16),
-              Flexible(
-                  fit: FlexFit.loose,
-                  flex: 0,
-                  child: MarkdownRenderer(path: widget.lesson.content!)),
-              Gap(20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  contact_button(text: 'Comment', lessonName: widget.lesson.title!),
-                  likeButton(lesson: widget.lesson),
-                ],
-              )
-            ],
-          ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            WebViewWidget(controller: controller,),
+            Positioned(
+              bottom: 0, right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: clickable(icon: Icons.comment, onTap: (){
+                    Navigator.push(context,
+                      MaterialPageRoute(builder: (context) =>
+                          chatPage(
+                              questions: {
+                                'comment': ['Thank you for reading "${widget.lesson.title}"', 'Write your comment down below!']
+                              },
+                              answers: {'user': getUserID(), 'lesson_title': '${widget.lesson.title}'},
+                              title: 'Sending a comment', pageName: 'lesson_comment')
+                      )
+                    );
+                  }),
+                )
+            ),
+            Positioned(
+                bottom: 0, left: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: clickable(icon: Icons.arrow_back, onTap: (){
+                    Navigator.pop(context);
+                  }),
+                )
+            ),
+          ],
         ),
-      ),
+      )
     );
   }
 }
+Future<void> send_lesson_comment(BuildContext context, String user, String lesson_title, String comment) async{
+  await sendEmailGeneral('$user has commented on $lesson_title: $comment');
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('comment posted!')));
+  Navigator.pop(context);
+}
+
 
 
 

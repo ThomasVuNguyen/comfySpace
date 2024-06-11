@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../home_screen/comfy_user_information_function/project_information.dart';
-import 'button_global/variables.dart';
 
 class comfy_toggle_button extends StatefulWidget {
   const comfy_toggle_button({super.key, required this.button, required this.hostname, required this.staticIP, required this.username, required this.password});
@@ -93,7 +92,7 @@ class _comfy_toggle_buttonState extends State<comfy_toggle_button> {
                 padding: const EdgeInsets.all(10.0),
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Color(0xFFDAEED7),
+                      color: const Color(0xFFDAEED7),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: widget.button.color!, width: 2)
                   ),
