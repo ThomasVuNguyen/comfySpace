@@ -8,6 +8,7 @@ import 'package:v2_1/home_screen/comfy_user_information_function/project_informa
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/project_space_screen/button_list/button_global/button_sort.dart';
 import 'package:v2_1/project_space_screen/components/ButtonCommandCreatePage.dart';
+import 'package:v2_1/project_space_screen/components/button_selection_title.dart';
 import 'package:v2_1/project_space_screen/project_space.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
 
@@ -158,6 +159,24 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       //resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.close, color: Theme.of(context).colorScheme.onSurface,),
+          onPressed: (){
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => project_space(
+                project_name: widget.projectName,
+                hostname: widget.hostname,
+                username: widget.username,
+                password: widget.password,
+              )),
+                  (Route<dynamic> route) => false,
+            );
+          },
+        )
+
+      ),
       body: Center(
         child: SafeArea(
           child: SingleChildScrollView(
@@ -226,7 +245,7 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                 Visibility(visible: _showWelcomeScreen, child: const Gap(20)),
                 // button previews
                 Builder(builder: (context) {
-                  String btnName = 'name me, buddy';
+                  String btnName = 'Howdy! Good friend';
                   String type = 'toggle';
                   int order = 1;
                   Map<String, String> function = {
@@ -276,20 +295,33 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                 Visibility(visible: _pickButtonTypeAndName, child: const Gap(20)),
                 Visibility(
                     visible: _pickButtonTypeAndName,
-                    child:
-                  DropdownMenu(
-                      textStyle: Theme.of(context).textTheme.titleMedium,
-                      width: MediaQuery.of(context).size.width*2/3,
-                      label: Text('Pick a button Type', style: Theme.of(context).textTheme.titleMedium,),
-                      enableSearch: true,
-                      //enableFilter: true,
-                      controller: buttonTypeController,
-                      dropdownMenuEntries: const [
-                        DropdownMenuEntry(value: 'tap', label: 'Tap'),
-                        DropdownMenuEntry(value: 'toggle', label: 'Toggle'),
-                        DropdownMenuEntry(value: 'swipe', label: 'Swipe')
-                      ],
+                    child: const buttonSelectionTitle(
+                        titleText: 'Pick a button type',
+                      url: 'https://comfyspace.tech',
                     )
+                ),
+                Visibility(
+                    visible: _pickButtonTypeAndName,
+                    child:
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 1000
+                    ),
+                    child: DropdownMenu(
+                      expandedInsets: EdgeInsets.symmetric(horizontal: 25),
+                        textStyle: Theme.of(context).textTheme.titleMedium,
+                        width: MediaQuery.of(context).size.width*2/3,
+                        //label: Text('Pick a button Type', style: Theme.of(context).textTheme.titleMedium,),
+                        enableSearch: true,
+                        //enableFilter: true,
+                        controller: buttonTypeController,
+                        dropdownMenuEntries: const [
+                          DropdownMenuEntry(value: 'tap', label: 'Tap'),
+                          DropdownMenuEntry(value: 'toggle', label: 'Toggle'),
+                          DropdownMenuEntry(value: 'swipe', label: 'Swipe')
+                        ],
+                      ),
+                  )
                 ),
                 Visibility(
                     visible: _pickButtonTypeAndName,
@@ -352,44 +384,10 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                 ),
           
                 //Page 5: Confirmation screen
-                
                 //Navigation Button
                 const Gap(40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    clickable(
-                        icon: Icons.cancel,
-                        onTap: (){
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => project_space(
-                              project_name: widget.projectName,
-                              hostname: widget.hostname,
-                              username: widget.username,
-                              password: widget.password,
-                            )),
-                                (Route<dynamic> route) => false,
-                          );
-                        },
-                    ),
-                    clickable(icon: Icons.arrow_forward, onTap: navigate)
-                    /*IconButton(onPressed: (){
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => project_space(
-                          project_name: widget.projectName,
-                          hostname: widget.hostname,
-                          username: widget.username,
-                          password: widget.password,
-                        )),
-                            (Route<dynamic> route) => false,
-                      );
-                      }, icon: const Icon(Icons.assignment_return)),*/
-                    //IconButton(onPressed: () { navigate();}, icon: const Icon(Icons.arrow_right))
-                  ],
-                )
+                clickable_text(text: 'Next', onTap: navigate),
+                //clickable(icon: Icons.arrow_forward, onTap: navigate)
               ],
             ),
           ),

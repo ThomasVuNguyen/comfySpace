@@ -44,7 +44,7 @@ class _pickProjectImageState extends State<pickProjectImage> {
                       FutureBuilder(
                           future: photoSearch,
                           builder: (context, snapshot){
-                            if(snapshot.connectionState == ConnectionState.done){
+                            if(snapshot.connectionState == ConnectionState.done && snapshot.data !=null){
                               List<String> imgURL = [];
                               List<String> imgAuthor = [];
                               for (int i = 0; i< snapshot.data!.length; i++){
@@ -157,6 +157,9 @@ class _pickProjectImageState extends State<pickProjectImage> {
                                     );
                                   }
                               );
+                            }
+                            else if(snapshot.connectionState == ConnectionState.done && snapshot.data ==null){
+                              return Text('null');
                             }
                             else{
                               return const randomLoadingWidget();

@@ -71,7 +71,23 @@ class _project_spaceState extends State<project_space> {
                       ),
                     ),
                   ),
-                  floatingActionButton: ExpandableFab(
+                  floatingActionButton: FloatingActionButton(
+                    child: const Icon(Icons.add),
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => AddNewButtonScreen(
+                          projectName: widget.project_name,
+                          hostname: widget.hostname,
+                          username: widget.username,
+                          password: widget.password,
+                        )),
+                            (Route<dynamic> route) => false,
+                      );
+                    },
+
+                  ),
+                  /*ExpandableFab(
                     openButtonBuilder: FloatingActionButtonBuilder(
                         size: 56,
                         builder: (BuildContext context, void Function()? onPressed, Animation<double> progress) {
@@ -81,16 +97,6 @@ class _project_spaceState extends State<project_space> {
                         }
                     ),
                     children: [
-                      IconButton(
-                          onPressed: (){
-
-                          },
-                          icon: FloatingButtonIcon(
-                            icon: Icons.settings,
-                            bgcolor: Theme.of(context).colorScheme.primaryContainer,
-                            iconColor: Theme.of(context).colorScheme.onPrimaryContainer,
-                          )
-                      ),
                       IconButton(
                           onPressed: (){
                             Navigator.pushAndRemoveUntil(
@@ -111,8 +117,7 @@ class _project_spaceState extends State<project_space> {
                           )
                       ),
                     ],
-                  ),
-                  floatingActionButtonLocation: ExpandableFab.location,
+                  ),*/
                 );
             }
             else{

@@ -37,8 +37,6 @@ class _lessonPageState extends State<lessonPage> {
     ..loadRequest(Uri.parse(widget.lesson.url!));
     super.initState();
   }
-  Future<void> disableHeader() async{
-  }
 
   @override
   Widget build(BuildContext context) {
