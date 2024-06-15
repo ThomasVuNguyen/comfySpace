@@ -158,9 +158,13 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton:
+      clickable_text(
+        text: 'Next', onTap: navigate,
+      ),
       //resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: IconButton(
+        /*leading: IconButton(
           icon: Icon(Icons.close, color: Theme.of(context).colorScheme.onSurface,),
           onPressed: (){
             Navigator.pushAndRemoveUntil(
@@ -174,222 +178,329 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                   (Route<dynamic> route) => false,
             );
           },
-        )
+        ),*/
+        title: Stack(
+          alignment: Alignment.center,
+          children: [
+            Center(
+              child: Text(
+                'Create a button',
+                style: Theme.of(context).textTheme.titleLarge!
+                    .copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
+              ),
+            ),
+            Positioned(
+                left: 0,
+                child: IconButton(
+                    onPressed: (){
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => project_space(
+                          project_name: widget.projectName,
+                          hostname: widget.hostname,
+                          username: widget.username,
+                          password: widget.password,
+                        )),
+                            (Route<dynamic> route) => false,
+                      );
+                    },
+                    icon: Icon(Icons.close, color: Theme.of(context).colorScheme.onPrimaryContainer,)
+                ))
+          ],
+        ),
 
       ),
       body: Center(
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                //Titles:
-                Visibility(
-                    visible: _pickCommands,
-                    child: Text(
-                        'Pick a button command',
-                        style: Theme.of(context).textTheme.titleLarge
-                            //?.copyWith(color: Theme.of(context).colorScheme.tertiary)
-                      )),
-                Visibility(
-                    visible: _pickTheme,
-                    child: Text(
-                        'Pick a color',
-                        style: Theme.of(context).textTheme.titleLarge
-                      //?.copyWith(color: Theme.of(context).colorScheme.tertiary)
-                    )),
-                Visibility(
-                    visible: _confirmationPage,
-                    child: AnimatedTextKit(
-                      isRepeatingAnimation: false,
-                      animatedTexts: [
-                        TypewriterAnimatedText(
-                            'Your new button is created!',
-                            textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
-                            speed: const Duration(milliseconds: 100)
-                        ),
-                        TypewriterAnimatedText(
-                            'Click next to continue',
-                            textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
-                            speed: const Duration(milliseconds: 100)
-                        ),
-                      ],
-                      onTap: () {
-                      },
-                    ),
-                ),
-          
-                //Page 1: Welcome screen
-                Visibility(
-                  visible: _showWelcomeScreen,
-                    child: //Text('Welcome to buttons!')
-                    AnimatedTextKit(
-              isRepeatingAnimation: false,
-              animatedTexts: [
-                TypewriterAnimatedText(
-                    'Lets create a button!',
-                    textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
-                    speed: const Duration(milliseconds: 100)
-                ),
-                TypewriterAnimatedText(
-                    'Click next to continue',
-                    textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
-                    speed: const Duration(milliseconds: 100)
-                ),
-              ],
-              onTap: () {
-              },
-            ),
-                ),
-                Visibility(visible: _showWelcomeScreen, child: const Gap(20)),
-                // button previews
-                Builder(builder: (context) {
-                  String btnName = 'Howdy! Good friend';
-                  String type = 'toggle';
-                  int order = 1;
-                  Map<String, String> function = {
-                    'on': '',
-                    'off': '',
-                    'tap': '',
-                    'up': '',
-                    'down': '',
-                    'left': '',
-                    'right': ''
-                  };
-                  Color color = Theme.of(context).colorScheme.onSurface;
-          
-                  if (buttonNameController.text != '') {
-                    btnName = buttonNameController.text;
-                  }
-                  if (buttonTypeController.text != '') {
-                    type = buttonTypeController.text.toLowerCase();
-                  }
-                  if(buttonColorController.text != ''){
-                    color = colorConversion(context, buttonColorController.text.toLowerCase());
-                  }
-                    return Container(
-                      padding: const EdgeInsets.all(20),
-                      width: 240, height: 240,
-                      child: button_sort(
-                          button: comfy_button(
-                              btnName, type, color, order, function
-                          ),
-                          projectName: '',
-                          hostname: '',
-                          staticIP: '',
-                          username: '',
-                          password: ''),
-                    );
-          
-                }),
-                Visibility(visible: _showWelcomeScreen, child: const Gap(20)),
-          
-                //Page 2: Pick button type & name
-                Visibility(
-                  visible: _pickButtonTypeAndName,
-                    child: in_app_textfield(
-                  controller: buttonNameController,
-                  hintText: 'LED Control', obsureText: false, titleText: 'Name your button',
-                )),
-                Visibility(visible: _pickButtonTypeAndName, child: const Gap(20)),
-                Visibility(
-                    visible: _pickButtonTypeAndName,
-                    child: const buttonSelectionTitle(
-                        titleText: 'Pick a button type',
-                      url: 'https://comfyspace.tech',
-                    )
-                ),
-                Visibility(
-                    visible: _pickButtonTypeAndName,
-                    child:
-                  Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 1000
-                    ),
-                    child: DropdownMenu(
-                      expandedInsets: EdgeInsets.symmetric(horizontal: 25),
-                        textStyle: Theme.of(context).textTheme.titleMedium,
-                        width: MediaQuery.of(context).size.width*2/3,
-                        //label: Text('Pick a button Type', style: Theme.of(context).textTheme.titleMedium,),
-                        enableSearch: true,
-                        //enableFilter: true,
-                        controller: buttonTypeController,
-                        dropdownMenuEntries: const [
-                          DropdownMenuEntry(value: 'tap', label: 'Tap'),
-                          DropdownMenuEntry(value: 'toggle', label: 'Toggle'),
-                          DropdownMenuEntry(value: 'swipe', label: 'Swipe')
-                        ],
-                      ),
-                  )
-                ),
-                Visibility(
-                    visible: _pickButtonTypeAndName,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                          'hint: Pick a gesture you resonate with!',
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                    )
-                ),
-                //Page 3: Pick a command
-                Visibility(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              //Titles:
+              /*Visibility(
                   visible: _pickCommands,
-                    child: ButtonCommandCreatePage(
+                  child: Text(
+                      'Pick a button command',
+                      style: Theme.of(context).textTheme.titleLarge
+                          //?.copyWith(color: Theme.of(context).colorScheme.tertiary)
+                    )),
+              Visibility(
+                  visible: _pickTheme,
+                  child: Text(
+                      'Pick a color',
+                      style: Theme.of(context).textTheme.titleLarge
+                    //?.copyWith(color: Theme.of(context).colorScheme.tertiary)
+                  )),*/
+              Visibility(
+                  visible: _confirmationPage,
+                  child: AnimatedTextKit(
+                    isRepeatingAnimation: false,
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                          'Your new button is created!',
+                          textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
+                          speed: const Duration(milliseconds: 100)
+                      ),
+                      TypewriterAnimatedText(
+                          'Click next to continue',
+                          textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
+                          speed: const Duration(milliseconds: 100)
+                      ),
+                    ],
+                    onTap: () {
+                    },
+                  ),
+              ),
+
+              //Page 1: Welcome screen
+              // button previews
+              Builder(builder: (context) {
+                String btnName = 'Hi there!';
+                String type = 'toggle';
+                int order = 1;
+                Map<String, String> function = {
+                  'on': '',
+                  'off': '',
+                  'tap': '',
+                  'up': '',
+                  'down': '',
+                  'left': '',
+                  'right': ''
+                };
+                Color color = Theme.of(context).colorScheme.onSurface;
+
+                if (buttonNameController.text != '') {
+                  btnName = buttonNameController.text;
+                }
+                if (buttonTypeController.text != '') {
+                  type = buttonTypeController.text.toLowerCase();
+                }
+                if(buttonColorController.text != ''){
+                  color = colorConversion(context, buttonColorController.text.toLowerCase());
+                }
+                  return Container(
+                    padding: const EdgeInsets.all(10),
+                    width: 210, height: 210,
+                    child: button_sort(
+                        button: comfy_button(
+                            btnName, type, color, order, function
+                        ),
+                        projectName: '',
+                        hostname: '',
+                        staticIP: '',
+                        username: '',
+                        password: ''),
+                  );
+
+              }),
+              Visibility(
+                visible: _showWelcomeScreen,
+                child: //Text('Welcome to buttons!')
+                AnimatedTextKit(
+                  isRepeatingAnimation: false,
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                        'Lets create a button!',
+                        textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
+                        speed: const Duration(milliseconds: 100)
+                    ),
+                    TypewriterAnimatedText(
+                        'Click next to continue',
+                        textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
+                        speed: const Duration(milliseconds: 100)
+                    ),
+                  ],
+                  onTap: () {
+                  },
+                ),
+              ),
+              Visibility(visible: _showWelcomeScreen, child: const Gap(20)),
+              Visibility(visible: !_showWelcomeScreen, child: Divider()),
+              //Page 2: Pick button type & name
+
+              //Pick name
+              Visibility(
+                visible: _pickButtonTypeAndName,
+                child: Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const Gap(20),
+                        in_app_textfield(
+                          controller: buttonNameController,
+                          hintText: 'LED Control', obsureText: false, titleText: 'Name your button',
+                        ),
+                        const Gap(20),
+                        const buttonSelectionTitle(
+                          titleText: 'Pick a button type',
+                          url: 'https://comfyspace.tech',
+                        ),
+                        Container(
+                          constraints: const BoxConstraints(
+                              maxWidth: 1000
+                          ),
+                          child: DropdownMenu(
+                            expandedInsets: EdgeInsets.symmetric(horizontal: 25),
+                            textStyle: Theme.of(context).textTheme.titleMedium,
+                            width: MediaQuery.of(context).size.width*2/3,
+                            //label: Text('Pick a button Type', style: Theme.of(context).textTheme.titleMedium,),
+                            enableSearch: true,
+                            //enableFilter: true,
+                            controller: buttonTypeController,
+                            dropdownMenuEntries: const [
+                              DropdownMenuEntry(value: 'tap', label: 'Tap'),
+                              DropdownMenuEntry(value: 'toggle', label: 'Toggle'),
+                              DropdownMenuEntry(value: 'swipe', label: 'Swipe')
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            'hint: Pick a gesture you resonate with!',
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        ),
+                        const Gap(40),
+                  
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              /*,Visibility(
+                visible: _pickButtonTypeAndName,
+                  child: in_app_textfield(
+                controller: buttonNameController,
+                hintText: 'LED Control', obsureText: false, titleText: 'Name your button',
+              )),
+              Visibility(visible: _pickButtonTypeAndName, child: const Gap(20)),
+              //Pick button type
+              Visibility(
+                  visible: _pickButtonTypeAndName,
+                  child: const buttonSelectionTitle(
+                      titleText: 'Pick a button type',
+                    url: 'https://comfyspace.tech',
+                  )
+              ),
+              Visibility(
+                  visible: _pickButtonTypeAndName,
+                  child:
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 1000
+                  ),
+                  child: DropdownMenu(
+                    expandedInsets: EdgeInsets.symmetric(horizontal: 25),
+                      textStyle: Theme.of(context).textTheme.titleMedium,
+                      width: MediaQuery.of(context).size.width*2/3,
+                      //label: Text('Pick a button Type', style: Theme.of(context).textTheme.titleMedium,),
+                      enableSearch: true,
+                      //enableFilter: true,
+                      controller: buttonTypeController,
+                      dropdownMenuEntries: const [
+                        DropdownMenuEntry(value: 'tap', label: 'Tap'),
+                        DropdownMenuEntry(value: 'toggle', label: 'Toggle'),
+                        DropdownMenuEntry(value: 'swipe', label: 'Swipe')
+                      ],
+                    ),
+                )
+              ),
+              Visibility(
+                  visible: _pickButtonTypeAndName,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                        'hint: Pick a gesture you resonate with!',
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                  )
+              ),*/
+              //Page 3: Pick a command
+              /*
+              Visibility(
+                visible: _pickCommands,
+                child: Column(
+                  children: [
+                    const Gap(20),
+                    ButtonCommandCreatePage(
                       buttonType: buttonTypeController.text.toLowerCase(),
                       tapCommandTextController: tapCommandTextController,
-          
+
                       toggleOnCommandTextController: toggleOnCommandTextController,
                       toggleOffCommandTextController: toggleOffCommandTextController,
-          
+
                       swipeUpCommandTextController: swipeUpCommandTextController,
                       swipeDownCommandTextController: swipeDownCommandTextController,
                       swipeLeftCommandTextController: swipeLeftCommandTextController,
                       swipeRightCommandTextController: swipeRightCommandTextController,
                       swipeTapCommandTextController: swipeTapCommandTextController,
-                    )
+                    ),
+                    const Gap(40),
+                  ],
                 ),
-                Visibility(visible: _pickButtonTypeAndName, child: const Gap(20)),
-          
-                //Page4: Pick theme & color
-                Visibility(
-                  visible: _pickTheme,
-                    child: DropdownMenu(
-                      textStyle: Theme.of(context).textTheme.titleMedium,
-                      width: MediaQuery.of(context).size.width*2/3,
-                      label: Text('Pick a color', style: Theme.of(context).textTheme.titleMedium,),
-                      controller: buttonColorController,
-                      enableSearch: true, //enableFilter: true,
-                      dropdownMenuEntries: const [
-                        DropdownMenuEntry(value: 'red', label: 'Red'),
-                        DropdownMenuEntry(value: 'green', label: 'Green'),
-                        DropdownMenuEntry(value: 'blue', label: 'Blue')
-                      ],
-                    )
-                ),
-                const Gap(20),
-                Visibility(
-                    visible: false,
-                    //_pickTheme,
-                    child: DropdownMenu(
-                      initialSelection: 'froggie',
-                      controller:buttonThemeController,
-                      enableSearch: true, //enableFilter: true,
-                      dropdownMenuEntries: const [
-                        DropdownMenuEntry(value: 'froggie', label: 'Froggie'),
-                        DropdownMenuEntry(value: 'classic', label: 'classic'),
-                      ],
-                    )
-                ),
-          
-                //Page 5: Confirmation screen
-                //Navigation Button
-                const Gap(40),
-                clickable_text(text: 'Next', onTap: navigate),
-                //clickable(icon: Icons.arrow_forward, onTap: navigate)
-              ],
-            ),
+              ),*/
+              //Pick command
+
+              Visibility(
+                visible: _pickCommands,
+                  child: ButtonCommandCreatePage(
+                    buttonType: buttonTypeController.text.toLowerCase(),
+                    tapCommandTextController: tapCommandTextController,
+
+                    toggleOnCommandTextController: toggleOnCommandTextController,
+                    toggleOffCommandTextController: toggleOffCommandTextController,
+
+                    swipeUpCommandTextController: swipeUpCommandTextController,
+                    swipeDownCommandTextController: swipeDownCommandTextController,
+                    swipeLeftCommandTextController: swipeLeftCommandTextController,
+                    swipeRightCommandTextController: swipeRightCommandTextController,
+                    swipeTapCommandTextController: swipeTapCommandTextController,
+                  )
+              ),
+
+              Visibility(visible: _pickButtonTypeAndName, child: const Gap(20)),
+
+              //Page4: Pick theme & color
+
+              //Pick theme
+              Visibility(child: const Gap(40), visible: _pickTheme,),
+              Visibility(
+                visible: _pickTheme,
+                  child: DropdownMenu(
+                    textStyle: Theme.of(context).textTheme.titleMedium,
+                    width: MediaQuery.of(context).size.width*2/3,
+                    label: Text('Pick a color', style: Theme.of(context).textTheme.titleMedium,),
+                    controller: buttonColorController,
+                    enableSearch: true, //enableFilter: true,
+                    dropdownMenuEntries: const [
+                      DropdownMenuEntry(value: 'red', label: 'Red'),
+                      DropdownMenuEntry(value: 'green', label: 'Green'),
+                      DropdownMenuEntry(value: 'blue', label: 'Blue')
+                    ],
+                  )
+              ),
+              const Gap(20),
+              Visibility(
+                  visible: false,
+                  //_pickTheme,
+                  child: DropdownMenu(
+                    initialSelection: 'froggie',
+                    controller:buttonThemeController,
+                    enableSearch: true, //enableFilter: true,
+                    dropdownMenuEntries: const [
+                      DropdownMenuEntry(value: 'froggie', label: 'Froggie'),
+                      DropdownMenuEntry(value: 'classic', label: 'classic'),
+                    ],
+                  )
+              ),
+
+              //Page 5: Confirmation screen
+              //Navigation Button
+              //const Gap(40),
+              //clickable_text(text: 'Next', onTap: navigate),
+              //clickable(icon: Icons.arrow_forward, onTap: navigate)
+            ],
           ),
         ),
       ),

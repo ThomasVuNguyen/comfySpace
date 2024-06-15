@@ -75,52 +75,62 @@ class _ButtonCommandCreatePageState extends State<ButtonCommandCreatePage> {
         );
       }
       else if(widget.buttonType == 'toggle'){
-        return Column(
-          children: [
-            in_app_textfield(
-              controller: widget.toggleOnCommandTextController,
-              hintText: '', obsureText: false, titleText: 'Toggle on command',
+        return Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                in_app_textfield(
+                  controller: widget.toggleOnCommandTextController,
+                  hintText: '', obsureText: false, titleText: 'Toggle on command',
+                ),
+                const Gap(20),
+                in_app_textfield(
+                    controller: widget.toggleOffCommandTextController,
+                    hintText: '',
+                    obsureText: false,
+                    titleText: 'Toggle off command'),
+                const Gap(80)
+              ],
             ),
-            const Gap(20),
-            in_app_textfield(
-                controller: widget.toggleOffCommandTextController,
-                hintText: '',
-                obsureText: false,
-                titleText: 'Toggle off command'),
-          ],
+          ),
         );
       }
       else if(widget.buttonType == 'swipe'){
-        return Column(
-          children: [
-            in_app_textfield(
-              controller: widget.swipeUpCommandTextController,
-              hintText: '', obsureText: false, titleText: 'Swipe up command',
+        return Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                in_app_textfield(
+                  controller: widget.swipeUpCommandTextController,
+                  hintText: '', obsureText: false, titleText: 'Swipe up command',
+                ),
+                    in_app_textfield(
+                      maxWidth: 100,
+                      controller: widget.swipeLeftCommandTextController,
+                      hintText: '', obsureText: false, titleText: 'Swipe left command',
+                    ),
+                    const Gap(20),
+                    in_app_textfield(
+                      maxWidth: 100,
+                      controller: widget.swipeTapCommandTextController,
+                      hintText: '', obsureText: false, titleText: 'Swipe tap command',
+                    ),
+                    const Gap(20),
+                    in_app_textfield(
+                      maxWidth: 100,
+                      controller: widget.swipeRightCommandTextController,
+                      hintText: '', obsureText: false, titleText: 'Swipe right command',
+                    ),
+                const Gap(20),
+                in_app_textfield(
+                    controller: widget.swipeDownCommandTextController,
+                    hintText: '',
+                    obsureText: false,
+                    titleText: 'Swipe down command'),
+                const Gap(80),
+              ],
             ),
-                in_app_textfield(
-                  maxWidth: 100,
-                  controller: widget.swipeLeftCommandTextController,
-                  hintText: '', obsureText: false, titleText: 'Swipe left command',
-                ),
-                const Gap(20),
-                in_app_textfield(
-                  maxWidth: 100,
-                  controller: widget.swipeTapCommandTextController,
-                  hintText: '', obsureText: false, titleText: 'Swipe tap command',
-                ),
-                const Gap(20),
-                in_app_textfield(
-                  maxWidth: 100,
-                  controller: widget.swipeRightCommandTextController,
-                  hintText: '', obsureText: false, titleText: 'Swipe right command',
-                ),
-            const Gap(20),
-            in_app_textfield(
-                controller: widget.swipeDownCommandTextController,
-                hintText: '',
-                obsureText: false,
-                titleText: 'Swipe down command'),
-          ],
+          ),
         );
       }
       else{
