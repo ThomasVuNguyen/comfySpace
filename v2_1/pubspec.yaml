@@ -64,6 +64,9 @@ dependencies:
 
   flutter_chat_types: any
   http: ^1.2.1
+  slidable_button: ^3.0.0+1
+  gradient_slide_to_act: ^0.0.2
+  slider_button: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
