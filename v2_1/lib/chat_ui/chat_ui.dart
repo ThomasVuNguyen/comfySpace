@@ -133,7 +133,7 @@ class _chatPageState extends State<chatPage> {
       _messages.insert(0, message);
     });
   }
-  Widget _bubbleBuilder(
+  /*Widget _bubbleBuilder(
       Widget child, {
         required message,
         required nextMessageInGroup,
@@ -154,34 +154,52 @@ class _chatPageState extends State<chatPage> {
             ? BubbleNip.leftBottom
             : BubbleNip.rightBottom,*/
         child: child,
-      );
+      );*/
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
-        title: Text(widget.title, style: Theme.of(context).textTheme.titleLarge),
+        title: Text(widget.title, style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer)),
         centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
 
       ),
-      body: Chat(
-        bubbleBuilder: _bubbleBuilder,
-          messages: _messages,
-          onSendPressed: _handleSendPressed,
-          user: _user,
-          showUserAvatars: true,
-          theme: DefaultChatTheme(
-              primaryColor: Theme.of(context).colorScheme.primary,
-              secondaryColor:
-              //Theme.of(context).colorScheme.secondary,
-              Theme.of(context).colorScheme.onPrimary,
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              inputTextStyle: Theme.of(context).textTheme.bodyMedium!,
-              inputTextColor: Theme.of(context).colorScheme.surface,
-              receivedMessageBodyTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface),
-              sentMessageBodyTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.surface),
-              inputBackgroundColor: Theme.of(context).colorScheme.primary
-          )
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment(0.8, 1),
+            colors: <Color>[
+              Theme.of(context).colorScheme.primaryContainer,
+              Theme.of(context).colorScheme.primaryContainer,
+              //Theme.of(context).colorScheme.onPrimary,
+
+            ],
+            tileMode: TileMode.mirror,
+          ),
+
+        ),
+        child: Chat(
+          //bubbleBuilder: _bubbleBuilder,
+            messages: _messages,
+            onSendPressed: _handleSendPressed,
+            user: _user,
+            showUserAvatars: true,
+
+            theme: DefaultChatTheme(
+              inputTextCursorColor: Theme.of(context).colorScheme.onPrimary,
+                primaryColor: Theme.of(context).colorScheme.primary,
+                secondaryColor: Theme.of(context).colorScheme.onPrimary,
+                backgroundColor: Colors.transparent,
+                inputTextStyle: Theme.of(context).textTheme.bodyMedium!,
+                inputTextColor: Theme.of(context).colorScheme.surface,
+                receivedMessageBodyTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                sentMessageBodyTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.surface),
+                inputBackgroundColor: Theme.of(context).colorScheme.primary
+            )
+        ),
       ),
     );
 
