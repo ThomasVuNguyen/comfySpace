@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:v2_1/comfy_share_screen/comfy_share.dart';
 import 'package:v2_1/create_new_project/components/ssh_scan.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
 import 'package:v2_1/account_info/account_info.dart';
@@ -43,8 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
           if(snapshot.connectionState == ConnectionState.done){
             var user = snapshot.data;
             List<Widget> homeScreenList = [
-              const project_list(),
               const learning_space(),
+              const project_list(),
+              const comfyShareScreen()
               //account_info(name: user?.name, tagline: user?.tagline,)
             ];
               return Scaffold(
@@ -106,10 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       selectedIndex: _selectedPageIndex,
                       destinations: const [
                         NavigationDestination(
-                            icon: Icon(Icons.build), label: 'Projects', selectedIcon: Icon(Icons.handyman),
+                          icon: Icon(Icons.library_books), label: 'Learn', selectedIcon: Icon(Icons.local_library),
                         ),
                         NavigationDestination(
-                          icon: Icon(Icons.library_books), label: 'Academy', selectedIcon: Icon(Icons.local_library),
+                            icon: Icon(Icons.build), label: 'Build', selectedIcon: Icon(Icons.handyman),
+                        ),
+                        NavigationDestination(
+                          icon: Icon(Icons.library_books), label: 'Share', selectedIcon: Icon(Icons.local_library),
                         ),
                       ],
                       onDestinationSelected: (selectedIndex){
