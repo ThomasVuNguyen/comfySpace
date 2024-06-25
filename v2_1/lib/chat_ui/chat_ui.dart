@@ -76,7 +76,8 @@ class _chatPageState extends State<chatPage> {
    switch (widget.pageName){
      //If user are in "create a new project" & finished "picking name & description", move to pick image page
      case 'create_new_project_pick_name': Navigator.push(context, MaterialPageRoute(builder: (context) => pickProjectImage(project_name: userAnswer['project_name']!, project_description: userAnswer['project_description']!)));
-     case 'register_new_user': await signUserUp(
+     case 'register_new_user':
+       await signUserUp(
          context,
          userAnswer['email']!,
          userAnswer['password']!,
@@ -187,7 +188,9 @@ class _chatPageState extends State<chatPage> {
             onSendPressed: _handleSendPressed,
             user: _user,
             showUserAvatars: true,
-
+            inputOptions: InputOptions(
+              autocorrect: false,
+            ),
             theme: DefaultChatTheme(
               inputTextCursorColor: Theme.of(context).colorScheme.onPrimary,
                 primaryColor: Theme.of(context).colorScheme.primary,

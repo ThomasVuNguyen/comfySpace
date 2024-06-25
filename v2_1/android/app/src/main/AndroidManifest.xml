@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-  <application android:label="Comfy Space" android:name="${applicationName}" android:icon="@mipmap/ic_launcher">
+  <application android:label="ComfySpace" android:name="${applicationName}" android:icon="@mipmap/ic_launcher">
     <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
       <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
@@ -15,17 +15,14 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
     <meta-data android:name="flutterEmbedding" android:value="2"/>
     <!-- Set up the Sign in with Apple activity, such that it's callable from the browser-redirect -->
-    <activity
-        android:name="com.aboutyou.dart_packages.sign_in_with_apple.SignInWithAppleCallback"
-        android:exported="true"
-        >
+    <activity android:name="com.aboutyou.dart_packages.sign_in_with_apple.SignInWithAppleCallback" android:exported="true">
       <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
 
-        <data android:scheme="signinwithapple" />
-        <data android:path="callback" />
+        <data android:scheme="signinwithapple"/>
+        <data android:path="callback"/>
       </intent-filter>
     </activity>
 

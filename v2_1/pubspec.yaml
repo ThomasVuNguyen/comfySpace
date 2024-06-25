@@ -67,6 +67,7 @@ dependencies:
   slidable_button: ^3.0.0+1
   gradient_slide_to_act: ^0.0.2
   slider_button: ^2.1.0
+  rename_app: ^1.5.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -110,7 +111,7 @@ icons_launcher:
   platforms:
     android:
       enable: true
-      image_path: "assets/comfy_logo_android.png"
+      image_path: "assets/comfy_icon.png"
     web:
       enable: true
       image_path: "assets/comfy_logo_ambience.png"

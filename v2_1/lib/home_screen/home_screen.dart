@@ -55,12 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: Theme.of(context).colorScheme.surface,
                     title: Builder(
                       builder: (context){
-                        if(_selectedPageIndex == 1){
-                          return Text('Comfy Academy',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.tertiary
-                          ));
-                        }
-                        else{
                           if(user?.name == null){
                             return Row(
                               children: [
@@ -78,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           else{
                             return randomGreeting(name: user!.name!,);
                           }
-                        }
+
                       },
                     ),
                     //
@@ -124,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
-                floatingActionButton: (_selectedPageIndex==0)? 
+                floatingActionButton: (_selectedPageIndex==1)?
                     const addProjectButton()
                     : null,
               );
