@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:v2_1/create_new_project/components/beginner_project_response.dart';
 import 'package:v2_1/create_new_project/components/raspi_setup.dart';
 import 'package:v2_1/universal_widget/talking_head.dart';
@@ -11,11 +12,11 @@ class experiencePicker extends StatelessWidget {
     List<Map<String, String>> experienceDescription = [
       {'title': 'Beginner',
         'description': 'You are new to robotics. The terms Raspberry Pi, SSH, and DC Motor all sound foreign to you. You will get custom help from the Comfy team!',
-        'img': 'https://images.unsplash.com/photo-1603354351149-e97b9124020d?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        'img': 'assets/image_asset/beginner_imagefx.png'
       },
       {'title': 'Practitioner',
         'description': 'You have experience with the craft of robotics. Raspberry Pi, SSH, and DC Motor all sound familiar to you. Comfy will help assist you at becoming even better!',
-        'img': 'https://plus.unsplash.com/premium_photo-1663091699742-70ca6f835197?q=80&w=2372&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        'img': 'assets/image_asset/experience-practitioner.gif'
       }
     ];
     return Scaffold(
@@ -46,12 +47,17 @@ class experiencePicker extends StatelessWidget {
                                 children: [
                                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(11)),
-                      child: Image.network(
-                          experienceDescription[index]['img']!,
-                          fit: BoxFit.fitWidth
-                      ),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(11)),
+                          child: Image.asset(
+                              experienceDescription[index]['img']!,
+                              fit: BoxFit.fitHeight
+                          ),
+                        ),
+                        Gap(60)
+                      ],
                     ),
                                   ),
                                   Container(

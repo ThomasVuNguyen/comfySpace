@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:unsplash_client/unsplash_client.dart';
@@ -31,7 +32,18 @@ class _project_listState extends State<project_list> {
           }
           //If there's no project
           else if(snapshot.hasData == false){
-            return const Text('howdyy');
+            return AnimatedTextKit(
+              isRepeatingAnimation: false,
+              animatedTexts: [
+                TypewriterAnimatedText(
+                    'Press the + button below to create a project!',
+                    textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
+                    speed: const Duration(milliseconds: 100)
+                ),
+              ],
+              onTap: () {
+              },
+            );
           }
           else{
               return ListView.builder(

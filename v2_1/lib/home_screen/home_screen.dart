@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:v2_1/comfy_share_screen/comfy_share.dart';
 import 'package:v2_1/create_new_project/components/ssh_scan.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
@@ -15,6 +16,8 @@ import 'package:v2_1/universal_widget/buttons.dart';
 import 'package:v2_1/universal_widget/greeting.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
+import 'comfy_user_information_function/project_information.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.pageIndex = 0});
@@ -26,14 +29,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var user_info;
   int _selectedPageIndex = 0;
+
   @override
   void initState() {
     if(widget.pageIndex == 1){
       _selectedPageIndex = 1;
     }
     user_info = get_user_information();
+
     super.initState();
   }
+
 
 
   @override
@@ -119,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 floatingActionButton: (_selectedPageIndex==1)?
-                    const addProjectButton()
+                const addProjectButton()
                     : null,
               );
           }

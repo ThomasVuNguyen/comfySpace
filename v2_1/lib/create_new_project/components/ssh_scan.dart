@@ -78,7 +78,7 @@ class SSHInitialScan extends StatelessWidget {
                             nextButton: clickable_text(
                               text: 'Finish', onTap: () async{
                                 await AddNewProject(context, project_name, project_description, hostname, username, password, imgURL);
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(pageIndex: 1,)));
                             },
                             ),
                           );

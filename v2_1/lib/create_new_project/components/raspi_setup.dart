@@ -200,7 +200,7 @@ List<PageViewModel> raspberryPiSetupSteps = [
           const instructionTitle(text: '5. Congrats! You have finished setting up your Raspberry Pi, the brain of your robot.'),
           Padding(
             padding: const EdgeInsets.all(20),
-            child: Image.network('https://comfyspace.tech/chilling-in-the-park.jpg'),
+            child: Image.network('https://comfyspace.tech/chilling-in-the-park.webp'),
           ),
           const instructionTitle(text: 'Hi! I\'m Thomas and I\'m proud of your progress so far! Remember to note down the IP address, username & password (last step).'),
 

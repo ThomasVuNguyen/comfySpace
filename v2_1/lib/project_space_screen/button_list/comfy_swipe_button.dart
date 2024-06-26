@@ -18,13 +18,14 @@ class comfy_swipe_button extends StatefulWidget {
 }
 
 class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
-  String _direction = 'tap'; int index = 0;
+  String direction = 'tap'; int index = 0;
   // tap: 0, left: 1, right:2, down: 3, up: 4
   late SSHClient sshClient;
 
   @override
   void initState(){
     initClient();
+    print('hi swipe');
     super.initState();
   }
 
@@ -57,16 +58,15 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
           onPasswordRequest: () => widget.password,
         );
         //attempt a connection
-        try{
-          sshClient.close();
-        } catch (e){
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('error disposing: $e')));
-        }
+        await sshClient.execute('echo hi');
+        print('ssh connection successfully created with hostname $potentialHostName');
+        break;
+
       }
       catch (e){
         //if all hostname tested and not working, report!
         if(potentialHostName == widget.hostname){
-          //SSH not connected
+          //SSH connection not made
           //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
         }
       }
@@ -74,9 +74,11 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
   }
 
   Future<void> onSwipe(String direction) async {
+    print('swipe');
     HapticFeedback.heavyImpact();
     SystemSound.play(SystemSoundType.click);
     if(direction == 'up'){
+      //print(widget.button.function!['up']!);
       await sshClient.run(widget.button.function!['up']!);
     }
     else if(direction == 'down'){
@@ -97,46 +99,49 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
     return GestureDetector(
       onTap: () async {
         setState(() {
-          _direction = 'tap';
+          direction = 'tap';
         });
-        await onSwipe(_direction);
+        await onSwipe(direction);
       },
-        onVerticalDragUpdate: (dragDetail){
+        onVerticalDragUpdate: (dragDetail) async {
+        print('drag up');
           if(dragDetail.primaryDelta!<0){
             setState((){
-              _direction = 'up';
+              direction = 'up';
               index=4;
             });
           }
           else if(dragDetail.primaryDelta!>0){
             setState(() {
-              _direction = 'down';
+              direction = 'down';
               index=3;
             });
           }
+
         },
         onHorizontalDragUpdate: (dragDetail){
+        print('ok');
           if(dragDetail.primaryDelta!<0){
             setState((){
-              _direction = 'left';
+              direction = 'left';
               index=1;
             });
           }
           else if(dragDetail.primaryDelta!>0){
             setState(() {
-              _direction = 'right';
+              direction = 'right';
               index=2;
             });
           }
         },
         onVerticalDragEnd: (dragDetail) async{
-          if(_direction == 'up' || _direction == 'down'){
-            await onSwipe(_direction);
+          if(direction == 'up' || direction == 'down'){
+            onSwipe(direction);
           }
         },
         onHorizontalDragEnd: (dragDetail) async{
-          if(_direction == 'left' || _direction == 'right'){
-            await onSwipe(_direction);
+          if(direction == 'left' || direction == 'right'){
+            onSwipe(direction);
           }
         },
         child: AnimatedContainer(
@@ -156,25 +161,25 @@ class _comfy_swipe_buttonState extends State<comfy_swipe_button> {
                 ),
                 Builder(
                     builder: (context){
-                      if(_direction=='up') {
+                      if(direction=='up') {
                         return Padding(
                           padding: const EdgeInsets.only(left: 25, right: 25, bottom: 60),
                           child: Image.asset(widget.swipeUpImg,),
                         );
                       }
-                      else if(_direction == 'down'){
+                      else if(direction == 'down'){
                         return Padding(
                             padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
                           child: Image.asset(widget.swipeDownImg),
                         );
                       }
-                      else if(_direction == 'left'){
+                      else if(direction == 'left'){
                         return Padding(
                             padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
                           child: Image.asset(widget.swipeLeftImg),
                         );
                       }
-                      else if(_direction == 'right'){
+                      else if(direction == 'right'){
                         return Padding(
                             padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
                           child: Image.asset(widget.swipeRightImg),

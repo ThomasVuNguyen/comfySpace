@@ -30,7 +30,7 @@ class _chatPageState extends State<chatPage> {
   final _comfyHelper = const types.User(
       id: 'comfyHelper',
       role: types.Role.admin,
-      imageUrl: 'https://comfyspace.tech/chilling-in-the-park.jpg'
+      imageUrl: 'https://comfyspace.tech/chilling-in-the-park.webp'
   );
   final List<types.Message> _messages = [];
 
@@ -164,7 +164,7 @@ class _chatPageState extends State<chatPage> {
       appBar: AppBar(
         title: Text(widget.title, style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer)),
         centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        //backgroundColor: Theme.of(context).colorScheme.primaryContainer,
 
       ),
       body: Container(
@@ -173,8 +173,8 @@ class _chatPageState extends State<chatPage> {
             begin: Alignment.topLeft,
             end: Alignment(0.8, 1),
             colors: <Color>[
-              Theme.of(context).colorScheme.primaryContainer,
-              Theme.of(context).colorScheme.primaryContainer,
+              Theme.of(context).colorScheme.surface,
+              Theme.of(context).colorScheme.surface,
               //Theme.of(context).colorScheme.onPrimary,
 
             ],
@@ -194,7 +194,7 @@ class _chatPageState extends State<chatPage> {
             theme: DefaultChatTheme(
               inputTextCursorColor: Theme.of(context).colorScheme.onPrimary,
                 primaryColor: Theme.of(context).colorScheme.primary,
-                secondaryColor: Theme.of(context).colorScheme.onPrimary,
+                secondaryColor: Theme.of(context).colorScheme.secondaryContainer,
                 backgroundColor: Colors.transparent,
                 inputTextStyle: Theme.of(context).textTheme.bodyMedium!,
                 inputTextColor: Theme.of(context).colorScheme.surface,
