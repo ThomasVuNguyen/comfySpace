@@ -59,7 +59,7 @@ class beginnerProjectMessage extends StatelessWidget {
                         ),
                         const Gap(20),
                         clickable_text(text: 'Read', onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(pageIndex: 1,)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(pageIndex: 0,)));
                         })
                       ],
                     ),

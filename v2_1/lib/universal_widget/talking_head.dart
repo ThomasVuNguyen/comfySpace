@@ -23,7 +23,7 @@ class talkingHead extends StatelessWidget {
               bottom: 30
             ),
             child: Container(
-              width: 300,
+              width: MediaQuery.of(context).size.width - 80,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.secondaryContainer,
                 borderRadius: const BorderRadius.only(
