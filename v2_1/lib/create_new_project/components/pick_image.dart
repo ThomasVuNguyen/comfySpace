@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:unsplash_client/unsplash_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:v2_1/create_new_project/components/experience_picker.dart';
+import 'package:v2_1/create_new_project/components/raspi_setup.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/unsplash/generate_image.dart';
 
 import '../../universal_widget/random_widget_loading.dart';
@@ -144,14 +145,21 @@ class _pickProjectImageState extends State<pickProjectImage> {
                                           ),
                                         ),
                                         onTap: (){
-                                          Navigator.push(
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                              raspberryPiSetup(
+                                                project_name: widget.project_name,
+                                                project_description: widget.project_description,
+                                                imgURL: photoList[index].urls.regular.toString(),
+                                              )
+                                          ));
+                                          /*Navigator.push(
                                               context,
                                               MaterialPageRoute(builder: (context) => experiencePicker(
                                                 project_name: widget.project_name,
                                                 project_description: widget.project_description,
                                                 imgURL: photoList[index].urls.regular.toString(),
                                               ))
-                                          );
+                                          );*/
                                         },
                                       ),
                                     );
