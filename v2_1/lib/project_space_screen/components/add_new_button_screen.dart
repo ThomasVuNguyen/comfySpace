@@ -308,7 +308,9 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                         hostname: '',
                         staticIP: '',
                         username: '',
-                        password: ''),
+                        password: '',
+                      systemInstances: {},
+                    ),
                   );
 
               }),

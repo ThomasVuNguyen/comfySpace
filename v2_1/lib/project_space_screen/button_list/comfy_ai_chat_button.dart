@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../home_screen/comfy_user_information_function/project_information.dart';
 import 'comfy_swipe_button.dart';
@@ -12,8 +14,10 @@ import 'package:flutter_tts/flutter_tts.dart';
 class comfy_ai_chat_button extends StatefulWidget {
   const comfy_ai_chat_button({super.key, required this.button,
     required this.hostname, required this.staticIP, required this.username, required this.password,
+    required this.voiceInstance
   });
   final comfy_button button; final String hostname; final String username; final String password; final String staticIP;
+  final SpeechToText voiceInstance;
   @override
   State<comfy_ai_chat_button> createState() => _comfy_ai_chat_buttonState();
 }
@@ -21,14 +25,20 @@ class comfy_ai_chat_button extends StatefulWidget {
 class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
   late SSHClient sshClient;
   bool _status = false;
+
+  SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+  String _lastWords = '';
+
   @override
   void initState(){
-    initTTS();
+    _speechToText = widget.voiceInstance;
+    //initTTS();
     initClient();
+    //initSpeech();
     print('hi swipe');
     super.initState();
   }
-
   @override
   void dispose(){
     try{
@@ -38,7 +48,6 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
 
     super.dispose();
   }
-
   @override
   void deactivate(){
     try{
@@ -86,19 +95,52 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
       );
     }
   }
-  Future<void> askAI(String query) async{
+
+  Future<void> initSpeech() async{
+    _speechEnabled = await _speechToText.initialize(
+      onStatus: (status){
+        print('speech init status $status');
+      },
+      onError: (error){
+        print('error: ${error.errorMsg}');
+      }
+    );
+    print(_speechEnabled);
+    print('speech initialized');
+}
+  Future<void> _startListening() async {
+    print('listening');
+    try{
+      await _speechToText.listen(onResult: _onSpeechResult);
+    } catch (e){
+      print(e.toString());
+    }
+
+
+  }
+  Future<void> _stopListening() async {
+    await _speechToText.stop();
+
+  }
+  Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
+    print('recognized word: ${result.recognizedWords}');
+    String response = await askAI(result.recognizedWords);
+  }
+
+  Future<String> askAI(String query) async{
     var response = await sshClient.run('comfy gemini_run $query');
     var answer =  utf8.decode(response);
     print('gemini response: $answer');
     _status != _status;
-    //return answer;
+
+    return answer;
+
   }
 
   Future<void> AIPromptInterface() async{
     print('prompting AI interface');
     showDialog(context: context, builder: (context){
       return AlertDialog(
-
       );
     });
   }
@@ -106,74 +148,18 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () async{
-          await AIPromptInterface();
-          setState(
-                  () {
-                _status = !_status;
-              }
-          );
+          _speechToText.isNotListening?
+          _startListening()
+              : _stopListening();
         },
 
-        child: AnimatedContainer(
-            duration: const Duration(milliseconds: 500),
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFDAEED7),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: widget.button.color!
-                            //Theme.of(context).colorScheme.onBackground
-                            , width: 2)
-                    ),
-
-                  ),
-                ),
-                Container(
-                  child: Builder(
-                      builder: (context){
-                        if(_status==true) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 45),
-                            child: Image.asset('assets/froggie/tap-on.png',),
-                          );
-                        }
-                        else{
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 30, right: 30, bottom: 45, top: 20),
-                            child: Image.asset('assets/froggie/tap-off.png', fit: BoxFit.fill,),
-                          );
-                        }}
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    widget.button.name!,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                ),
-              ],
-            )
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+              color: _speechToText.isNotListening ? Colors.red: Colors.green,
+              ),
         )
     );
-    return GestureDetector(
-        onTap:()  async{
 
-          //Show listening popup
-          //Parse in prompt
-          //Receive Respond
-          //Speaking
-        print('tapping');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('tapped')));
-        await askAI('who is donald trump?');
-      },
-      child: Container(
-        child: Center(child: Text('ai ${widget.button.name}'),),
-      ),
-    );
   }
 }

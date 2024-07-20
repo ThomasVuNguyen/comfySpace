@@ -8,9 +8,13 @@ import 'package:v2_1/project_space_screen/button_list/comfy_toggle_button.dart';
 import 'package:v2_1/project_space_screen/components/button_edit_and_delete_page.dart';
 
 class button_sort extends StatefulWidget {
-  const button_sort({super.key, required this.button, required this.projectName, required this.hostname, required this.staticIP, required this.username, required this.password});
+  const button_sort({super.key, required this.button, required this.projectName,
+    required this.hostname, required this.staticIP, required this.username, required this.password,
+    required this.systemInstances
+  });
   final comfy_button button; final String projectName;
   final String hostname; final String staticIP; final String username; final String password;
+  final Map<String, dynamic> systemInstances;
   @override
   State<button_sort> createState() => _button_sortState();
 }
@@ -47,6 +51,7 @@ class _button_sortState extends State<button_sort> {
   }
   @override
   Widget build(BuildContext context) {
+    print('system instance of ${widget.systemInstances.toString()}');
     return Stack(
       alignment: Alignment.topLeft,
       children: [
@@ -61,7 +66,7 @@ class _button_sortState extends State<button_sort> {
                     case 'swipe':
                       return comfy_swipe_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password,);
                     case 'ai-chat':
-                      return comfy_ai_chat_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password);
+                      return comfy_ai_chat_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password, voiceInstance: widget.systemInstances['voice']);
                     default:
                       return Text('unidentified ${widget.button.type}');
                   }

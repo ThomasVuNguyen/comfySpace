@@ -193,7 +193,9 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                     hostname: '',
                     staticIP: '',
                     username: '',
-                    password: ''),
+                    password: '',
+                  systemInstances: {},
+                ),
               );
 
             }),

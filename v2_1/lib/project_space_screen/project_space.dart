@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:typewritertext/typewritertext.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/edit_button.dart';
 import 'package:v2_1/home_screen/home_screen.dart';
@@ -22,6 +23,10 @@ class project_space extends StatefulWidget {
 }
 
 class _project_spaceState extends State<project_space> {
+
+
+  bool _speechEnabled = false;
+
   @override
   void initState() {
     print('howdy project');
@@ -31,7 +36,6 @@ class _project_spaceState extends State<project_space> {
     }
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +103,7 @@ class _project_spaceState extends State<project_space> {
                   }
                 }
                 var buttonList = snapshot.data![1];
+                Map<String, dynamic> systemInstances = (snapshot.data!.length >2)? snapshot.data![2] :{};
                 return Scaffold(
                     appBar:AppBar(
                       automaticallyImplyLeading: false,
@@ -138,6 +143,7 @@ class _project_spaceState extends State<project_space> {
                                   username: widget.username,
                                   password: widget.password,
                                   staticIP: staticIP,
+                                  systemInstances: systemInstances,
                                 ),
                               );
                             }
@@ -170,6 +176,9 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
   print('initializing project: getting button list & running ssh scripts');
   //start timer
   double beginningTime = DateTime.now().microsecondsSinceEpoch/1000000;
+  SpeechToText speechToText = SpeechToText();
+
+  Map<String, dynamic> systemInstances = {};
   //acquire button list
   print('getting button list');
   var results =  await Future.wait(
@@ -178,12 +187,26 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
       ]
   );
   List<comfy_button> buttonList = results[0] as List<comfy_button>;
-
+  bool voice_required = buttonList.any((button) => button.type == 'ai-chat');
+  if(voice_required == true){
+    print('ai chat found');
+    bool result = await speechToText.initialize(
+        onStatus: (status){
+          print('speech init status $status');
+        },
+        onError: (error){
+          print('error: ${error.errorMsg}');
+        }
+    );
+    print('voice initialization complete');
+    print(result.toString());
+    systemInstances['voice'] = speechToText;
+  }
   //List<comfy_button> buttonList = await get_button_list_information(context, projectName);
   print('initializing raspbery pi done');
   // if on web, bypass
   if(kIsWeb){
-    return ['web bypass', buttonList];
+    return ['web bypass', buttonList, systemInstances];
   }
   //if project screen is loaded from the home screen, run raspberry pi init function
 
@@ -204,13 +227,13 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
     double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
     print('time taken to load in project $projectName: ${endTime-beginningTime} ');
 
-    return [staticIP, buttonList];
+    return [staticIP, buttonList, systemInstances];
   } catch(e){
 
     double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
     print('time taken to load in project $projectName: ${endTime-beginningTime} ');
-
-    return ['comfy space initialize, static ip not found', buttonList];
+    print('system instance is $systemInstances');
+    return ['comfy space initialize, static ip not found', buttonList, systemInstances];
     // if no static ip found, return a random result
   }
 
