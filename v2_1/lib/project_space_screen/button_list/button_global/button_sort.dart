@@ -66,7 +66,7 @@ class _button_sortState extends State<button_sort> {
                     case 'swipe':
                       return comfy_swipe_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password,);
                     case 'ai-chat':
-                      return comfy_ai_chat_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password, voiceInstance: widget.systemInstances['voice']);
+                      return comfy_ai_chat_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password);
                     default:
                       return Text('unidentified ${widget.button.type}');
                   }

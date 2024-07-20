@@ -192,14 +192,14 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
     print('ai chat found');
     bool result = await speechToText.initialize(
         onStatus: (status){
-          print('speech init status $status');
+          //print('speech init status $status');
         },
         onError: (error){
-          print('error: ${error.errorMsg}');
+          //print('error: ${error.errorMsg}');
         }
     );
-    print('voice initialization complete');
-    print(result.toString());
+    //print('voice initialization complete');
+    //print(result.toString());
     systemInstances['voice'] = speechToText;
   }
   //List<comfy_button> buttonList = await get_button_list_information(context, projectName);
