@@ -18,6 +18,8 @@ class ButtonCommandCreatePage extends StatefulWidget {
     required this.swipeRightCommandTextController,
     required this.swipeTapCommandTextController,
 
+    required this.aiAPIButtonTextController,
+
     this.buttonFunction = const {},
 
 
@@ -36,6 +38,7 @@ class ButtonCommandCreatePage extends StatefulWidget {
   final TextEditingController swipeLeftCommandTextController;
   final TextEditingController swipeRightCommandTextController;
   final TextEditingController swipeTapCommandTextController;
+  final TextEditingController aiAPIButtonTextController;
 
   //store existing button data for editing buttons
   final Map<String, String> buttonFunction;
@@ -61,6 +64,9 @@ class _ButtonCommandCreatePageState extends State<ButtonCommandCreatePage> {
       widget.swipeLeftCommandTextController.text = widget.buttonFunction['left']!;
       widget.swipeRightCommandTextController.text = widget.buttonFunction['right']!;
       widget.swipeTapCommandTextController.text = widget.buttonFunction['tap']!;
+    }
+    else if(widget.buttonFunction == 'ai-chat' && widget.buttonFunction.isNotEmpty){
+      print('hello');
     }
 
     super.initState();
@@ -131,6 +137,12 @@ class _ButtonCommandCreatePageState extends State<ButtonCommandCreatePage> {
               ],
             ),
           ),
+        );
+      }
+      else if(widget.buttonType == 'ai-chat'){
+        return in_app_textfield(
+          controller: widget.aiAPIButtonTextController,
+          hintText: '', obsureText: false, titleText: 'Google Gemini API Key',
         );
       }
       else{

@@ -51,6 +51,9 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
   final swipeRightCommandTextController = TextEditingController();
   final swipeTapCommandTextController = TextEditingController();
 
+  //controller for ai buttons
+  final AIButtonTextController = TextEditingController();
+
 
   Future<void> navigate() async {
     if(_confirmationPage == false){
@@ -126,6 +129,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
           'tap': (swipeTapCommandTextController.text.isEmpty == true)? '':swipeTapCommandTextController.text,
           'left': (swipeLeftCommandTextController.text.isEmpty == true)? '':swipeLeftCommandTextController.text,
           'right': (swipeRightCommandTextController.text.isEmpty == true)? '' :swipeRightCommandTextController.text,
+          'api': (AIButtonTextController.text.isEmpty == true)? '': AIButtonTextController.text
         };
       }
       await edit_button(context, widget.projectName, widget.button.name!,
@@ -293,6 +297,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                 'down': (widget.button.function?['down'] == null)? '' :widget.button.function!['down']!,
                 'left': (widget.button.function?['left'] == null)? '' :widget.button.function!['left']!,
                 'right': (widget.button.function?['right'] == null)? '' :widget.button.function!['right']!,
+                'api': ((widget.button.function)?['api'] == null)? '':widget.button.function!['']!,
               },
 
               tapCommandTextController: tapCommandTextController,
@@ -304,7 +309,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
               swipeDownCommandTextController: swipeDownCommandTextController,
               swipeLeftCommandTextController: swipeLeftCommandTextController,
               swipeRightCommandTextController: swipeRightCommandTextController,
-              swipeTapCommandTextController: swipeTapCommandTextController,
+              swipeTapCommandTextController: swipeTapCommandTextController, aiAPIButtonTextController:AIButtonTextController,
             ),
             ),
 

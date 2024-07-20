@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -7,8 +8,10 @@ import 'package:v2_1/home_screen/comfy_user_information_function/color_conversio
 import 'package:v2_1/home_screen/comfy_user_information_function/project_information.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/project_space_screen/button_list/button_global/button_sort.dart';
+import 'package:v2_1/project_space_screen/button_list/function/save_gemini_api.dart';
 import 'package:v2_1/project_space_screen/components/ButtonCommandCreatePage.dart';
 import 'package:v2_1/project_space_screen/components/button_selection_title.dart';
+import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
 import 'package:v2_1/project_space_screen/project_space.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
 
@@ -48,8 +51,13 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
   final swipeRightCommandTextController = TextEditingController();
   final swipeTapCommandTextController = TextEditingController();
 
+  //placeholder for ai chat button
+  final aiAPIButtonTextController = TextEditingController();
+
   //placeholder for button function map
   Map<String, String> buttonFunction = {};
+
+
 
   Future<void> navigate() async {
     if(_confirmationPage == false){
@@ -136,6 +144,30 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
           'right': swipeRightCommandTextController.text,
         };
       }
+      else if(buttonColorController.text.toLowerCase()=='ai-chat'){
+        buttonFunction={
+          'api': aiAPIButtonTextController.text
+        };
+        late SSHClient sshClient;
+        for(String potentialHostName in [widget.hostname]){
+          try{
+            sshClient = SSHClient(
+              await SSHSocket.connect(potentialHostName, 22),
+              username: widget.username,
+              onPasswordRequest: () => widget.password,
+            );
+            //attempt a connection
+            var save_api_key_response = await SaveGeminiAPI(widget.hostname, widget.username, widget.password, aiAPIButtonTextController.text.trim(), context);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(save_api_key_response)));
+            break;
+
+          }
+          catch (e){
+            //SSH error not connected
+            //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
+          }
+        }
+      }
       await AddNewButton(widget.projectName,
           buttonTypeController.text.toLowerCase(),
           buttonNameController.text,
@@ -164,21 +196,6 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
       ),
       //resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        /*leading: IconButton(
-          icon: Icon(Icons.close, color: Theme.of(context).colorScheme.onSurface,),
-          onPressed: (){
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => project_space(
-                project_name: widget.projectName,
-                hostname: widget.hostname,
-                username: widget.username,
-                password: widget.password,
-              )),
-                  (Route<dynamic> route) => false,
-            );
-          },
-        ),*/
         title: Stack(
           alignment: Alignment.center,
           children: [
@@ -350,7 +367,8 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                             dropdownMenuEntries: const [
                               DropdownMenuEntry(value: 'tap', label: 'Tap'),
                               DropdownMenuEntry(value: 'toggle', label: 'Toggle'),
-                              DropdownMenuEntry(value: 'swipe', label: 'Swipe')
+                              DropdownMenuEntry(value: 'swipe', label: 'Swipe'),
+                              DropdownMenuEntry(value: 'ai-chat', label: 'ai-chat')
                             ],
                           ),
                         ),
@@ -456,6 +474,7 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                     swipeLeftCommandTextController: swipeLeftCommandTextController,
                     swipeRightCommandTextController: swipeRightCommandTextController,
                     swipeTapCommandTextController: swipeTapCommandTextController,
+                    aiAPIButtonTextController: aiAPIButtonTextController,
                   )
               ),
 

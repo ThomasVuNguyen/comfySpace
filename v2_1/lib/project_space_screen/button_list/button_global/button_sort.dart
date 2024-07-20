@@ -1,6 +1,7 @@
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/project_information.dart';
+import 'package:v2_1/project_space_screen/button_list/comfy_ai_chat_button.dart';
 import 'package:v2_1/project_space_screen/button_list/comfy_swipe_button.dart';
 import 'package:v2_1/project_space_screen/button_list/comfy_tap_button.dart';
 import 'package:v2_1/project_space_screen/button_list/comfy_toggle_button.dart';
@@ -59,6 +60,8 @@ class _button_sortState extends State<button_sort> {
                       return comfy_toggle_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password,);
                     case 'swipe':
                       return comfy_swipe_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password,);
+                    case 'ai-chat':
+                      return comfy_ai_chat_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password);
                     default:
                       return Text('unidentified ${widget.button.type}');
                   }
