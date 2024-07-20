@@ -107,6 +107,9 @@ flutter:
     - assets/notion_style/
     - assets/comfy_logo_android.png
     - shorebird.yaml
+    - assets/sounds/speech_to_text_listening.m4r
+    - assets/sounds/speech_to_text_cancel.m4r
+    - assets/sounds/speech_to_text_stop.m4
 
 
 icons_launcher:
