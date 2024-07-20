@@ -1,14 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-
 import '../../home_screen/comfy_user_information_function/project_information.dart';
-import 'comfy_swipe_button.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 
 class comfy_ai_chat_button extends StatefulWidget {
@@ -54,6 +49,7 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     } catch (e){
 
     }
+    _stopListening();
     super.deactivate();
   }
   Future<void> initClient() async{
@@ -80,27 +76,12 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     }
   }
 
-  Future<void> initTTS() async{
-    FlutterTts flutterTts = FlutterTts();
-    if(Platform.isIOS){
-      await flutterTts.setSharedInstance(true);
-      await flutterTts.setIosAudioCategory(IosTextToSpeechAudioCategory.ambient,
-          [
-            IosTextToSpeechAudioCategoryOptions.allowBluetooth,
-            IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-            IosTextToSpeechAudioCategoryOptions.mixWithOthers
-          ],
-          IosTextToSpeechAudioMode.voicePrompt
-      );
-    }
-  }
+
 
   Future<void> _startListening() async {
     print('listening');
     await widget.voiceInstance.listen(onResult: _onSpeechResult);
-    setState(() {
-
-    });
+    setState(() {});
   }
   Future<void> _stopListening() async {
     print('stopping');
@@ -109,8 +90,7 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
 
   }
   Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
-    print('recognized word: ${result.recognizedWords}');
-    //String response = await askAI(result.recognizedWords);
+    print(result.recognizedWords);
     setState(() {
       _lastWords = result.recognizedWords;
     });
@@ -151,3 +131,6 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
 
   }
 }
+
+
+
