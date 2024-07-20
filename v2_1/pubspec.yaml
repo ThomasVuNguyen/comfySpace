@@ -68,6 +68,7 @@ dependencies:
   gradient_slide_to_act: ^0.0.2
   slider_button: ^2.1.0
   rename_app: ^1.5.0
+  flutter_tts: ^4.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
