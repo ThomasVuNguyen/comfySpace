@@ -27,7 +27,6 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
 
   @override
   void initState(){
-
     initTTS();
     initClient();
     //initSpeech();
@@ -50,7 +49,7 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     } catch (e){
 
     }
-
+    flutterTts.stop();
     super.deactivate();
   }
   Future<void> initClient() async{
@@ -83,12 +82,15 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     var answer =  utf8.decode(response);
     print('gemini response: $answer');
     _status != _status;
-    await flutterTts.speak(answer);
+    print('speaking');
+    try{
+      await flutterTts.speak(answer);
+    } catch (e){
+      print('error speaking $e');
+    }
     return answer;
 
   }
-
-
   Future<void> AIPromptInterface() async{
     print('prompting AI interface');
     showDialog(context: context, builder: (context){
@@ -99,40 +101,54 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
 
   Future<void> Speech2Text() async{
     SpeechToText speech = SpeechToText();
-    String _lastWords = '';
-    bool listeningDone = false;
+
     bool available = await speech.initialize(
+
+      options: [
+        SpeechToText.webDoNotAggregate,
+      ]
+        ,
       debugLogging: true,
-        onStatus: (status){
-      print('status: $status');
-      if(status.contains('done') == true){
-        listeningDone == true;
-      }
-    }, onError: (error){
+        onError: (error){
       print('error: $error');
     });
     if ( available ) {
-      speech.listen( onResult: (result){
+      speech.listen(
+        pauseFor: Duration(milliseconds: 500),
+        //partialResults: false,
+        listenOptions: SpeechListenOptions(
+          partialResults: true,
+          enableHapticFeedback: true
+        ),
+          onResult: (result){
         print(result.recognizedWords);
-        if (speech.lastStatus == 'notListening'){
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.recognizedWords)));
-          askAI(result.recognizedWords);
+        if(Platform.isIOS){
+          speech.stop();
         }
+
+          if(Platform.isAndroid && speech.lastStatus == 'notListening'){
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.recognizedWords)));
+            speech.stop();
+            askAI(result.recognizedWords);
+          }
+          if(Platform.isIOS && speech.lastStatus == 'listening' ){
+            print('status ${speech.lastStatus}');
+            speech.stop();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.recognizedWords)));
+            askAI(result.recognizedWords);
+          }
+
+
       });
     }
     else {
       print("The user has denied the use of speech recognition.");
     }
-    if(speech.isNotListening == true){
-      print('listening over');
-    }
-    // some time later...
-    //speech.stop();
+
   }
 
   Future<void> initTTS() async{
-    await flutterTts.setLanguage("en-US");
-    await flutterTts.setPitch(1.0);
+
 
     if(Platform.isIOS){
       await flutterTts.setSharedInstance(true);
@@ -145,8 +161,10 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
           IosTextToSpeechAudioMode.voicePrompt
       );
     }
-    //print('speaking, spaceman');
-    //await flutterTts.speak("hello, spaceman");
+    print('speaking, spaceman');
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setPitch(1.0);
+    await flutterTts.speak("hello, spaceman");
   }
   @override
   Widget build(BuildContext context) {
