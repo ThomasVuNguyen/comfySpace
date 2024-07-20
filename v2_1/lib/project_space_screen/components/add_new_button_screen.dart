@@ -161,7 +161,6 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
             var save_api_key_response = await SaveGeminiAPI(widget.hostname, widget.username, widget.password, aiAPIButtonTextController.text.trim(), context);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(save_api_key_response)));
             break;
-
           }
           catch (e){
             print('error');

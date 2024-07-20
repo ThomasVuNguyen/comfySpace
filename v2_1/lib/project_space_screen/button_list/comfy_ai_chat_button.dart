@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 
@@ -66,10 +68,23 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     }
   }
 
+  Future<void> askAI(String query) async{
+    var response = await sshClient.run('comfy gemini_run $query');
+    var answer =  utf8.decode(response);
+    print('gemini response: $answer');
+    //return answer;
+  }
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(child: Text('ai'),),
+    return GestureDetector(
+        onTap:()  async{
+        print('tapping');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('tapped')));
+        await askAI('who is donald trump?');
+      },
+      child: Container(
+        child: Center(child: Text('ai ${widget.button.name}'),),
+      ),
     );
   }
 }
