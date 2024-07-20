@@ -26,13 +26,12 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
   late SSHClient sshClient;
   bool _status = false;
 
-  SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
 
   @override
   void initState(){
-    _speechToText = widget.voiceInstance;
+
     //initTTS();
     initClient();
     //initSpeech();
@@ -45,7 +44,7 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
       sshClient.close();
     } catch (e){
     }
-
+    _stopListening();
     super.dispose();
   }
   @override
@@ -96,43 +95,33 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     }
   }
 
-  Future<void> initSpeech() async{
-    _speechEnabled = await _speechToText.initialize(
-      onStatus: (status){
-        print('speech init status $status');
-      },
-      onError: (error){
-        print('error: ${error.errorMsg}');
-      }
-    );
-    print(_speechEnabled);
-    print('speech initialized');
-}
   Future<void> _startListening() async {
     print('listening');
-    try{
-      await _speechToText.listen(onResult: _onSpeechResult);
-    } catch (e){
-      print(e.toString());
-    }
+    await widget.voiceInstance.listen(onResult: _onSpeechResult);
+    setState(() {
 
-
+    });
   }
   Future<void> _stopListening() async {
-    await _speechToText.stop();
+    print('stopping');
+    await widget.voiceInstance.stop();
+    setState(() {});
 
   }
   Future<void> _onSpeechResult(SpeechRecognitionResult result) async {
     print('recognized word: ${result.recognizedWords}');
-    String response = await askAI(result.recognizedWords);
+    //String response = await askAI(result.recognizedWords);
+    setState(() {
+      _lastWords = result.recognizedWords;
+    });
   }
 
   Future<String> askAI(String query) async{
+    print('asking gemini $query');
     var response = await sshClient.run('comfy gemini_run $query');
     var answer =  utf8.decode(response);
     print('gemini response: $answer');
     _status != _status;
-
     return answer;
 
   }
@@ -148,15 +137,14 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () async{
-          _speechToText.isNotListening?
-          _startListening()
-              : _stopListening();
+          widget.voiceInstance.isNotListening?
+          _startListening() : _stopListening();
         },
 
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-              color: _speechToText.isNotListening ? Colors.red: Colors.green,
+              color: widget.voiceInstance.isNotListening? Colors.red: Colors.green,
               ),
         )
     );
