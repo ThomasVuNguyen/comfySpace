@@ -144,11 +144,12 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
           'right': swipeRightCommandTextController.text,
         };
       }
-      else if(buttonColorController.text.toLowerCase()=='ai-chat'){
+      else if(buttonTypeController.text.toLowerCase()=='ai-chat'){
         buttonFunction={
           'api': aiAPIButtonTextController.text
         };
         late SSHClient sshClient;
+        print('adding gemini api');
         for(String potentialHostName in [widget.hostname]){
           try{
             sshClient = SSHClient(
@@ -163,10 +164,12 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
 
           }
           catch (e){
+            print('error');
             //SSH error not connected
             //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
           }
         }
+        print('adding api done');
       }
       await AddNewButton(widget.projectName,
           buttonTypeController.text.toLowerCase(),
