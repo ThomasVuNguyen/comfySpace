@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../home_screen/comfy_user_information_function/project_information.dart';
@@ -21,11 +23,12 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
   late SSHClient sshClient;
   bool _status = false;
 
+  var flutterTts = FlutterTts();
 
   @override
   void initState(){
 
-    //initTTS();
+    initTTS();
     initClient();
     //initSpeech();
     print('hi swipe');
@@ -37,7 +40,7 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
       sshClient.close();
     } catch (e){
     }
-
+    flutterTts.stop();
     super.dispose();
   }
   @override
@@ -80,9 +83,11 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     var answer =  utf8.decode(response);
     print('gemini response: $answer');
     _status != _status;
+    await flutterTts.speak(answer);
     return answer;
 
   }
+
 
   Future<void> AIPromptInterface() async{
     print('prompting AI interface');
@@ -124,13 +129,35 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     // some time later...
     //speech.stop();
   }
+
+  Future<void> initTTS() async{
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setPitch(1.0);
+
+    if(Platform.isIOS){
+      await flutterTts.setSharedInstance(true);
+      await flutterTts.setIosAudioCategory(IosTextToSpeechAudioCategory.ambient,
+          [
+            IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+            IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+            IosTextToSpeechAudioCategoryOptions.mixWithOthers
+          ],
+          IosTextToSpeechAudioMode.voicePrompt
+      );
+    }
+    //print('speaking, spaceman');
+    //await flutterTts.speak("hello, spaceman");
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
           Speech2Text();
-
         },
+        onDoubleTap: (){
+          flutterTts.stop();
+        },
+
 
         child: Padding(
           padding: const EdgeInsets.all(8.0),

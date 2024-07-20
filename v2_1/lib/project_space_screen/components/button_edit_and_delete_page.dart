@@ -211,6 +211,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                           'Would you like to delete or edit a button?',
                           textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
                           speed: const Duration(milliseconds: 100)
+                          //speed: const Duration(milliseconds: 100)
                       ),
                     ],
                     onTap: () {
@@ -235,7 +236,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                   clickable(icon: Icons.cancel, onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(project_name: widget.projectName, hostname: widget.hostname, username: widget.username, password: widget.password)));
                   }),
-                  clickable_text(text: 'Edit button', onTap: navigate)
+                  (widget.button.type == 'ai-chat')? Gap(0): clickable_text(text: 'Edit button', onTap: navigate)
                   //IconButton(onPressed: navigate, icon: const Text('Edit button'))
                 ],
               ),
@@ -299,7 +300,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                 'down': (widget.button.function?['down'] == null)? '' :widget.button.function!['down']!,
                 'left': (widget.button.function?['left'] == null)? '' :widget.button.function!['left']!,
                 'right': (widget.button.function?['right'] == null)? '' :widget.button.function!['right']!,
-                'api': ((widget.button.function)?['api'] == null)? '':widget.button.function!['']!,
+                //'api': ((widget.button.function)?['api'] == null)? '':widget.button.function!['']!,
               },
 
               tapCommandTextController: tapCommandTextController,
