@@ -209,9 +209,7 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
               ],
             )
         )
-
     );
-
   }
 }
 
