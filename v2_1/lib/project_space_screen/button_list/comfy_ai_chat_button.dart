@@ -40,7 +40,8 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
       sshClient.close();
     } catch (e){
     }
-    flutterTts.stop();
+    print('disposing tts');
+    //flutterTts.stop();
     super.dispose();
   }
   @override
@@ -50,7 +51,8 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     } catch (e){
 
     }
-
+    print('disposing tts');
+    //flutterTts.stop();
     super.deactivate();
   }
   Future<void> initClient() async{
@@ -114,11 +116,12 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     if ( available ) {
       speech.listen( onResult: (result){
         print(result.recognizedWords);
+        speech.stop();
         if (Platform.isAndroid == true && speech.lastStatus == 'notListening'){
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.recognizedWords)));
           askAI(result.recognizedWords);
         }
-        else if(Platform.isIOS && speech.lastStatus == 'listening' ){
+        else if(Platform.isIOS && speech.lastStatus == 'listening'){
           print('status ${speech.lastStatus}');
           speech.stop();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.recognizedWords)));
@@ -150,9 +153,14 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
           ],
           IosTextToSpeechAudioMode.voicePrompt
       );
+
+
     }
-    //print('speaking, spaceman');
-    //await flutterTts.speak("hello, spaceman");
+    await flutterTts.awaitSpeakCompletion(true);
+    await flutterTts.awaitSynthCompletion(true);
+
+    print('speaking, spaceman');
+    await flutterTts.speak("hello, spaceman");
   }
   @override
   Widget build(BuildContext context) {
