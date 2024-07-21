@@ -110,6 +110,7 @@ flutter:
     - assets/sounds/speech_to_text_listening.m4r
     - assets/sounds/speech_to_text_cancel.m4r
     - assets/sounds/speech_to_text_stop.m4r
+    - assets/gemini/gemini-logo.webp
 
 
 icons_launcher:

@@ -53,7 +53,7 @@ class _button_sortState extends State<button_sort> {
   Widget build(BuildContext context) {
     print('system instance of ${widget.systemInstances.toString()}');
     return Stack(
-      alignment: Alignment.topLeft,
+      alignment: Alignment.topRight,
       children: [
                 Builder(builder: (context){
                   switch (widget.button.type){
@@ -74,7 +74,7 @@ class _button_sortState extends State<button_sort> {
         Padding(
           padding: const EdgeInsets.all(5.0),
           child: Container(
-            height: 20, width: 20,
+            height: 25, width: 25,
             decoration: BoxDecoration(
               border: Border.all(color: Theme.of(context).colorScheme.onSurface, width: 2),
               shape: BoxShape.circle,
@@ -82,7 +82,9 @@ class _button_sortState extends State<button_sort> {
               //borderRadius: BorderRadius.circular(20)
             ),
               child: Center(
-                child: IconButton(onPressed: (){
+                child: IconButton(
+                  iconSize: 0,
+                    onPressed: (){
                   Navigator.pushAndRemoveUntil(context,
                     MaterialPageRoute(builder: (context) => ButtonEditAndDeletePage(
                       projectName: widget.projectName, button: widget.button,
@@ -90,7 +92,7 @@ class _button_sortState extends State<button_sort> {
                     )),
                         (Route<dynamic> route) => false,
                   );
-                }, icon: Icon(Icons.edit_sharp, color: Theme.of(context).colorScheme.onPrimaryContainer,size: 0,)),
+                }, icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.onPrimaryContainer,)),
               )),
         ),
       ],

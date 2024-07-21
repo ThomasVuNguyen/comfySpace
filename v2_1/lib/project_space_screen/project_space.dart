@@ -48,6 +48,7 @@ class _project_spaceState extends State<project_space> {
             }
             else {
               if(snapshot.hasError && snapshot.error.toString().contains('No element') == true || snapshot.data == null){
+                print('error in snapshot ${snapshot.error.toString()}');
                 //print('comfy project snapshot data error: ${snapshot.data.toString()}');
                 return Scaffold(
                   appBar: AppBar(
@@ -183,9 +184,14 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
   print('getting button list');
   var results =  await Future.wait(
       [get_button_list_information(context, projectName),
-      setUpRaspberryPi(context, hostname, username, password),
+
       ]
   );
+  try{
+    await setUpRaspberryPi(context, hostname, username, password);
+  } catch (e){
+    print('error setting up raspberry pi ${e.toString()}');
+  }
   List<comfy_button> buttonList = results[0] as List<comfy_button>;
   bool voice_required = buttonList.any((button) => button.type == 'ai-chat');
   if(voice_required == true){
@@ -206,7 +212,7 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
   print('initializing raspbery pi done');
   // if on web, bypass
   if(kIsWeb){
-    return ['web bypass', buttonList, systemInstances];
+    return ['web bypass', buttonList];
   }
   //if project screen is loaded from the home screen, run raspberry pi init function
 
@@ -226,14 +232,15 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
 
     double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
     print('time taken to load in project $projectName: ${endTime-beginningTime} ');
-
-    return [staticIP, buttonList, systemInstances];
+    print('project space initialization ${[staticIP, buttonList]}');
+    return [staticIP, buttonList];
   } catch(e){
 
     double endTime = DateTime.now().microsecondsSinceEpoch/1000000;
     print('time taken to load in project $projectName: ${endTime-beginningTime} ');
     print('system instance is $systemInstances');
-    return ['comfy space initialize, static ip not found', buttonList, systemInstances];
+    print('project space initialization ${['comfy space initialize, static ip not found', buttonList]}');
+    return ['comfy space initialize, static ip not found', buttonList];
     // if no static ip found, return a random result
   }
 

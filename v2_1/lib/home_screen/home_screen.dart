@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     //
                     actions: [
                       (kDebugMode)? IconButton(onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => TTSTestScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => VoiceScreenTest()));
                       }, icon: Icon(Icons.auto_fix_high)) : Gap(0),
                       GestureDetector(
                         onTap: (){
