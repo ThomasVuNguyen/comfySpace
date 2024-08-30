@@ -6,13 +6,13 @@ TextTheme ComfyTextTheme = TextTheme(
   displayMedium: GoogleFonts.montserrat(fontWeight: FontWeight.w500, fontSize: 45),
   displaySmall: GoogleFonts.montserrat(fontWeight: FontWeight.w500, fontSize: 36),
 
-  headlineLarge: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 32),
-  headlineMedium: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 28),
-  headlineSmall: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 24),
+  headlineLarge: GoogleFonts.ubuntu(fontWeight: FontWeight.w500, fontSize: 32),
+  headlineMedium: GoogleFonts.ubuntu(fontWeight: FontWeight.w500, fontSize: 28),
+  headlineSmall: GoogleFonts.ubuntu(fontWeight: FontWeight.w500, fontSize: 24),
 
-  titleLarge: GoogleFonts.lekton(fontWeight: FontWeight.bold, fontSize: 22),
-  titleMedium: GoogleFonts.lekton(fontWeight: FontWeight.bold, fontSize: 16),
-  titleSmall: GoogleFonts.lekton(fontWeight: FontWeight.bold, fontSize: 14),
+  titleLarge: GoogleFonts.ubuntu(fontWeight: FontWeight.w500, fontSize: 20),
+  titleMedium: GoogleFonts.ubuntu(fontWeight: FontWeight.w500, fontSize: 16),
+  titleSmall: GoogleFonts.ubuntu(fontWeight: FontWeight.w500, fontSize: 16),
 
   bodyLarge: GoogleFonts.montserrat(fontWeight: FontWeight.normal, fontSize: 16),
   bodyMedium: GoogleFonts.montserrat(fontWeight: FontWeight.normal, fontSize: 14),
