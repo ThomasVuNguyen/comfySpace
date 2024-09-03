@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:v2_1/comfy_share_screen/comfy_share.dart';
 import 'package:v2_1/create_new_project/components/ssh_scan.dart';
 import 'package:v2_1/home_screen/comfy_user_information_function/user_information.dart';
@@ -13,10 +14,12 @@ import 'package:v2_1/home_screen/components/learning_space.dart';
 import 'package:v2_1/home_screen/components/project_list.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/test_functionality/tts.dart';
+import 'package:v2_1/themes/app_color.dart';
 
 import 'package:v2_1/universal_widget/buttons.dart';
 import 'package:v2_1/universal_widget/greeting.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
+import 'package:v2_1/welcome_page/welcome_page.dart';
 
 import 'comfy_user_information_function/project_information.dart';
 
@@ -53,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if(snapshot.connectionState == ConnectionState.done){
             var user = snapshot.data;
             List<Widget> homeScreenList = [
+              const welcome_page(),
               const learning_space(),
               const project_list(),
               const comfyShareScreen()
@@ -62,41 +66,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   appBar: AppBar(
                     automaticallyImplyLeading: false,
                     backgroundColor: Theme.of(context).colorScheme.surface,
-                    title: Builder(
-                      builder: (context){
-                          if(user?.name == null){
-                            return Row(
-                              children: [
-                                const randomGreeting(),
-                                clickable_text(text: 'Pick a username!', onTap: (){
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const set_user_info()),
-                                  );
-                                })
-                              ],
-                            );
-                            return Text('Greetings, ${user?.name}');
-                          }
-                          else{
-                            return randomGreeting(name: user!.name!,);
-                          }
-
-                      },
-                    ),
+                    title: Image.asset('assets/comfy_icon.png', height: 32,),
                     //
                     actions: [
-                      (kDebugMode)? IconButton(onPressed: (){
-                        //Navigator.push(context, MaterialPageRoute(builder: (context) => VoiceScreenTest()));
-                      }, icon: Icon(Icons.auto_fix_high)) : Gap(0),
                       GestureDetector(
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) =>
                           account_info(name: user?.name, tagline: user?.tagline)
                           ));
                         },
-                          child: const avatar_icon()
-                      )
+                          child: HugeIcon(
+                            icon: HugeIcons.strokeRoundedSetting07,
+                            color: AppColors.black,
+                          )
+                      ),
+
+                      Gap(20)
                     ],
                   ),
                   body: homeScreenList[_selectedPageIndex],
@@ -114,13 +99,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       selectedIndex: _selectedPageIndex,
                       destinations: const [
                         NavigationDestination(
-                          icon: Icon(Icons.library_books), label: 'Learn', selectedIcon: Icon(Icons.local_library),
+                          icon: HugeIcon(icon: HugeIcons.strokeRoundedHome09, color: AppColors.black), label: 'Home', selectedIcon: HugeIcon(icon: HugeIcons.strokeRoundedHome09, color: AppColors.black),
                         ),
                         NavigationDestination(
-                            icon: Icon(Icons.build), label: 'Build', selectedIcon: Icon(Icons.handyman),
+                          icon: HugeIcon(icon: HugeIcons.strokeRoundedGarage, color: AppColors.black), label: 'Garage', selectedIcon: HugeIcon(icon: HugeIcons.strokeRoundedGarage, color: AppColors.black)
                         ),
                         NavigationDestination(
-                          icon: Icon(Icons.library_books), label: 'Share', selectedIcon: Icon(Icons.local_library),
+                            icon: HugeIcon(icon: HugeIcons.strokeRoundedLegalHammer, color: AppColors.black), label: 'Build', selectedIcon: HugeIcon(icon: HugeIcons.strokeRoundedLegalHammer, color: AppColors.black),
+                        ),
+                        NavigationDestination(
+                          icon: HugeIcon(icon: HugeIcons.strokeRoundedAddressBook, color: AppColors.black), label: 'Learn', selectedIcon: HugeIcon(icon: HugeIcons.strokeRoundedAddressBook, color: AppColors.black)
                         ),
                       ],
                       onDestinationSelected: (selectedIndex){
