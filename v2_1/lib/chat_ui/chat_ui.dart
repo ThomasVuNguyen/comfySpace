@@ -83,6 +83,7 @@ class _chatPageState extends State<chatPage> {
          userAnswer['password']!,
          userAnswer['name']!,
          userAnswer['tagline']!,
+         {}
          );
      case 'ssh_credentials': Navigator.push(context, MaterialPageRoute(builder: (context) =>
          SSHInitialScan(

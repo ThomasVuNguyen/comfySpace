@@ -70,6 +70,8 @@ dependencies:
   rename_app: ^1.5.0
   flutter_tts: ^4.0.2
   speech_to_text: ^6.6.2
+  hugeicons: ^0.0.7
+  audioplayers: ^6.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

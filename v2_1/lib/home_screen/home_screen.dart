@@ -13,7 +13,7 @@ import 'package:v2_1/home_screen/components/learning_space.dart';
 import 'package:v2_1/home_screen/components/project_list.dart';
 import 'package:v2_1/home_screen/components/set_user_info.dart';
 import 'package:v2_1/test_functionality/tts.dart';
-import 'package:v2_1/test_functionality/voice_to_text.dart';
+
 import 'package:v2_1/universal_widget/buttons.dart';
 import 'package:v2_1/universal_widget/greeting.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     //
                     actions: [
                       (kDebugMode)? IconButton(onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => VoiceScreenTest()));
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) => VoiceScreenTest()));
                       }, icon: Icon(Icons.auto_fix_high)) : Gap(0),
                       GestureDetector(
                         onTap: (){
