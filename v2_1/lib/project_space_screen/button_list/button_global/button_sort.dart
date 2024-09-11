@@ -9,11 +9,11 @@ import 'package:v2_1/project_space_screen/components/button_edit_and_delete_page
 
 class button_sort extends StatefulWidget {
   const button_sort({super.key, required this.button, required this.projectName,
-    required this.hostname, required this.staticIP, required this.username, required this.password,
+    required this.hostname, required this.staticIP, required this.port, required this.username, required this.password,
     required this.systemInstances
   });
   final comfy_button button; final String projectName;
-  final String hostname; final String staticIP; final String username; final String password;
+  final String hostname; final String staticIP; final int port; final String username; final String password;
   final Map<String, dynamic> systemInstances;
   @override
   State<button_sort> createState() => _button_sortState();
@@ -32,7 +32,7 @@ class _button_sortState extends State<button_sort> {
     for(String potentialHostName in [widget.staticIP, widget.hostname]){
       try{
         sshClient = SSHClient(
-          await SSHSocket.connect(potentialHostName, 22),
+          await SSHSocket.connect(potentialHostName, widget.port),
           username: widget.username,
           onPasswordRequest: () => widget.password,
         );
@@ -60,13 +60,13 @@ class _button_sortState extends State<button_sort> {
                     case 'tap':
                       return comfy_tap_button(
                         button: widget.button,
-                        hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password,);
+                        hostname: widget.hostname, staticIP: widget.staticIP, port: widget.port, username: widget.username, password: widget.password,);
                     case 'toggle':
-                      return comfy_toggle_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password,);
+                      return comfy_toggle_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, port: widget.port, username: widget.username, password: widget.password,);
                     case 'swipe':
-                      return comfy_swipe_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password,);
+                      return comfy_swipe_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, port: widget.port, username: widget.username, password: widget.password,);
                     case 'ai-chat':
-                      return comfy_ai_chat_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, username: widget.username, password: widget.password);
+                      return comfy_ai_chat_button(button: widget.button, hostname: widget.hostname, staticIP: widget.staticIP, port: widget.port, username: widget.username, password: widget.password);
                     default:
                       return Text('unidentified ${widget.button.type}');
                   }
@@ -88,7 +88,8 @@ class _button_sortState extends State<button_sort> {
                   Navigator.pushAndRemoveUntil(context,
                     MaterialPageRoute(builder: (context) => ButtonEditAndDeletePage(
                       projectName: widget.projectName, button: widget.button,
-                      hostname: widget.hostname, username: widget.username, password: widget.password,
+                      hostname: widget.hostname, port: widget.port,
+                      username: widget.username, password: widget.password,
                     )),
                         (Route<dynamic> route) => false,
                   );

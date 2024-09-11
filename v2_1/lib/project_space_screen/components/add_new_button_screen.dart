@@ -17,10 +17,10 @@ import 'package:v2_1/universal_widget/buttons.dart';
 
 class AddNewButtonScreen extends StatefulWidget {
   const AddNewButtonScreen({super.key,
-    required this.projectName, required this.hostname, required this.username, required this.password
+    required this.projectName, required this.hostname, required this.port, required this.username, required this.password
   });
   final String projectName;
-  final String hostname; final String username; final String password;
+  final String hostname; final int port; final String username; final String password;
   @override
   State<AddNewButtonScreen> createState() => _AddNewButtonScreenState();
 }
@@ -181,6 +181,7 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
           MaterialPageRoute(builder: (context) => project_space(
           project_name: widget.projectName,
         hostname: widget.hostname,
+        port: widget.port,
         username: widget.username,
         password: widget.password,
       )),
@@ -217,6 +218,7 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                         MaterialPageRoute(builder: (context) => project_space(
                           project_name: widget.projectName,
                           hostname: widget.hostname,
+                          port: widget.port,
                           username: widget.username,
                           password: widget.password,
                         )),
@@ -307,6 +309,7 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                         projectName: '',
                         hostname: '',
                         staticIP: '',
+                        port: 22,
                         username: '',
                         password: '',
                       systemInstances: {},

@@ -16,8 +16,8 @@ import 'package:v2_1/universal_widget/random_widget_loading.dart';
 import '../home_screen/comfy_user_information_function/project_information.dart';
 
 class project_space extends StatefulWidget {
-  const project_space({super.key, required this.project_name, required this.hostname, required this.username, required this.password, this.raspberryPiInit = false});
-  final String project_name; final String hostname; final String username; final String password; final bool raspberryPiInit;
+  const project_space({super.key, required this.project_name, required this.hostname, required this.port, required this.username, required this.password, this.raspberryPiInit = false});
+  final String project_name; final String hostname; final int port; final String username; final String password; final bool raspberryPiInit;
   @override
   State<project_space> createState() => _project_spaceState();
 }
@@ -41,7 +41,7 @@ class _project_spaceState extends State<project_space> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width~/150;
     return FutureBuilder(
-          future: project_space_initialize(context, widget.hostname, widget.username, widget.password, widget.project_name, widget.raspberryPiInit),
+          future: project_space_initialize(context, widget.hostname, widget.port, widget.username, widget.password, widget.project_name, widget.raspberryPiInit),
           builder: (context, snapshot){
             if(snapshot.connectionState != ConnectionState.done){
               return const Center(child: randomLoadingWidget());
@@ -84,6 +84,7 @@ class _project_spaceState extends State<project_space> {
                         MaterialPageRoute(builder: (context) => AddNewButtonScreen(
                           projectName: widget.project_name,
                           hostname: widget.hostname,
+                          port: widget.port,
                           username: widget.username,
                           password: widget.password,
                         )),
@@ -141,6 +142,7 @@ class _project_spaceState extends State<project_space> {
                                   button: buttonList[index],
                                   projectName: widget.project_name,
                                   hostname: widget.hostname,
+                                  port: widget.port,
                                   username: widget.username,
                                   password: widget.password,
                                   staticIP: staticIP,
@@ -157,6 +159,7 @@ class _project_spaceState extends State<project_space> {
                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AddNewButtonScreen(
                           projectName: widget.project_name,
                           hostname: widget.hostname,
+                          port: widget.port,
                           username: widget.username,
                           password: widget.password,
                         )),
@@ -173,7 +176,7 @@ class _project_spaceState extends State<project_space> {
   }
 }
 
-Future<List<dynamic>> project_space_initialize(BuildContext context, String hostname, String username, String password, String projectName, bool raspberryPiInit) async{
+Future<List<dynamic>> project_space_initialize(BuildContext context, String hostname, int port, String username, String password, String projectName, bool raspberryPiInit) async{
   print('initializing project: getting button list & running ssh scripts');
   //start timer
   double beginningTime = DateTime.now().microsecondsSinceEpoch/1000000;
@@ -188,7 +191,7 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
       ]
   );
   try{
-    await setUpRaspberryPi(context, hostname, username, password);
+    await setUpRaspberryPi(context, hostname, port, username, password);
   } catch (e){
     print('error setting up raspberry pi ${e.toString()}');
   }
@@ -218,7 +221,7 @@ Future<List<dynamic>> project_space_initialize(BuildContext context, String host
 
     print('initializing raspbery pi');
     try{
-      await setUpRaspberryPi(context, hostname, username, password);
+      await setUpRaspberryPi(context, hostname, port, username, password);
     } catch(e){
       print('error inititalize rapsberry pi: $e');
     }

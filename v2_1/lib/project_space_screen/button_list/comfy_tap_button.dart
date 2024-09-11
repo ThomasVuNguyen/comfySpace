@@ -5,8 +5,9 @@ import 'package:v2_1/home_screen/comfy_user_information_function/project_informa
 
 
 class comfy_tap_button extends StatefulWidget {
-  const comfy_tap_button({super.key, required this.button, required this.hostname, required this.staticIP, required this.username, required this.password});
+  const comfy_tap_button({super.key, required this.button, required this.hostname, required this.staticIP, required this.port, required this.username, required this.password});
   final comfy_button button; final String hostname; final String username; final String password; final String staticIP;
+  final int port;
 
   @override
   State<comfy_tap_button> createState() => _comfy_tap_buttonState();
@@ -45,7 +46,7 @@ class _comfy_tap_buttonState extends State<comfy_tap_button> {
     for(String potentialHostName in [widget.staticIP.trim(), widget.hostname]){
       try{
         sshClient = SSHClient(
-          await SSHSocket.connect(potentialHostName, 22),
+          await SSHSocket.connect(potentialHostName, widget.port),
           username: widget.username,
           onPasswordRequest: () => widget.password,
         );

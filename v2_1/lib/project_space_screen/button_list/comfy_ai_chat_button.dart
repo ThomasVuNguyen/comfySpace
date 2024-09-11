@@ -9,10 +9,10 @@ import '../../home_screen/comfy_user_information_function/project_information.da
 
 class comfy_ai_chat_button extends StatefulWidget {
   const comfy_ai_chat_button({super.key, required this.button,
-    required this.hostname, required this.staticIP, required this.username, required this.password,
+    required this.hostname, required this.staticIP, required this.port, required this.username, required this.password,
 
   });
-  final comfy_button button; final String hostname; final String username; final String password; final String staticIP;
+  final comfy_button button; final String hostname; final int port; final String username; final String password; final String staticIP;
 
   @override
   State<comfy_ai_chat_button> createState() => _comfy_ai_chat_buttonState();
@@ -54,7 +54,7 @@ class _comfy_ai_chat_buttonState extends State<comfy_ai_chat_button> {
     for(String potentialHostName in [widget.staticIP.trim(), widget.hostname]){
       try{
         sshClient = SSHClient(
-          await SSHSocket.connect(potentialHostName, 22),
+          await SSHSocket.connect(potentialHostName, widget.port),
           username: widget.username,
           onPasswordRequest: () => widget.password,
         );

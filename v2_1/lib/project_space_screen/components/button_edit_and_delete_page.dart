@@ -17,10 +17,12 @@ class ButtonEditAndDeletePage extends StatefulWidget {
   const ButtonEditAndDeletePage({super.key,
     required this.projectName,
     required this.button,
-    required this.hostname, required this.username, required this.password
+    required this.hostname, required this.port,
+    required this.username, required this.password
   });
   final String projectName;  final comfy_button button;
-  final String hostname; final String username; final String password;
+  final String hostname; final int port;
+  final String username; final String password;
   @override
   State<ButtonEditAndDeletePage> createState() => _ButtonEditAndDeletePageState();
 }
@@ -138,6 +140,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => project_space(
           project_name: widget.projectName,
         hostname: widget.hostname,
+        port: widget.port,
         username: widget.username,
         password: widget.password,
       )));
@@ -192,6 +195,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                     projectName: '',
                     hostname: '',
                     staticIP: '',
+                    port: 22,
                     username: '',
                     password: '',
                   systemInstances: {},
@@ -229,12 +233,13 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => project_space(
                       project_name: widget.projectName,
                       hostname: widget.hostname,
+                      port: widget.port,
                       username: widget.username,
                       password: widget.password,
                     ))));
               },),
                   clickable(icon: Icons.cancel, onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(project_name: widget.projectName, hostname: widget.hostname, username: widget.username, password: widget.password)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => project_space(project_name: widget.projectName, hostname: widget.hostname, port: widget.port, username: widget.username, password: widget.password)));
                   }),
                   (widget.button.type == 'ai-chat')? Gap(0): clickable_text(text: 'Edit button', onTap: navigate)
                   //IconButton(onPressed: navigate, icon: const Text('Edit button'))
@@ -388,6 +393,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                         MaterialPageRoute(builder: (context) => project_space(
                           project_name: widget.projectName,
                           hostname: widget.hostname,
+                          port: widget.port,
                           username: widget.username,
                           password: widget.password,
                         )),

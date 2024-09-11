@@ -57,6 +57,7 @@ class _project_listState extends State<project_list> {
                       project_name: projectList[index].name,
                       project_description: projectList[index].description,
                       hostname: projectList[index].hostname,
+                      port: projectList[index].port,
                       username: projectList[index].username,
                       password: projectList[index].password,
                       imgURL: projectList[index].imgURL,
@@ -73,10 +74,10 @@ class _project_listState extends State<project_list> {
 }
 
 class project_card extends StatefulWidget {
-  const project_card({super.key, required this.project_name, required this.project_description,
+  const project_card({super.key, required this.project_name, required this.port, required this.project_description,
     required this.hostname, required this.username, required this.password, required this.imgURL});
   final String? project_name; final String? project_description;
-  final String? hostname; final String? username; final String? password;
+  final String? hostname; final int? port; final String? username; final String? password;
   final String? imgURL;
   @override
   State<project_card> createState() => _project_cardState();
@@ -93,7 +94,7 @@ class _project_cardState extends State<project_card> {
     if(widget.hostname != ''){
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => project_space(
         project_name: widget.project_name!,
-        hostname: widget.hostname!, username: widget.username!, password: widget.password!, raspberryPiInit: true,
+        hostname: widget.hostname!, port: widget.port!, username: widget.username!, password: widget.password!, raspberryPiInit: true,
       )));
     }
     else{

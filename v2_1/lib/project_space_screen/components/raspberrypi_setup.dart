@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:dartssh2/dartssh2.dart';
 import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
 
-Future<void> setUpRaspberryPi(BuildContext context, String hostname, String username, String password) async{
+Future<void> setUpRaspberryPi(BuildContext context, String hostname, int port, String username, String password) async{
   print('running raspberry pi setup');
   bool sshAvailable = true;
   late SSHClient sshClient;
@@ -24,7 +24,7 @@ Future<void> setUpRaspberryPi(BuildContext context, String hostname, String user
     for(String potentialHostName in [staticIP.trim(), hostname]){
       try{
         sshClient = SSHClient(
-          await SSHSocket.connect(potentialHostName, 22, timeout: const Duration(seconds: 5)),
+          await SSHSocket.connect(potentialHostName, port, timeout: const Duration(seconds: 5)),
           username: username,
           onPasswordRequest: () => password,
         );
