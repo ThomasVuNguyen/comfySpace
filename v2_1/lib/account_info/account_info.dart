@@ -16,7 +16,8 @@ import '../comfyauth/authentication/auth.dart';
 
 class account_info extends StatefulWidget {
   const account_info({super.key, required this.name, required this.tagline});
-  final String? name; final String? tagline;
+  final String? name;
+  final String? tagline;
   @override
   State<account_info> createState() => _account_infoState();
 }
@@ -25,167 +26,249 @@ class _account_infoState extends State<account_info> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
         title: Stack(
-          alignment: Alignment.center,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Stack(
+            alignment: Alignment.center,
             children: [
-            Center(
-              child: Text(
-                'Account',
-                style: Theme.of(context).textTheme.titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
+              Center(
+                child: Text(
+                  'Account',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                ),
               ),
-            ),
               Positioned(
-                left: 0,
+                  left: 0,
                   child: IconButton(
-                      onPressed: (){Navigator.pop(context);},
-                      icon: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.primary,)
-                  ))
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Theme.of(context).colorScheme.primary,
+                      )))
             ],
-            ),
-      ),
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(child: FractionallySizedBox(heightFactor: 0.2,)),
-            avatar_icon(size: 80,),
-            Gap(20),
-            Text('${widget.name}',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.fade,
-            ),
-            Text('${widget.tagline}',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.fade,
-            ),
-            Gap(20),
-            Flexible(child: FractionallySizedBox(heightFactor: 0.3,)),
-
-            //Log out button
-            (Platform.isAndroid || Platform.isIOS)?
-            Center(child: SliderButton(
-              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-              baseColor: Theme.of(context).colorScheme.secondaryContainer,
-              buttonColor: Theme.of(context).colorScheme.onSecondaryContainer,
-              highlightedColor: Colors.red,
-              shimmer: false,
-              action: () async {
-                // show loading screen
-                showDialog(context: context, builder: (context){
-                  return const Center(child: CircularProgressIndicator(),);
-                });
-                // check if currently google sign in
-
-                if (await GoogleSignIn().isSignedIn()){
-                  await GoogleSignIn().disconnect();
-                }
-                // try signing out
-                FirebaseAuth.instance.signOut();
-
-                // pop the loading circle
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const auth_page(welcomePage: true,)));
-              },
-              label: Text(
-                "Sign out",
-                style:
-                  Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer)
-              ),
-              icon: Icon(Icons.exit_to_app, color: Theme.of(context).colorScheme.secondaryContainer
-                ,)
-
-            ))
-                :clickable_text(
-                text: 'Sign out',
-                onTap: () async {
-                  // show loading screen
-                  showDialog(context: context, builder: (context){
-                    return const Center(child: CircularProgressIndicator(),);
-                  });
-                  // check if currently google sign in
-
-                  if (await GoogleSignIn().isSignedIn()){
-                    await GoogleSignIn().disconnect();
-                  }
-                  // try signing out
-                  FirebaseAuth.instance.signOut();
-
-                  // pop the loading circle
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const auth_page(welcomePage: true,)));
-                }
-            ),
-            const Gap(20),
-            (Platform.isAndroid || Platform.isIOS)?
-            Center(child: SliderButton(
-                backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
-                baseColor: Theme.of(context).colorScheme.tertiaryContainer,
-                buttonColor: Theme.of(context).colorScheme.onTertiaryContainer,
-                highlightedColor: Colors.red,
-                shimmer: false,
-                action: () async{
-                  String? email = getUserID().toString();
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Forwarding to support site')));
-                  await(launchUrl(Uri.parse('https://comfyspace.tech/support')));
-                  await sendEmailGeneral('$email needs support');
-                },
-                label: Text(
-                    "Request support",
-                    style:
-                    Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onTertiaryContainer)
-                ),
-                icon: Icon(Icons.help_outline, color: Theme.of(context).colorScheme.tertiaryContainer
-                  ,)
-
-            ))
-                : clickable_text(
-                text: 'Need support/information ?' ,
-                onTap: () async{
-                  String? email = getUserID().toString();
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Forwarding to support site')));
-                  await(launchUrl(Uri.parse('https://comfyspace.tech/support')));
-                  await sendEmailGeneral('$email needs support');
-                }),
-            Gap(20),
-            (Platform.isAndroid || Platform.isIOS)?
-            Center(child: SliderButton(
-                backgroundColor: Theme.of(context).colorScheme.errorContainer,
-                baseColor: Theme.of(context).colorScheme.errorContainer,
-                buttonColor: Theme.of(context).colorScheme.onErrorContainer,
-                highlightedColor: Colors.red,
-                shimmer: false,
-                action: () async{
-                  String? email = getUserID().toString();
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Account deletion requested, will complete in 48 hours')));
-                  await sendEmailGeneral('$email would like to delete their account');
-                },
-                label: Text(
-                    "Delete account",
-                    style:
-                    Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onErrorContainer)
-                ),
-                icon: Icon(Icons.warning_amber, color: Theme.of(context).colorScheme.errorContainer
-                  ,)
-
-            ))
-                :clickable_text(
-                text: 'Request account deletion',
-                onTap: () async{
-                  String? email = getUserID().toString();
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Account deletion requested, will complete in 48 hours')));
-                  await sendEmailGeneral('$email would like to delete their account');
-                }),
-            const Gap(20),
-
-          ],
+          ),
         ),
-      )
-      /*Center(
+        body: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Flexible(
+                  child: FractionallySizedBox(
+                heightFactor: 0.2,
+              )),
+              const avatar_icon(
+                size: 80,
+              ),
+              const Gap(20),
+              Text(
+                '${widget.name}',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.fade,
+              ),
+              Text(
+                '${widget.tagline}',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.fade,
+              ),
+              const Gap(20),
+              const Flexible(
+                  child: FractionallySizedBox(
+                heightFactor: 0.3,
+              )),
+
+              //Log out button
+              (Platform.isAndroid || Platform.isIOS)
+                  ? Center(
+                      child: SliderButton(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          baseColor:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          buttonColor: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                          highlightedColor: Colors.red,
+                          shimmer: false,
+                          action: () async {
+                            // show loading screen
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                });
+                            // check if currently google sign in
+
+                            if (await GoogleSignIn().isSignedIn()) {
+                              await GoogleSignIn().disconnect();
+                            }
+                            // try signing out
+                            FirebaseAuth.instance.signOut();
+
+                            // pop the loading circle
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const auth_page(
+                                          welcomePage: true,
+                                        )));
+                            return null;
+                          },
+                          label: Text("Sign out",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondaryContainer)),
+                          icon: Icon(
+                            Icons.exit_to_app,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                          )))
+                  : clickable_text(
+                      text: 'Sign out',
+                      onTap: () async {
+                        // show loading screen
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            });
+                        // check if currently google sign in
+
+                        if (await GoogleSignIn().isSignedIn()) {
+                          await GoogleSignIn().disconnect();
+                        }
+                        // try signing out
+                        FirebaseAuth.instance.signOut();
+
+                        // pop the loading circle
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const auth_page(
+                                      welcomePage: true,
+                                    )));
+                      }),
+              const Gap(20),
+              (Platform.isAndroid || Platform.isIOS)
+                  ? Center(
+                      child: SliderButton(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          baseColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          buttonColor:
+                              Theme.of(context).colorScheme.onTertiaryContainer,
+                          highlightedColor: Colors.red,
+                          shimmer: false,
+                          action: () async {
+                            String? email = getUserID().toString();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Forwarding to support site')));
+                            await (launchUrl(
+                                Uri.parse('https://comfyspace.tech/support')));
+                            await sendEmailGeneral('$email needs support');
+                            return null;
+                          },
+                          label: Text("Request support",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onTertiaryContainer)),
+                          icon: Icon(
+                            Icons.help_outline,
+                            color:
+                                Theme.of(context).colorScheme.tertiaryContainer,
+                          )))
+                  : clickable_text(
+                      text: 'Need support/information ?',
+                      onTap: () async {
+                        String? email = getUserID().toString();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Forwarding to support site')));
+                        await (launchUrl(
+                            Uri.parse('https://comfyspace.tech/support')));
+                        await sendEmailGeneral('$email needs support');
+                      }),
+              const Gap(20),
+              (Platform.isAndroid || Platform.isIOS)
+                  ? Center(
+                      child: SliderButton(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.errorContainer,
+                          baseColor:
+                              Theme.of(context).colorScheme.errorContainer,
+                          buttonColor:
+                              Theme.of(context).colorScheme.onErrorContainer,
+                          highlightedColor: Colors.red,
+                          shimmer: false,
+                          action: () async {
+                            String? email = getUserID().toString();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Account deletion requested, will complete in 48 hours')));
+                            await sendEmailGeneral(
+                                '$email would like to delete their account');
+                            return null;
+                          },
+                          label: Text("Delete account",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onErrorContainer)),
+                          icon: Icon(
+                            Icons.warning_amber,
+                            color: Theme.of(context).colorScheme.errorContainer,
+                          )))
+                  : clickable_text(
+                      text: 'Request account deletion',
+                      onTap: () async {
+                        String? email = getUserID().toString();
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                'Account deletion requested, will complete in 48 hours')));
+                        await sendEmailGeneral(
+                            '$email would like to delete their account');
+                      }),
+              const Gap(20),
+            ],
+          ),
+        )
+        /*Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
@@ -254,6 +337,6 @@ class _account_infoState extends State<account_info> {
             ],
           ),
         ),),*/
-    );
+        );
   }
 }
