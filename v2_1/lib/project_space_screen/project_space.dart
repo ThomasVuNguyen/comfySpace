@@ -54,7 +54,9 @@ class _project_spaceState extends State<project_space> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width ~/ 150;
+    var buttonSize =
+        MediaQuery.of(context).orientation == Orientation.portrait ? 150 : 220;
+    var screenPerWidth = MediaQuery.of(context).size.width ~/ buttonSize;
     return FutureBuilder(
         future: project_space_initialize(
             context,
@@ -163,7 +165,7 @@ class _project_spaceState extends State<project_space> {
                     child: ReorderableGridView.builder(
                         itemCount: buttonList!.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: screenWidth),
+                            crossAxisCount: screenPerWidth),
                         onReorder: (oldIndex, newIndex) async {
                           if (kDebugMode) {
                             print('$oldIndex swapped with $newIndex');
@@ -185,6 +187,7 @@ class _project_spaceState extends State<project_space> {
                               password: widget.password,
                               staticIP: staticIP,
                               systemInstances: systemInstances,
+                              type: widget.type,
                             ),
                           );
                         }),

@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:v2_1/themes/app_color.dart';
 
-import '../../home_screen/comfy_user_information_function/project_information.dart';
+import '../../../home_screen/comfy_user_information_function/project_information.dart';
 
-class comfy_bento_move_button extends StatefulWidget {
-  const comfy_bento_move_button({
+class comfy_joystick_button extends StatefulWidget {
+  const comfy_joystick_button({
     super.key,
-    required this.motor_id,
+    required this.button,
     required this.hostname,
     required this.staticIP,
     required this.port,
@@ -20,7 +20,7 @@ class comfy_bento_move_button extends StatefulWidget {
     this.swipeLeftImg = 'assets/froggie/swipe left.png',
     this.swipeRightImg = 'assets/froggie/swipe right.png',
   });
-  final int motor_id;
+  final comfy_button button;
   final String hostname;
   final String username;
   final String password;
@@ -31,11 +31,10 @@ class comfy_bento_move_button extends StatefulWidget {
   final String swipeLeftImg;
   final String swipeRightImg;
   @override
-  State<comfy_bento_move_button> createState() =>
-      _comfy_bento_move_buttonState();
+  State<comfy_joystick_button> createState() => _comfy_joystick_buttonState();
 }
 
-class _comfy_bento_move_buttonState extends State<comfy_bento_move_button> {
+class _comfy_joystick_buttonState extends State<comfy_joystick_button> {
   int index = 0;
   // tap: 0, left: 1, right:2, down: 3, up: 4
   late SSHClient sshClient;
@@ -115,6 +114,7 @@ class _comfy_bento_move_buttonState extends State<comfy_bento_move_button> {
   Widget build(BuildContext context) {
     Offset _position = Offset.zero;
     return GestureDetector(
+        onTap: () async {},
         onPanUpdate: (details) {
           setState(() {
             _position += details.delta;
