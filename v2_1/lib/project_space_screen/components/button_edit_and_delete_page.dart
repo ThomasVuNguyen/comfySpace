@@ -229,7 +229,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                   port: 22,
                   username: '',
                   password: '',
-                  systemInstances: {},
+                  systemInstances: const {},
                 ),
               );
             }),
@@ -290,7 +290,7 @@ class _ButtonEditAndDeletePageState extends State<ButtonEditAndDeletePage> {
                                     password: widget.password)));
                       }),
                   (widget.button.type == 'ai-chat')
-                      ? Gap(0)
+                      ? const Gap(0)
                       : clickable_text(text: 'Edit button', onTap: navigate)
                   //IconButton(onPressed: navigate, icon: const Text('Edit button'))
                 ],

@@ -19,10 +19,9 @@ class _TTSTestScreenState extends State<TTSTestScreen> {
     super.initState();
   }
 
-  Future<void> initTTS() async{
+  Future<void> initTTS() async {
     await flutterTts.setLanguage("en-US");
     await flutterTts.setPitch(1.0);
-
 
     //await flutterTts.awaitSpeakCompletion(true);
     //await flutterTts.awaitSynthCompletion(true);
@@ -35,13 +34,15 @@ class _TTSTestScreenState extends State<TTSTestScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(child: TextButton(
-        child: Text('hu'),
-        onPressed: () async{
-          await flutterTts.speak('hi');
-          print('spoken');
-        },
-      ),),
+      body: Center(
+        child: TextButton(
+          child: const Text('hu'),
+          onPressed: () async {
+            await flutterTts.speak('hi');
+            print('spoken');
+          },
+        ),
+      ),
     );
   }
 }

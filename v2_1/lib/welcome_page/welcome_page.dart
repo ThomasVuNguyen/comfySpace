@@ -29,27 +29,27 @@ class welcome_page extends StatelessWidget {
                           .textTheme
                           .titleLarge
                           ?.copyWith(color: AppColors.black)),
-                  Gap(12),
+                  const Gap(12),
                   Text(
                       'This is a hub for you to learn about the exciting world of robotics, and even build one for yourself!',
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge
                           ?.copyWith(color: AppColors.black)),
-                  Gap(12),
+                  const Gap(12),
                   Text('Here are a few things to get started with, have fun!',
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge
                           ?.copyWith(color: AppColors.black)),
-                  Gap(32),
+                  const Gap(32),
                   GestureDetector(
                       onTap: () {
                         launchUrl(Uri.parse('https://comfyspace.tech/build'));
                       },
                       child: Image.asset(
                           'assets/home_screen/comfy_build_block.png')),
-                  Gap(20),
+                  const Gap(20),
                   GestureDetector(
                       onTap: () {
                         launchUrl(Uri.parse('https://comfyspace.tech/learn'));

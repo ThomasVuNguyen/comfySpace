@@ -11,10 +11,16 @@ import 'package:v2_1/lesson_page/comfy_lesson_page.dart';
 import '../create_new_project/components/pick_image.dart';
 
 class chatPage extends StatefulWidget {
-  const chatPage({super.key, required this.questions, required this.answers, required this.title, required this.pageName});
-  final Map<String, List<String>> questions; final Map<String, String> answers; final String title;
+  const chatPage(
+      {super.key,
+      required this.questions,
+      required this.answers,
+      required this.title,
+      required this.pageName});
+  final Map<String, List<String>> questions;
+  final Map<String, String> answers;
+  final String title;
   final String pageName;
-
 
   @override
   State<chatPage> createState() => _chatPageState();
@@ -30,8 +36,7 @@ class _chatPageState extends State<chatPage> {
   final _comfyHelper = const types.User(
       id: 'comfyHelper',
       role: types.Role.admin,
-      imageUrl: 'https://comfyspace.tech/chilling-in-the-park.webp'
-  );
+      imageUrl: 'https://comfyspace.tech/chilling-in-the-park.webp');
   final List<types.Message> _messages = [];
 
   @override
@@ -41,14 +46,14 @@ class _chatPageState extends State<chatPage> {
     super.initState();
   }
 
-  Future<void> _conversationSequence() async{
+  Future<void> _conversationSequence() async {
     //Loop through the map of conversation
     Map<String, List<String>> questionMap = widget.questions;
-    for(var title in questionMap.keys) {
+    for (var title in questionMap.keys) {
       List<String> questions = questionMap[title]!;
       //Send all questions in the question
       await Future.delayed(const Duration(milliseconds: 200));
-      for (final question in questions){
+      for (final question in questions) {
         //Send each question one by one
         _sendAdminMessage(question);
         await Future.delayed(const Duration(milliseconds: 200));
@@ -72,36 +77,38 @@ class _chatPageState extends State<chatPage> {
     }
     await _moveToNextPage();
   }
+
   Future<void> _moveToNextPage() async {
-   switch (widget.pageName){
-     //If user are in "create a new project" & finished "picking name & description", move to pick image page
-     case 'create_new_project_pick_name': Navigator.push(context, MaterialPageRoute(builder: (context) => pickProjectImage(project_name: userAnswer['project_name']!, project_description: userAnswer['project_description']!)));
-     case 'register_new_user':
-       await signUserUp(
-         context,
-         userAnswer['email']!,
-         userAnswer['password']!,
-         userAnswer['name']!,
-         userAnswer['tagline']!,
-         {}
-         );
-     case 'ssh_credentials': Navigator.push(context, MaterialPageRoute(builder: (context) =>
-         SSHInitialScan(
-             project_name: userAnswer['project_name']!,
-             project_description: userAnswer['project_description']!,
-             imgURL: userAnswer['imgURL']!,
-             hostname: userAnswer['hostname']!,
-             username: userAnswer['username']!,
-             password: userAnswer['password']!))
-     );
-     case 'lesson_comment': await send_lesson_comment(
-       context,
-         userAnswer['user']!,
-         userAnswer['lesson_title']!,
-         userAnswer['comment']!);
-   }
+    switch (widget.pageName) {
+      //If user are in "create a new project" & finished "picking name & description", move to pick image page
+      case 'create_new_project_pick_name':
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => pickProjectImage(
+                    project_name: userAnswer['project_name']!,
+                    project_description: userAnswer['project_description']!)));
+      case 'register_new_user':
+        await signUserUp(context, userAnswer['email']!, userAnswer['password']!,
+            userAnswer['name']!, userAnswer['tagline']!, {});
+      case 'ssh_credentials':
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SSHInitialScan(
+                    project_name: userAnswer['project_name']!,
+                    project_description: userAnswer['project_description']!,
+                    imgURL: userAnswer['imgURL']!,
+                    hostname: userAnswer['hostname']!,
+                    username: userAnswer['username']!,
+                    password: userAnswer['password']!)));
+      case 'lesson_comment':
+        await send_lesson_comment(context, userAnswer['user']!,
+            userAnswer['lesson_title']!, userAnswer['comment']!);
+    }
   }
-  void _sendAdminMessage(String msg){
+
+  void _sendAdminMessage(String msg) {
     final textMessage = types.TextMessage(
       author: _comfyHelper,
       createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -114,7 +121,7 @@ class _chatPageState extends State<chatPage> {
     });
   }
 
-  void _sendUserMessage(String msg){
+  void _sendUserMessage(String msg) {
     final textMessage = types.TextMessage(
       author: _user,
       createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -126,10 +133,12 @@ class _chatPageState extends State<chatPage> {
       _questionAnswered = true;
     });
   }
+
   void _handleSendPressed(types.PartialText message) {
     _sendUserMessage(message.text);
     //_questionAnswered = true;
   }
+
   void _addMessage(types.Message message) {
     setState(() {
       _messages.insert(0, message);
@@ -161,51 +170,53 @@ class _chatPageState extends State<chatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
-        title: Text(widget.title, style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer)),
+        title: Text(widget.title,
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Theme.of(context).colorScheme.onPrimaryContainer)),
         centerTitle: true,
         //backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
-            end: Alignment(0.8, 1),
+            end: const Alignment(0.8, 1),
             colors: <Color>[
               Theme.of(context).colorScheme.surface,
               Theme.of(context).colorScheme.surface,
               //Theme.of(context).colorScheme.onPrimary,
-
             ],
             tileMode: TileMode.mirror,
           ),
-
         ),
         child: Chat(
-          //bubbleBuilder: _bubbleBuilder,
+            //bubbleBuilder: _bubbleBuilder,
             messages: _messages,
             onSendPressed: _handleSendPressed,
             user: _user,
             showUserAvatars: true,
-            inputOptions: InputOptions(
+            inputOptions: const InputOptions(
               autocorrect: false,
             ),
             theme: DefaultChatTheme(
-              inputTextCursorColor: Theme.of(context).colorScheme.onPrimary,
+                inputTextCursorColor: Theme.of(context).colorScheme.onPrimary,
                 primaryColor: Theme.of(context).colorScheme.primary,
-                secondaryColor: Theme.of(context).colorScheme.secondaryContainer,
+                secondaryColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
                 backgroundColor: Colors.transparent,
                 inputTextStyle: Theme.of(context).textTheme.bodyMedium!,
                 inputTextColor: Theme.of(context).colorScheme.surface,
-                receivedMessageBodyTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface),
-                sentMessageBodyTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.surface),
-                inputBackgroundColor: Theme.of(context).colorScheme.primary
-            )
-        ),
+                receivedMessageBodyTextStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
+                sentMessageBodyTextStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Theme.of(context).colorScheme.surface),
+                inputBackgroundColor: Theme.of(context).colorScheme.primary)),
       ),
     );
-
   }
 }

@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const project_list(),
               //const comfyShareScreen()
               //account_info(name: user?.name, tagline: user?.tagline,)
-              BentoPage()
+              const BentoPage()
             ];
             return Scaffold(
               appBar: AppBar(
@@ -76,11 +76,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 builder: (context) => account_info(
                                     name: user?.name, tagline: user?.tagline)));
                       },
-                      child: HugeIcon(
+                      child: const HugeIcon(
                         icon: HugeIcons.strokeRoundedSetting07,
                         color: AppColors.black,
                       )),
-                  Gap(20)
+                  const Gap(20)
                 ],
               ),
               body: homeScreenList[_selectedPageIndex],

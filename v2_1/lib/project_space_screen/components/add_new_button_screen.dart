@@ -16,11 +16,18 @@ import 'package:v2_1/project_space_screen/project_space.dart';
 import 'package:v2_1/universal_widget/buttons.dart';
 
 class AddNewButtonScreen extends StatefulWidget {
-  const AddNewButtonScreen({super.key,
-    required this.projectName, required this.hostname, required this.port, required this.username, required this.password
-  });
+  const AddNewButtonScreen(
+      {super.key,
+      required this.projectName,
+      required this.hostname,
+      required this.port,
+      required this.username,
+      required this.password});
   final String projectName;
-  final String hostname; final int port; final String username; final String password;
+  final String hostname;
+  final int port;
+  final String username;
+  final String password;
   @override
   State<AddNewButtonScreen> createState() => _AddNewButtonScreenState();
 }
@@ -57,85 +64,71 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
   //placeholder for button function map
   Map<String, String> buttonFunction = {};
 
-
-
   Future<void> navigate() async {
-    if(_confirmationPage == false){
-        if(_showWelcomeScreen == true){
+    if (_confirmationPage == false) {
+      if (_showWelcomeScreen == true) {
+        setState(() {
+          _showWelcomeScreen = false;
+          _pickButtonTypeAndName = true;
+          _pickCommands = false;
+          _pickTheme = false;
+          _confirmationPage = false;
+        });
+      } else if (_pickButtonTypeAndName == true) {
+        if (buttonNameController.text.isEmpty ||
+            buttonTypeController.text.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Button name & type cannot be empty')));
+        } else {
           setState(() {
             _showWelcomeScreen = false;
-            _pickButtonTypeAndName = true;
-            _pickCommands = false;
+            _pickButtonTypeAndName = false;
+            _pickCommands = true;
             _pickTheme = false;
             _confirmationPage = false;
           });
         }
-        else if(_pickButtonTypeAndName == true){
-          if(buttonNameController.text.isEmpty || buttonTypeController.text.isEmpty){
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Button name & type cannot be empty')));
-          }
-          else{
-            setState(() {
-              _showWelcomeScreen = false;
-              _pickButtonTypeAndName = false;
-              _pickCommands = true;
-              _pickTheme = false;
-              _confirmationPage = false;
-            });
-          }
-
-        }
-        else if(_pickCommands == true){
+      } else if (_pickCommands == true) {
+        setState(() {
+          _showWelcomeScreen = false;
+          _pickButtonTypeAndName = false;
+          _pickCommands = false;
+          _pickTheme = true;
+          _confirmationPage = false;
+        });
+      } else if (_pickTheme == true) {
+        if (
+            //buttonThemeController.text.isEmpty ||
+            buttonColorController.text.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Color cannot be empty')));
+        } else {
           setState(() {
             _showWelcomeScreen = false;
             _pickButtonTypeAndName = false;
             _pickCommands = false;
-            _pickTheme = true;
-            _confirmationPage = false;
+            _pickTheme = false;
+            _confirmationPage = true;
           });
-
         }
-        else if(_pickTheme == true){
-          if(
-          //buttonThemeController.text.isEmpty ||
-              buttonColorController.text.isEmpty){
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Color cannot be empty')));
-          }
-          else{
-            setState(() {
-              _showWelcomeScreen = false;
-              _pickButtonTypeAndName = false;
-              _pickCommands = false;
-              _pickTheme = false;
-              _confirmationPage = true;
-            });
-          }
-
-        }
-
-    }
-    else{
-
-      if(kDebugMode){
+      }
+    } else {
+      if (kDebugMode) {
         print('adding button');
       }
 
-      if(buttonThemeController.text.isEmpty){
+      if (buttonThemeController.text.isEmpty) {
         buttonThemeController.text = 'froggie';
       }
 
-      if(buttonTypeController.text.toLowerCase()=='tap'){
-        buttonFunction = {
-          'tap': tapCommandTextController.text
-        };
-      }
-      else if(buttonTypeController.text.toLowerCase()=='toggle'){
+      if (buttonTypeController.text.toLowerCase() == 'tap') {
+        buttonFunction = {'tap': tapCommandTextController.text};
+      } else if (buttonTypeController.text.toLowerCase() == 'toggle') {
         buttonFunction = {
           'on': toggleOnCommandTextController.text,
           'off': toggleOffCommandTextController.text,
         };
-      }
-      else if(buttonTypeController.text.toLowerCase()=='swipe'){
+      } else if (buttonTypeController.text.toLowerCase() == 'swipe') {
         buttonFunction = {
           'up': swipeUpCommandTextController.text,
           'down': swipeDownCommandTextController.text,
@@ -143,26 +136,28 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
           'left': swipeLeftCommandTextController.text,
           'right': swipeRightCommandTextController.text,
         };
-      }
-      else if(buttonTypeController.text.toLowerCase()=='ai-chat'){
-        buttonFunction={
-          'api': aiAPIButtonTextController.text
-        };
+      } else if (buttonTypeController.text.toLowerCase() == 'ai-chat') {
+        buttonFunction = {'api': aiAPIButtonTextController.text};
         late SSHClient sshClient;
         print('adding gemini api');
-        for(String potentialHostName in [widget.hostname]){
-          try{
+        for (String potentialHostName in [widget.hostname]) {
+          try {
             sshClient = SSHClient(
               await SSHSocket.connect(potentialHostName, 22),
               username: widget.username,
               onPasswordRequest: () => widget.password,
             );
             //attempt a connection
-            var save_api_key_response = await SaveGeminiAPI(widget.hostname, widget.username, widget.password, aiAPIButtonTextController.text.trim(), context);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(save_api_key_response)));
+            var saveApiKeyResponse = await SaveGeminiAPI(
+                widget.hostname,
+                widget.username,
+                widget.password,
+                aiAPIButtonTextController.text.trim(),
+                context);
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(saveApiKeyResponse)));
             break;
-          }
-          catch (e){
+          } catch (e) {
             print('error');
             //SSH error not connected
             //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to $potentialHostName: $e}')));
@@ -170,32 +165,34 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
         }
         print('adding api done');
       }
-      await AddNewButton(widget.projectName,
+      await AddNewButton(
+          widget.projectName,
           buttonTypeController.text.toLowerCase(),
           buttonNameController.text,
           buttonFunction,
           buttonColorController.text.toLowerCase(),
           buttonThemeController.text.toLowerCase());
       Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => project_space(
-          project_name: widget.projectName,
-        hostname: widget.hostname,
-        port: widget.port,
-        username: widget.username,
-        password: widget.password,
-      )),
-            (Route<dynamic> route) => false,
+        context,
+        MaterialPageRoute(
+            builder: (context) => project_space(
+                  project_name: widget.projectName,
+                  hostname: widget.hostname,
+                  port: widget.port,
+                  username: widget.username,
+                  password: widget.password,
+                )),
+        (Route<dynamic> route) => false,
       );
     }
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton:
-      clickable_text(
-        text: 'Next', onTap: navigate,
+      floatingActionButton: clickable_text(
+        text: 'Next',
+        onTap: navigate,
       ),
       //resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -205,31 +202,33 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
             Center(
               child: Text(
                 'Create a button',
-                style: Theme.of(context).textTheme.titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer),
               ),
             ),
             Positioned(
                 left: 0,
                 child: IconButton(
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => project_space(
-                          project_name: widget.projectName,
-                          hostname: widget.hostname,
-                          port: widget.port,
-                          username: widget.username,
-                          password: widget.password,
-                        )),
-                            (Route<dynamic> route) => false,
+                        MaterialPageRoute(
+                            builder: (context) => project_space(
+                                  project_name: widget.projectName,
+                                  hostname: widget.hostname,
+                                  port: widget.port,
+                                  username: widget.username,
+                                  password: widget.password,
+                                )),
+                        (Route<dynamic> route) => false,
                       );
                     },
-                    icon: Icon(Icons.close, color: Theme.of(context).colorScheme.onPrimaryContainer,)
-                ))
+                    icon: Icon(
+                      Icons.close,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    )))
           ],
         ),
-
       ),
       body: Center(
         child: SafeArea(
@@ -253,24 +252,21 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                     //?.copyWith(color: Theme.of(context).colorScheme.tertiary)
                   )),*/
               Visibility(
-                  visible: _confirmationPage,
-                  child: AnimatedTextKit(
-                    isRepeatingAnimation: false,
-                    animatedTexts: [
-                      TypewriterAnimatedText(
-                          'Your new button is created!',
-                          textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
-                          speed: const Duration(milliseconds: 100)
-                      ),
-                      TypewriterAnimatedText(
-                          'Click next to continue',
-                          textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
-                          speed: const Duration(milliseconds: 100)
-                      ),
-                    ],
-                    onTap: () {
-                    },
-                  ),
+                visible: _confirmationPage,
+                child: AnimatedTextKit(
+                  isRepeatingAnimation: false,
+                  animatedTexts: [
+                    TypewriterAnimatedText('Your new button is created!',
+                        textAlign: TextAlign.center,
+                        textStyle: Theme.of(context).textTheme.titleMedium,
+                        speed: const Duration(milliseconds: 100)),
+                    TypewriterAnimatedText('Click next to continue',
+                        textAlign: TextAlign.center,
+                        textStyle: Theme.of(context).textTheme.titleMedium,
+                        speed: const Duration(milliseconds: 100)),
+                  ],
+                  onTap: () {},
+                ),
               ),
 
               //Page 1: Welcome screen
@@ -296,50 +292,52 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                 if (buttonTypeController.text != '') {
                   type = buttonTypeController.text.toLowerCase();
                 }
-                if(buttonColorController.text != ''){
-                  color = colorConversion(context, buttonColorController.text.toLowerCase());
+                if (buttonColorController.text != '') {
+                  color = colorConversion(
+                      context, buttonColorController.text.toLowerCase());
                 }
-                  return Container(
-                    padding: const EdgeInsets.all(10),
-                    width: 210, height: 210,
-                    child: button_sort(
-                        button: comfy_button(
-                            btnName, type, color, order, function
-                        ),
-                        projectName: '',
-                        hostname: '',
-                        staticIP: '',
-                        port: 22,
-                        username: '',
-                        password: '',
-                      systemInstances: {},
-                    ),
-                  );
-
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  width: 210,
+                  height: 210,
+                  child: button_sort(
+                    button: comfy_button(btnName, type, color, order, function),
+                    projectName: '',
+                    hostname: '',
+                    staticIP: '',
+                    port: 22,
+                    username: '',
+                    password: '',
+                    systemInstances: const {},
+                  ),
+                );
               }),
               Visibility(
                 visible: _showWelcomeScreen,
                 child: //Text('Welcome to buttons!')
-                AnimatedTextKit(
+                    AnimatedTextKit(
                   isRepeatingAnimation: false,
                   animatedTexts: [
-                    TypewriterAnimatedText(
-                        'Lets create a button!',
-                        textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
-                        speed: const Duration(milliseconds: 100)
-                    ),
-                    TypewriterAnimatedText(
-                        'Click next to continue',
-                        textAlign: TextAlign.center, textStyle: Theme.of(context).textTheme.titleMedium,
-                        speed: const Duration(milliseconds: 100)
-                    ),
+                    TypewriterAnimatedText('Lets create a button!',
+                        textAlign: TextAlign.center,
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer),
+                        speed: const Duration(milliseconds: 100)),
+                    TypewriterAnimatedText('Click next to continue',
+                        textAlign: TextAlign.center,
+                        textStyle: Theme.of(context).textTheme.titleMedium,
+                        speed: const Duration(milliseconds: 100)),
                   ],
-                  onTap: () {
-                  },
+                  onTap: () {},
                 ),
               ),
               Visibility(visible: _showWelcomeScreen, child: const Gap(20)),
-              Visibility(visible: !_showWelcomeScreen, child: Divider()),
+              Visibility(visible: !_showWelcomeScreen, child: const Divider()),
               //Page 2: Pick button type & name
 
               //Pick name
@@ -352,7 +350,9 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                         const Gap(20),
                         in_app_textfield(
                           controller: buttonNameController,
-                          hintText: 'LED Control', obsureText: false, titleText: 'Name your button',
+                          hintText: 'LED Control',
+                          obsureText: false,
+                          titleText: 'Name your button',
                         ),
                         const Gap(20),
                         const buttonSelectionTitle(
@@ -360,22 +360,23 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                           url: 'https://comfyspace.tech',
                         ),
                         Container(
-                          constraints: const BoxConstraints(
-                              maxWidth: 1000
-                          ),
+                          constraints: const BoxConstraints(maxWidth: 1000),
                           child: DropdownMenu(
-                            expandedInsets: EdgeInsets.symmetric(horizontal: 25),
+                            expandedInsets:
+                                const EdgeInsets.symmetric(horizontal: 25),
                             textStyle: Theme.of(context).textTheme.titleMedium,
-                            width: MediaQuery.of(context).size.width*2/3,
+                            width: MediaQuery.of(context).size.width * 2 / 3,
                             //label: Text('Pick a button Type', style: Theme.of(context).textTheme.titleMedium,),
                             enableSearch: true,
                             //enableFilter: true,
                             controller: buttonTypeController,
                             dropdownMenuEntries: const [
                               DropdownMenuEntry(value: 'tap', label: 'Tap'),
-                              DropdownMenuEntry(value: 'toggle', label: 'Toggle'),
+                              DropdownMenuEntry(
+                                  value: 'toggle', label: 'Toggle'),
                               DropdownMenuEntry(value: 'swipe', label: 'Swipe'),
-                              DropdownMenuEntry(value: 'ai-chat', label: 'ai-chat')
+                              DropdownMenuEntry(
+                                  value: 'ai-chat', label: 'ai-chat')
                             ],
                           ),
                         ),
@@ -387,7 +388,6 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                           ),
                         ),
                         const Gap(40),
-                  
                       ],
                     ),
                   ),
@@ -468,35 +468,44 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
               //Pick command
 
               Visibility(
-                visible: _pickCommands,
+                  visible: _pickCommands,
                   child: ButtonCommandCreatePage(
                     buttonType: buttonTypeController.text.toLowerCase(),
                     tapCommandTextController: tapCommandTextController,
-
-                    toggleOnCommandTextController: toggleOnCommandTextController,
-                    toggleOffCommandTextController: toggleOffCommandTextController,
-
+                    toggleOnCommandTextController:
+                        toggleOnCommandTextController,
+                    toggleOffCommandTextController:
+                        toggleOffCommandTextController,
                     swipeUpCommandTextController: swipeUpCommandTextController,
-                    swipeDownCommandTextController: swipeDownCommandTextController,
-                    swipeLeftCommandTextController: swipeLeftCommandTextController,
-                    swipeRightCommandTextController: swipeRightCommandTextController,
-                    swipeTapCommandTextController: swipeTapCommandTextController,
+                    swipeDownCommandTextController:
+                        swipeDownCommandTextController,
+                    swipeLeftCommandTextController:
+                        swipeLeftCommandTextController,
+                    swipeRightCommandTextController:
+                        swipeRightCommandTextController,
+                    swipeTapCommandTextController:
+                        swipeTapCommandTextController,
                     aiAPIButtonTextController: aiAPIButtonTextController,
-                  )
-              ),
+                  )),
 
               Visibility(visible: _pickButtonTypeAndName, child: const Gap(20)),
 
               //Page4: Pick theme & color
 
               //Pick theme
-              Visibility(child: const Gap(40), visible: _pickTheme,),
               Visibility(
                 visible: _pickTheme,
+                child: const Gap(40),
+              ),
+              Visibility(
+                  visible: _pickTheme,
                   child: DropdownMenu(
                     textStyle: Theme.of(context).textTheme.titleMedium,
-                    width: MediaQuery.of(context).size.width*2/3,
-                    label: Text('Pick a color', style: Theme.of(context).textTheme.titleMedium,),
+                    width: MediaQuery.of(context).size.width * 2 / 3,
+                    label: Text(
+                      'Pick a color',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     controller: buttonColorController,
                     enableSearch: true, //enableFilter: true,
                     dropdownMenuEntries: const [
@@ -504,22 +513,20 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
                       DropdownMenuEntry(value: 'green', label: 'Green'),
                       DropdownMenuEntry(value: 'blue', label: 'Blue')
                     ],
-                  )
-              ),
+                  )),
               const Gap(20),
               Visibility(
                   visible: false,
                   //_pickTheme,
                   child: DropdownMenu(
                     initialSelection: 'froggie',
-                    controller:buttonThemeController,
+                    controller: buttonThemeController,
                     enableSearch: true, //enableFilter: true,
                     dropdownMenuEntries: const [
                       DropdownMenuEntry(value: 'froggie', label: 'Froggie'),
                       DropdownMenuEntry(value: 'classic', label: 'classic'),
                     ],
-                  )
-              ),
+                  )),
 
               //Page 5: Confirmation screen
               //Navigation Button
@@ -533,4 +540,3 @@ class _AddNewButtonScreenState extends State<AddNewButtonScreen> {
     );
   }
 }
-

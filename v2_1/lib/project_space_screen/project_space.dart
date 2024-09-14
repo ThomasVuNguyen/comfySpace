@@ -14,6 +14,7 @@ import 'package:v2_1/project_space_screen/components/raspberrypi_setup.dart';
 import 'package:v2_1/project_space_screen/function/static_ip_function.dart';
 import 'package:v2_1/universal_widget/random_widget_loading.dart';
 
+import '../home_screen/comfy_user_information_function/bento_bot/bento_information.dart';
 import '../home_screen/comfy_user_information_function/project_information.dart';
 
 class project_space extends StatefulWidget {
@@ -38,7 +39,7 @@ class project_space extends StatefulWidget {
 }
 
 class _project_spaceState extends State<project_space> {
-  bool _speechEnabled = false;
+  final bool _speechEnabled = false;
 
   @override
   void initState() {
@@ -62,7 +63,8 @@ class _project_spaceState extends State<project_space> {
             widget.username,
             widget.password,
             widget.project_name,
-            widget.raspberryPiInit),
+            widget.raspberryPiInit,
+            widget.type),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: randomLoadingWidget());
@@ -120,7 +122,7 @@ class _project_spaceState extends State<project_space> {
                             );
                           },
                         )
-                      : SizedBox(
+                      : const SizedBox(
                           width: 0,
                           height: 0,
                         ));
@@ -190,7 +192,7 @@ class _project_spaceState extends State<project_space> {
                 ),
                 floatingActionButton: (widget.type != 'community')
                     ? FloatingActionButton(
-                        child: Icon(Icons.add),
+                        child: const Icon(Icons.add),
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
                             context,
@@ -206,7 +208,7 @@ class _project_spaceState extends State<project_space> {
                           );
                         },
                       )
-                    : SizedBox(
+                    : const SizedBox(
                         width: 0,
                         height: 0,
                       ),
@@ -218,13 +220,15 @@ class _project_spaceState extends State<project_space> {
 }
 
 Future<List<dynamic>> project_space_initialize(
-    BuildContext context,
-    String hostname,
-    int port,
-    String username,
-    String password,
-    String projectName,
-    bool raspberryPiInit) async {
+  BuildContext context,
+  String hostname,
+  int port,
+  String username,
+  String password,
+  String projectName,
+  bool raspberryPiInit,
+  String type,
+) async {
   print('initializing project: getting button list & running ssh scripts');
   //start timer
   double beginningTime = DateTime.now().microsecondsSinceEpoch / 1000000;
@@ -233,17 +237,22 @@ Future<List<dynamic>> project_space_initialize(
   Map<String, dynamic> systemInstances = {};
   //acquire button list
   print('getting button list');
+
   var results = await Future.wait([
-    get_button_list_information(context, projectName),
+    (type == 'community')
+        ? get_bento_button_list_information(context, projectName)
+        : get_button_list_information(context, projectName),
   ]);
+  print(results);
   try {
     await setUpRaspberryPi(context, hostname, port, username, password);
   } catch (e) {
     print('error setting up raspberry pi ${e.toString()}');
   }
-  List<comfy_button> buttonList = results[0] as List<comfy_button>;
-  bool voice_required = buttonList.any((button) => button.type == 'ai-chat');
-  if (voice_required == true) {
+  List<comfy_button> buttonList = results[0];
+  print(buttonList.length);
+  bool voiceRequired = buttonList.any((button) => button.type == 'ai-chat');
+  if (voiceRequired == true) {
     print('ai chat found');
     bool result = await speechToText.initialize(onStatus: (status) {
       //print('speech init status $status');

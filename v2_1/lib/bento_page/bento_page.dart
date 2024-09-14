@@ -13,6 +13,7 @@ class _BentoPageState extends State<BentoPage> {
   var bento_projects = get_bento_project_list_information();
   @override
   Widget build(BuildContext context) {
+    print('entering bento page');
     return Center(
         child: FutureBuilder(
             future: bento_projects,

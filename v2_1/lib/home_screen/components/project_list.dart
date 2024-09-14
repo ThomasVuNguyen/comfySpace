@@ -100,6 +100,7 @@ class _project_cardState extends State<project_card> {
 
   void openProjectSpace() {
     if (widget.hostname != '') {
+      print('opening project space');
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => project_space(
                 project_name: widget.project_name!,
@@ -108,7 +109,7 @@ class _project_cardState extends State<project_card> {
                 username: widget.username!,
                 password: widget.password!,
                 raspberryPiInit: true,
-                type: widget.type!,
+                type: widget.type,
               )));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
