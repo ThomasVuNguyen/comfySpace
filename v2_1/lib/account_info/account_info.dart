@@ -26,7 +26,6 @@ class _account_infoState extends State<account_info> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        title: Stack(
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Stack(
